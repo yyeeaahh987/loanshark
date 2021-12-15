@@ -18,7 +18,7 @@ class Login extends React.Component {
   };
 
   static isAuthenticated(token) {
-    if (token) return true;
+    return true;
   }
 
   constructor(props) {

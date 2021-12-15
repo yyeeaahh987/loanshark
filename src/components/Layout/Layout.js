@@ -116,6 +116,11 @@ class Layout extends React.Component {
                       exact
                       component={Dashboard}
                     />
+                    <Route
+                        path="/app/main/borrow"
+                        exact
+                        component={Tables}
+                    />
                     <Route path={"/app/typography"} component={Typography} />
                     <Route path={"/app/tables"} component={Tables} />
                     <Route path={"/app/ui/maps"} component={Maps} />
