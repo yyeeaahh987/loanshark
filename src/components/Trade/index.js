@@ -23,7 +23,7 @@ class Trade extends React.Component {
                                     <ButtonDropdown
                                         toggle={function noRefCheck(){}}
                                     >
-                                        <DropdownToggle outlines caret color="success">
+                                        <DropdownToggle outlines color="success">
                                             Choose
                                         </DropdownToggle>
                                         <DropdownMenu>
@@ -46,7 +46,7 @@ class Trade extends React.Component {
                                     <ButtonDropdown
                                         toggle={function noRefCheck(){}}
                                     >
-                                        <DropdownToggle outlines caret color="success">
+                                        <DropdownToggle outlines color="success">
                                             Choose
                                         </DropdownToggle>
                                         <DropdownMenu>

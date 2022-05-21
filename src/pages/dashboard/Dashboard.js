@@ -385,7 +385,7 @@ class Dashboard extends React.Component {
 
   render() {
     return (
-      <div className={s.root}>
+      <div>
         <Row>
           <Col xl={4}>
             <Widget

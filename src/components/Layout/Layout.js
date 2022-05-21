@@ -88,7 +88,7 @@ class Layout extends React.Component {
           s.root,
           !this.props.sidebarOpened ? s.sidebarClose : "",
           "flatlogic-one",
-          "dashboard-light",
+          "dashboard-black",
         ].join(" ")}
         onClick={e => this.handleCloseSidebar(e)}
       >

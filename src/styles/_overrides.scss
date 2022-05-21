@@ -448,7 +448,7 @@ small {
 ///////// Breadcrumbs //////////
 
 .breadcrumb {
-  color: #323232;
+  color: #ffffff;
   margin-bottom: 1.5rem;
   margin-top: 0;
   font-weight: 300;
@@ -456,7 +456,7 @@ small {
 
   > .active {
     font-weight: 400;
-    color: #323232;
+    color: #ffffff;
   }
 
   padding: 0;
@@ -464,7 +464,7 @@ small {
 
 .breadcrumb-item + .breadcrumb-item::before {
   content: ">";
-  color: #323232;
+  color: #ffffff;
 }
 
 ///////// Glyphicons //////////

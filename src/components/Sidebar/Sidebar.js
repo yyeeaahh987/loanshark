@@ -8,7 +8,6 @@ import LinksGroup from "./LinksGroup/LinksGroup";
 import {
   changeActiveSidebarItem
 } from "../../actions/navigation";
-import { logoutUser } from "../../actions/user";
 
 import lightDashboardIcon from "../../images/light-dashboard.svg";
 import darkDashboardIcon from "../../images/dark-dashboard.svg";
@@ -33,16 +32,10 @@ class Sidebar extends React.Component {
 
   constructor(props) {
     super(props);
-
-    this.doLogout = this.doLogout.bind(this);
   }
 
   dismissAlert(id) {
     this.props.dispatch(dismissAlert(id));
-  }
-
-  doLogout() {
-    this.props.dispatch(logoutUser());
   }
 
   render() {

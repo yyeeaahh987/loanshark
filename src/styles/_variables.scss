@@ -75,7 +75,7 @@ $theme-colors: (
 
 $link-color: #1A86D0;
 
-$text-color: #323232 !default;
+$text-color: #ffffff !default;
 
 $font-weight-bold: 700 !default;
 $font-weight-semi-bold: 600 !default;
@@ -83,9 +83,9 @@ $font-weight-normal: 400 !default;
 $font-weight-thin: 300 !default;
 $font-weight-base: $font-weight-thin !default;
 
-$addition-bg: $gray-100 !default;
+$addition-bg: $black !default;
 
-$body-bg: #FAFAFA !default;
+$body-bg: #000000 !default;
 $body-bg-light: lighten($body-bg, 3%);
 
 //== Components
@@ -123,7 +123,7 @@ $breadcrumb-divider: '>';
 $breadcrumb-padding-y: 0;
 $breadcrumb-bg: transparent;
 
-$widget-bg: #fff;
+$widget-bg: #000;
 $widget-title-color: #444;
 $widget-shadow-designated: -1px 0 8px rgba(0,0,0,.2);
 $widget-border-radius: 8px;
@@ -147,9 +147,9 @@ $navbar-padding-x: 32px !default;
 
 // Custom navbar links
 $navbar-link-color: $text-color !default;
-$navbar-link-hover-color: $gray-800 !default;
+$navbar-link-hover-color: $gray-400 !default;
 $navbar-link-hover-bg: transparent !default;
-$navbar-link-active-color: $gray-700 !default;
+$navbar-link-active-color: $gray-400 !default;
 $navbar-link-active-bg: $gray-300 !default;
 $navbar-link-disabled-color: $gray-400 !default;
 $navbar-link-disabled-bg: transparent !default;
@@ -161,12 +161,12 @@ $dropdown-link-color: $text-color;
 // -------------------------
 $widget-padding-vertical: 23px !default;
 $widget-padding-horizontal: 30px !default;
-$widget-bg-color: $white;
+$widget-bg-color: $gray-400;
 
 //== Navs
 //
 $nav-tabs-active-link-hover-bg: $white !default;
-$nav-tabs-active-link-hover-color: $gray-700 !default;
+$nav-tabs-active-link-hover-color: $gray-400 !default;
 
 //== Forms
 //
@@ -184,7 +184,7 @@ $badge-padding-y: 0.4em;
 $badge-padding-x: 0.4em;
 
 // Breadcrumbs
-$breadcrumb-active-color: $gray-700;
+$breadcrumb-active-color: $white;
 
 // Progress bars
 $progress-height: 0.65rem !default;

@@ -1,8 +1,6 @@
 import React from "react";
 import { ListGroup, ListGroupItem } from "reactstrap";
 
-import { logoutUser } from "../../../actions/user";
-
 import s from "./ListGroup.module.scss";
 
 import settingsIcon from "../../../images/settings.svg";
@@ -15,9 +13,6 @@ class MessagesDemo extends React.Component {
   constructor(props) {
     super(props);
     this.doLogout = this.doLogout.bind(this);
-  }
-  doLogout() {
-    this.props.dispatch(logoutUser());
   }
   render() {
     return (

@@ -87,7 +87,7 @@ class Tables extends React.Component {
                   opts={initEchartsOptions}
               />
               <Table>
-                
+
               </Table>
             </Widget>
           </Col>

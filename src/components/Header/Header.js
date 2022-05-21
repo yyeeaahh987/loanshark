@@ -17,7 +17,6 @@ import {
 } from "reactstrap";
 import cx from "classnames";
 import Notifications from "../Notifications";
-import { logoutUser } from "../../actions/user";
 import {
   toggleSidebar,
   openSidebar,
@@ -55,7 +54,6 @@ class Header extends React.Component {
     this.toggleMessages = this.toggleMessages.bind(this);
     this.toggleAccount = this.toggleAccount.bind(this);
     this.toggleSidebar = this.toggleSidebar.bind(this);
-    this.doLogout = this.doLogout.bind(this);
     this.changeArrowImg = this.changeArrowImg.bind(this);
     this.changeArrowImgOut = this.changeArrowImgOut.bind(this);
 
@@ -93,10 +91,6 @@ class Header extends React.Component {
     this.setState({
       accountOpen: !this.state.accountOpen,
     });
-  }
-
-  doLogout() {
-    this.props.dispatch(logoutUser());
   }
 
   changeArrowImg() {
