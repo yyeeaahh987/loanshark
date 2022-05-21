@@ -5524,7 +5524,7 @@
   "resolved" "https://registry.npmjs.org/etag/-/etag-1.8.1.tgz"
   "version" "1.8.1"
 
-"eve@git://github.com/adobe-webplatform/eve.git#eef80ed":
+"eve@https://github.com/adobe-webplatform/eve.git#eef80ed":
   "version" "0.4.1"
 
 "event-emitter@~0.3.5":
@@ -12942,7 +12942,7 @@
   "resolved" "https://registry.npmjs.org/webpack-raphael/-/webpack-raphael-2.1.4.tgz"
   "version" "2.1.4"
   dependencies:
-    "eve" "git://github.com/adobe-webplatform/eve.git#eef80ed"
+    "eve" "https://github.com/adobe-webplatform/eve.git#eef80ed"
 
 "webpack-sources@^1.1.0", "webpack-sources@^1.4.0", "webpack-sources@^1.4.1":
   "integrity" "sha512-lgTS3Xhv1lCOKo7SA5TjKXMjpSM4sBjNV5+q2bqesbSPs5FjGmU6jjtBSkX9b4qW87vDIsCIlUPOEhbZrMdjeQ=="
