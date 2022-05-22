@@ -2,16 +2,10 @@ import React, { Component } from "react";
 import {
   Breadcrumb,
   BreadcrumbItem,
-  Button,
-  UncontrolledButtonDropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
   Row,
   Col,
 } from "reactstrap";
 import uuid from "uuid/v4";
-import s from "./BreadcrumbHistory.module.scss";
 
 class BreadcrumbHistory extends Component {
   state = {

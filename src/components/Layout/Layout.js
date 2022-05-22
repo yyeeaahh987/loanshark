@@ -17,12 +17,7 @@ import s from "./Layout.module.scss";
 import BreadcrumbHistory from "../BreadcrumbHistory";
 
 // pages
-import Typography from "../../pages/typography";
-import Maps from "../../pages/maps";
-import Notifications from "../../pages/notifications/Notifications";
-import Icons from "../../pages/icons";
 import Tables from "../../pages/tables";
-import Charts from "../../pages/charts";
 
 class Layout extends React.Component {
   static propTypes = {
@@ -94,7 +89,7 @@ class Layout extends React.Component {
       >
         <Sidebar />
         <div className={s.wrap}>
-          <Header />
+          <Header></Header>
 
           <Hammer onSwipe={this.handleSwipe}>
             <main className={s.content}>
@@ -121,15 +116,6 @@ class Layout extends React.Component {
                         exact
                         component={Tables}
                     />
-                    <Route path={"/app/typography"} component={Typography} />
-                    <Route path={"/app/tables"} component={Tables} />
-                    <Route path={"/app/ui/maps"} component={Maps} />
-                    <Route
-                      path={"/app/ui/notifications"}
-                      component={Notifications}
-                    />
-                    <Route path={"/app/ui/icons"} component={Icons} />
-                    <Route path={"/app/ui/charts"} component={Charts} />
                   </Switch>
                 </CSSTransition>
               </TransitionGroup>

@@ -4,10 +4,6 @@ import { Switch, Route, Redirect } from 'react-router';
 import { HashRouter } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 
-/* eslint-disable */
-import ErrorPage from '../pages/error';
-/* eslint-enable */
-
 import '../styles/theme.scss';
 import LayoutComponent from '../components/Layout';
 
@@ -34,7 +30,6 @@ class App extends React.PureComponent {
                     <Route path="/" exact render={() => <Redirect to="/app/main"/>}/>
                     <Route path="/app" exact render={() => <Redirect to="/app/main"/>}/>
                     <PrivateRoute path="/app" dispatch={this.props.dispatch} component={LayoutComponent}/>
-                    <Route component={ErrorPage}/>
                 </Switch>
             </HashRouter>
         </div>

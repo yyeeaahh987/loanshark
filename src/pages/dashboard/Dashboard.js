@@ -3,10 +3,6 @@ import { Row, Col, Table, Button } from "reactstrap";
 
 import usersImg from "../../images/usersImg.svg";
 import smileImg from "../../images/smileImg.svg";
-import totalSale from "../../images/total-sale.svg";
-import orders from "../../images/orders.svg";
-import stocksImg from "../../images/stocks.svg";
-import stocksDownImg from "../../images/stocksDown.svg";
 
 import { chartData } from "./chartsMock";
 
@@ -14,13 +10,6 @@ import Widget from "../../components/Widget";
 
 import s from "./Dashboard.module.scss";
 import ApexChart from "react-apexcharts";
-
-//people
-import p1 from "../../images/people/p1.png";
-import p2 from "../../images/people/p2.png";
-import p3 from "../../images/people/p3.png";
-import p4 from "../../images/people/p4.png";
-import p5 from "../../images/userAvatar.png";
 
 const orderValueOverride = {
   options: {

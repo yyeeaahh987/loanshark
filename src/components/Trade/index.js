@@ -1,12 +1,9 @@
-import React, { useState } from "react";
-import { Row, Col, Button, Spin, Input, DropdownToggle, ButtonDropdown, InputGroup, DropdownMenu, DropdownItem } from "reactstrap";
+import React from "react";
+import { Row, Col, Button, Input, DropdownToggle, ButtonDropdown, InputGroup, DropdownMenu, DropdownItem } from "reactstrap";
 import "./trade.less";
 import s from "../../pages/tables/Tables.modules.scss";
 
 class Trade extends React.Component {
-    constructor(props) {
-        super(props);
-    }
 
     render () {
         return (
@@ -23,8 +20,8 @@ class Trade extends React.Component {
                                     <ButtonDropdown
                                         toggle={function noRefCheck(){}}
                                     >
-                                        <DropdownToggle outlines color="success">
-                                            Choose
+                                        <DropdownToggle outlines color="info">
+                                            ETH
                                         </DropdownToggle>
                                         <DropdownMenu>
                                             <DropdownItem header>
@@ -34,7 +31,7 @@ class Trade extends React.Component {
                                     </ButtonDropdown>
                                     <Input
                                         title="Input"
-                                        placeholder="deposit..."
+                                        placeholder="Enter deposit amount..."
                                     />
                                 </InputGroup>
 
@@ -46,18 +43,18 @@ class Trade extends React.Component {
                                     <ButtonDropdown
                                         toggle={function noRefCheck(){}}
                                     >
-                                        <DropdownToggle outlines color="success">
-                                            Choose
+                                        <DropdownToggle outlines color="warning">
+                                            BTC
                                         </DropdownToggle>
                                         <DropdownMenu>
                                             <DropdownItem header>
-                                                ETH
+                                                BTC
                                             </DropdownItem>
                                         </DropdownMenu>
                                     </ButtonDropdown>
                                     <Input
                                         title="Input"
-                                        placeholder="borrow..."
+                                        placeholder="Enter borrow amount..."
                                     />
                                 </InputGroup>
 
