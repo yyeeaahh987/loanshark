@@ -248,6 +248,16 @@ class Header extends React.Component {
                         rpcUrls: ['https://api.avax-test.network/ext/bc/C/rpc']
                       }
                     ]
+                  }).then(() => {
+                    const dataHong = require('../../abi/Hong.json');
+                    this.setMyFujiVaultETHBTC(new  window.web3.eth.Contract(FujiVaultAVAX.abi, MY_FujiVaultETHBTC));
+                    this.setMyFliquidatorAVAX(new  window.web3.eth.Contract(FliquidatorAVAX.abi, MY_FliquidatorAVAX));
+                    this.setMyFujiController(new  window.web3.eth.Contract(Controller.abi, MY_FujiController));
+                    this.setMyFujiOracle(new  window.web3.eth.Contract(FujiOracle.abi, MY_FujiOracle));
+                    this.setMyETHContract(new  window.web3.eth.Contract(dataHong, WETH));
+                    this.setMyBTCContract(new  window.web3.eth.Contract(dataHong, WBTC));
+    
+                    this.getNeededCollateralFor()
                   });
                 }
               })
