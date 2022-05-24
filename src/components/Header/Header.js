@@ -13,7 +13,16 @@ import {
 } from "../../actions/navigation";
 
 import {
-  changeNumberOfEth, changeUserDepositBalance, changeUserDebtBalance
+  changeMyAccount,
+  changeNumberOfEth, 
+  changeUserDepositBalance, 
+  changeUserDebtBalance,
+  changeMyFujiVaultETHBTC,
+  changeMyFliquidatorAvax,
+  changeMyFujiController,
+  changeMyFujiOracle,
+  changeMyEthContract,
+  changeMyBtcContract
 } from "../../actions/loanshark";
 
 import Controller from '../../abi/fujidao/Controller.json';
@@ -57,6 +66,7 @@ class Header extends React.Component {
     this.changeArrowImg = this.changeArrowImg.bind(this);
     this.changeArrowImgOut = this.changeArrowImgOut.bind(this);
     this.ethEnabled = this.ethEnabled.bind(this);
+    this.getNeededCollateralFor = this.getNeededCollateralFor.bind(this);
 
     this.setMyFujiVaultETHBTC = this.setMyFujiVaultETHBTC.bind(this);
     this.setMyFliquidatorAVAX = this.setMyFliquidatorAVAX.bind(this);
@@ -156,61 +166,72 @@ class Header extends React.Component {
     });
   }
 
+  setMyAccount(val) {
+    this.setState({
+      myAccount: val,
+    });
+    this.props.dispatch(changeMyAccount(val));
+  }
+
   setMyFujiVaultETHBTC(val) {
+    console.log("test: " + val.options.address);
     this.setState({
       myFujiVaultETHBTC: val,
     });
+    this.props.dispatch(changeMyFujiVaultETHBTC(val));
   }
 
   setMyFliquidatorAVAX(val) {
     this.setState({
       myFliquidatorAVAX: val,
     });
+    this.props.dispatch(changeMyFliquidatorAvax(val));
   }
 
   setMyFujiController(val) {
     this.setState({
       myFujiController: val,
     });
+    this.props.dispatch(changeMyFujiController(val));
   }
 
   setMyFujiOracle(val) {
     this.setState({
       myFujiOracle: val,
     });
+    this.props.dispatch(changeMyFujiOracle(val));
   }
 
   setMyETHContract(val) {
     this.setState({
       myETHContract: val,
     });
+    this.props.dispatch(changeMyEthContract(val));
   }
 
   setMyBTCContract(val) {
     this.setState({
       myBTCContract: val,
     });
+    this.props.dispatch(changeMyBtcContract(val));
   }
 
   getNeededCollateralFor() {
-    if (this.state.myFujiVaultETHBTC) {
+    if (this.props.myFujiVaultETHBTC) {
       let args = [
         1,
         true
       ]
-      console.log(this.state.myFujiVaultETHBTC.methods);
-      this.state.myFujiVaultETHBTC.methods.getNeededCollateralFor(...args).call({}, (error, result) => {
+      this.props.myFujiVaultETHBTC.methods.getNeededCollateralFor(...args).call({}, (error, result) => {
         this.props.dispatch(changeNumberOfEth((result / 10000000000)));
       });
 
-      this.state.myFujiVaultETHBTC.methods.userDepositBalance(this.state.myAccount).call({}, (error, result) => {
-        console.log(result);
-        this.props.dispatch(changeUserDepositBalance((result / 1000000000000000000)));
+      this.props.myFujiVaultETHBTC.methods.userDepositBalance(this.props.myAccount).call({}, (error, result) => {
+        this.props.dispatch(changeUserDepositBalance(window.web3.utils.fromWei(result, 'ether')));
       });
 
-      this.state.myFujiVaultETHBTC.methods.userDebtBalance(this.state.myAccount).call({}, (error, result) => {
-        console.log(result);
-        this.props.dispatch(changeUserDebtBalance((result / 10000000000)));
+      this.props.myFujiVaultETHBTC.methods.userDebtBalance(this.props.myAccount).call({}, (error, result) => {
+        this.props.dispatch(changeUserDebtBalance(window.web3.utils.fromWei(result, 'gwei') * 10));
       });
     }
   }
@@ -225,7 +246,7 @@ class Header extends React.Component {
         console.log("accounts:", result);
 
         this.setState({myAccount: result[0]});
-
+        this.setMyAccount(result[0]);
         const chainId = 43113 // Avax Testnet
 
         if (window.ethereum.networkVersion !== chainId) {
@@ -294,6 +315,8 @@ class Header extends React.Component {
           </Button>
           : <div style={{marginLeft: "auto"}}>Your Wallet Address: {this.state.myAccount}</div>
         }
+        &nbsp;
+         <Button color={"warning"} onClick={this.getNeededCollateralFor}>Refresh</Button>
       </Navbar>
     );
   }
@@ -303,9 +326,16 @@ function mapStateToProps(store) {
   return {
     sidebarOpened: store.navigation.sidebarOpened,
     sidebarStatic: store.navigation.sidebarStatic,
-    numberOfEth: store.loanshark.numberOfEth,
+    myAccount: store.loanshark.myAccount,
+    numberOfEth:  store.loanshark.userDebtBalance,
     userDepositBalance: store.loanshark.userDepositBalance,
-    userDebtBalance: store.loanshark.userDebtBalance
+    userDebtBalance:  store.loanshark.userDebtBalance,
+    myFujiVaultETHBTC: store.loanshark.myFujiVaultETHBTC,
+    myFliquidatorAVAX: store.loanshark.myFliquidatorAVAX,
+    myFujiController: store.loanshark.myFujiController,
+    myFujiOracle: store.loanshark.myFujiOracle,
+    myETHContract: store.loanshark.myETHContract,
+    myBTCContract:  store.loanshark.myBTCContract
   };
 }
 

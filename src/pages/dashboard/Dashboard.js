@@ -520,7 +520,7 @@ class Dashboard extends React.Component {
                     Amount
                   </th>
                   <th key={5} scope="col" className={"pl-0"}>
-                    Action
+                    
                   </th>
                   <th key={2} scope="col" className={"pl-0"}>
                     Debt
@@ -529,10 +529,13 @@ class Dashboard extends React.Component {
                     Amount
                   </th>
                   <th key={5} scope="col" className={"pl-0"}>
-                    Action
+                    
                   </th>
                   <th key={4} scope="col" className={"pl-0"}>
                     Health Factor
+                  </th>
+                  <th key={4} scope="col" className={"pl-0"}>
+                    Action
                   </th>
                 </tr>
                 </thead>
@@ -547,7 +550,7 @@ class Dashboard extends React.Component {
                   <td className={"pl-0 fw-thin"}>
                     <Button color={"success"}>
                       Deposit
-                    </Button>
+                    </Button>&nbsp;
                     <Button color={"danger"}>
                       Withdraw
                     </Button>
@@ -561,7 +564,7 @@ class Dashboard extends React.Component {
                   <td className={"pl-0 fw-thin"}>
                     <Button color={"success"}>
                       Borrow
-                    </Button>
+                    </Button>&nbsp;
                     <Button color={"danger"}>
                       Repay
                     </Button>
@@ -569,35 +572,13 @@ class Dashboard extends React.Component {
                   <td className={"pl-0 text-success fw-normal"}>
                     6.43
                   </td>
-                </tr>
-                <tr key={1}>
-                  <td className="fw-thin pl-0 fw-thin">
-                    ETH
-                  </td>
-                  <td className={"pl-0 fw-thin"}>
-                    $40,000
-                  </td>
-                  <td className={"pl-0 fw-thin"}>
-                    <Button color={"success"}>
-                      Deposit
-                    </Button>
-                    <Button color={"danger"}>
-                      Withdraw
-                    </Button>
-                  </td>
-                  <td className="fw-thin pl-0 fw-thin">
-                    --
-                  </td>
-                  <td className={"pl-0 fw-thin"}>
-                    $0
-                  </td>
-                  <td className={"pl-0 fw-thin"}>
-                    <Button color={"success"}>
-                      Borrow
-                    </Button>
-                  </td>
                   <td className={"pl-0 text-success fw-normal"}>
-                    2.58
+                    <Button color={"success"}>
+                      Enter Smart Vault
+                    </Button>&nbsp;
+                    <Button color={"danger"}>
+                      Flash Close
+                    </Button>
                   </td>
                 </tr>
                 </tbody>
