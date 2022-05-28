@@ -4,6 +4,7 @@ export const TOGGLE_SIDEBAR = 'TOGGLE_SIDEBAR';
 export const OPEN_SIDEBAR = 'OPEN_SIDEBAR';
 export const CLOSE_SIDEBAR = 'CLOSE_SIDEBAR';
 export const CHANGE_ACTIVE_SIDEBAR_ITEM = 'CHANGE_ACTIVE_SIDEBAR_ITEM';
+export const TOGGLE_LOADING = 'TOGGLE_LOADING';
 
 export function toggleSidebar() {
   return {
@@ -22,6 +23,13 @@ export function closeSidebar() {
     type: CLOSE_SIDEBAR,
   };
 }
+
+export function toggleLoading() {
+  return {
+    type: TOGGLE_LOADING,
+  };
+}
+
 
 export function changeActiveSidebarItem(activeItem) {
   return {

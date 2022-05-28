@@ -5,6 +5,9 @@ import { Switch, Route, withRouter, Redirect } from "react-router";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import Hammer from "rc-hammerjs";
 
+import LoadingOverlay from 'react-loading-overlay'
+import BounceLoader from 'react-spinners/BounceLoader'
+
 import Dashboard from "../../pages/dashboard";
 import Header from "../Header";
 import Sidebar from "../Sidebar";
@@ -78,51 +81,56 @@ class Layout extends React.Component {
 
   render() {
     return (
-      <div
-        className={[
-          s.root,
-          !this.props.sidebarOpened ? s.sidebarClose : "",
-          "flatlogic-one",
-          "dashboard-black",
-        ].join(" ")}
-        onClick={e => this.handleCloseSidebar(e)}
+      <LoadingOverlay
+        active={this.props.loadingActive}
+        spinner={<BounceLoader />}
       >
-        <Sidebar />
-        <div className={s.wrap}>
-          <Header></Header>
+        <div
+          className={[
+            s.root,
+            !this.props.sidebarOpened ? s.sidebarClose : "",
+            "flatlogic-one",
+            "dashboard-black",
+          ].join(" ")}
+          onClick={e => this.handleCloseSidebar(e)}
+        >
+          <Sidebar />
+          <div className={s.wrap}>
+            <Header></Header>
 
-          <Hammer onSwipe={this.handleSwipe}>
-            <main className={s.content}>
-              <BreadcrumbHistory url={this.props.location.pathname} />
-              <TransitionGroup>
-                <CSSTransition
-                  key={this.props.location.key}
-                  classNames="fade"
-                  timeout={200}
-                >
-                  <Switch>
-                    <Route
-                      path="/app/main"
-                      exact
-                      render={() => <Redirect to="/app/main/dashboard" />}
-                    />
-                    <Route
-                      path="/app/main/dashboard"
-                      exact
-                      component={Dashboard}
-                    />
-                    <Route
-                        path="/app/main/borrow"
+            <Hammer onSwipe={this.handleSwipe}>
+              <main className={s.content}>
+                <BreadcrumbHistory url={this.props.location.pathname} />
+                <TransitionGroup>
+                  <CSSTransition
+                    key={this.props.location.key}
+                    classNames="fade"
+                    timeout={200}
+                  >
+                    <Switch>
+                      <Route
+                        path="/app/main"
                         exact
-                        component={Tables}
-                    />
-                  </Switch>
-                </CSSTransition>
-              </TransitionGroup>
-            </main>
-          </Hammer>
+                        render={() => <Redirect to="/app/main/dashboard" />}
+                      />
+                      <Route
+                        path="/app/main/dashboard"
+                        exact
+                        component={Dashboard}
+                      />
+                      <Route
+                          path="/app/main/borrow"
+                          exact
+                          component={Tables}
+                      />
+                    </Switch>
+                  </CSSTransition>
+                </TransitionGroup>
+              </main>
+            </Hammer>
+          </div>
         </div>
-      </div>
+      </LoadingOverlay>
     );
   }
 }
@@ -131,6 +139,7 @@ function mapStateToProps(store) {
   return {
     sidebarOpened: store.navigation.sidebarOpened,
     sidebarStatic: store.navigation.sidebarStatic,
+    loadingActive: store.navigation.loadingActive
   };
 }
 

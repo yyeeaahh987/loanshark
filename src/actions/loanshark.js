@@ -8,6 +8,10 @@ export const CHANGE_MY_FUJI_CONTROLLER = 'CHANGE_MY_FUJI_CONTROLLER';
 export const CHANGE_MY_FUJI_ORACLE = 'CHANGE_MY_FUJI_ORACLE';
 export const CHANGE_MY_ETH_CONTRACT = 'CHANGE_MY_ETH_CONTRACT';
 export const CHANGE_MY_BTC_CONTRACT = 'CHANGE_MY_BTC_CONTRACT';
+export const CHANGE_MY_USDT_CONTRACT = 'CHANGE_MY_USDT_CONTRACT';
+export const CHANGE_PRICE_OF_ETH = 'CHANGE_PRICE_OF_ETH';
+export const CHANGE_PRICE_OF_BTC = 'CHANGE_PRICE_OF_BTC';
+export const CHANGE_ProviderAAVEAVAX = 'CHANGE_ProviderAAVEAVAX';
 
 export function changeMyAccount(payload) {
   return {type: CHANGE_MY_ACCOUNT,payload};
@@ -38,4 +42,16 @@ export function changeMyEthContract(payload) {
 }
 export function changeMyBtcContract(payload) {
   return {type: CHANGE_MY_BTC_CONTRACT,payload};
+}
+export function changeMyUsdtContract(payload) {
+  return {type: CHANGE_MY_USDT_CONTRACT,payload};
+}
+export function changePriceOfEth(payload) {
+  return {type: CHANGE_PRICE_OF_ETH,payload};
+}
+export function changePriceOfBtc(payload) {
+  return {type: CHANGE_PRICE_OF_BTC,payload};
+}
+export function changeProviderAAVEAVAX(payload) {
+  return {type: CHANGE_ProviderAAVEAVAX,payload};
 }

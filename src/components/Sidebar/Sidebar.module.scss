@@ -28,7 +28,7 @@
   min-width: $sidebar-width-open;
   transition: width $sidebar-transition-time ease-in-out;
   background-color: var(--sidebar-bg-color);
-  z-index: 999;
+  z-index: 0;
   box-shadow: 4px 4px 25px rgba(109, 105, 105, 0.15);
 }
 

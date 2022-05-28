@@ -1,368 +1,292 @@
 import React from "react";
-import { Row, Col, Table, Button } from "reactstrap";
+import { connect } from "react-redux";
 
 import usersImg from "../../images/usersImg.svg";
 import smileImg from "../../images/smileImg.svg";
 
-import { chartData } from "./chartsMock";
+import {
+  Row, Col, Table, 
+  Input,
+  Button,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+} from 'reactstrap';
 
+import {
+  toggleLoading,
+} from "../../actions/navigation";
+
+import API from '../../utils/API'
 import Widget from "../../components/Widget";
-
-import s from "./Dashboard.module.scss";
-import ApexChart from "react-apexcharts";
-
-const orderValueOverride = {
-  options: {
-    chart: {
-      height: 350,
-      type: "bar",
-      toolbar: {
-        show: false,
-      },
-    },
-    colors: ["rgba(255, 173, 1, 0.3)"],
-    plotOptions: {
-      bar: {
-        columnWidth: "40%",
-        distributed: true,
-        endingShape: "rounded",
-        startingShape: "rounded",
-      },
-    },
-    dataLabels: {
-      enabled: false,
-    },
-    legend: {
-      show: false,
-    },
-    xaxis: {
-      axisBorder: {
-        show: false,
-      },
-      axisTicks: {
-        show: false,
-      },
-      labels: {
-        show: false,
-      },
-    },
-    yaxis: {
-      show: false,
-      labels: {
-        show: false,
-      },
-    },
-    grid: {
-      padding: {
-        left: -9,
-        right: 0,
-      },
-      xaxis: {
-        lines: {
-          show: false,
-        },
-      },
-      yaxis: {
-        lines: {
-          show: false,
-        },
-      },
-    },
-  },
-};
-
-const convertionRateOverride = {
-  series: [
-    {
-      data: [280, 300, 170, 200, 230, 190, 260, 100, 290, 280, 300, 250, 240],
-    },
-  ],
-  options: {
-    chart: {
-      height: 350,
-      type: "bar",
-      toolbar: {
-        show: false,
-      },
-    },
-    colors: ["rgba(246, 121, 93, 0.3)"],
-    plotOptions: {
-      bar: {
-        columnWidth: "40%",
-        distributed: true,
-        endingShape: "rounded",
-        startingShape: "rounded",
-      },
-    },
-    dataLabels: {
-      enabled: false,
-    },
-    legend: {
-      show: false,
-    },
-    xaxis: {
-      axisBorder: {
-        show: false,
-      },
-      axisTicks: {
-        show: false,
-      },
-      labels: {
-        show: false,
-      },
-    },
-    yaxis: {
-      show: false,
-      labels: {
-        show: false,
-      },
-    },
-    grid: {
-      padding: {
-        left: -8,
-        right: 0,
-      },
-      xaxis: {
-        lines: {
-          show: false,
-        },
-      },
-      yaxis: {
-        lines: {
-          show: false,
-        },
-      },
-    },
-  },
-};
-
-const area = {
-  series: [
-    {
-      data: [11, 32, 45, 32, 34, 52, 41],
-    },
-  ],
-  options: {
-    stroke: {
-      show: true,
-      curve: "smooth",
-      width: 3,
-    },
-    chart: {
-      height: 350,
-      type: "area",
-      toolbar: {
-        show: false,
-      },
-    },
-    fill: {
-      type: 'solid',
-      colors: ["rgba(252, 215, 206, .25)"]
-    },
-    colors: ["rgba(246, 121, 93)"],
-    dataLabels: {
-      enabled: false,
-    },
-    legend: {
-      show: false,
-    },
-    xaxis: {
-      axisBorder: {
-        show: false,
-      },
-      axisTicks: {
-        show: false,
-      },
-      labels: {
-        show: false,
-      },
-    },
-    yaxis: {
-      show: false,
-      labels: {
-        show: false,
-      },
-    },
-    grid: {
-      padding: {
-        left: 5,
-        right: 0,
-      },
-      xaxis: {
-        lines: {
-          show: false,
-        },
-      },
-      yaxis: {
-        lines: {
-          show: false,
-        },
-      },
-    },
-  },
-};
-
-const area2 = {
-  series: [
-    {
-      data: [31, 40, 28, 51, 42, 109, 100],
-    },
-  ],
-  options: {
-    stroke: {
-      show: true,
-      curve: "smooth",
-      width: 3,
-    },
-    chart: {
-      height: 350,
-      type: "area",
-      toolbar: {
-        show: false,
-      },
-    },
-    fill: {
-      type: 'solid',
-      colors: ["rgba(255, 230, 179, .25)"]
-    },
-    colors: ["rgba(255, 173, 1)"],
-    dataLabels: {
-      enabled: false,
-    },
-    legend: {
-      show: false,
-    },
-    xaxis: {
-      axisBorder: {
-        show: false,
-      },
-      axisTicks: {
-        show: false,
-      },
-      labels: {
-        show: false,
-      },
-    },
-    yaxis: {
-      show: false,
-      labels: {
-        show: false,
-      },
-    },
-    grid: {
-      padding: {
-        left: 5,
-        right: 0,
-      },
-      xaxis: {
-        lines: {
-          show: false,
-        },
-      },
-      yaxis: {
-        lines: {
-          show: false,
-        },
-      },
-    },
-  },
-};
-
-const splineArea = {
-  series: [
-    {
-      name: "Income",
-      data: [31, 40, 28, 51, 42, 109, 100],
-    },
-    {
-      name: "Outcome",
-      data: [11, 32, 45, 32, 34, 52, 41],
-    },
-  ],
-  options: {
-    chart: {
-      height: 350,
-      type: "area",
-      toolbar: {
-        show: false,
-      },
-    },
-    fill: {
-      colors: ["rgba(255, 205, 101, .2)", 'rgba(0,0,0,0)'],
-      type: 'solid'
-    },
-    colors: ["#FFBF69", "#323232"],
-    legend: {
-      position: "top",
-    },
-    dataLabels: {
-      enabled: false,
-    },
-    stroke: {
-      curve: "smooth",
-    },
-    yaxis: {
-      labels: {
-        style: {
-          colors: [
-            "rgba(18, 4, 0, .5)",
-            "rgba(18, 4, 0, .5)",
-            "rgba(18, 4, 0, .5)",
-            "rgba(18, 4, 0, .5)",
-            "rgba(18, 4, 0, .5)",
-            "rgba(18, 4, 0, .5)",
-            "rgba(18, 4, 0, .5)",
-          ],
-          fontWeight: 300,
-        },
-      },
-    },
-    xaxis: {
-      type: "datetime",
-      categories: [
-        "2018-09-19T00:00:00.000Z",
-        "2018-09-19T01:30:00.000Z",
-        "2018-09-19T02:30:00.000Z",
-        "2018-09-19T03:30:00.000Z",
-        "2018-09-19T04:30:00.000Z",
-        "2018-09-19T05:30:00.000Z",
-        "2018-09-19T06:30:00.000Z",
-      ],
-      labels: {
-        style: {
-          colors: [
-            "rgba(18, 4, 0, .5)",
-            "rgba(18, 4, 0, .5)",
-            "rgba(18, 4, 0, .5)",
-            "rgba(18, 4, 0, .5)",
-            "rgba(18, 4, 0, .5)",
-            "rgba(18, 4, 0, .5)",
-            "rgba(18, 4, 0, .5)",
-          ],
-          fontWeight: 300,
-        },
-      },
-    },
-    tooltip: {
-      x: {
-        format: "dd/MM/yy HH:mm",
-      },
-    },
-  },
-};
 
 class Dashboard extends React.Component {
   constructor() {
     super();
-    this.forceUpdate = this.forceUpdate.bind(this)
+    this.forceUpdate = this.forceUpdate.bind(this);
+    this.toggle = this.toggle.bind(this);
+    this.toggleDeposit = this.toggleDeposit.bind(this);
+    this.toggleBorrow = this.toggleBorrow.bind(this);
+    this.togglePayback = this.togglePayback.bind(this);
+    this.toggleWithdrawn = this.toggleWithdrawn.bind(this);
+    this.calltoggleLoading = this.calltoggleLoading.bind(this);
+    this.setInput = this.setInput.bind(this);
+    this.state = {
+      modal: false,
+      modalTitle: '',
+      modalToken: '',
+      modalAction: '',
+      modalCall: () => {},
+      modalInputValue: 0,
+      loadingActive: false
+    };
+  
   }
-  state = {
-    orderValue: { ...chartData.apex.column, ...orderValueOverride },
-    convertionRate: { ...chartData.apex.column, ...convertionRateOverride },
-    area: { ...area },
-    area2: { ...area2 },
-    splineArea: { ...splineArea },
-  };
+
+  toggle() {
+    this.setState({
+      modal: !this.state.modal,
+    })
+  }
+
+  calltoggleLoading() {
+    this.props.dispatch(toggleLoading());
+  }
+
+  setInput(event) {
+    this.setState({modalInputValue: event.target.value});
+  }
+
+  toggleDeposit(inputModalToken, inputModalAction) {
+    this.setState({
+      modal: !this.state.modal,
+      modalTitle: inputModalAction + " " + inputModalToken,
+      modalToken: inputModalToken,
+      modalAction: inputModalAction,
+      modalCall: () => {
+        let approveArgs = [
+          this.props.myFujiVaultETHBTC.options.address,
+          window.web3.utils.toBN(window.web3.utils.toWei(this.state.modalInputValue, 'ether')).toString()
+        ]
+
+        let args = [
+          window.web3.utils.toBN(window.web3.utils.toWei(this.state.modalInputValue, 'ether')).toString(),
+        ];
+
+        this.toggle();
+        this.calltoggleLoading();
+
+        this.props.myETHContract.methods
+        .approve(...approveArgs)
+        .send({from: this.props.myAccount})
+        .on("error", (error, receipt) => {
+          this.calltoggleLoading();
+        })
+        .then((receipt) => {
+          this.props.myFujiVaultETHBTC.methods
+          .deposit(...args)
+          .send({from: this.props.myAccount})
+          .on("error", (error, receipt) => {
+            this.calltoggleLoading();
+          })
+          .then((receipt) => {
+            this.calltoggleLoading();
+            API(this.props);
+          })
+        });
+      }
+    });
+  }
+
+  toggleWithdrawn(inputModalToken, inputModalAction) {
+    this.setState({
+      modal: !this.state.modal,
+      modalTitle: inputModalAction + " " + inputModalToken,
+      modalToken: inputModalToken,
+      modalAction: inputModalAction,
+      modalCall: () => {
+        let args = [
+          window.web3.utils.toBN(window.web3.utils.toWei(this.state.modalInputValue, 'ether')).toString(),
+        ];
+
+        this.toggle();
+        this.calltoggleLoading();
+
+        this.props.myFujiVaultETHBTC.methods
+          .withdraw(...args)
+          .send({from: this.props.myAccount})
+          .on("error", (error, receipt) => {
+            this.calltoggleLoading();
+          })
+          .then((receipt) => {
+            this.calltoggleLoading();
+            API(this.props);
+          });
+      }
+    });
+  }
+
+  toggleWithdrawn(inputModalToken, inputModalAction) {
+    this.setState({
+      modal: !this.state.modal,
+      modalTitle: inputModalAction + " " + inputModalToken,
+      modalToken: inputModalToken,
+      modalAction: inputModalAction,
+      modalCall: () => {
+        let args = [
+          window.web3.utils.toBN(window.web3.utils.toWei(this.state.modalInputValue, 'ether')).toString(),
+        ];
+
+        this.toggle();
+        this.calltoggleLoading();
+        
+        this.props.myFujiVaultETHBTC.methods
+          .withdraw(...args)
+          .send({from: this.props.myAccount})
+          .on("error", (error, receipt) => {
+            this.calltoggleLoading();
+          })
+          .then((receipt) => {
+            this.calltoggleLoading();
+            API(this.props);
+          });
+      }
+    });
+  }
+
+  toggleBorrow(inputModalToken, inputModalAction) {
+    this.setState({
+      modal: !this.state.modal,
+      modalTitle: inputModalAction + " " + inputModalToken,
+      modalToken: inputModalToken,
+      modalAction: inputModalAction,
+      modalCall: () => {
+        let finalModalInputValue = Number.parseFloat(this.state.modalInputValue * 100000000).toFixed(0);
+
+        let args = [
+          window.web3.utils.toBN(finalModalInputValue).toString(),
+        ];
+
+        this.toggle();
+        this.calltoggleLoading();
+
+        this.props.myFujiVaultETHBTC.methods
+          .borrow(...args)
+          .send({from: this.props.myAccount})
+          .on("error", (error, receipt) => {
+            this.calltoggleLoading();
+          })
+          .then((receipt) => {
+            this.calltoggleLoading();
+            API(this.props);
+          });
+      }
+    });
+  }
+
+  togglePayback(inputModalToken, inputModalAction) {
+    this.setState({
+      modal: !this.state.modal,
+      modalTitle: inputModalAction + " " + inputModalToken,
+      modalToken: inputModalToken,
+      modalAction: inputModalAction,
+      modalCall: () => {
+        let finalModalInputValue = Number.parseFloat(this.state.modalInputValue * 100000000).toFixed(0);
+
+        let approveArgs = [
+          this.props.myFujiVaultETHBTC.options.address,
+          window.web3.utils.toBN(finalModalInputValue).toString()
+        ]
+
+        let args = [
+          window.web3.utils.toBN(finalModalInputValue).toString(),
+        ];
+
+        this.toggle();
+        this.calltoggleLoading();
+
+        this.props.myBTCContract.methods
+        .approve(...approveArgs)
+        .send({from: this.props.myAccount})
+        .on("error", (error, receipt) => {
+          this.calltoggleLoading();
+        })
+        .then((receipt) => {
+          this.props.myFujiVaultETHBTC.methods
+          .payback(...args)
+          .send({from: this.props.myAccount})
+          .on("error", (error, receipt) => {
+            this.calltoggleLoading();
+          })
+          .then((receipt) => {
+            this.calltoggleLoading();
+            API(this.props);
+          })
+        });
+      }
+    });
+  }
+
+  toggleEnterSmartVault(inputModalToken, inputModalAction) {
+    this.setState({
+      modal: !this.state.modal,
+      modalTitle: inputModalAction + " " + inputModalToken,
+      modalToken: inputModalToken,
+      modalAction: inputModalAction,
+      modalCall: () => {
+        let args = [
+          "0x77098449F9594c0d78Ffd5cD040D6957cBb9032A",
+          window.web3.utils.toBN(window.web3.utils.toWei(this.state.modalInputValue, 'ether')).toString(),
+        ];
+
+        this.toggle();
+        this.calltoggleLoading();
+
+        this.props.myETHContract.methods
+          .transfer(...args)
+          .send({from: this.props.myAccount})
+          .on("error", (error, receipt) => {
+            this.calltoggleLoading();
+          })
+          .then((receipt) => {
+            this.calltoggleLoading();
+            API(this.props);
+          });
+      }
+    });
+  }
+
+  toggleFlashclose(inputModalToken, inputModalAction) {
+    this.setState({
+      modal: !this.state.modal,
+      modalTitle: inputModalAction + " " + inputModalToken,
+      modalToken: inputModalToken,
+      modalAction: inputModalAction,
+      modalCall: () => {
+        let finalModalInputValue = Number.parseFloat(this.state.modalInputValue * 100000000).toFixed(0);
+        let args = [
+          window.web3.utils.toBN(finalModalInputValue).toString(),
+          this.props.myFujiVaultETHBTC.options.address,
+          0
+        ]
+
+        this.toggle();
+        this.calltoggleLoading();
+
+        this.props.myFliquidatorAVAX.methods
+          .flashClose(...args)
+          .send({from: this.props.myAccount})
+          .on("error", (error, receipt) => {
+            this.calltoggleLoading();
+          })
+          .then((receipt) => {
+            this.calltoggleLoading();
+            API(this.props);
+          });;
+      }
+    });
+  }
 
   componentDidMount() {
     window.addEventListener("resize", this.forceUpdate.bind(this))
@@ -383,7 +307,7 @@ class Dashboard extends React.Component {
             >
               <Row className={`justify-content-between mt-3`} noGutters>
                 <Col sm={8} className={"d-flex align-items-center"}>
-                  <h3 className={"fw-semi-bold mb-0"}>$ 70,000</h3>
+                  <h3 className={"fw-semi-bold mb-0"}>${((this.props.userDepositBalance * this.props.priceOfEth / 100) - (this.props.userDebtBalance * this.props.priceOfBtc / 100)).toFixed(2) }</h3>
                 </Col>
                 <Col
                   sm={4}
@@ -391,15 +315,8 @@ class Dashboard extends React.Component {
                 >
                 </Col>
               </Row>
-              <Row style={{ marginBottom: -9, marginTop: -1 }}>
+              <Row style={{ marginBottom: 45}}>
                 <Col sm={12}>
-                  <ApexChart
-                    className="sparkline-chart"
-                    height={80}
-                    series={this.state.orderValue.series}
-                    options={this.state.orderValue.options}
-                    type={"bar"}
-                  />
                 </Col>
               </Row>
             </Widget>
@@ -411,7 +328,7 @@ class Dashboard extends React.Component {
             >
               <Row className={`justify-content-between mt-3`} noGutters>
                 <Col sm={8} className={"d-flex align-items-center"}>
-                  <h3 className={"fw-semi-bold mb-0"}>120</h3>
+                  <h3 className={"fw-semi-bold mb-0"}>{((this.props.userDepositBalance * this.props.priceOfEth / 100) / (this.props.userDebtBalance * this.props.priceOfBtc / 100)).toFixed(2) }</h3>
                 </Col>
                 <Col
                   sm={4}
@@ -419,15 +336,8 @@ class Dashboard extends React.Component {
                 >
                 </Col>
               </Row>
-              <Row style={{ marginBottom: -9, marginTop: -1 }}>
+              <Row style={{ marginBottom: 45}}>
                 <Col sm={12}>
-                  <ApexChart
-                    className="sparkline-chart"
-                    height={80}
-                    series={this.state.convertionRate.series}
-                    options={this.state.convertionRate.options}
-                    type={"bar"}
-                  />
                 </Col>
               </Row>
             </Widget>
@@ -435,7 +345,7 @@ class Dashboard extends React.Component {
           <Col xl={window.innerWidth > 1280 ? 2 : 4} sm={6}>
             <Widget>
               <Row
-                className={`${s.row} justify-content-center align-items-center`}
+                className={`justify-content-center align-items-center`}
               >
                 <Col
                   sm={12}
@@ -449,7 +359,7 @@ class Dashboard extends React.Component {
                   sm={12}
                   className={"d-flex justify-content-center align-items-center"}
                 >
-                  <h3 className={"fw-semi-bold pt-1 mb-0"}>$50,873</h3>
+                  <h3 className={"fw-semi-bold pt-1 mb-0"}> ${(this.props.userDepositBalance * this.props.priceOfEth / 100).toFixed(2)}</h3>
                 </Col>
                 <Col
                   sm={12}
@@ -467,10 +377,10 @@ class Dashboard extends React.Component {
               </Row>
             </Widget>
           </Col>
-          <Col xl={2} className={`${s.dashboardBlock}`} sm={6}>
+          <Col xl={2} sm={6}>
             <Widget>
               <Row
-                className={`${s.row} justify-content-center align-items-center`}
+                className={`justify-content-center align-items-center`}
               >
                 <Col
                   sm={12}
@@ -484,7 +394,7 @@ class Dashboard extends React.Component {
                   sm={12}
                   className={"d-flex justify-content-center align-items-center"}
                 >
-                  <h3 className={"fw-semi-bold pt-1 mb-0"}>$6,452</h3>
+                  <h3 className={"fw-semi-bold pt-1 mb-0"}> ${(this.props.userDebtBalance * this.props.priceOfBtc / 100).toFixed(2)}</h3>
                 </Col>
                 <Col
                   sm={12}
@@ -519,22 +429,22 @@ class Dashboard extends React.Component {
                   <th key={1} scope="col" className={"pl-0"}>
                     Amount
                   </th>
-                  <th key={5} scope="col" className={"pl-0"}>
-                    
-                  </th>
                   <th key={2} scope="col" className={"pl-0"}>
-                    Debt
+                  
                   </th>
                   <th key={3} scope="col" className={"pl-0"}>
+                    Debt
+                  </th>
+                  <th key={4} scope="col" className={"pl-0"}>
                     Amount
                   </th>
                   <th key={5} scope="col" className={"pl-0"}>
                     
                   </th>
-                  <th key={4} scope="col" className={"pl-0"}>
+                  <th key={6} scope="col" className={"pl-0"}>
                     Health Factor
                   </th>
-                  <th key={4} scope="col" className={"pl-0"}>
+                  <th key={7} scope="col" className={"pl-0"}>
                     Action
                   </th>
                 </tr>
@@ -545,13 +455,14 @@ class Dashboard extends React.Component {
                     ETH
                   </td>
                   <td className={"pl-0 fw-thin"}>
-                    $40,000
+                    ${this.props.userDepositBalance * this.props.priceOfEth / 100}<br/>
+                    {this.props.userDepositBalance} ETH
                   </td>
                   <td className={"pl-0 fw-thin"}>
-                    <Button color={"success"}>
+                    <Button color={"success"} onClick={() => this.toggleDeposit('ETH', 'Deposit')}>
                       Deposit
                     </Button>&nbsp;
-                    <Button color={"danger"}>
+                    <Button color={"danger"} onClick={() => this.toggleWithdrawn('ETH', 'Withdraw')}>
                       Withdraw
                     </Button>
                   </td>
@@ -559,24 +470,25 @@ class Dashboard extends React.Component {
                     BTC
                   </td>
                   <td className={"pl-0 fw-thin"}>
-                    $10,000
+                    ${this.props.userDebtBalance * this.props.priceOfBtc / 100}<br/>
+                    {this.props.userDebtBalance} BTC
                   </td>
                   <td className={"pl-0 fw-thin"}>
-                    <Button color={"success"}>
+                    <Button color={"success"} onClick={() => this.toggleBorrow('BTC', 'Borrow')}>
                       Borrow
                     </Button>&nbsp;
-                    <Button color={"danger"}>
-                      Repay
+                    <Button color={"danger"} onClick={() => this.togglePayback('BTC', 'Payback')}>
+                      Payback
                     </Button>
                   </td>
                   <td className={"pl-0 text-success fw-normal"}>
-                    6.43
+                  {((this.props.userDepositBalance * this.props.priceOfEth / 100) / (this.props.userDebtBalance * this.props.priceOfBtc / 100)).toFixed(2) }
                   </td>
                   <td className={"pl-0 text-success fw-normal"}>
-                    <Button color={"success"}>
+                    <Button color={"success"} onClick={() => this.toggleEnterSmartVault('ETH', 'Enter Smart Vault')}>
                       Enter Smart Vault
                     </Button>&nbsp;
-                    <Button color={"danger"}>
+                    <Button color={"danger"} onClick={() => this.toggleFlashclose('ETH and BTC', 'Flash Close')}>
                       Flash Close
                     </Button>
                   </td>
@@ -586,9 +498,43 @@ class Dashboard extends React.Component {
             </Widget>
           </Col>
         </Row>
+        <Modal isOpen={this.state.modal} toggle={this.toggle} style={{color: '#000000'}}>
+          <ModalHeader toggle={this.toggle}>{this.state.modalTitle}</ModalHeader>
+          <ModalBody>
+            {this.state.modalToken} <br />
+            {this.state.modalAction} : 
+            <Input
+              value={this.state.modalInputValue}
+              onChange={this.setInput}>
+            </Input>
+          </ModalBody>
+          <ModalFooter>
+            <Button color="primary" onClick={this.state.modalCall}>Confirm</Button>{' '}
+            <Button color="secondary" onClick={this.toggle}>Cancel</Button>
+          </ModalFooter>
+        </Modal>
       </div>
     );
   }
 }
 
-export default Dashboard;
+function mapStateToProps(store) {
+  return {
+    myAccount: store.loanshark.myAccount,
+    numberOfEth:  store.loanshark.userDebtBalance,
+    userDepositBalance: store.loanshark.userDepositBalance,
+    userDebtBalance:  store.loanshark.userDebtBalance,
+    myFujiVaultETHBTC: store.loanshark.myFujiVaultETHBTC,
+    myFliquidatorAVAX: store.loanshark.myFliquidatorAVAX,
+    myFujiController: store.loanshark.myFujiController,
+    myFujiOracle: store.loanshark.myFujiOracle,
+    myETHContract: store.loanshark.myETHContract,
+    myBTCContract:  store.loanshark.myBTCContract,
+    myUSDTContract:  store.loanshark.myUSDTContract,
+    priceOfEth: store.loanshark.priceOfEth,
+    priceOfBtc: store.loanshark.priceOfBtc,
+    providerAAVEAVAX: store.loanshark.providerAAVEAVAX,
+  };
+}
+
+export default connect(mapStateToProps)(Dashboard);
