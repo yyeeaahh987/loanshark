@@ -127,34 +127,6 @@ class Dashboard extends React.Component {
     });
   }
 
-  toggleWithdrawn(inputModalToken, inputModalAction) {
-    this.setState({
-      modal: !this.state.modal,
-      modalTitle: inputModalAction + " " + inputModalToken,
-      modalToken: inputModalToken,
-      modalAction: inputModalAction,
-      modalCall: () => {
-        let args = [
-          window.web3.utils.toBN(window.web3.utils.toWei(this.state.modalInputValue, 'ether')).toString(),
-        ];
-
-        this.toggle();
-        this.calltoggleLoading();
-        
-        this.props.myFujiVaultETHBTC.methods
-          .withdraw(...args)
-          .send({from: this.props.myAccount})
-          .on("error", (error, receipt) => {
-            this.calltoggleLoading();
-          })
-          .then((receipt) => {
-            this.calltoggleLoading();
-            API(this.props);
-          });
-      }
-    });
-  }
-
   toggleBorrow(inputModalToken, inputModalAction) {
     this.setState({
       modal: !this.state.modal,
@@ -192,7 +164,8 @@ class Dashboard extends React.Component {
       modalToken: inputModalToken,
       modalAction: inputModalAction,
       modalCall: () => {
-        let finalModalInputValue = Number.parseFloat(this.state.modalInputValue * 100000000).toFixed(0);
+        
+        let finalModalInputValue = this.state.modalInputValue < 0 ? Number.parseFloat(1000000000000).toFixed(0) : Number.parseFloat(this.state.modalInputValue * 100000000).toFixed(0);
 
         let approveArgs = [
           this.props.myFujiVaultETHBTC.options.address,
@@ -200,7 +173,7 @@ class Dashboard extends React.Component {
         ]
 
         let args = [
-          window.web3.utils.toBN(finalModalInputValue).toString(),
+          this.state.modalInputValue < 0 ? "-1" : window.web3.utils.toBN(finalModalInputValue).toString(),
         ];
 
         this.toggle();
@@ -235,15 +208,17 @@ class Dashboard extends React.Component {
       modalToken: inputModalToken,
       modalAction: inputModalAction,
       modalCall: () => {
+        let finalModalInputValue = Number.parseFloat(this.state.modalInputValue * 100000000).toFixed(0);
+
         let args = [
           "0x77098449F9594c0d78Ffd5cD040D6957cBb9032A",
-          window.web3.utils.toBN(window.web3.utils.toWei(this.state.modalInputValue, 'ether')).toString(),
+          window.web3.utils.toBN(finalModalInputValue).toString(),
         ];
 
         this.toggle();
         this.calltoggleLoading();
 
-        this.props.myETHContract.methods
+        this.props.myBTCContract.methods
           .transfer(...args)
           .send({from: this.props.myAccount})
           .on("error", (error, receipt) => {
@@ -307,7 +282,7 @@ class Dashboard extends React.Component {
             >
               <Row className={`justify-content-between mt-3`} noGutters>
                 <Col sm={8} className={"d-flex align-items-center"}>
-                  <h3 className={"fw-semi-bold mb-0"}>${((this.props.userDepositBalance * this.props.priceOfEth / 100) - (this.props.userDebtBalance * this.props.priceOfBtc / 100)).toFixed(2) }</h3>
+                  <h3 className={"fw-semi-bold mb-0"}>${(((this.props.userDepositBalance) * this.props.priceOfEth / 100) - (this.props.userDebtBalance * this.props.priceOfBtc / 100)).toFixed(2) }</h3>
                 </Col>
                 <Col
                   sm={4}
@@ -418,7 +393,7 @@ class Dashboard extends React.Component {
           <Col sm={12}>
             <Widget
                 customDropDown
-                title={<p className={"fw-bold"}>My position</p>}
+                title={<p className={"fw-bold"}>My Borrowing Position</p>}
             >
               <Table className={"mb-0"} borderless responsive>
                 <thead>
@@ -485,7 +460,7 @@ class Dashboard extends React.Component {
                   {((this.props.userDepositBalance * this.props.priceOfEth / 100) / (this.props.userDebtBalance * this.props.priceOfBtc / 100)).toFixed(2) }
                   </td>
                   <td className={"pl-0 fw-normal"}>
-                    <Button color={"success"} disabled={!this.props.myFujiVaultETHBTC} onClick={() => this.toggleEnterSmartVault('ETH', 'Enter Smart Vault')}>
+                    <Button color={"success"} disabled={!this.props.myFujiVaultETHBTC} onClick={() => this.toggleEnterSmartVault('BTC', 'Enter Smart Vault')}>
                       Enter Smart Vault
                     </Button>&nbsp;
                     <Button color={"danger"} disabled={!this.props.myFujiVaultETHBTC} onClick={() => this.toggleFlashclose('ETH and BTC', 'Flash Close')}>
@@ -496,6 +471,61 @@ class Dashboard extends React.Component {
                 </tbody>
               </Table>
             </Widget>
+            <Row>
+              <Col sm={10}>
+               <Widget
+                    customDropDown
+                    title={<p className={"fw-bold"}>My Smart Value Position</p>}
+                >
+                  <Table className={"mb-0"} borderless responsive>
+                    <thead>
+                    <tr>
+                      <th key={0} scope="col" className={"pl-0"}>
+                        Asset
+                      </th>
+                      <th key={1} scope="col" className={"pl-0"}>
+                        Amount
+                      </th>
+                      <th key={2} scope="col" className={"pl-0"}>
+                        Action
+                      </th>
+                      <th key={3} scope="col" className={"pl-0"}>
+                        Trigger Healto Ratio
+                      </th>
+                      <th key={4} scope="col" className={"pl-0"}>
+                        APY
+                      </th>
+                    </tr>
+                    </thead>
+                    <tbody className="text-dark">
+                    <tr key={0}>
+                      <td className="fw-thin pl-0 fw-thin">
+                        BTC
+                      </td>
+                      <td className={"pl-0 fw-thin"}>
+                        $0<br/>
+                        0 BTC
+                      </td>
+                      <td className={"pl-0 fw-thin"}>
+                        <Button color={"success"} disabled={!this.props.myFujiVaultETHBTC} onClick={() => this.toggleEnterSmartVault('BTC', 'Payback')}>
+                          Payback Debt
+                        </Button>&nbsp;
+                        <Button color={"danger"} disabled={!this.props.myFujiVaultETHBTC} onClick={() => this.toggleEnterSmartVault('BTC', 'Leave Smart Vault')}>
+                          Leave Smart Vault
+                        </Button>&nbsp;
+                      </td>
+                      <td className="fw-thin pl-0 fw-thin">
+                        1.1
+                      </td>
+                      <td className={"pl-0 fw-thin"}>
+                        10%
+                      </td>
+                    </tr>
+                    </tbody>
+                  </Table>
+                </Widget>
+              </Col>
+            </Row>
           </Col>
         </Row>
         <Modal isOpen={this.state.modal} toggle={this.toggle} style={{color: '#000000'}}>

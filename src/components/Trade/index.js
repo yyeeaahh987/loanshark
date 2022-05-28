@@ -11,6 +11,11 @@ import {
   
 import API from '../../utils/API'
 
+import {
+    changeInputEthDeposit,
+    changeInputBtcDebt,
+  } from "../../actions/loanshark";
+  
 class Trade extends React.Component {
     constructor(props) {
         super(props);
@@ -42,10 +47,12 @@ class Trade extends React.Component {
     
     setInputEthDeposit(event) {
         this.setState({inputEthDeposit: event.target.value});
+        this.props.dispatch(changeInputEthDeposit(event.target.value));
     }
 
     setInputBtcBorrow(event) {
         this.setState({inputBtcBorrow: event.target.value});
+        this.props.dispatch(changeInputBtcDebt(event.target.value));
     }
 
     depositAndBorrow () {
@@ -89,7 +96,7 @@ class Trade extends React.Component {
             <>
                 <Row style={{ marginBottom: 9, marginTop: 1 }}>
                     <Col lg={12}>
-                    <div  style={{
+                        <div  style={{
                             display: "flex",
                             flexWrap: "wrap",
                             flexDirection: "column",
@@ -99,7 +106,7 @@ class Trade extends React.Component {
                                 <ButtonDropdown
                                     toggle={function noRefCheck(){}}
                                 >
-                                    <DropdownToggle outlines color="info">
+                                    <DropdownToggle color="info">
                                         ETH
                                     </DropdownToggle>
                                     <DropdownMenu>
@@ -122,7 +129,7 @@ class Trade extends React.Component {
                                 <ButtonDropdown
                                     toggle={function noRefCheck(){}}
                                 >
-                                    <DropdownToggle outlines color="warning">
+                                    <DropdownToggle color="warning">
                                         BTC
                                     </DropdownToggle>
                                     <DropdownMenu>
@@ -164,7 +171,9 @@ function mapStateToProps(store) {
       myFujiController: store.loanshark.myFujiController,
       myFujiOracle: store.loanshark.myFujiOracle,
       myETHContract: store.loanshark.myETHContract,
-      myBTCContract:  store.loanshark.myBTCContract
+      myBTCContract:  store.loanshark.myBTCContract,
+      inputBtcDept: store.loanshark.inputBtcDept,
+      inputEthDeposit: store.loanshark.inputEthDeposit,
     };
   }
 

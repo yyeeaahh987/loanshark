@@ -46,7 +46,6 @@ import arrowActive from '../../images/Arrow 5.svg'
 
 import s from "./Header.module.scss"; // eslint-disable-line css-modules/no-unused-class
 
-const BSCSCAN_TESTNET=process.env.REACT_APP_BSCSCAN_TESTNET
 const MY_FujiVaultETHBTC=process.env.REACT_APP_MY_FujiVaultETHBTC;
 const MY_FliquidatorAVAX=process.env.REACT_APP_MY_FliquidatorAVAX;
 const MY_FujiController=process.env.REACT_APP_MY_FujiController;
@@ -405,7 +404,7 @@ class Header extends React.Component {
           className={`${s.root} d-print-none`}
           style={{ zIndex: 0, backgroundColor: '#12191D', display: "flex" }}
         >
-          {this.state.myAccount == '' ? 
+          {!this.state.myAccount ? 
             <Button style={{marginLeft: "auto"}} color={"outline-light"} className={`${s.btnShadow}`} onClick={this.ethEnabled}>
               Collect Wallet
             </Button>

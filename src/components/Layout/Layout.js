@@ -6,7 +6,7 @@ import { TransitionGroup, CSSTransition } from "react-transition-group";
 import Hammer from "rc-hammerjs";
 
 import LoadingOverlay from 'react-loading-overlay'
-import RingLoader from 'react-spinners/RingLoader'
+import CircleLoader from 'react-spinners/CircleLoader'
 
 import Dashboard from "../../pages/dashboard";
 import Header from "../Header";
@@ -83,7 +83,7 @@ class Layout extends React.Component {
     return (
       <LoadingOverlay
         active={this.props.loadingActive}
-        spinner={<RingLoader color={"#ffffff"} size={150} />}
+        spinner={<CircleLoader color={"#ffffff"} size={150} />}
       >
         <div
           className={[

@@ -4,9 +4,12 @@ import 'chart.js/auto';
 import {
   Row,
   Col,
+  ListGroup,
+  ListGroupItem,
+  Badge,
 } from "reactstrap";
 import { MDBContainer } from "mdbreact";
-import { Pie } from "react-chartjs-2";
+import { Doughnut } from "react-chartjs-2";
 
 import Widget from "../../components/Widget";
 import Trade from "../../components/Trade";
@@ -53,28 +56,52 @@ class Tables extends React.Component {
     return (
       <div className={s.root}>
         <Row>
-          <Col lg={7}>
+          <Col lg={6}>
             <Widget
-              title={<p style={{ fontWeight: 700 }}>Deposit ETH and Borrow BTC<br/>
-                  <h6 style={{color: "#0000000"}}>{this.props.numberOfEth.toFixed(2)} ETH as collateral to borrow 1 BTC, including safety factors</h6></p>
+              title={
+                <p style={{ fontWeight: 700 }}>Deposit ETH and Borrow BTC<br/>
+                    <span style={{color: "#0000000", fontSize: "16px"}}>{this.props.numberOfEth.toFixed(2)} ETH as collateral to borrow 1 BTC</span>
+                </p>
               }
               customDropDown
             >
               <Trade/>
             </Widget>
+            <ListGroup>
+              <h6 style={{color: '#ffffff'}}>Markets and APR of BTC</h6><br/>
+              <ListGroupItem active className="justify-content-between">
+                AAVE{' '}
+                <Badge  color="warning" pill>
+                  1.4%
+                </Badge>
+              </ListGroupItem>
+              <ListGroupItem active className="justify-content-between">
+                BenQi{' '}
+                <Badge pill>
+                  2.0%
+                </Badge>
+              </ListGroupItem>
+              <ListGroupItem active className="justify-content-between">
+                TraderJoe{' '}
+                <Badge pill>
+                  3.1%
+                </Badge>
+              </ListGroupItem>
+            </ListGroup>
           </Col>
-          <Col lg={5}>
+          
+          <Col lg={6}>
             <Widget
-              title={<p style={{ fontWeight: 700 }}>Deposited and Borrowed</p>
+              title={<p style={{ fontWeight: 700 }}>Deposited, Borrowed and Health Factor</p>
               }
               customDropDown
             >
               <MDBContainer>
-                <Pie data={{
+                <Doughnut data={{
                     labels: ["ETH $", "BTC $"],
                     datasets: [
                       {
-                        data: [this.props.userDepositBalance * this.props.priceOfEth / 100, this.props.userDebtBalance * this.props.priceOfBtc / 100],
+                        data: [(Number(this.props.userDepositBalance) + Number(this.props.inputEthDeposit))  * this.props.priceOfEth / 100, (Number(this.props.userDebtBalance)  + Number(this.props.inputBtcDept)) * this.props.priceOfBtc / 100],
                         backgroundColor: [
                           "#25859B",
                           "#FFBF69",
@@ -85,7 +112,24 @@ class Tables extends React.Component {
                         ]
                       }
                     ]
-                  }} options={{ responsive: true }} />
+                  }} 
+                  plugins={[{
+                    beforeDraw: (chart) => {
+                     var width = chart.width,
+                         height = chart.height,
+                         ctx = chart.ctx;
+                         ctx.restore();
+                         var fontSize = (height / 200).toFixed(2);
+                         ctx.font = fontSize + "em sans-serif";
+                         ctx.textBaseline = "top";
+                         var text = (!(Number(this.props.userDebtBalance) + Number(this.props.inputBtcDept)) > 0? "" : (((Number(this.props.userDepositBalance) + Number(this.props.inputEthDeposit)) * this.props.priceOfEth / 100) / ( (Number(this.props.userDebtBalance)  + Number(this.props.inputBtcDept))  * this.props.priceOfBtc / 100)).toFixed(2)),
+                         textX = Math.round((width - ctx.measureText(text).width) / 2),
+                         textY = height / 2;
+                         ctx.fillText(text, textX, textY);
+                         ctx.save();
+                    } 
+                  }]}
+                  options={{ responsive: true }} />
               </MDBContainer>
             </Widget>
           </Col>
@@ -103,6 +147,8 @@ function mapStateToProps(store) {
     userDebtBalance: store.loanshark.userDebtBalance,
     priceOfEth: store.loanshark.priceOfEth,
     priceOfBtc: store.loanshark.priceOfBtc,
+    inputBtcDept: store.loanshark.inputBtcDept,
+    inputEthDeposit: store.loanshark.inputEthDeposit,
   };
 }
 

@@ -12,6 +12,8 @@ export const CHANGE_MY_USDT_CONTRACT = 'CHANGE_MY_USDT_CONTRACT';
 export const CHANGE_PRICE_OF_ETH = 'CHANGE_PRICE_OF_ETH';
 export const CHANGE_PRICE_OF_BTC = 'CHANGE_PRICE_OF_BTC';
 export const CHANGE_ProviderAAVEAVAX = 'CHANGE_ProviderAAVEAVAX';
+export const CHANGE_INPUT_ETH_DEPOSIT = 'CHANGE_INPUT_ETH_DEPOSIT';
+export const CHANGE_INPUT_BTC_DEBT = 'CHANGE_INPUT_BTC_DEBT';
 
 export function changeMyAccount(payload) {
   return {type: CHANGE_MY_ACCOUNT,payload};
@@ -54,4 +56,10 @@ export function changePriceOfBtc(payload) {
 }
 export function changeProviderAAVEAVAX(payload) {
   return {type: CHANGE_ProviderAAVEAVAX,payload};
+}
+export function changeInputEthDeposit(payload) {
+  return {type: CHANGE_INPUT_ETH_DEPOSIT,payload};
+}
+export function changeInputBtcDebt(payload) {
+  return {type: CHANGE_INPUT_BTC_DEBT,payload};
 }

@@ -12,7 +12,9 @@ import {
   CHANGE_MY_USDT_CONTRACT,
   CHANGE_PRICE_OF_ETH,
   CHANGE_PRICE_OF_BTC,
-  CHANGE_ProviderAAVEAVAX
+  CHANGE_ProviderAAVEAVAX,
+  CHANGE_INPUT_BTC_DEBT, 
+  CHANGE_INPUT_ETH_DEPOSIT,
 } from '../actions/loanshark';
 
 const defaultState = {
@@ -29,7 +31,9 @@ const defaultState = {
   myUSDTContract: null,
   priceOfEth: null,
   priceOfBtc: null,
-  providerAAVEAVAX: null
+  providerAAVEAVAX: null,
+  inputBtcDept: 0,
+  inputEthDeposit: 0,
 }
 
 export default function loansharkReducer(state = defaultState, action) {
@@ -62,6 +66,10 @@ export default function loansharkReducer(state = defaultState, action) {
       return {...state,priceOfBtc: action.payload};
     case CHANGE_ProviderAAVEAVAX:
       return {...state,providerAAVEAVAX: action.payload};
+    case CHANGE_INPUT_BTC_DEBT:
+      return {...state,inputBtcDept: action.payload};
+    case CHANGE_INPUT_ETH_DEPOSIT:
+      return {...state,inputEthDeposit: action.payload};
     default:
       return state;
   }
