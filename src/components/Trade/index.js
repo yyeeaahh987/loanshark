@@ -9,6 +9,8 @@ import {
     toggleLoading,
   } from "../../actions/navigation";
   
+import API from '../../utils/API'
+
 class Trade extends React.Component {
     constructor(props) {
         super(props);
@@ -93,59 +95,55 @@ class Trade extends React.Component {
                             flexDirection: "column",
                             alignItems: "center"
                         }}>
-                                <InputGroup >
-                                    <ButtonDropdown
-                                        toggle={function noRefCheck(){}}
-                                    >
-                                        <DropdownToggle outlines color="info">
+                            <InputGroup >
+                                <ButtonDropdown
+                                    toggle={function noRefCheck(){}}
+                                >
+                                    <DropdownToggle outlines color="info">
+                                        ETH
+                                    </DropdownToggle>
+                                    <DropdownMenu>
+                                        <DropdownItem header>
                                             ETH
-                                        </DropdownToggle>
-                                        <DropdownMenu>
-                                            <DropdownItem header>
-                                                ETH
-                                            </DropdownItem>
-                                        </DropdownMenu>
-                                    </ButtonDropdown>
-                                    <Input
-                                        title="Input"
-                                        placeholder="Enter deposit amount..."
-                                        value={this.state.inputEthDeposit}
-                                        onChange={this.setInputEthDeposit}
-                                    />
-                                </InputGroup>
-
+                                        </DropdownItem>
+                                    </DropdownMenu>
+                                </ButtonDropdown>
+                                <Input
+                                    title="Input"
+                                    placeholder="Enter deposit amount..."
+                                    value={this.state.inputEthDeposit}
+                                    onChange={this.setInputEthDeposit}
+                                />
+                            </InputGroup>
                             <Button outline  className="primary">
                                 ⇅
                             </Button>
-
-                                <InputGroup style={{width: "100%"}}  >
-                                    <ButtonDropdown
-                                        toggle={function noRefCheck(){}}
-                                    >
-                                        <DropdownToggle outlines color="warning">
+                            <InputGroup style={{width: "100%"}}  >
+                                <ButtonDropdown
+                                    toggle={function noRefCheck(){}}
+                                >
+                                    <DropdownToggle outlines color="warning">
+                                        BTC
+                                    </DropdownToggle>
+                                    <DropdownMenu>
+                                        <DropdownItem header>
                                             BTC
-                                        </DropdownToggle>
-                                        <DropdownMenu>
-                                            <DropdownItem header>
-                                                BTC
-                                            </DropdownItem>
-                                        </DropdownMenu>
-                                    </ButtonDropdown>
-                                    <Input
-                                        title="Input"
-                                        placeholder="Enter borrow amount..."
-                                        value={this.state.inputBtcBorrow}
-                                        onChange={this.setInputBtcBorrow}
-                                    />
-                                </InputGroup>
-
+                                        </DropdownItem>
+                                    </DropdownMenu>
+                                </ButtonDropdown>
+                                <Input
+                                    title="Input"
+                                    placeholder="Enter borrow amount..."
+                                    value={this.state.inputBtcBorrow}
+                                    onChange={this.setInputBtcBorrow}
+                                />
+                            </InputGroup>
                         </div>
                     </Col>
                 </Row>
-
                 <Row style={{ marginBottom: 9, marginTop:20 }}>
                     <Col lg={12} className={s.root}>
-                        <Button color="success" style={{width: "100%"}} onClick={this.depositAndBorrow} >
+                        <Button disabled={!this.props.myFujiVaultETHBTC || !(this.state.inputEthDeposit > 0)} color={"primary"} style={{width: "100%"}} onClick={this.depositAndBorrow} >
                             Deposit and Borrow
                         </Button>
                     </Col>

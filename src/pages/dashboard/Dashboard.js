@@ -459,10 +459,10 @@ class Dashboard extends React.Component {
                     {this.props.userDepositBalance} ETH
                   </td>
                   <td className={"pl-0 fw-thin"}>
-                    <Button color={"success"} onClick={() => this.toggleDeposit('ETH', 'Deposit')}>
+                    <Button color={"success"} disabled={!this.props.myFujiVaultETHBTC} onClick={() => this.toggleDeposit('ETH', 'Deposit')}>
                       Deposit
                     </Button>&nbsp;
-                    <Button color={"danger"} onClick={() => this.toggleWithdrawn('ETH', 'Withdraw')}>
+                    <Button color={"danger"} disabled={!this.props.myFujiVaultETHBTC} onClick={() => this.toggleWithdrawn('ETH', 'Withdraw')}>
                       Withdraw
                     </Button>
                   </td>
@@ -474,21 +474,21 @@ class Dashboard extends React.Component {
                     {this.props.userDebtBalance} BTC
                   </td>
                   <td className={"pl-0 fw-thin"}>
-                    <Button color={"success"} onClick={() => this.toggleBorrow('BTC', 'Borrow')}>
+                    <Button color={"success"} disabled={!this.props.myFujiVaultETHBTC} onClick={() => this.toggleBorrow('BTC', 'Borrow')}>
                       Borrow
                     </Button>&nbsp;
-                    <Button color={"danger"} onClick={() => this.togglePayback('BTC', 'Payback')}>
+                    <Button color={"danger"} disabled={!this.props.myFujiVaultETHBTC} onClick={() => this.togglePayback('BTC', 'Payback')}>
                       Payback
                     </Button>
                   </td>
-                  <td className={"pl-0 text-success fw-normal"}>
+                  <td className={"pl-0 fw-normal"}>
                   {((this.props.userDepositBalance * this.props.priceOfEth / 100) / (this.props.userDebtBalance * this.props.priceOfBtc / 100)).toFixed(2) }
                   </td>
-                  <td className={"pl-0 text-success fw-normal"}>
-                    <Button color={"success"} onClick={() => this.toggleEnterSmartVault('ETH', 'Enter Smart Vault')}>
+                  <td className={"pl-0 fw-normal"}>
+                    <Button color={"success"} disabled={!this.props.myFujiVaultETHBTC} onClick={() => this.toggleEnterSmartVault('ETH', 'Enter Smart Vault')}>
                       Enter Smart Vault
                     </Button>&nbsp;
-                    <Button color={"danger"} onClick={() => this.toggleFlashclose('ETH and BTC', 'Flash Close')}>
+                    <Button color={"danger"} disabled={!this.props.myFujiVaultETHBTC} onClick={() => this.toggleFlashclose('ETH and BTC', 'Flash Close')}>
                       Flash Close
                     </Button>
                   </td>
@@ -501,8 +501,7 @@ class Dashboard extends React.Component {
         <Modal isOpen={this.state.modal} toggle={this.toggle} style={{color: '#000000'}}>
           <ModalHeader toggle={this.toggle}>{this.state.modalTitle}</ModalHeader>
           <ModalBody>
-            {this.state.modalToken} <br />
-            {this.state.modalAction} : 
+          {this.state.modalAction} {this.state.modalToken} : 
             <Input
               value={this.state.modalInputValue}
               onChange={this.setInput}>

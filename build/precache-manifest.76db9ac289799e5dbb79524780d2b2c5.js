@@ -1,23 +1,23 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "3f732038268a416fe1801c4dede562cb",
+    "revision": "dfdaf9dc92cd4222b02183959834e725",
     "url": "./index.html"
   },
   {
-    "revision": "2b63dfc2b7d78f5e4822",
+    "revision": "d1b02887e75e8057e675",
     "url": "./tables/css/2.11b26ce2.chunk.css"
   },
   {
-    "revision": "bec54588a38e38d08a65",
-    "url": "./tables/css/main.6d873bd9.chunk.css"
+    "revision": "fde1d3febd62124caded",
+    "url": "./tables/css/main.b55f7d34.chunk.css"
   },
   {
-    "revision": "2b63dfc2b7d78f5e4822",
-    "url": "./tables/js/2.2b63dfc2.chunk.js"
+    "revision": "d1b02887e75e8057e675",
+    "url": "./tables/js/2.d1b02887.chunk.js"
   },
   {
-    "revision": "bec54588a38e38d08a65",
-    "url": "./tables/js/main.bec54588.chunk.js"
+    "revision": "fde1d3febd62124caded",
+    "url": "./tables/js/main.fde1d3fe.chunk.js"
   },
   {
     "revision": "5fe9fcb532ea3eb281d3",
@@ -96,8 +96,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "./tables/media/glyphicons-halflings-regular.fa277232.woff"
   },
   {
-    "revision": "f063ba55cc56154e21d736999066b333",
-    "url": "./tables/media/logo.f063ba55.svg"
+    "revision": "dfe478ab5642740c16d30e43009f2c91",
+    "url": "./tables/media/logo.png"
   },
   {
     "revision": "013ee8fb311ffd63bcd50efd379af24a",

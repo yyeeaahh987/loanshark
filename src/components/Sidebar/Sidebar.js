@@ -9,7 +9,7 @@ import {
   changeActiveSidebarItem
 } from "../../actions/navigation";
 
-import logo from "../../images/logo.svg";
+import logo from "../../images/logo.png";
 
 class Sidebar extends React.Component {
   static propTypes = {
@@ -37,8 +37,7 @@ class Sidebar extends React.Component {
         <div className={`${(!this.props.sidebarOpened && !this.props.sidebarStatic ) ? s.sidebarClose : ''} ${s.sidebarWrapper}`} id={"sidebar-drawer"}>
         <nav className={s.root}>
           <header className={s.logo}>
-            <img src={logo} alt="logo" className={s.logoStyle} />
-            <span>Loan&nbsp;</span> Shark
+            <img src={logo} alt="LoanShark" width="180px" className={s.logoStyle} />
           </header>
           <h5 className={s.navTitle}>APP</h5>
           <ul className={s.nav}>

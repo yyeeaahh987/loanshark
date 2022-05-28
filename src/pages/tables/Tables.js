@@ -1,9 +1,12 @@
 import React from "react";
 import { connect } from "react-redux";
+import 'chart.js/auto';
 import {
   Row,
   Col,
 } from "reactstrap";
+import { MDBContainer } from "mdbreact";
+import { Pie } from "react-chartjs-2";
 
 import Widget from "../../components/Widget";
 import Trade from "../../components/Trade";
@@ -14,7 +17,7 @@ class Tables extends React.Component {
   state = {
     initEchartsOptions: {
       renderer: 'canvas'
-    },
+    }
   }
 
   parseDate(date) {
@@ -50,18 +53,41 @@ class Tables extends React.Component {
     return (
       <div className={s.root}>
         <Row>
-          <Col lg={6}>
+          <Col lg={7}>
             <Widget
-              title={<p style={{ fontWeight: 700 }}>Deposit ETH and Borrow BTC</p>}
+              title={<p style={{ fontWeight: 700 }}>Deposit ETH and Borrow BTC<br/>
+                  <h6 style={{color: "#0000000"}}>{this.props.numberOfEth.toFixed(2)} ETH as collateral to borrow 1 BTC, including safety factors</h6></p>
+              }
               customDropDown
             >
               <Trade/>
             </Widget>
           </Col>
-          <Col lg={6}>
-            <h6>Needs {this.props.numberOfEth} ETH as collateral to borrow 1 BTC, including safety factors</h6>
-            <h6>You deposited {this.props.userDepositBalance} ETH as collateral</h6>
-            <h6>You borrowed {this.props.userDebtBalance} BTC</h6>
+          <Col lg={5}>
+            <Widget
+              title={<p style={{ fontWeight: 700 }}>Deposited and Borrowed</p>
+              }
+              customDropDown
+            >
+              <MDBContainer>
+                <Pie data={{
+                    labels: ["ETH $", "BTC $"],
+                    datasets: [
+                      {
+                        data: [this.props.userDepositBalance * this.props.priceOfEth / 100, this.props.userDebtBalance * this.props.priceOfBtc / 100],
+                        backgroundColor: [
+                          "#25859B",
+                          "#FFBF69",
+                        ],
+                        hoverBackgroundColor: [
+                          "#25859B",
+                          "#FFBF69",
+                        ]
+                      }
+                    ]
+                  }} options={{ responsive: true }} />
+              </MDBContainer>
+            </Widget>
           </Col>
         </Row>
       </div>
@@ -74,7 +100,9 @@ function mapStateToProps(store) {
   return {
     numberOfEth: store.loanshark.numberOfEth,
     userDepositBalance: store.loanshark.userDepositBalance,
-    userDebtBalance: store.loanshark.userDebtBalance
+    userDebtBalance: store.loanshark.userDebtBalance,
+    priceOfEth: store.loanshark.priceOfEth,
+    priceOfBtc: store.loanshark.priceOfBtc,
   };
 }
 

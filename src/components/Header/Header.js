@@ -3,8 +3,17 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router";
 import {
-  Navbar, Button
+  Navbar, Button, Input,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
 } from "reactstrap";
+
+import {
+  toggleLoading,
+} from "../../actions/navigation";
+
 import {
   toggleSidebar,
   openSidebar,
@@ -14,9 +23,6 @@ import {
 
 import {
   changeMyAccount,
-  changeNumberOfEth, 
-  changeUserDepositBalance, 
-  changeUserDebtBalance,
   changeMyFujiVaultETHBTC,
   changeMyFliquidatorAvax,
   changeMyFujiController,
@@ -24,8 +30,6 @@ import {
   changeMyEthContract,
   changeMyBtcContract,
   changeMyUsdtContract,
-  changePriceOfEth,
-  changePriceOfBtc,
   changeProviderAAVEAVAX,
 } from "../../actions/loanshark";
 
@@ -66,6 +70,9 @@ class Header extends React.Component {
     super(props);
   
     this.toggleMenu = this.toggleMenu.bind(this);
+    this.toggleMintETH = this.toggleMintETH.bind(this);
+    this.setInput = this.setInput.bind(this);
+    this.toggle = this.toggle.bind(this);
     this.switchSidebar = this.switchSidebar.bind(this);
     this.toggleNotifications = this.toggleNotifications.bind(this);
     this.toggleMessages = this.toggleMessages.bind(this);
@@ -106,18 +113,38 @@ class Header extends React.Component {
       myFujiOracle: '',
       myETHContract: '',
       myBTCContract: '',
-      myUSDTContract: ''
+      myUSDTContract: '',
+      modal: false,
+      modalTitle: '',
+      modalToken: '',
+      modalAction: '',
+      modalCall: () => {},
+      modalInputValue: 0
     };
+  }
+
+  toggle() {
+    this.setState({
+      modal: !this.state.modal,
+    })
   }
 
   toggleFocus = () => {
     this.setState({ focus: !this.state.focus });
   };
 
+  calltoggleLoading() {
+    this.props.dispatch(toggleLoading());
+  }
+
   toggleNotifications() {
     this.setState({
       notificationsOpen: !this.state.notificationsOpen,
     });
+  }
+
+  setInput(event) {
+    this.setState({modalInputValue: event.target.value});
   }
 
   toggleMessages() {
@@ -242,6 +269,64 @@ class Header extends React.Component {
     API(this.props);
   }
 
+  toggleMintETH(inputModalToken, inputModalAction) {
+    this.setState({
+      modal: !this.state.modal,
+      modalTitle: inputModalAction + " " + inputModalToken,
+      modalToken: inputModalToken,
+      modalAction: inputModalAction,
+      modalCall: () => {
+        let args = [
+          window.web3.utils.toBN(window.web3.utils.toWei(this.state.modalInputValue, 'ether')).toString(),
+        ];
+
+        this.toggle();
+        this.calltoggleLoading();
+
+        this.props.myETHContract.methods
+          .mint(...args)
+          .send({from: this.props.myAccount})
+          .on("error", (error, receipt) => {
+            this.calltoggleLoading();
+          })
+          .then((receipt) => {
+            this.calltoggleLoading();
+            API(this.props);
+          });
+      }
+    });
+  }
+
+  toggleMintBTC(inputModalToken, inputModalAction) {
+    this.setState({
+      modal: !this.state.modal,
+      modalTitle: inputModalAction + " " + inputModalToken,
+      modalToken: inputModalToken,
+      modalAction: inputModalAction,
+      modalCall: () => {
+        let finalModalInputValue = Number.parseFloat(this.state.modalInputValue * 100000000).toFixed(0);
+
+        let args = [
+          window.web3.utils.toBN(finalModalInputValue).toString(),
+        ];
+
+        this.toggle();
+        this.calltoggleLoading();
+
+        this.props.myBTCContract.methods
+          .mint(...args)
+          .send({from: this.props.myAccount})
+          .on("error", (error, receipt) => {
+            this.calltoggleLoading();
+          })
+          .then((receipt) => {
+            this.calltoggleLoading();
+            API(this.props);
+          });
+      }
+    });
+  }
+
   ethEnabled() {
     if (window.web3) {
       window.web3 = new Web3(window.web3.currentProvider);
@@ -315,19 +400,41 @@ class Header extends React.Component {
 
   render() {
     return (
-      <Navbar
-        className={`${s.root} d-print-none`}
-        style={{ zIndex: 0, backgroundColor: '#323232', display: "flex" }}
-      >
-        {this.state.myAccount == '' ? 
-          <Button style={{marginLeft: "auto"}} color={"danger"} className={`${s.btnShadow}`} onClick={this.ethEnabled}>
-            Collect Wallet
-          </Button>
-          : <div style={{marginLeft: "auto"}}>Your Wallet Address: {this.state.myAccount}</div>
-        }
-        &nbsp;
-         <Button color={"warning"} onClick={this.getNeededCollateralFor}>Refresh</Button>
-      </Navbar>
+      <div>
+        <Navbar
+          className={`${s.root} d-print-none`}
+          style={{ zIndex: 0, backgroundColor: '#12191D', display: "flex" }}
+        >
+          {this.state.myAccount == '' ? 
+            <Button style={{marginLeft: "auto"}} color={"outline-light"} className={`${s.btnShadow}`} onClick={this.ethEnabled}>
+              Collect Wallet
+            </Button>
+            : <div style={{marginLeft: "auto"}}><Input disabled={true} valid style={{width: '450px'}} value={this.state.myAccount}></Input></div>
+          }
+          &nbsp;
+          <Button color={"outline-light"} disabled={!this.props.myAccount} onClick={this.getNeededCollateralFor}>Refresh</Button>
+          &nbsp;
+          <Button color={"outline-light"} onClick={() => window.open("https://faucet.avax.network/", "_blank")}>Mint AVAX</Button>
+          &nbsp;
+          <Button color={"outline-light"} disabled={!this.props.myETHContract}  onClick={() => this.toggleMintETH('ETH', 'Mint')}>Mint ETH</Button>
+          &nbsp;
+          <Button color={"outline-light"} disabled={!this.props.myBTCContract}  onClick={() => this.toggleMintBTC('BTC', 'Mint')}>Mint BTC</Button>
+        </Navbar>
+        <Modal isOpen={this.state.modal} toggle={this.toggle} style={{color: '#000000'}}>
+          <ModalHeader toggle={this.toggle}>{this.state.modalTitle}</ModalHeader>
+          <ModalBody>
+          {this.state.modalAction} {this.state.modalToken} : 
+            <Input
+              value={this.state.modalInputValue}
+              onChange={this.setInput}>
+            </Input>
+          </ModalBody>
+          <ModalFooter>
+            <Button color="primary" onClick={this.state.modalCall}>Confirm</Button>{' '}
+            <Button color="secondary" onClick={this.toggle}>Cancel</Button>
+          </ModalFooter>
+        </Modal>
+      </div>
     );
   }
 }
