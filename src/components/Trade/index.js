@@ -118,8 +118,8 @@ class Trade extends React.Component {
                         this.setState({inputEthDeposit: 0});
                         this.props.dispatch(changeInputEthDeposit(0));
 
-                        this.setState({inputEthDeposit:0});
-                        this.props.dispatch(changeInputEthDeposit(0));
+                        this.setState({inputBtcBorrow:0});
+                        this.props.dispatch(changeInputBtcDebt(0));
 
                         API(this.props);
                     });
