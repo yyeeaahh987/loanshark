@@ -4,6 +4,7 @@ import {
     changeUserDebtBalance,
     changePriceOfEth,
     changePriceOfBtc,
+    changeSmartVaultBtc,
   } from "../actions/loanshark";
 
 const WBTC=process.env.REACT_APP_WBTC;
@@ -44,6 +45,14 @@ let refreshPrice = (props) => {
         ]
         props.myFujiOracle.methods.getPriceOf(...argsPriceOfBtc).call({}, (error, result) => {
             props.dispatch(changePriceOfBtc(result));
+        });
+
+        props.myFujiOracle.methods.getPriceOf(...argsPriceOfBtc).call({}, (error, result) => {
+            props.dispatch(changePriceOfBtc(result));
+        });
+
+        props.myBTCContract.methods.balanceOf(props.mySmartVault).call({}, (error, result) => {
+            props.dispatch(changeSmartVaultBtc(window.web3.utils.fromWei(result, 'gwei') * 10));
         });
     }
 }

@@ -68,12 +68,13 @@ class Tables extends React.Component {
               <Trade/>
             </Widget>
             <ListGroup>
-              <h6 style={{color: '#ffffff'}}>Markets and APR of BTC</h6><br/>
+              <h6 style={{color: '#ffffff'}}>Borrowing APY of BTC</h6><br/>
               <ListGroupItem active className="justify-content-between">
                 AAVE{' '}
                 <Badge  color="warning" pill>
                   1.4%
                 </Badge>
+                <span style={{paddingLeft: "15px"}}>{' '}Current Loan Provider</span>
               </ListGroupItem>
               <ListGroupItem active className="justify-content-between">
                 BenQi{' '}

@@ -31,6 +31,7 @@ import {
   changeMyBtcContract,
   changeMyUsdtContract,
   changeProviderAAVEAVAX,
+  changeMySmartVault,
 } from "../../actions/loanshark";
 
 import Controller from '../../abi/fujidao/Controller.json';
@@ -54,6 +55,7 @@ const WBTC=process.env.REACT_APP_WBTC;
 const WETH=process.env.REACT_APP_WETH;
 const USDT=process.env.REACT_APP_USDT;
 const AAVEAVAX=process.env.REACT_APP_ProviderAAVEAVAX;
+const SMART_VAULT=process.env.REACT_APP_SMART_VAULT;
 
 class Header extends React.Component {
   static propTypes = {
@@ -90,6 +92,7 @@ class Header extends React.Component {
     this.setMyBTCContract = this.setMyBTCContract.bind(this);
     this.setMyUSDTContract = this.setMyUSDTContract.bind(this);
     this.setMyAAVEAVAXContract = this.setMyAAVEAVAXContract.bind(this);
+    this.setMySmartVaultContract = this.setMySmartVaultContract.bind(this);
 
     this.state = {
       menuOpen: false,
@@ -239,6 +242,10 @@ class Header extends React.Component {
     this.props.dispatch(changeMyFujiOracle(val));
   }
 
+  setMySmartVaultContract(val) {
+    this.props.dispatch(changeMySmartVault(val));
+  }
+
   setMyETHContract(val) {
     this.setState({
       myETHContract: val,
@@ -369,6 +376,7 @@ class Header extends React.Component {
                     this.setMyBTCContract(new  window.web3.eth.Contract(dataHong, WBTC));
                     this.setMyUSDTContract(new  window.web3.eth.Contract(dataHong, USDT));
                     this.setMyAAVEAVAXContract(new  window.web3.eth.Contract(ProviderAAVEAVAX.abi, ProviderAAVEAVAX));
+                    this.setMySmartVaultContract(SMART_VAULT)
                     
                     this.getNeededCollateralFor()
                   });
@@ -384,6 +392,7 @@ class Header extends React.Component {
                 this.setMyBTCContract(new  window.web3.eth.Contract(dataHong, WBTC));
                 this.setMyUSDTContract(new  window.web3.eth.Contract(dataHong, USDT));
                 this.setMyAAVEAVAXContract(new  window.web3.eth.Contract(ProviderAAVEAVAX.abi, AAVEAVAX));
+                this.setMySmartVaultContract(SMART_VAULT)
 
                 this.getNeededCollateralFor()
               })
@@ -450,12 +459,14 @@ function mapStateToProps(store) {
     myFliquidatorAVAX: store.loanshark.myFliquidatorAVAX,
     myFujiController: store.loanshark.myFujiController,
     myFujiOracle: store.loanshark.myFujiOracle,
+    mySmartVault: store.loanshark.mySmartVault,
     myETHContract: store.loanshark.myETHContract,
     myBTCContract:  store.loanshark.myBTCContract,
     myUSDTContract:  store.loanshark.myUSDTContract,
     priceOfEth: store.loanshark.priceOfEth,
     priceOfBtc: store.loanshark.priceOfBtc,
     providerAAVEAVAX: store.loanshark.providerAAVEAVAX,
+    smartVaultBtc: store.loanshark.smartVaultBtc,
   };
 }
 

@@ -24,6 +24,7 @@ class Trade extends React.Component {
         this.setInputEthDeposit = this.setInputEthDeposit.bind(this);
         this.setInputBtcBorrow = this.setInputBtcBorrow.bind(this);
         this.calltoggleLoading = this.calltoggleLoading.bind(this);
+        this.getMyBtcAmount = this.getMyBtcAmount.bind(this);
 
         this.state = {
             myAccount: false,
@@ -37,7 +38,9 @@ class Trade extends React.Component {
             myETHContract: '',
             myBTCContract: '',
             inputEthDeposit: 0,
-            inputBtcBorrow: 0
+            inputBtcBorrow: 0,
+            myBtcAmount: 0,
+            myEthAmount: 0
         };
     }
 
@@ -54,6 +57,27 @@ class Trade extends React.Component {
         this.setState({inputBtcBorrow: event.target.value});
         this.props.dispatch(changeInputBtcDebt(event.target.value));
     }
+
+    getMyBtcAmount() {
+        if (this.props.myBTCContract) {
+            this.props.myBTCContract.methods.balanceOf(this.props.myAccount).call({}, (error, result) => {
+                this.setState({myBtcAmount: window.web3.utils.fromWei(result, 'gwei') * 10});
+            });
+        }
+    }
+
+    getMyEthAmount() {
+        if (this.props.myETHContract) {
+            this.props.myETHContract.methods.balanceOf(this.props.myAccount).call({}, (error, result) => {
+                this.setState({myEthAmount: window.web3.utils.fromWei(result, 'ether')});
+            });
+        }
+    }
+
+    componentDidUpdate(prevProps) {
+          this.getMyBtcAmount();
+          this.getMyEthAmount();
+      } 
 
     depositAndBorrow () {
         if (this.props.myETHContract) {
@@ -85,6 +109,13 @@ class Trade extends React.Component {
                     })
                     .then((receipt) => {
                         this.calltoggleLoading();
+
+                        this.setState({inputEthDeposit: 0});
+                        this.props.dispatch(changeInputEthDeposit(0));
+
+                        this.setState({inputEthDeposit:0});
+                        this.props.dispatch(changeInputEthDeposit(0));
+
                         API(this.props);
                     });
                 });
@@ -121,6 +152,7 @@ class Trade extends React.Component {
                                     value={this.state.inputEthDeposit}
                                     onChange={this.setInputEthDeposit}
                                 />
+                                <Button color="light" onClick={() => {this.setState({inputEthDeposit: this.state.myEthAmount})}}>Max</Button>
                             </InputGroup>
                             <Button outline  className="primary">
                                 ⇅
@@ -144,6 +176,7 @@ class Trade extends React.Component {
                                     value={this.state.inputBtcBorrow}
                                     onChange={this.setInputBtcBorrow}
                                 />
+                                <Button color="light" onClick={() => {this.setState({inputBtcBorrow: this.state.myBtcAmount})}}>Max</Button>
                             </InputGroup>
                         </div>
                     </Col>

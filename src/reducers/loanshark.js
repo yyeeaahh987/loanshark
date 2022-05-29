@@ -7,6 +7,7 @@ import {
   CHANGE_MY_FLIQUIDATORAVAX,
   CHANGE_MY_FUJI_CONTROLLER,
   CHANGE_MY_FUJI_ORACLE,
+  CHANGE_MY_SMART_VAULT,
   CHANGE_MY_ETH_CONTRACT,
   CHANGE_MY_BTC_CONTRACT,
   CHANGE_MY_USDT_CONTRACT,
@@ -15,6 +16,7 @@ import {
   CHANGE_ProviderAAVEAVAX,
   CHANGE_INPUT_BTC_DEBT, 
   CHANGE_INPUT_ETH_DEPOSIT,
+  CHANGE_SMART_VAULT_BTC
 } from '../actions/loanshark';
 
 const defaultState = {
@@ -26,12 +28,14 @@ const defaultState = {
   myFliquidatorAVAX: null,
   myFujiController: null,
   myFujiOracle: null,
+  mySmartVault: null,
   myETHContract: null,
   myBTCContract: null,
   myUSDTContract: null,
   priceOfEth: null,
   priceOfBtc: null,
   providerAAVEAVAX: null,
+  smartVaultBtc: 0,
   inputBtcDept: 0,
   inputEthDeposit: 0,
 }
@@ -54,6 +58,8 @@ export default function loansharkReducer(state = defaultState, action) {
      return {...state,myFujiController: action.payload};
     case CHANGE_MY_FUJI_ORACLE:
       return {...state,myFujiOracle: action.payload};
+    case CHANGE_MY_SMART_VAULT:
+      return {...state,mySmartVault: action.payload};
     case CHANGE_MY_ETH_CONTRACT:
       return {...state,myETHContract: action.payload};
     case CHANGE_MY_BTC_CONTRACT:
@@ -66,6 +72,8 @@ export default function loansharkReducer(state = defaultState, action) {
       return {...state,priceOfBtc: action.payload};
     case CHANGE_ProviderAAVEAVAX:
       return {...state,providerAAVEAVAX: action.payload};
+    case CHANGE_SMART_VAULT_BTC:
+      return {...state,smartVaultBtc: action.payload};
     case CHANGE_INPUT_BTC_DEBT:
       return {...state,inputBtcDept: action.payload};
     case CHANGE_INPUT_ETH_DEPOSIT:
