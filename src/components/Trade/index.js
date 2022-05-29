@@ -76,12 +76,10 @@ class Trade extends React.Component {
 
     componentDidUpdate(prevProps) {
         if (prevProps.myETHContract !== this.props.myETHContract) {
-            alert("ff");
             this.getMyEthAmount();
         }
 
         if (prevProps.myBTCContract !== this.props.myBTCContract) {
-            alert("ff");
             this.getMyBtcAmount();
         }
       } 
