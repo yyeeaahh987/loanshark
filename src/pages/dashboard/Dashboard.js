@@ -528,7 +528,7 @@ class Dashboard extends React.Component {
                         Action
                       </th>
                       <th key={3} scope="col" className={"pl-0"}>
-                        Trigger Healto Factor
+                        Trigger Health Factor
                       </th>
                       <th key={4} scope="col" className={"pl-0"}>
                         APY
