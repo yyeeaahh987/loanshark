@@ -1,89 +1,61 @@
-# 🤘 Flatlogic One React 
+WAVAX2
+0xd00ae08403B9bbb9124bB305C09058E32C39A48c
 
-Free and open-source admin dashboard template built with React and Bootstrap 4. Developed with ❤️ by [Flatlogic](https://flatlogic.com/). If you love our project please star ⭐️ our repo!
+WBTC
+0x9C1DCacB57ADa1E9e2D3a8280B7cfC7EB936186F
 
-**Development at risk! Our developer wants to eat and accepted a job offer from McDonalds! Buy a [full version of Flatlogic One React](https://flatlogic.com/templates/flatlogic-one-react) to help us hire him again!** *
+WETH
+0x9668f5f55f2712Dd2dfa316256609b516292D554
 
-[View Demo](https://flatlogic.github.io/one-react-template/) | [Download](https://github.com/flatlogic/one-react.git) | [More templates](https://flatlogic.com/templates) | [Support forum](https://flatlogic.com/forum)
+Benqi BTC
+0x385104afa0bfdac5a2bce2e3fae97e96d1cb9160
+CToken
+0x1116E05cc3f64a9C4B90A5aDeE0f5C631C65ea38
 
-[![image](https://user-images.githubusercontent.com/43149862/80715665-5d031c80-8aff-11ea-801b-dd22163b4874.png)](https://flatlogic.github.io/one-react-template/)
+Benqi ETH
+0x4f5003fd2234df46fb2ee1531c89b8bdcc372255
+CToken:
+0x906f11f3087ad54dbf618e763427bd98af16bf9c
 
-This dashboard is a free version (containing only few components) of our [Flatlogic One React](https://flatlogic.com/templates/flatlogic-one-react). There are all ready-to-use components, that are in full version. It is built on the top of React 16, so it well supported along the web. You can easy customize template by changing SCSS variables. All paddings and colors are in _variables.scss file.
+Benqi Comptroller
+0x0fEC306943Ec9766C1Da78C1E1b18c7fF23FE09e
 
-## Features
+USDT
+0x02823f9B469960Bb3b1de0B3746D4b95B7E35543
 
-Flatlogic One React Template is a great template to quick-start development of SAAS, CMS, IoT Dashboard, E-Commerce apps, etc  
-Lite version of a Flatlogic One React includes following features and pages:
+ProviderAAVE
+0x57b3c1e2FEF127b2870236cCbc71263621559961
+0xe7A190921bB7ff61F518077E16955a2D2cBb833E
 
-* Bootstrap 4+ & SCSS
-* Responsive layout
-* React Chart.js
-* Simple login / logout 
-* Error page
-* Styled Bootstrap components like buttons, modals, etc
+ProviderBenqi
+0xcD19eE1C2fE31D50CAb2ced934E8289e4b7A41e4
 
+FujiVaultETHBTC
+0xEE40b3e21242283fFF01CeaD8bBC9739E2c0ec63
 
-## Pages
-We have implemented some basic pages, so you can see our template in action.
+FujiVaultETHBTC(Benqi)
+0x5fC7aFEA0871328bBC3039De0E19a9d7C5A11AF8
 
-* Dashboard sample
-* Typography
-* Tables
-* Notifications
-* Charts
-* Icons
-* Maps
-* Chat
-* Login
-* Error page
+FliquidatorAVAX
+0x323570A2479123a58cFDE3309cBA2D0Bbf52C0F3
 
-## Instalation 
+Swapper
+0x2D99ABD9008Dc933ff5c0CD271B88309593aB921
 
-1. Clone repository
-```shell
-git clone https://github.com/flatlogic/one-react-template
-```
-2. Get in the project folder
-```shell
-cd one-react-template
-```
-3. Install dependencies via npm or yarn
-```shell
-npm install
-```
-```shell
-yarn
-```
+FujiController
+0x0f7E3A07CADEaD0A36c20c2CF732218B019a555E
 
-## Quick start
-Run development server
-```shell
-yarn run serve
-```
+FlasherAVAX
+0x2981e754F7c1D02aa3ED92d6f3254Caec3e47FD0
 
-## Support
-For any additional information please go to our [**support forum**](https://flatlogic.com/forum) and raise your questions or feedback provide there. We highly appreciate your participation!
+FujiAdmin
+0xe330B41B52b90eFccc4aB151dF364D4024f370Fa
 
-## How can I support developers?
-- Star our GitHub repo :star:
-- [Tweet about it](https://twitter.com/intent/tweet?text=Amazing%20dashboard%20built%20with%20%23VueJS%20and%20%23Bootstrap!&url=https://github.com/flatlogic/light-blue-vue-admin&via=flatlogic).
-- Create pull requests, submit bugs, suggest new features or documentation updates :wrench:
-- Follow [@flatlogic on Twitter](https://twitter.com/flatlogic).
-- Subscribe to Flatlogic newsletter at [flatlogic.com](https://flatlogic.com/)
-- Like our page on [Facebook](https://www.facebook.com/flatlogic/) :thumbsup:
+FujiOracle
+0x707c7C644a733E71E97C54Ee0F9686468d74b9B4
 
-## More from Flatlogic
-- [Awesome Bootstrap Checkboxes & Radios](https://github.com/flatlogic/awesome-bootstrap-checkbox) - ✅ Pure css way to make inputs look prettier
-- [React Native Starter](https://github.com/flatlogic/react-native-starter) - 🚀 A powerful react native starter template that bootstraps development of your mobile application
-- [React Dashboard](https://github.com/flatlogic/react-dashboard) - 🔥 React Dashboard - isomorphic admin dashboard template with GraphQL
-- [Sing App](https://github.com/flatlogic/sing-app) - 💥 Free and open-source admin dashboard template built with Bootstrap 4
-- [Light Blue Dashboard](https://github.com/flatlogic/light-blue-dashboard) - 💦 Free and open-source (no frameworks) admin dashboard template built with Bootstrap
+FujiERC1155
+0x003c45f27aD5901EE0Ef3eA4F629561727Cb5493
 
-## Premium themes
-Looking for premium themes and templates? Check out our other template at [flatlogic.com](https://flatlogic.com/admin-dashboards).
-
-## License
-
-Flatlogic One React Template version is [MIT](https://github.com/flatlogic/one-react-template/blob/master/LICENCE)-licensed.
-
-* that's a joke actually, but we would really appreciate if you support us by buying a premium version. Anyways free is just free and is limited to only few components, while premium one has more and comes with premium support.
+FujiMapping
+0xB17583362fcCFFf195323D10aB0ad3C9E3dcf8e7
