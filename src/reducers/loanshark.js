@@ -16,7 +16,9 @@ import {
   CHANGE_ProviderAAVEAVAX,
   CHANGE_INPUT_BTC_DEBT, 
   CHANGE_INPUT_ETH_DEPOSIT,
-  CHANGE_SMART_VAULT_BTC
+  CHANGE_SMART_VAULT_BTC,
+  CHANGE_MY_ETH_AMOUNT,
+  CHANGE_MY_BTC_AMOUNT
 } from '../actions/loanshark';
 
 const defaultState = {
@@ -80,6 +82,10 @@ export default function loansharkReducer(state = defaultState, action) {
       return {...state,inputBtcDept: action.payload};
     case CHANGE_INPUT_ETH_DEPOSIT:
       return {...state,inputEthDeposit: action.payload};
+    case CHANGE_MY_ETH_AMOUNT:
+      return {...state,myETHAmount: action.payload};
+    case CHANGE_MY_BTC_AMOUNT:
+      return {...state,myBTCAmount: action.payload};
     default:
       return state;
   }

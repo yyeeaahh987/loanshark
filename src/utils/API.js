@@ -5,6 +5,8 @@ import {
     changePriceOfEth,
     changePriceOfBtc,
     changeSmartVaultBtc,
+    changeMyETHAmount,
+    changeMyBTCAmount
   } from "../actions/loanshark";
 
 const WBTC=process.env.REACT_APP_WBTC;
@@ -53,6 +55,14 @@ let refreshPrice = (props) => {
 
         props.myBTCContract.methods.balanceOf(props.mySmartVault).call({}, (error, result) => {
             props.dispatch(changeSmartVaultBtc(window.web3.utils.fromWei(result, 'gwei') * 10));
+        });
+
+        props.myBTCContract.methods.balanceOf(props.myAccount).call({}, (error, result) => {
+            props.dispatch(changeMyBTCAmount(window.web3.utils.fromWei(result, 'gwei') * 10));
+        });
+
+        props.myETHContract.methods.balanceOf(props.myAccount).call({}, (error, result) => {
+            props.dispatch(changeMyETHAmount(window.web3.utils.fromWei(result, 'ether')));
         });
     }
 }
