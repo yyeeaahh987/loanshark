@@ -38,6 +38,8 @@ const defaultState = {
   smartVaultBtc: 0,
   inputBtcDept: 0,
   inputEthDeposit: 0,
+  myETHAmount: 0,
+  myBTCAmount: 0
 }
 
 export default function loansharkReducer(state = defaultState, action) {
