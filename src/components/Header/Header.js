@@ -415,7 +415,7 @@ class Header extends React.Component {
         >
           {!this.state.myAccount ? 
             <Button style={{marginLeft: "auto"}} color={"outline-light"} className={`${s.btnShadow}`} onClick={this.ethEnabled}>
-              Collect Wallet
+              Connect Wallet
             </Button>
             : <div style={{marginLeft: "auto"}}><Input disabled={true} valid style={{width: '450px'}} value={this.state.myAccount}></Input></div>
           }
