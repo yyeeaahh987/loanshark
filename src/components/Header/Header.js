@@ -39,6 +39,7 @@ import FujiVaultAVAX from '../../abi/fujidao/FujiVaultAVAX.json';
 import FliquidatorAVAX from '../../abi/fujidao/FliquidatorAVAX.json';
 import FujiOracle from '../../abi/fujidao/FujiOracle.json';
 import ProviderAAVEAVAX from '../../abi/fujidao/ProviderAAVEAVAX.json';
+import SmartVault from '../../abi/fujidao/SmartVault.json';
 import API from '../../utils/API'
 
 import Web3 from 'web3';
@@ -376,7 +377,7 @@ class Header extends React.Component {
                     this.setMyBTCContract(new  window.web3.eth.Contract(dataHong, WBTC));
                     this.setMyUSDTContract(new  window.web3.eth.Contract(dataHong, USDT));
                     this.setMyAAVEAVAXContract(new  window.web3.eth.Contract(ProviderAAVEAVAX.abi, ProviderAAVEAVAX));
-                    this.setMySmartVaultContract(SMART_VAULT)
+                    this.setMySmartVaultContract(new  window.web3.eth.Contract(SmartVault, SMART_VAULT))
                     
                     this.getNeededCollateralFor()
                   });
@@ -392,7 +393,7 @@ class Header extends React.Component {
                 this.setMyBTCContract(new  window.web3.eth.Contract(dataHong, WBTC));
                 this.setMyUSDTContract(new  window.web3.eth.Contract(dataHong, USDT));
                 this.setMyAAVEAVAXContract(new  window.web3.eth.Contract(ProviderAAVEAVAX.abi, AAVEAVAX));
-                this.setMySmartVaultContract(SMART_VAULT)
+                this.setMySmartVaultContract(new  window.web3.eth.Contract(SmartVault, SMART_VAULT))
 
                 this.getNeededCollateralFor()
               })

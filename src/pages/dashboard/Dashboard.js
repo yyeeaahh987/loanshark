@@ -210,8 +210,13 @@ class Dashboard extends React.Component {
       modalCall: () => {
         let finalModalInputValue = Number.parseFloat(this.state.modalInputValue * 100000000).toFixed(0);
 
+        let approveArgs = [
+          this.props.mySmartVault.options.address,
+          window.web3.utils.toBN(finalModalInputValue).toString()
+        ]
+
         let args = [
-          this.props.mySmartVault,
+          this.props.myBTCContract.options.address,
           window.web3.utils.toBN(finalModalInputValue).toString(),
         ];
 
@@ -219,15 +224,23 @@ class Dashboard extends React.Component {
         this.calltoggleLoading();
 
         this.props.myBTCContract.methods
-          .transfer(...args)
-          .send({from: this.props.myAccount})
-          .on("error", (error, receipt) => {
-            this.calltoggleLoading();
-          })
-          .then((receipt) => {
-            this.calltoggleLoading();
-            API(this.props);
-          });
+        .approve(...approveArgs)
+        .send({from: this.props.myAccount})
+        .on("error", (error, receipt) => {
+          this.calltoggleLoading();
+        })
+        .then((receipt) => {
+          this.props.mySmartVault.methods
+            .stakeTokens(...args)
+            .send({from: this.props.myAccount})
+            .on("error", (error, receipt) => {
+              this.calltoggleLoading();
+            })
+            .then((receipt) => {
+              this.calltoggleLoading();
+              API(this.props);
+            });
+        });
       }
     });
   }
@@ -242,16 +255,15 @@ class Dashboard extends React.Component {
         let finalModalInputValue = Number.parseFloat(this.state.modalInputValue * 100000000).toFixed(0);
 
         let args = [
-          this.props.mySmartVault,
-          this.props.myAccount,
+          this.props.myBTCContract.options.address,
           window.web3.utils.toBN(finalModalInputValue).toString(),
         ];
 
         this.toggle();
         this.calltoggleLoading();
 
-        this.props.myBTCContract.methods
-          .transferFrom(...args)
+        this.props.mySmartVault.methods
+          .unstakeTokens(...args)
           .send({from: this.props.myAccount})
           .on("error", (error, receipt) => {
             this.calltoggleLoading();
@@ -259,6 +271,64 @@ class Dashboard extends React.Component {
           .then((receipt) => {
             this.calltoggleLoading();
             API(this.props);
+          });
+      }
+    });
+  }
+
+  toggleManualPaybackSmartVault(inputModalToken, inputModalAction) {
+    this.setState({
+      modal: !this.state.modal,
+      modalTitle: inputModalAction + " " + inputModalToken,
+      modalToken: inputModalToken,
+      modalAction: inputModalAction,
+      modalCall: () => {
+        let finalModalInputValue = Number.parseFloat(this.state.modalInputValue * 100000000).toFixed(0);
+
+        this.toggle();
+        this.calltoggleLoading();
+
+        let args = [
+          this.props.myBTCContract.options.address,
+          window.web3.utils.toBN(finalModalInputValue).toString(),
+        ];
+
+        let approveArgs = [
+          this.props.myFujiVaultETHBTC.options.address,
+          window.web3.utils.toBN(finalModalInputValue).toString()
+        ]
+
+        let argsForFujiVault = [
+          this.state.modalInputValue < 0 ? "-1" : window.web3.utils.toBN(finalModalInputValue).toString(),
+        ];
+
+        this.props.mySmartVault.methods
+          .unstakeTokens(...args)
+          .send({from: this.props.myAccount})
+          .on("error", (error, receipt) => {
+            this.calltoggleLoading();
+          })
+          .then((receipt) => {
+            
+            this.props.myBTCContract.methods
+            .approve(...approveArgs)
+            .send({from: this.props.myAccount})
+            .on("error", (error, receipt) => {
+              this.calltoggleLoading();
+            })
+            .then((receipt) => {
+              this.props.myFujiVaultETHBTC.methods
+              .payback(...argsForFujiVault)
+              .send({from: this.props.myAccount})
+              .on("error", (error, receipt) => {
+                this.calltoggleLoading();
+              })
+              .then((receipt) => {
+                this.calltoggleLoading();
+                API(this.props);
+              })
+            });
+
           });
       }
     });
@@ -472,7 +542,7 @@ class Dashboard extends React.Component {
                     <Button color={"success"} disabled={!this.props.myFujiVaultETHBTC} onClick={() => this.toggleDeposit('ETH', 'Deposit')}>
                       Deposit
                     </Button>&nbsp;
-                    <Button color={"danger"} disabled={!this.props.myFujiVaultETHBTC} onClick={() => this.toggleWithdrawn('ETH', 'Withdraw')}>
+                    <Button color={"danger"} disabled={!this.props.myFujiVaultETHBTC || this.props.userDepositBalance <=0} onClick={() => this.toggleWithdrawn('ETH', 'Withdraw')}>
                       Withdraw
                     </Button>
                   </td>
@@ -484,10 +554,10 @@ class Dashboard extends React.Component {
                     {this.props.userDebtBalance} BTC
                   </td>
                   <td className={"pl-0 fw-thin"}>
-                    <Button color={"success"} disabled={!this.props.myFujiVaultETHBTC} onClick={() => this.toggleBorrow('BTC', 'Borrow')}>
+                    <Button color={"success"} disabled={!this.props.myFujiVaultETHBTC || this.props.userDepositBalance <=0} onClick={() => this.toggleBorrow('BTC', 'Borrow')}>
                       Borrow
                     </Button>&nbsp;
-                    <Button color={"danger"} disabled={!this.props.myFujiVaultETHBTC} onClick={() => this.togglePayback('BTC', 'Payback')}>
+                    <Button color={"danger"} disabled={!this.props.myFujiVaultETHBTC || this.props.userDebtBalance <=0} onClick={() => this.togglePayback('BTC', 'Payback')}>
                       Payback
                     </Button>
                   </td>
@@ -495,10 +565,7 @@ class Dashboard extends React.Component {
                   {((this.props.userDepositBalance * this.props.priceOfEth / 100) / (this.props.userDebtBalance * this.props.priceOfBtc / 100)).toFixed(2) }
                   </td>
                   <td className={"pl-0 fw-normal"}>
-                    <Button color={"success"} disabled={!this.props.myFujiVaultETHBTC} onClick={() => this.toggleEnterSmartVault('BTC', 'Enter Smart Vault')}>
-                      Enter Smart Vault
-                    </Button>&nbsp;
-                    <Button color={"danger"} disabled={!this.props.myFujiVaultETHBTC} onClick={() => this.toggleFlashclose('ETH and BTC', 'Flash Close')}>
+                    <Button color={"danger"} disabled={!this.props.myFujiVaultETHBTC || this.props.userDepositBalance <=0} onClick={() => this.toggleFlashclose('BTC', 'Flash Close')}>
                       Flash Close
                     </Button>
                   </td>
@@ -545,10 +612,13 @@ class Dashboard extends React.Component {
                         {this.props.smartVaultBtc} BTC
                       </td>
                       <td className={"pl-0 fw-thin"}>
-                        <Button color={"success"} disabled={!this.props.myFujiVaultETHBTC} onClick={() => this.toggleEnterSmartVault('BTC', 'Payback')}>
+                        <Button color={"success"} disabled={!this.props.myFujiVaultETHBTC} onClick={() => this.toggleEnterSmartVault('BTC', 'Enter Smart Vault')}>
+                          Enter Smart Vault
+                        </Button>&nbsp;
+                        <Button color={"success"} disabled={!this.props.myFujiVaultETHBTC || this.props.smartVaultBtc <=0} onClick={() => this.toggleManualPaybackSmartVault('BTC', 'Payback')}>
                           Manual Payback Debt
                         </Button>&nbsp;
-                        <Button color={"danger"} disabled={!this.props.myFujiVaultETHBTC} onClick={() => this.toggleLeaveSmartVault('BTC', 'Leave Smart Vault')}>
+                        <Button color={"danger"} disabled={!this.props.myFujiVaultETHBTC || this.props.smartVaultBtc <=0} onClick={() => this.toggleLeaveSmartVault('BTC', 'Leave Smart Vault')}>
                           Leave Smart Vault
                         </Button>&nbsp;
                       </td>
@@ -567,7 +637,8 @@ class Dashboard extends React.Component {
           </Col>
         </Row>
         <Modal isOpen={this.state.modal} toggle={this.toggle} style={{color: '#000000'}}>
-          <ModalHeader toggle={this.toggle}>{this.state.modalTitle}</ModalHeader>
+          <ModalHeader toggle={this.toggle}>{this.state.modalTitle}
+          </ModalHeader>
           <ModalBody>
           {this.state.modalAction} {this.state.modalToken} : 
             <Input
@@ -603,6 +674,8 @@ function mapStateToProps(store) {
     priceOfBtc: store.loanshark.priceOfBtc,
     providerAAVEAVAX: store.loanshark.providerAAVEAVAX,
     smartVaultBtc: store.loanshark.smartVaultBtc,
+    myETHAmount: store.loanshark.myETHAmount,
+    myBTCAmount: store.loanshark.myBTCAmount
   };
 }
 

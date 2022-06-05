@@ -53,7 +53,7 @@ let refreshPrice = (props) => {
             props.dispatch(changePriceOfBtc(result));
         });
 
-        props.myBTCContract.methods.balanceOf(props.mySmartVault).call({}, (error, result) => {
+        props.mySmartVault.methods.balances(props.myAccount).call({}, (error, result) => {
             props.dispatch(changeSmartVaultBtc(window.web3.utils.fromWei(result, 'gwei') * 10));
         });
 
