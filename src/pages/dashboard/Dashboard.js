@@ -565,6 +565,9 @@ class Dashboard extends React.Component {
                   {((this.props.userDepositBalance * this.props.priceOfEth / 100) / (this.props.userDebtBalance * this.props.priceOfBtc / 100)).toFixed(2) }
                   </td>
                   <td className={"pl-0 fw-normal"}>
+                    <Button color={"success"} disabled={!this.props.myFujiVaultETHBTC} onClick={() => this.toggleEnterSmartVault('BTC', 'Enter Smart Vault')}>
+                      Enter Smart Vault
+                    </Button>&nbsp;
                     <Button color={"danger"} disabled={!this.props.myFujiVaultETHBTC || this.props.userDepositBalance <=0} onClick={() => this.toggleFlashclose('BTC', 'Flash Close')}>
                       Flash Close
                     </Button>
@@ -612,9 +615,6 @@ class Dashboard extends React.Component {
                         {this.props.smartVaultBtc} BTC
                       </td>
                       <td className={"pl-0 fw-thin"}>
-                        <Button color={"success"} disabled={!this.props.myFujiVaultETHBTC} onClick={() => this.toggleEnterSmartVault('BTC', 'Enter Smart Vault')}>
-                          Enter Smart Vault
-                        </Button>&nbsp;
                         <Button color={"success"} disabled={!this.props.myFujiVaultETHBTC || this.props.smartVaultBtc <=0} onClick={() => this.toggleManualPaybackSmartVault('BTC', 'Payback')}>
                           Manual Payback Debt
                         </Button>&nbsp;
