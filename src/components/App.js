@@ -29,6 +29,26 @@ class App extends React.PureComponent {
                 <Switch>
                     <Route path="/" exact render={() => <Redirect to="/app/main"/>}/>
                     <Route path="/app" exact render={() => <Redirect to="/app/main"/>}/>
+                    <Route path="/twitter" exact component={() => { 
+                        window.location.href = 'https://twitter.com/loansharktech'; 
+                        return null;
+                    }}/>
+                    <Route path="/documentation" exact component={() => { 
+                        window.location.href = 'https://docs.loanshark.tech/'; 
+                        return null;
+                    }}/>
+                    <Route path="/introduction" exact component={() => { 
+                        window.location.href = 'https://loanshark.tech/'; 
+                        return null;
+                    }}/>
+                    <Route path="/github" exact component={() => { 
+                        window.location.href = 'https://github.com/loansharktech?tab=repositories'; 
+                        return null;
+                    }}/>
+                    <Route path="/discord" exact component={() => { 
+                        window.location.href = 'https://discord.gg/4BjV9UyQ'; 
+                        return null;
+                    }}/>
                     <PrivateRoute path="/app" dispatch={this.props.dispatch} component={LayoutComponent}/>
                 </Switch>
             </HashRouter>

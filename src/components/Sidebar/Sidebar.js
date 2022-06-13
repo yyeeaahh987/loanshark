@@ -67,20 +67,34 @@ class Sidebar extends React.Component {
           <ul>
             <hr />
             <LinksGroup
-              onActiveSidebarItemChange={activeItem =>
-                this.props.dispatch(changeActiveSidebarItem(activeItem))
-              }
-              header="Twitter"
-              isHeader
-              index="main"
+                onActiveSidebarItemChange={activeItem =>
+                    this.props.dispatch(changeActiveSidebarItem(activeItem))
+                }
+                header="Introduction"
+                link="/introduction"
+                target="_blank"
+                isHeader
             >
             </LinksGroup>
             <LinksGroup
               onActiveSidebarItemChange={activeItem =>
                 this.props.dispatch(changeActiveSidebarItem(activeItem))
               }
-              header="Telegram"
+              header="Documentation"
+              link="/documentation"
+              target="_blank"
               isHeader
+            >
+            </LinksGroup>
+            <LinksGroup
+              onActiveSidebarItemChange={activeItem =>
+                this.props.dispatch(changeActiveSidebarItem(activeItem))
+              }
+              header="Twitter"
+              isHeader
+              link="/twitter"
+              target="_blank"
+              index="main"
             >
             </LinksGroup>
             <LinksGroup
@@ -88,6 +102,8 @@ class Sidebar extends React.Component {
                     this.props.dispatch(changeActiveSidebarItem(activeItem))
                 }
                 header="Discord"
+                link="/discord"
+                target="_blank"
                 isHeader
             >
             </LinksGroup>
@@ -95,15 +111,9 @@ class Sidebar extends React.Component {
                 onActiveSidebarItemChange={activeItem =>
                     this.props.dispatch(changeActiveSidebarItem(activeItem))
                 }
-                header="Medium"
-                isHeader
-            >
-            </LinksGroup>
-            <LinksGroup
-                onActiveSidebarItemChange={activeItem =>
-                    this.props.dispatch(changeActiveSidebarItem(activeItem))
-                }
-                header="Github"
+                header="GitHub"
+                link="/github"
+                target="_blank"
                 isHeader
             >
             </LinksGroup>
