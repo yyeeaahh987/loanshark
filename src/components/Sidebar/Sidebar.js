@@ -39,9 +39,7 @@ class Sidebar extends React.Component {
           <header className={s.logo}>
             <img src={logo} alt="LoanShark" width="180px" className={s.logoStyle} />
           </header>
-          <h5 className={s.navTitle}>APP</h5>
           <ul className={s.nav}>
-            <hr />
             <LinksGroup
                 onActiveSidebarItemChange={activeItem =>
                     this.props.dispatch(changeActiveSidebarItem(activeItem))
@@ -66,7 +64,6 @@ class Sidebar extends React.Component {
             </LinksGroup>
           </ul>
 
-          <h5 className={s.navTitle}>SOCIAL</h5>
           <ul>
             <hr />
             <LinksGroup

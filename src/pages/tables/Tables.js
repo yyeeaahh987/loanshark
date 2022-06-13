@@ -122,6 +122,7 @@ class Tables extends React.Component {
                          ctx.restore();
                          var fontSize = (height / 200).toFixed(2);
                          ctx.font = fontSize + "em sans-serif";
+                         ctx.fillStyle = "#fff";
                          ctx.textBaseline = "top";
                          var text = (!(Number(this.props.userDebtBalance) + Number(this.props.inputBtcDept)) > 0? "" : (((Number(this.props.userDepositBalance) + Number(this.props.inputEthDeposit)) * this.props.priceOfEth / 100) / ( (Number(this.props.userDebtBalance)  + Number(this.props.inputBtcDept))  * this.props.priceOfBtc / 100)).toFixed(2)),
                          textX = Math.round((width - ctx.measureText(text).width) / 2),

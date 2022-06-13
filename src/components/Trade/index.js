@@ -130,7 +130,7 @@ class Trade extends React.Component {
                                     value={this.state.inputEthDeposit}
                                     onChange={this.setInputEthDeposit}
                                 />
-                                <Button color="light" onClick={() => {
+                                <Button style={{borderRadius: "0px 10px 10px 0px"}} color="dark" onClick={() => {
                                     this.setState({inputEthDeposit: this.props.myETHAmount});
                                     this.props.dispatch(changeInputEthDeposit(this.props.myETHAmount));
                                 }}>Max</Button>
@@ -157,7 +157,7 @@ class Trade extends React.Component {
                                     value={this.state.inputBtcBorrow}
                                     onChange={this.setInputBtcBorrow}
                                 />
-                                <Button color="light" onClick={() => {
+                                <Button style={{borderRadius: "0px 10px 10px 0px"}}  color="dark" onClick={() => {
                                     this.setState({inputBtcBorrow: this.props.myBTCAmount});
                                     this.props.dispatch(changeInputBtcDebt(this.props.myBTCAmount));
                                 }}>Max</Button>

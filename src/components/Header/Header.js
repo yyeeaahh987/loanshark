@@ -412,7 +412,7 @@ class Header extends React.Component {
       <div>
         <Navbar
           className={`${s.root} d-print-none`}
-          style={{ zIndex: 0, backgroundColor: '#12191D', display: "flex" }}
+          style={{ zIndex: 0, backgroundColor: '#000000', display: "flex" }}
         >
           {!this.state.myAccount ? 
             <Button style={{marginLeft: "auto"}} color={"outline-light"} className={`${s.btnShadow}`} onClick={this.ethEnabled}>

@@ -529,7 +529,7 @@ class Dashboard extends React.Component {
                   </th>
                 </tr>
                 </thead>
-                <tbody className="text-dark">
+                <tbody className="">
                 <tr key={0}>
                   <td className="fw-thin pl-0 fw-thin">
                     ETH
@@ -539,10 +539,10 @@ class Dashboard extends React.Component {
                     {this.props.userDepositBalance} ETH
                   </td>
                   <td className={"pl-0 fw-thin"}>
-                    <Button color={"success"} disabled={!this.props.myFujiVaultETHBTC} onClick={() => this.toggleDeposit('ETH', 'Deposit')}>
+                    <Button color={"info"} disabled={!this.props.myFujiVaultETHBTC} onClick={() => this.toggleDeposit('ETH', 'Deposit')}>
                       Deposit
                     </Button>&nbsp;
-                    <Button color={"danger"} disabled={!this.props.myFujiVaultETHBTC || this.props.userDepositBalance <=0} onClick={() => this.toggleWithdrawn('ETH', 'Withdraw')}>
+                    <Button color={"warning"} disabled={!this.props.myFujiVaultETHBTC || this.props.userDepositBalance <=0} onClick={() => this.toggleWithdrawn('ETH', 'Withdraw')}>
                       Withdraw
                     </Button>
                   </td>
@@ -554,10 +554,10 @@ class Dashboard extends React.Component {
                     {this.props.userDebtBalance} BTC
                   </td>
                   <td className={"pl-0 fw-thin"}>
-                    <Button color={"success"} disabled={!this.props.myFujiVaultETHBTC || this.props.userDepositBalance <=0} onClick={() => this.toggleBorrow('BTC', 'Borrow')}>
+                    <Button color={"info"} disabled={!this.props.myFujiVaultETHBTC || this.props.userDepositBalance <=0} onClick={() => this.toggleBorrow('BTC', 'Borrow')}>
                       Borrow
                     </Button>&nbsp;
-                    <Button color={"danger"} disabled={!this.props.myFujiVaultETHBTC || this.props.userDebtBalance <=0} onClick={() => this.togglePayback('BTC', 'Payback')}>
+                    <Button color={"warning"} disabled={!this.props.myFujiVaultETHBTC || this.props.userDebtBalance <=0} onClick={() => this.togglePayback('BTC', 'Payback')}>
                       Payback
                     </Button>
                   </td>
@@ -565,10 +565,10 @@ class Dashboard extends React.Component {
                   {((this.props.userDepositBalance * this.props.priceOfEth / 100) / (this.props.userDebtBalance * this.props.priceOfBtc / 100)).toFixed(2) }
                   </td>
                   <td className={"pl-0 fw-normal"}>
-                    <Button color={"success"} disabled={!this.props.myFujiVaultETHBTC} onClick={() => this.toggleEnterSmartVault('BTC', 'Enter Smart Vault')}>
+                    <Button color={"info"} disabled={!this.props.myFujiVaultETHBTC} onClick={() => this.toggleEnterSmartVault('BTC', 'Enter Smart Vault')}>
                       Enter Smart Vault
                     </Button>&nbsp;
-                    <Button color={"danger"} disabled={!this.props.myFujiVaultETHBTC || this.props.userDepositBalance <=0} onClick={() => this.toggleFlashclose('BTC', 'Flash Close')}>
+                    <Button color={"warning"} disabled={!this.props.myFujiVaultETHBTC || this.props.userDepositBalance <=0} onClick={() => this.toggleFlashclose('BTC', 'Flash Close')}>
                       Flash Close
                     </Button>
                   </td>
@@ -605,7 +605,7 @@ class Dashboard extends React.Component {
                       </th>
                     </tr>
                     </thead>
-                    <tbody className="text-dark">
+                    <tbody className="">
                     <tr key={0}>
                       <td className="fw-thin pl-0 fw-thin">
                         BTC
@@ -615,10 +615,10 @@ class Dashboard extends React.Component {
                         {this.props.smartVaultBtc} BTC
                       </td>
                       <td className={"pl-0 fw-thin"}>
-                        <Button color={"success"} disabled={!this.props.myFujiVaultETHBTC || this.props.smartVaultBtc <=0} onClick={() => this.toggleManualPaybackSmartVault('BTC', 'Payback')}>
+                        <Button color={"info"} disabled={!this.props.myFujiVaultETHBTC || this.props.smartVaultBtc <=0} onClick={() => this.toggleManualPaybackSmartVault('BTC', 'Payback')}>
                           Manual Payback Debt
                         </Button>&nbsp;
-                        <Button color={"danger"} disabled={!this.props.myFujiVaultETHBTC || this.props.smartVaultBtc <=0} onClick={() => this.toggleLeaveSmartVault('BTC', 'Leave Smart Vault')}>
+                        <Button color={"warning"} disabled={!this.props.myFujiVaultETHBTC || this.props.smartVaultBtc <=0} onClick={() => this.toggleLeaveSmartVault('BTC', 'Leave Smart Vault')}>
                           Leave Smart Vault
                         </Button>&nbsp;
                       </td>

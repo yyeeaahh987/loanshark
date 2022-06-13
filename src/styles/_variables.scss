@@ -36,7 +36,7 @@ $gray-500: #a3aeb7 !default;
 $gray-600: #798892 !default;
 $gray-700: #495057 !default;
 $gray-800: #3c484f !default;
-$gray-900: #29323a !default;
+$gray-900: #fff !default;
 $black:    #000 !default;
 $gray-light: $gray-100 !default;
 
@@ -107,7 +107,7 @@ $border-radius-sm:       0.25rem !default;
 
 $sidebar-transition-time: 0.3s !default;
 
-$sidebar-width-open: 284px;
+$sidebar-width-open: 200px;
 $sidebar-width-closed: 50px;
 $sidebar-transition-time: 0.3s !default;
 
@@ -124,7 +124,7 @@ $breadcrumb-padding-y: 0;
 $breadcrumb-bg: transparent;
 
 $widget-bg: #000;
-$widget-title-color: #444;
+$widget-title-color: #fff;
 $widget-shadow-designated: -1px 0 8px rgba(0,0,0,.2);
 $widget-border-radius: 8px;
 
@@ -161,7 +161,7 @@ $dropdown-link-color: $text-color;
 // -------------------------
 $widget-padding-vertical: 23px !default;
 $widget-padding-horizontal: 30px !default;
-$widget-bg-color: $gray-400;
+$widget-bg-color: #222222;
 
 //== Navs
 //

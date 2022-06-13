@@ -292,12 +292,6 @@ class Widget extends React.Component {
                 <img src={dropdownImg} alt="dropdown"/>
               </DropdownToggle>
               <DropdownMenu className="bg-widget-transparent" right style={{padding: 10}}>
-                <DropdownItem onClick={this.handleReload} title="Reload">
-                  Reload &nbsp;&nbsp;
-                  <span className="badge badge-pill badge-success animated bounceIn">
-                    <strong>9</strong>
-                  </span>
-                </DropdownItem>
                 
                 <DropdownItem onClick={this.handleFullscreen} title={!fullscreened ? "Full Screen" : "Restore"}>{!fullscreened ? "Fullscreen" : "Restore"} </DropdownItem>
                 <DropdownItem divider />
