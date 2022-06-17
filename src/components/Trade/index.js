@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 
 import { Row, Col, Button, Input, DropdownToggle, ButtonDropdown, InputGroup, DropdownMenu, DropdownItem } from "reactstrap";
 import "./trade.less";
+import "./trade.scss"
 import s from "../../pages/tables/Tables.modules.scss";
 
 import {
@@ -19,6 +20,25 @@ import {
 import {
     toDecimalNumber
 } from '../../utils/commonFunction'
+
+class BalanceAmount extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+    render() {
+        return (
+            <>
+                <div className="balanceBox">
+                    <div className="balanceBox__content">
+                        <div>{`You balance: ${toDecimalNumber(this.props.amount, 6)}`}</div>
+                    </div>
+                </div>
+            </>
+        )
+    }
+};
+
+
 class Trade extends React.Component {
     constructor(props) {
         super(props);
@@ -141,11 +161,9 @@ class Trade extends React.Component {
                                 }}>Max</Button>
 
                             </InputGroup>
-                            <div style={{ width:"100%" }}>
-                                <div style={{ textAlign:"right" }}>
-                                    {`You balance: ${toDecimalNumber(this.state.currentDepositeCurrencyBalance, 6)}`}
-                                </div>
-                            </div>
+                            <BalanceAmount
+                                amount={this.state.currentDepositeCurrencyBalance}
+                            ></BalanceAmount>
                             <Button outline className="primary">
                                 ⇅
                             </Button>
@@ -173,12 +191,9 @@ class Trade extends React.Component {
                                     this.props.dispatch(changeInputBtcDebt(this.props.myBTCAmount));
                                 }}>Max</Button>
                             </InputGroup>
-
-                            <div style={{ width:"100%" }}>
-                            <div style={{ textAlign:"right" }}>
-                                    <div>{`You balance: ${toDecimalNumber(this.state.currentTargetCurrencyBalance, 6)}`}</div>
-                                </div>
-                            </div>
+                            <BalanceAmount
+                                amount={this.state.currentTargetCurrencyBalance}
+                            ></BalanceAmount>
                         </div>
                     </Col>
                 </Row>
@@ -193,6 +208,8 @@ class Trade extends React.Component {
         )
     }
 };
+
+
 
 function mapStateToProps(store) {
     return {
