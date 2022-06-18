@@ -63,8 +63,6 @@ class Trade extends React.Component {
             inputBtcBorrow: 0,
             myBtcAmount: 0,
             myEthAmount: 0,
-            currentDepositeCurrencyBalance: 4.6000,
-            currentTargetCurrencyBalance: 8.9000,
         };
     }
 
@@ -162,7 +160,7 @@ class Trade extends React.Component {
 
                             </InputGroup>
                             <BalanceAmount
-                                amount={this.state.currentDepositeCurrencyBalance}
+                                amount={this.state.myEthAmount}
                             ></BalanceAmount>
                             <Button outline className="primary">
                                 ⇅
@@ -192,7 +190,7 @@ class Trade extends React.Component {
                                 }}>Max</Button>
                             </InputGroup>
                             <BalanceAmount
-                                amount={this.state.currentTargetCurrencyBalance}
+                                amount={this.state.myBtcAmount}
                             ></BalanceAmount>
                         </div>
                     </Col>
