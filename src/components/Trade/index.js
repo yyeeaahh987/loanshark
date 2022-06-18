@@ -3,19 +3,42 @@ import { connect } from "react-redux";
 
 import { Row, Col, Button, Input, DropdownToggle, ButtonDropdown, InputGroup, DropdownMenu, DropdownItem } from "reactstrap";
 import "./trade.less";
+import "./trade.scss"
 import s from "../../pages/tables/Tables.modules.scss";
 
 import {
     toggleLoading,
-  } from "../../actions/navigation";
-  
+} from "../../actions/navigation";
+
 import API from '../../utils/API'
 
 import {
     changeInputEthDeposit,
     changeInputBtcDebt,
-  } from "../../actions/loanshark";
-  
+} from "../../actions/loanshark";
+
+import {
+    toDecimalNumber
+} from '../../utils/commonFunction'
+
+class BalanceAmount extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+    render() {
+        return (
+            <>
+                <div className="balanceBox">
+                    <div className="balanceBox__content">
+                        <div>{`You balance: ${toDecimalNumber(this.props.amount, 6)}`}</div>
+                    </div>
+                </div>
+            </>
+        )
+    }
+};
+
+
 class Trade extends React.Component {
     constructor(props) {
         super(props);
@@ -39,25 +62,25 @@ class Trade extends React.Component {
             inputEthDeposit: 0,
             inputBtcBorrow: 0,
             myBtcAmount: 0,
-            myEthAmount: 0
+            myEthAmount: 0,
         };
     }
 
     calltoggleLoading() {
         this.props.dispatch(toggleLoading());
     }
-    
+
     setInputEthDeposit(event) {
-        this.setState({inputEthDeposit: event.target.value});
+        this.setState({ inputEthDeposit: event.target.value });
         this.props.dispatch(changeInputEthDeposit(event.target.value));
     }
 
     setInputBtcBorrow(event) {
-        this.setState({inputBtcBorrow: event.target.value});
+        this.setState({ inputBtcBorrow: event.target.value });
         this.props.dispatch(changeInputBtcDebt(event.target.value));
     }
 
-    depositAndBorrow () {
+    depositAndBorrow() {
         if (this.props.myETHContract) {
             let approveArgs = [
                 this.props.myFujiVaultETHBTC.options.address,
@@ -71,41 +94,41 @@ class Trade extends React.Component {
             ]
 
             this.calltoggleLoading();
-            
+
             this.props.myETHContract.methods
                 .approve(...approveArgs)
-                .send({from: this.props.myAccount})
+                .send({ from: this.props.myAccount })
                 .on("error", (error, receipt) => {
                     this.calltoggleLoading();
                 })
                 .then((receipt) => {
                     this.props.myFujiVaultETHBTC.methods
-                    .depositAndBorrow(...args)
-                    .send({from: this.props.myAccount})
-                    .on("error", (error, receipt) => {
-                        this.calltoggleLoading();
-                    })
-                    .then((receipt) => {
-                        this.calltoggleLoading();
+                        .depositAndBorrow(...args)
+                        .send({ from: this.props.myAccount })
+                        .on("error", (error, receipt) => {
+                            this.calltoggleLoading();
+                        })
+                        .then((receipt) => {
+                            this.calltoggleLoading();
 
-                        this.setState({inputEthDeposit: 0});
-                        this.props.dispatch(changeInputEthDeposit(0));
+                            this.setState({ inputEthDeposit: 0 });
+                            this.props.dispatch(changeInputEthDeposit(0));
 
-                        this.setState({inputBtcBorrow:0});
-                        this.props.dispatch(changeInputBtcDebt(0));
+                            this.setState({ inputBtcBorrow: 0 });
+                            this.props.dispatch(changeInputBtcDebt(0));
 
-                        API(this.props);
-                    });
+                            API(this.props);
+                        });
                 });
         }
     }
 
-    render () {
+    render() {
         return (
             <>
                 <Row style={{ marginBottom: 9, marginTop: 1 }}>
                     <Col lg={12}>
-                        <div  style={{
+                        <div style={{
                             display: "flex",
                             flexWrap: "wrap",
                             flexDirection: "column",
@@ -113,7 +136,7 @@ class Trade extends React.Component {
                         }}>
                             <InputGroup >
                                 <ButtonDropdown
-                                    toggle={function noRefCheck(){}}
+                                    toggle={function noRefCheck() { }}
                                 >
                                     <DropdownToggle color="info">
                                         ETH
@@ -130,17 +153,21 @@ class Trade extends React.Component {
                                     value={this.state.inputEthDeposit}
                                     onChange={this.setInputEthDeposit}
                                 />
-                                <Button style={{borderRadius: "0px 10px 10px 0px"}} color="dark" onClick={() => {
-                                    this.setState({inputEthDeposit: this.props.myETHAmount});
+                                <Button style={{ borderRadius: "0px 10px 10px 0px" }} color="dark" onClick={() => {
+                                    this.setState({ inputEthDeposit: this.props.myETHAmount });
                                     this.props.dispatch(changeInputEthDeposit(this.props.myETHAmount));
                                 }}>Max</Button>
+
                             </InputGroup>
-                            <Button outline  className="primary">
+                            <BalanceAmount
+                                amount={this.state.myEthAmount}
+                            ></BalanceAmount>
+                            <Button outline className="primary">
                                 ⇅
                             </Button>
-                            <InputGroup style={{width: "100%"}}  >
+                            <InputGroup style={{ width: "100%" }}  >
                                 <ButtonDropdown
-                                    toggle={function noRefCheck(){}}
+                                    toggle={function noRefCheck() { }}
                                 >
                                     <DropdownToggle color="warning">
                                         BTC
@@ -157,17 +184,20 @@ class Trade extends React.Component {
                                     value={this.state.inputBtcBorrow}
                                     onChange={this.setInputBtcBorrow}
                                 />
-                                <Button style={{borderRadius: "0px 10px 10px 0px"}}  color="dark" onClick={() => {
-                                    this.setState({inputBtcBorrow: this.props.myBTCAmount});
+                                <Button style={{ borderRadius: "0px 10px 10px 0px" }} color="dark" onClick={() => {
+                                    this.setState({ inputBtcBorrow: this.props.myBTCAmount });
                                     this.props.dispatch(changeInputBtcDebt(this.props.myBTCAmount));
                                 }}>Max</Button>
                             </InputGroup>
+                            <BalanceAmount
+                                amount={this.state.myBtcAmount}
+                            ></BalanceAmount>
                         </div>
                     </Col>
                 </Row>
-                <Row style={{ marginBottom: 9, marginTop:20 }}>
+                <Row style={{ marginBottom: 9, marginTop: 20 }}>
                     <Col lg={12} className={s.root}>
-                        <Button disabled={!this.props.myFujiVaultETHBTC || !(this.state.inputEthDeposit > 0)} color={"primary"} style={{width: "100%"}} onClick={this.depositAndBorrow} >
+                        <Button disabled={!this.props.myFujiVaultETHBTC || !(this.state.inputEthDeposit > 0)} color={"primary"} style={{ width: "100%" }} onClick={this.depositAndBorrow} >
                             Deposit and Borrow
                         </Button>
                     </Col>
@@ -177,23 +207,25 @@ class Trade extends React.Component {
     }
 };
 
+
+
 function mapStateToProps(store) {
     return {
-      myAccount: store.loanshark.myAccount,
-      numberOfEth:  store.loanshark.userDebtBalance,
-      userDepositBalance: store.loanshark.userDepositBalance,
-      userDebtBalance:  store.loanshark.userDebtBalance,
-      myFujiVaultETHBTC: store.loanshark.myFujiVaultETHBTC,
-      myFliquidatorAVAX: store.loanshark.myFliquidatorAVAX,
-      myFujiController: store.loanshark.myFujiController,
-      myFujiOracle: store.loanshark.myFujiOracle,
-      myETHContract: store.loanshark.myETHContract,
-      myBTCContract:  store.loanshark.myBTCContract,
-      inputBtcDept: store.loanshark.inputBtcDept,
-      inputEthDeposit: store.loanshark.inputEthDeposit,
-      myETHAmount: store.loanshark.myETHAmount,
-      myBTCAmount: store.loanshark.myBTCAmount
+        myAccount: store.loanshark.myAccount,
+        numberOfEth: store.loanshark.userDebtBalance,
+        userDepositBalance: store.loanshark.userDepositBalance,
+        userDebtBalance: store.loanshark.userDebtBalance,
+        myFujiVaultETHBTC: store.loanshark.myFujiVaultETHBTC,
+        myFliquidatorAVAX: store.loanshark.myFliquidatorAVAX,
+        myFujiController: store.loanshark.myFujiController,
+        myFujiOracle: store.loanshark.myFujiOracle,
+        myETHContract: store.loanshark.myETHContract,
+        myBTCContract: store.loanshark.myBTCContract,
+        inputBtcDept: store.loanshark.inputBtcDept,
+        inputEthDeposit: store.loanshark.inputEthDeposit,
+        myETHAmount: store.loanshark.myETHAmount,
+        myBTCAmount: store.loanshark.myBTCAmount
     };
-  }
+}
 
 export default connect(mapStateToProps)(Trade);
