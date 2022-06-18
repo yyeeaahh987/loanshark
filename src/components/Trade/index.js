@@ -160,7 +160,7 @@ class Trade extends React.Component {
 
                             </InputGroup>
                             <BalanceAmount
-                                amount={this.state.myEthAmount}
+                                amount={this.props.myETHAmount}
                             ></BalanceAmount>
                             <Button outline className="primary">
                                 ⇅
@@ -190,7 +190,7 @@ class Trade extends React.Component {
                                 }}>Max</Button>
                             </InputGroup>
                             <BalanceAmount
-                                amount={this.state.myBtcAmount}
+                                amount={this.props.myBTCAmount}
                             ></BalanceAmount>
                         </div>
                     </Col>
