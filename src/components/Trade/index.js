@@ -61,8 +61,6 @@ class Trade extends React.Component {
             myBTCContract: '',
             inputEthDeposit: 0,
             inputBtcBorrow: 0,
-            myBtcAmount: 0,
-            myEthAmount: 0,
         };
     }
 
