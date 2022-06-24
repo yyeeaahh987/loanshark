@@ -1,56 +1,60 @@
 import {
     changeNumberOfEth, 
+    changeNumberOfAvax, 
     changeUserDepositBalance, 
     changeUserDebtBalance,
     changePriceOfEth,
     changePriceOfBtc,
+    changePriceOfAvax,
     changeSmartVaultBtc,
     changeMyETHAmount,
-    changeMyBTCAmount
+    changeMyBTCAmount,
+    changeMyAVAXAmount,
+    changeMyUSDTAmount
   } from "../actions/loanshark";
 
 const WBTC=process.env.REACT_APP_WBTC;
+const AVAX=process.env.REACT_APP_AVAX;
 const WETH=process.env.REACT_APP_WETH;
 const USDT=process.env.REACT_APP_USDT;
 
 let refreshPrice = (props) => {
     if (props.myFujiVaultETHBTC) {
-        let args = [
-            1,
-            true
-        ]
+        let args = [1,true]
+
+        // ETH-BTC Vaults
         props.myFujiVaultETHBTC.methods.getNeededCollateralFor(...args).call({}, (error, result) => {
             props.dispatch(changeNumberOfEth((result / 10000000000)));
         });
-
         props.myFujiVaultETHBTC.methods.userDepositBalance(props.myAccount).call({}, (error, result) => {
             props.dispatch(changeUserDepositBalance(window.web3.utils.fromWei(result, 'ether')));
         });
-
         props.myFujiVaultETHBTC.methods.userDebtBalance(props.myAccount).call({}, (error, result) => {
             props.dispatch(changeUserDebtBalance(window.web3.utils.fromWei(result, 'gwei') * 10));
         });
 
-        let argsPriceOfEth = [
-            USDT,
-            WETH,
-            2
-        ]
+        // AVAX-USDT Vaults
+        props.myFujiVaultAVAXUSDT.methods.getNeededCollateralFor(...args).call({}, (error, result) => {
+            props.dispatch(changeNumberOfAvax((result / 10000000000)));
+        });
+        props.myFujiVaultAVAXUSDT.methods.userDepositBalance(props.myAccount).call({}, (error, result) => {
+            props.dispatch(changeUserDepositBalance(window.web3.utils.fromWei(result, 'ether')));
+        });
+        props.myFujiVaultAVAXUSDT.methods.userDebtBalance(props.myAccount).call({}, (error, result) => {
+            props.dispatch(changeUserDebtBalance(window.web3.utils.fromWei(result, 'gwei') * 10));
+        });
+
+        let argsPriceOfEth = [USDT,WETH,2]
         props.myFujiOracle.methods.getPriceOf(...argsPriceOfEth).call({}, (error, result) => {
             props.dispatch(changePriceOfEth(result));
         });
-
-        let argsPriceOfBtc = [
-            USDT,
-            WBTC,
-            2
-        ]
+        let argsPriceOfBtc = [USDT,WETH,2]
         props.myFujiOracle.methods.getPriceOf(...argsPriceOfBtc).call({}, (error, result) => {
             props.dispatch(changePriceOfBtc(result));
         });
-
-        props.myFujiOracle.methods.getPriceOf(...argsPriceOfBtc).call({}, (error, result) => {
-            props.dispatch(changePriceOfBtc(result));
+        let argsPriceOfAvax = [USDT,AVAX,2]
+        props.myFujiOracle.methods.getPriceOf(...argsPriceOfAvax).call({}, (error, result) => {
+            props.dispatch(changePriceOfAvax(result));
         });
 
         if (props.mySmartVault) {
@@ -62,10 +66,19 @@ let refreshPrice = (props) => {
         props.myBTCContract.methods.balanceOf(props.myAccount).call({}, (error, result) => {
             props.dispatch(changeMyBTCAmount(window.web3.utils.fromWei(result, 'gwei') * 10));
         });
-
         props.myETHContract.methods.balanceOf(props.myAccount).call({}, (error, result) => {
             props.dispatch(changeMyETHAmount(window.web3.utils.fromWei(result, 'ether')));
         });
+        props.myUSDTContract.methods.balanceOf(props.myAccount).call({}, (error, result) => {
+            props.dispatch(changeMyUSDTAmount(window.web3.utils.fromWei(result, 'ether')));
+        });
+
+        window.web3.eth.getBalance(props.myAccount, function(err, result) {
+            if (err) {
+            } else {
+                props.dispatch(changeMyAVAXAmount(window.web3.utils.fromWei(result, 'ether')));
+            }
+        })
     }
 }
 

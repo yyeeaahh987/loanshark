@@ -23,7 +23,9 @@ import {
 
 import {
   changeMyAccount,
+  changeSelectedPair,
   changeMyFujiVaultETHBTC,
+  changeMyFujiVaultAVAXUSDT,
   changeMyFliquidatorAvax,
   changeMyFujiController,
   changeMyFujiOracle,
@@ -49,6 +51,7 @@ import arrowActive from '../../images/Arrow 5.svg'
 import s from "./Header.module.scss"; // eslint-disable-line css-modules/no-unused-class
 
 const MY_FujiVaultETHBTC=process.env.REACT_APP_MY_FujiVaultETHBTC;
+const MY_FujiVaultAVAXUSDT=process.env.REACT_APP_MY_FujiVaultAVAXUSDT;
 const MY_FliquidatorAVAX=process.env.REACT_APP_MY_FliquidatorAVAX;
 const MY_FujiController=process.env.REACT_APP_MY_FujiController;
 const MY_FujiOracle=process.env.REACT_APP_MY_FujiOracle;
@@ -86,6 +89,7 @@ class Header extends React.Component {
     this.getNeededCollateralFor = this.getNeededCollateralFor.bind(this);
 
     this.setMyFujiVaultETHBTC = this.setMyFujiVaultETHBTC.bind(this);
+    this.setMyFujiVaultAVAXUSDT = this.setMyFujiVaultAVAXUSDT.bind(this);
     this.setMyFliquidatorAVAX = this.setMyFliquidatorAVAX.bind(this);
     this.setMyFujiController = this.setMyFujiController.bind(this);
     this.setMyFujiOracle = this.setMyFujiOracle.bind(this);
@@ -110,7 +114,6 @@ class Header extends React.Component {
       ethNeededCollateral: 0,
       userDepositBalance: 0,
       userDebtBalance: 0,
-      myFujiVaultETHBTC: '',
       myFliquidatorAVAX: '',
       myFujiController: '',
       myFujiOracle: '',
@@ -215,11 +218,11 @@ class Header extends React.Component {
   }
 
   setMyFujiVaultETHBTC(val) {
-    console.log("test: " + val.options.address);
-    this.setState({
-      myFujiVaultETHBTC: val,
-    });
     this.props.dispatch(changeMyFujiVaultETHBTC(val));
+  }
+
+  setMyFujiVaultAVAXUSDT(val) {
+    this.props.dispatch(changeMyFujiVaultAVAXUSDT(val));
   }
 
   setMyFliquidatorAVAX(val) {
@@ -370,6 +373,7 @@ class Header extends React.Component {
                   }).then(() => {
                     const dataHong = require('../../abi/Hong.json');
                     this.setMyFujiVaultETHBTC(new  window.web3.eth.Contract(FujiVaultAVAX.abi, MY_FujiVaultETHBTC));
+                    this.setMyFujiVaultAVAXUSDT(new  window.web3.eth.Contract(FujiVaultAVAX.abi, MY_FujiVaultAVAXUSDT));
                     this.setMyFliquidatorAVAX(new  window.web3.eth.Contract(FliquidatorAVAX.abi, MY_FliquidatorAVAX));
                     this.setMyFujiController(new  window.web3.eth.Contract(Controller.abi, MY_FujiController));
                     this.setMyFujiOracle(new  window.web3.eth.Contract(FujiOracle.abi, MY_FujiOracle));
@@ -386,6 +390,7 @@ class Header extends React.Component {
               .then(() => {
                 const dataHong = require('../../abi/Hong.json');
                 this.setMyFujiVaultETHBTC(new  window.web3.eth.Contract(FujiVaultAVAX.abi, MY_FujiVaultETHBTC));
+                this.setMyFujiVaultAVAXUSDT(new  window.web3.eth.Contract(FujiVaultAVAX.abi, MY_FujiVaultAVAXUSDT));
                 this.setMyFliquidatorAVAX(new  window.web3.eth.Contract(FliquidatorAVAX.abi, MY_FliquidatorAVAX));
                 this.setMyFujiController(new  window.web3.eth.Contract(Controller.abi, MY_FujiController));
                 this.setMyFujiOracle(new  window.web3.eth.Contract(FujiOracle.abi, MY_FujiOracle));
@@ -457,6 +462,7 @@ function mapStateToProps(store) {
     userDepositBalance: store.loanshark.userDepositBalance,
     userDebtBalance:  store.loanshark.userDebtBalance,
     myFujiVaultETHBTC: store.loanshark.myFujiVaultETHBTC,
+    myFujiVaultAVAXUSDT: store.loanshark.myFujiVaultAVAXUSDT,
     myFliquidatorAVAX: store.loanshark.myFliquidatorAVAX,
     myFujiController: store.loanshark.myFujiController,
     myFujiOracle: store.loanshark.myFujiOracle,

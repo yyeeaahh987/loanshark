@@ -43,7 +43,7 @@ class Trade extends React.Component {
     constructor(props) {
         super(props);
 
-        this.depositAndBorrow = this.depositAndBorrow.bind(this);
+        this.depositWETHAndBorrowWBTC = this.depositWETHAndBorrowWBTC.bind(this);
         this.setInputEthDeposit = this.setInputEthDeposit.bind(this);
         this.setInputBtcBorrow = this.setInputBtcBorrow.bind(this);
         this.calltoggleLoading = this.calltoggleLoading.bind(this);
@@ -78,7 +78,51 @@ class Trade extends React.Component {
         this.props.dispatch(changeInputBtcDebt(event.target.value));
     }
 
-    depositAndBorrow() {
+    depositWETHAndBorrowWBTC() {
+        if (this.props.myETHContract) {
+            let approveArgs = [
+                this.props.myFujiVaultETHBTC.options.address,
+                window.web3.utils.toBN(window.web3.utils.toWei(this.state.inputEthDeposit, 'ether')).toString()
+            ]
+            let finalInputBtcBorrow = (this.state.inputBtcBorrow / 10).toString() + "";
+
+            let args = [
+                window.web3.utils.toBN(window.web3.utils.toWei(this.state.inputEthDeposit, 'ether')).toString(),
+                window.web3.utils.toBN(window.web3.utils.toWei(finalInputBtcBorrow, 'shannon')).toString()
+            ]
+
+            this.calltoggleLoading();
+
+            this.props.myETHContract.methods
+                .approve(...approveArgs)
+                .send({ from: this.props.myAccount })
+                .on("error", (error, receipt) => {
+                    this.calltoggleLoading();
+                })
+                .then((receipt) => {
+                    this.props.myFujiVaultETHBTC.methods
+                        .depositWETHAndBorrowWBTC(...args)
+                        .send({ from: this.props.myAccount, value: window.web3.utils.toBN(window.web3.utils.toWei(this.state.inputEthDeposit, 'ether')).toString() })
+                        .on("error", (error, receipt) => {
+                            this.calltoggleLoading();
+                        })
+                        .then((receipt) => {
+                            this.calltoggleLoading();
+
+                            this.setState({ inputEthDeposit: 0 });
+                            this.props.dispatch(changeInputEthDeposit(0));
+
+                            this.setState({ inputBtcBorrow: 0 });
+                            this.props.dispatch(changeInputBtcDebt(0));
+
+                            API(this.props);
+                        });
+                });
+        }
+    }
+
+
+    depositAVAXAndBorrowUSDT() {
         if (this.props.myETHContract) {
             let approveArgs = [
                 this.props.myFujiVaultETHBTC.options.address,
@@ -102,7 +146,7 @@ class Trade extends React.Component {
                 .then((receipt) => {
                     this.props.myFujiVaultETHBTC.methods
                         .depositAndBorrow(...args)
-                        .send({ from: this.props.myAccount })
+                        .send({ from: this.props.myAccount, value: window.web3.utils.toBN(window.web3.utils.toWei(this.state.inputEthDeposit, 'ether')).toString() })
                         .on("error", (error, receipt) => {
                             this.calltoggleLoading();
                         })

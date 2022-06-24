@@ -1,8 +1,11 @@
 export const CHANGE_MY_ACCOUNT = 'CHANGE_MY_ACCOUNT';
+export const CHANGE_SELECTED_PAIR = 'CHANGE_SELECTED_PAIR';
 export const CHANGE_NUMBER_OF_ETH = 'CHANGE_NUMBER_OF_ETH';
+export const CHANGE_NUMBER_OF_AVAX = 'CHANGE_NUMBER_OF_AVAX';
 export const CHANGE_USER_DEPOSIT_BALANCE = 'CHANGE_USER_DEPOSIT_BALANCE';
 export const CHANGE_USER_DEBT_BALANCE = 'CHANGE_USER_DEBT_BALANCE';
 export const CHANGE_MY_FUJI_VALUT_ETHBTC = 'CHANGE_MY_FUJI_VALUT_ETHBTC';
+export const CHANGE_MY_FUJI_VALUT_AVAXUSDT = 'CHANGE_MY_FUJI_VALUT_AVAXUSDT';
 export const CHANGE_MY_FLIQUIDATORAVAX = 'CHANGE_MY_FLIQUIDATORAVAX';
 export const CHANGE_MY_FUJI_CONTROLLER = 'CHANGE_MY_FUJI_CONTROLLER';
 export const CHANGE_MY_FUJI_ORACLE = 'CHANGE_MY_FUJI_ORACLE';
@@ -12,18 +15,29 @@ export const CHANGE_MY_BTC_CONTRACT = 'CHANGE_MY_BTC_CONTRACT';
 export const CHANGE_MY_USDT_CONTRACT = 'CHANGE_MY_USDT_CONTRACT';
 export const CHANGE_PRICE_OF_ETH = 'CHANGE_PRICE_OF_ETH';
 export const CHANGE_PRICE_OF_BTC = 'CHANGE_PRICE_OF_BTC';
+export const CHANGE_PRICE_OF_AVAX = 'CHANGE_PRICE_OF_AVAX';
+export const CHANGE_PRICE_OF_USDT = 'CHANGE_PRICE_OF_USDT';
 export const CHANGE_ProviderAAVEAVAX = 'CHANGE_ProviderAAVEAVAX';
+export const CHANGE_ProviderTraderJoe = 'CHANGE_ProviderTraderJoe';
 export const CHANGE_SMART_VAULT_BTC = 'CHANGE_SMART_VAULT_BTC';
 export const CHANGE_INPUT_ETH_DEPOSIT = 'CHANGE_INPUT_ETH_DEPOSIT';
 export const CHANGE_INPUT_BTC_DEBT = 'CHANGE_INPUT_BTC_DEBT';
 export const CHANGE_MY_ETH_AMOUNT = 'CHANGE_MY_ETH_AMOUNT';
 export const CHANGE_MY_BTC_AMOUNT = 'CHANGE_MY_BTC_AMOUNT';
+export const CHANGE_MY_AVAX_AMOUNT = 'CHANGE_MY_AVAX_AMOUNT';
+export const CHANGE_MY_USDT_AMOUNT = 'CHANGE_MY_USDT_AMOUNT';
 
 export function changeMyAccount(payload) {
   return {type: CHANGE_MY_ACCOUNT,payload};
 }
+export function changeSelectedPair(payload) {
+  return {type: CHANGE_SELECTED_PAIR,payload};
+}
 export function changeNumberOfEth(payload) {
   return {type: CHANGE_NUMBER_OF_ETH,payload};
+}
+export function changeNumberOfAvax(payload) {
+  return {type: CHANGE_NUMBER_OF_AVAX,payload};
 }
 export function changeUserDepositBalance(payload) {
   return {type: CHANGE_USER_DEPOSIT_BALANCE,payload};
@@ -33,6 +47,9 @@ export function changeUserDebtBalance(payload) {
 }
 export function changeMyFujiVaultETHBTC(payload) {
   return {type: CHANGE_MY_FUJI_VALUT_ETHBTC,payload};
+}
+export function changeMyFujiVaultAVAXUSDT(payload) {
+  return {type: CHANGE_MY_FUJI_VALUT_AVAXUSDT,payload};
 }
 export function changeMyFliquidatorAvax(payload) {
   return {type: CHANGE_MY_FLIQUIDATORAVAX,payload};
@@ -61,8 +78,17 @@ export function changePriceOfEth(payload) {
 export function changePriceOfBtc(payload) {
   return {type: CHANGE_PRICE_OF_BTC,payload};
 }
+export function changePriceOfAvax(payload) {
+  return {type: CHANGE_PRICE_OF_AVAX,payload};
+}
+export function changePriceOfUsdt(payload) {
+  return {type: CHANGE_PRICE_OF_USDT,payload};
+}
 export function changeProviderAAVEAVAX(payload) {
   return {type: CHANGE_ProviderAAVEAVAX,payload};
+}
+export function changeProviderTraderJoe(payload) {
+  return {type: CHANGE_ProviderTraderJoe,payload};
 }
 export function changeSmartVaultBtc(payload) {
   return {type: CHANGE_SMART_VAULT_BTC,payload};
@@ -78,4 +104,10 @@ export function changeMyETHAmount(payload) {
 }
 export function changeMyBTCAmount(payload) {
   return {type: CHANGE_MY_BTC_AMOUNT,payload};
+}
+export function changeMyAVAXAmount(payload) {
+  return {type: CHANGE_MY_AVAX_AMOUNT,payload};
+}
+export function changeMyUSDTAmount(payload) {
+  return {type: CHANGE_MY_USDT_AMOUNT,payload};
 }
