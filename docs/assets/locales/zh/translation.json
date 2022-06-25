@@ -1,0 +1,8 @@
+{
+    "hello": "你好!",
+    "link": "一起來 <1>這裡</1> 學習 React 吧",
+    "object1": {
+        "object1name1":"甲乙丙",
+        "object1name2":"甲乙丙123"
+    }
+ }
