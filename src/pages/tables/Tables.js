@@ -79,8 +79,13 @@ class Tables extends React.Component {
           <Col lg={6}>
             <Widget
               title={
-                <p style={{ fontWeight: 700 }}>Deposit ETH and Borrow BTC<br />
-                  <span style={{ color: "#0000000", fontSize: "16px" }}>{this.props.numberOfEth.toFixed(2)} ETH as collateral to borrow 1 BTC</span>
+                <p style={{ fontWeight: 700 }}>
+                  Deposit {this.props.selectedPair === "ETHBTC"? " ETH" : this.props.selectedPair === "AVAXUSDT"? " AVAX" : ""} and 
+                  Borrow {this.props.selectedPair === "ETHBTC"? " BTC" : this.props.selectedPair === "AVAXUSDT"? " USDT" : ""}<br/>
+                    <span style={{color: "#0000000", fontSize: "16px"}}>
+                      {this.props.selectedPair === "ETHBTC" ? this.props.numberOfEth.toFixed(2) : this.props.selectedPair === "AVAXUSDT" ? this.props.numberOfAvax.toFixed(2) : ""}  
+                      {this.props.selectedPair === "ETHBTC"? " ETH" : this.props.selectedPair === "AVAXUSDT"? " AVAX" : ""} as collateral to borrow 1 
+                      {this.props.selectedPair === "ETHBTC"? " BTC" : this.props.selectedPair === "AVAXUSDT"? " USDT" : ""}</span>
                 </p>
               }
               customDropDown
@@ -119,37 +124,49 @@ class Tables extends React.Component {
             >
               <MDBContainer>
                 <Doughnut data={{
-                  labels: ["ETH $", "BTC $"],
-                  datasets: [
-                    {
-                      data: [(Number(this.props.userDepositBalance) + Number(this.props.inputEthDeposit)) * this.props.priceOfEth / 100, (Number(this.props.userDebtBalance) + Number(this.props.inputBtcDept)) * this.props.priceOfBtc / 100],
-                      backgroundColor: [
-                        "#25859B",
-                        "#FFBF69",
-                      ],
-                      hoverBackgroundColor: [
-                        "#25859B",
-                        "#FFBF69",
-                      ]
-                    }
-                  ]
-                }}
+                    labels: ["ETH $", "BTC $"],
+                    datasets: [
+                      {
+                        data: [
+                          (Number(this.props.userDepositBalance) + Number(this.props.inputEthDeposit)) 
+                          * (this.props.selectedPair === "ETHBTC"? this.props.priceOfEth : this.props.selectedPair === "AVAXUSDT"? this.props.priceOfAvax : 0) / 100, 
+                          (Number(this.props.userDebtBalance) + Number(this.props.inputBtcDept)) 
+                          * (this.props.selectedPair === "ETHBTC"? this.props.priceOfBtc : this.props.selectedPair === "AVAXUSDT"? this.props.priceOfUsdt : 0) / 100
+                        ],
+                        backgroundColor: [
+                          "#25859B",
+                          "#FFBF69",
+                        ],
+                        hoverBackgroundColor: [
+                          "#25859B",
+                          "#FFBF69",
+                        ]
+                      }
+                    ]
+                  }} 
                   plugins={[{
                     beforeDraw: (chart) => {
-                      var width = chart.width,
-                        height = chart.height,
-                        ctx = chart.ctx;
-                      ctx.restore();
-                      var fontSize = (height / 200).toFixed(2);
-                      ctx.font = fontSize + "em sans-serif";
-                      ctx.fillStyle = "#fff";
-                      ctx.textBaseline = "top";
-                      var text = (!(Number(this.props.userDebtBalance) + Number(this.props.inputBtcDept)) > 0 ? "" : (((Number(this.props.userDepositBalance) + Number(this.props.inputEthDeposit)) * this.props.priceOfEth / 100) / ((Number(this.props.userDebtBalance) + Number(this.props.inputBtcDept)) * this.props.priceOfBtc / 100)).toFixed(2)),
-                        textX = Math.round((width - ctx.measureText(text).width) / 2),
-                        textY = height / 2;
-                      ctx.fillText(text, textX, textY);
-                      ctx.save();
-                    }
+                     var width = chart.width,
+                         height = chart.height,
+                         ctx = chart.ctx;
+                         ctx.restore();
+                         var fontSize = (height / 200).toFixed(2);
+                         ctx.font = fontSize + "em sans-serif";
+                         ctx.fillStyle = "#fff";
+                         ctx.textBaseline = "top";
+                         var text = (!(Number(this.props.userDebtBalance) + Number(this.props.inputBtcDept)) > 0? "" : 
+                         (
+                            ((Number(this.props.userDepositBalance) + Number(this.props.inputEthDeposit)) 
+                            * (this.props.selectedPair === "ETHBTC"? this.props.priceOfEth : this.props.selectedPair === "AVAXUSDT"? this.props.priceOfAvax : 0) / 100) 
+                            / 
+                            ((Number(this.props.userDebtBalance) + Number(this.props.inputBtcDept)) 
+                            * (this.props.selectedPair === "ETHBTC"? this.props.priceOfBtc : this.props.selectedPair === "AVAXUSDT"? this.props.priceOfUsdt : 0) / 100)
+                         ).toFixed(2)),
+                         textX = Math.round((width - ctx.measureText(text).width) / 2),
+                         textY = height / 2;
+                         ctx.fillText(text, textX, textY);
+                         ctx.save();
+                    } 
                   }]}
                   options={{ responsive: true }} />
               </MDBContainer>
@@ -164,11 +181,15 @@ class Tables extends React.Component {
 
 function mapStateToProps(store) {
   return {
+    selectedPair: store.loanshark.selectedPair,
     numberOfEth: store.loanshark.numberOfEth,
+    numberOfAvax: store.loanshark.numberOfAvax,
     userDepositBalance: store.loanshark.userDepositBalance,
     userDebtBalance: store.loanshark.userDebtBalance,
     priceOfEth: store.loanshark.priceOfEth,
     priceOfBtc: store.loanshark.priceOfBtc,
+    priceOfUsdt: store.loanshark.priceOfUsdt,
+    priceOfAvax: store.loanshark.priceOfAvax,
     inputBtcDept: store.loanshark.inputBtcDept,
     inputEthDeposit: store.loanshark.inputEthDeposit,
   };

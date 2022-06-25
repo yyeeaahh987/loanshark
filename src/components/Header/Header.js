@@ -24,7 +24,9 @@ import {
 
 import {
   changeMyAccount,
+  changeSelectedPair,
   changeMyFujiVaultETHBTC,
+  changeMyFujiVaultAVAXUSDT,
   changeMyFliquidatorAvax,
   changeMyFujiController,
   changeMyFujiOracle,
@@ -32,7 +34,8 @@ import {
   changeMyBtcContract,
   changeMyUsdtContract,
   changeProviderAAVEAVAX,
-  changeMySmartVault,
+  changeMySmartVaultBtc,
+  changeMySmartVaultUsdt
 } from "../../actions/loanshark";
 
 import Controller from '../../abi/fujidao/Controller.json';
@@ -49,15 +52,17 @@ import arrowActive from '../../images/Arrow 5.svg'
 
 import s from "./Header.module.scss"; // eslint-disable-line css-modules/no-unused-class
 
-const MY_FujiVaultETHBTC = process.env.REACT_APP_MY_FujiVaultETHBTC;
-const MY_FliquidatorAVAX = process.env.REACT_APP_MY_FliquidatorAVAX;
-const MY_FujiController = process.env.REACT_APP_MY_FujiController;
-const MY_FujiOracle = process.env.REACT_APP_MY_FujiOracle;
-const WBTC = process.env.REACT_APP_WBTC;
-const WETH = process.env.REACT_APP_WETH;
-const USDT = process.env.REACT_APP_USDT;
-const AAVEAVAX = process.env.REACT_APP_ProviderAAVEAVAX;
-const SMART_VAULT = process.env.REACT_APP_SMART_VAULT;
+const MY_FujiVaultETHBTC=process.env.REACT_APP_MY_FujiVaultETHBTC;
+const MY_FujiVaultAVAXUSDT=process.env.REACT_APP_MY_FujiVaultAVAXUSDT;
+const MY_FliquidatorAVAX=process.env.REACT_APP_MY_FliquidatorAVAX;
+const MY_FujiController=process.env.REACT_APP_MY_FujiController;
+const MY_FujiOracle=process.env.REACT_APP_MY_FujiOracle;
+const WBTC=process.env.REACT_APP_WBTC;
+const WETH=process.env.REACT_APP_WETH;
+const USDT=process.env.REACT_APP_USDT;
+const AAVEAVAX=process.env.REACT_APP_ProviderAAVEAVAX;
+const SMART_VAULT_BTC=process.env.REACT_APP_SMART_VAULT_BTC;
+const SMART_VAULT_USDT=process.env.REACT_APP_SMART_VAULT_USDT;
 
 class Header extends React.Component {
   static propTypes = {
@@ -87,6 +92,7 @@ class Header extends React.Component {
     this.getNeededCollateralFor = this.getNeededCollateralFor.bind(this);
 
     this.setMyFujiVaultETHBTC = this.setMyFujiVaultETHBTC.bind(this);
+    this.setMyFujiVaultAVAXUSDT = this.setMyFujiVaultAVAXUSDT.bind(this);
     this.setMyFliquidatorAVAX = this.setMyFliquidatorAVAX.bind(this);
     this.setMyFujiController = this.setMyFujiController.bind(this);
     this.setMyFujiOracle = this.setMyFujiOracle.bind(this);
@@ -94,7 +100,8 @@ class Header extends React.Component {
     this.setMyBTCContract = this.setMyBTCContract.bind(this);
     this.setMyUSDTContract = this.setMyUSDTContract.bind(this);
     this.setMyAAVEAVAXContract = this.setMyAAVEAVAXContract.bind(this);
-    this.setMySmartVaultContract = this.setMySmartVaultContract.bind(this);
+    this.setMySmartVaultContractBtc = this.setMySmartVaultContractBtc.bind(this);
+    this.setMySmartVaultContractUsdt = this.setMySmartVaultContractUsdt.bind(this);
 
     this.state = {
       menuOpen: false,
@@ -109,9 +116,6 @@ class Header extends React.Component {
       arrowImg: arrowActive,
       myAccount: false,
       ethNeededCollateral: 0,
-      userDepositBalance: 0,
-      userDebtBalance: 0,
-      myFujiVaultETHBTC: '',
       myFliquidatorAVAX: '',
       myFujiController: '',
       myFujiOracle: '',
@@ -216,11 +220,11 @@ class Header extends React.Component {
   }
 
   setMyFujiVaultETHBTC(val) {
-    console.log("test: " + val.options.address);
-    this.setState({
-      myFujiVaultETHBTC: val,
-    });
     this.props.dispatch(changeMyFujiVaultETHBTC(val));
+  }
+
+  setMyFujiVaultAVAXUSDT(val) {
+    this.props.dispatch(changeMyFujiVaultAVAXUSDT(val));
   }
 
   setMyFliquidatorAVAX(val) {
@@ -244,8 +248,12 @@ class Header extends React.Component {
     this.props.dispatch(changeMyFujiOracle(val));
   }
 
-  setMySmartVaultContract(val) {
-    this.props.dispatch(changeMySmartVault(val));
+  setMySmartVaultContractBtc(val) {
+    this.props.dispatch(changeMySmartVaultBtc(val));
+  }
+
+  setMySmartVaultContractUsdt(val) {
+    this.props.dispatch(changeMySmartVaultUsdt(val));
   }
 
   setMyETHContract(val) {
@@ -365,20 +373,24 @@ class Header extends React.Component {
                         chainName: 'Avalanche Fuji Testnet',
                         chainId: window.web3.utils.toHex(chainId),
                         nativeCurrency: { name: 'AVAX', decimals: 18, symbol: 'AVAX' },
-                        rpcUrls: ['https://api.avax-test.network/ext/bc/C/rpc']
+                        rpcUrls: ['https://speedy-nodes-nyc.moralis.io/2b572311b72eca56f1517c91/avalanche/testnet']
                       }
                     ]
                   }).then(() => {
                     const dataHong = require('../../abi/Hong.json');
-                    this.setMyFujiVaultETHBTC(new window.web3.eth.Contract(FujiVaultAVAX.abi, MY_FujiVaultETHBTC));
-                    this.setMyFliquidatorAVAX(new window.web3.eth.Contract(FliquidatorAVAX.abi, MY_FliquidatorAVAX));
-                    this.setMyFujiController(new window.web3.eth.Contract(Controller.abi, MY_FujiController));
-                    this.setMyFujiOracle(new window.web3.eth.Contract(FujiOracle.abi, MY_FujiOracle));
-                    this.setMyETHContract(new window.web3.eth.Contract(dataHong, WETH));
-                    this.setMyBTCContract(new window.web3.eth.Contract(dataHong, WBTC));
-                    this.setMyUSDTContract(new window.web3.eth.Contract(dataHong, USDT));
-                    this.setMyAAVEAVAXContract(new window.web3.eth.Contract(ProviderAAVEAVAX.abi, ProviderAAVEAVAX));
-                    this.setMySmartVaultContract(new window.web3.eth.Contract(SmartVault, SMART_VAULT))
+                    this.setMyFujiVaultETHBTC(new  window.web3.eth.Contract(FujiVaultAVAX.abi, MY_FujiVaultETHBTC));
+                    this.setMyFujiVaultAVAXUSDT(new  window.web3.eth.Contract(FujiVaultAVAX.abi, MY_FujiVaultAVAXUSDT));
+                    this.setMyFliquidatorAVAX(new  window.web3.eth.Contract(FliquidatorAVAX.abi, MY_FliquidatorAVAX));
+                    this.setMyFujiController(new  window.web3.eth.Contract(Controller.abi, MY_FujiController));
+                    this.setMyFujiOracle(new  window.web3.eth.Contract(FujiOracle.abi, MY_FujiOracle));
+                    this.setMyETHContract(new  window.web3.eth.Contract(dataHong, WETH));
+                    this.setMyBTCContract(new  window.web3.eth.Contract(dataHong, WBTC));
+                    this.setMyUSDTContract(new  window.web3.eth.Contract(dataHong, USDT));
+                    this.setMyAAVEAVAXContract(new  window.web3.eth.Contract(ProviderAAVEAVAX.abi, ProviderAAVEAVAX));
+                    this.setMySmartVaultContract(new  window.web3.eth.Contract(SmartVault, SMART_VAULT_BTC));
+                    this.setMySmartVaultContract(new  window.web3.eth.Contract(SmartVault, SMART_VAULT_USDT));
+                    
+                    this.props.dispatch(changeSelectedPair('AVAXUSDT'));
 
                     this.getNeededCollateralFor()
                   });
@@ -386,16 +398,19 @@ class Header extends React.Component {
               })
               .then(() => {
                 const dataHong = require('../../abi/Hong.json');
-                this.setMyFujiVaultETHBTC(new window.web3.eth.Contract(FujiVaultAVAX.abi, MY_FujiVaultETHBTC));
-                this.setMyFliquidatorAVAX(new window.web3.eth.Contract(FliquidatorAVAX.abi, MY_FliquidatorAVAX));
-                this.setMyFujiController(new window.web3.eth.Contract(Controller.abi, MY_FujiController));
-                this.setMyFujiOracle(new window.web3.eth.Contract(FujiOracle.abi, MY_FujiOracle));
-                this.setMyETHContract(new window.web3.eth.Contract(dataHong, WETH));
-                this.setMyBTCContract(new window.web3.eth.Contract(dataHong, WBTC));
-                this.setMyUSDTContract(new window.web3.eth.Contract(dataHong, USDT));
-                this.setMyAAVEAVAXContract(new window.web3.eth.Contract(ProviderAAVEAVAX.abi, AAVEAVAX));
-                this.setMySmartVaultContract(new window.web3.eth.Contract(SmartVault, SMART_VAULT))
+                this.setMyFujiVaultETHBTC(new  window.web3.eth.Contract(FujiVaultAVAX.abi, MY_FujiVaultETHBTC));
+                this.setMyFujiVaultAVAXUSDT(new  window.web3.eth.Contract(FujiVaultAVAX.abi, MY_FujiVaultAVAXUSDT));
+                this.setMyFliquidatorAVAX(new  window.web3.eth.Contract(FliquidatorAVAX.abi, MY_FliquidatorAVAX));
+                this.setMyFujiController(new  window.web3.eth.Contract(Controller.abi, MY_FujiController));
+                this.setMyFujiOracle(new  window.web3.eth.Contract(FujiOracle.abi, MY_FujiOracle));
+                this.setMyETHContract(new  window.web3.eth.Contract(dataHong, WETH));
+                this.setMyBTCContract(new  window.web3.eth.Contract(dataHong, WBTC));
+                this.setMyUSDTContract(new  window.web3.eth.Contract(dataHong, USDT));
+                this.setMyAAVEAVAXContract(new  window.web3.eth.Contract(ProviderAAVEAVAX.abi, AAVEAVAX));
+                this.setMySmartVaultContractBtc(new  window.web3.eth.Contract(SmartVault, SMART_VAULT_BTC));
+                this.setMySmartVaultContractUsdt(new  window.web3.eth.Contract(SmartVault, SMART_VAULT_USDT));
 
+                this.props.dispatch(changeSelectedPair('AVAXUSDT'));
                 this.getNeededCollateralFor()
               })
               .catch((error) => {
@@ -424,9 +439,7 @@ class Header extends React.Component {
           &nbsp;
           <Button color={"outline-light"} disabled={!this.props.myAccount} onClick={this.getNeededCollateralFor}>Refresh</Button>
           &nbsp;
-          <Button color={"outline-light"} onClick={() => window.open("https://faucet.avax.network/", "_blank")}>Mint AVAX</Button>
-          &nbsp;
-          <Button color={"outline-light"} disabled={!this.props.myETHContract} onClick={() => this.toggleMintETH('ETH', 'Mint')}>Mint ETH</Button>
+          <Button color={"outline-light"} disabled={!this.props.myETHContract}  onClick={() => this.toggleMintETH('ETH', 'Mint')}>Mint ETH</Button>
           &nbsp;
           <Button color={"outline-light"} disabled={!this.props.myBTCContract} onClick={() => this.toggleMintBTC('BTC', 'Mint')}>Mint BTC</Button>
         </Navbar>
@@ -454,14 +467,19 @@ function mapStateToProps(store) {
     sidebarOpened: store.navigation.sidebarOpened,
     sidebarStatic: store.navigation.sidebarStatic,
     myAccount: store.loanshark.myAccount,
-    numberOfEth: store.loanshark.userDebtBalance,
-    userDepositBalance: store.loanshark.userDepositBalance,
-    userDebtBalance: store.loanshark.userDebtBalance,
+    selectedPair: store.loanshark.selectedPair,
+    numberOfEth:  store.loanshark.userDebtBalance,
+    userDepositBalanceEth: store.loanshark.userDepositBalanceEth,
+    userDepositBalanceAvax: store.loanshark.userDepositBalanceAvax,
+    userDebtBalanceBtc:  store.loanshark.userDebtBalanceBtc,
+    userDebtBalanceUsdt:  store.loanshark.userDebtBalanceUsdt,
     myFujiVaultETHBTC: store.loanshark.myFujiVaultETHBTC,
+    myFujiVaultAVAXUSDT: store.loanshark.myFujiVaultAVAXUSDT,
     myFliquidatorAVAX: store.loanshark.myFliquidatorAVAX,
     myFujiController: store.loanshark.myFujiController,
     myFujiOracle: store.loanshark.myFujiOracle,
-    mySmartVault: store.loanshark.mySmartVault,
+    mySmartVaultBtc: store.loanshark.mySmartVaultBtc,
+    mySmartVaultUsdt: store.loanshark.mySmartVaultUsdt,
     myETHContract: store.loanshark.myETHContract,
     myBTCContract: store.loanshark.myBTCContract,
     myUSDTContract: store.loanshark.myUSDTContract,
@@ -469,6 +487,7 @@ function mapStateToProps(store) {
     priceOfBtc: store.loanshark.priceOfBtc,
     providerAAVEAVAX: store.loanshark.providerAAVEAVAX,
     smartVaultBtc: store.loanshark.smartVaultBtc,
+    smartVaultUsdt: store.loanshark.smartVaultUsdt
   };
 }
 
