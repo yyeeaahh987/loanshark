@@ -58,7 +58,7 @@ class Dashboard extends React.Component {
     this.setState({modalInputValue: event.target.value});
   }
 
-  toggleDeposit(inputModalToken, inputModalAction) {
+  toggleDeposit(inputModalToken, inputModalAction, pair) {
     this.setState({
       modal: !this.state.modal,
       modalTitle: inputModalAction + " " + inputModalToken,
@@ -66,7 +66,7 @@ class Dashboard extends React.Component {
       modalAction: inputModalAction,
       modalCall: () => {
         let approveArgs = [
-          this.props.myFujiVaultETHBTC.options.address,
+          (pair === "ETHBTC" ? this.props.myFujiVaultETHBTC.options.address : pair === "AVAXUSDT" ? this.props.myFujiVaultAVAXUSDT.options.address : ""),
           window.web3.utils.toBN(window.web3.utils.toWei(this.state.modalInputValue, 'ether')).toString()
         ]
 
@@ -74,19 +74,38 @@ class Dashboard extends React.Component {
           window.web3.utils.toBN(window.web3.utils.toWei(this.state.modalInputValue, 'ether')).toString(),
         ];
 
-        this.toggle();
-        this.calltoggleLoading();
-
-        this.props.myETHContract.methods
-        .approve(...approveArgs)
-        .send({from: this.props.myAccount})
-        .on("error", (error, receipt) => {
+        if (pair === "ETHBTC") {
+          this.toggle();
           this.calltoggleLoading();
-        })
-        .then((receipt) => {
-          this.props.myFujiVaultETHBTC.methods
-          .deposit(...args)
+  
+          this.props.myETHContract.methods
+          .approve(...approveArgs)
           .send({from: this.props.myAccount})
+          .on("error", (error, receipt) => {
+            this.calltoggleLoading();
+          })
+          .then((receipt) => {
+            this.props.myFujiVaultETHBTC.methods
+            .deposit(...args)
+            .send({from: this.props.myAccount})
+            .on("error", (error, receipt) => {
+              this.calltoggleLoading();
+            })
+            .then((receipt) => {
+              this.calltoggleLoading();
+              API(this.props);
+            })
+          });
+        }
+
+        if (pair === "AVAXUSDT") {
+          this.toggle();
+          this.calltoggleLoading();
+  
+          let a = window.web3.utils.toBN(window.web3.utils.toWei(this.state.modalInputValue, 'ether')).toString();
+          this.props.myFujiVaultAVAXUSDT.methods
+          .deposit(...args)
+          .send({from: this.props.myAccount, value: a})
           .on("error", (error, receipt) => {
             this.calltoggleLoading();
           })
@@ -94,12 +113,13 @@ class Dashboard extends React.Component {
             this.calltoggleLoading();
             API(this.props);
           })
-        });
+        }
+
       }
     });
   }
 
-  toggleWithdrawn(inputModalToken, inputModalAction) {
+  toggleWithdrawn(inputModalToken, inputModalAction, pair) {
     this.setState({
       modal: !this.state.modal,
       modalTitle: inputModalAction + " " + inputModalToken,
@@ -110,128 +130,12 @@ class Dashboard extends React.Component {
           window.web3.utils.toBN(window.web3.utils.toWei(this.state.modalInputValue, 'ether')).toString(),
         ];
 
-        this.toggle();
-        this.calltoggleLoading();
-
-        this.props.myFujiVaultETHBTC.methods
-          .withdraw(...args)
-          .send({from: this.props.myAccount})
-          .on("error", (error, receipt) => {
-            this.calltoggleLoading();
-          })
-          .then((receipt) => {
-            this.calltoggleLoading();
-            API(this.props);
-          });
-      }
-    });
-  }
-
-  toggleBorrow(inputModalToken, inputModalAction) {
-    this.setState({
-      modal: !this.state.modal,
-      modalTitle: inputModalAction + " " + inputModalToken,
-      modalToken: inputModalToken,
-      modalAction: inputModalAction,
-      modalCall: () => {
-        let finalModalInputValue = Number.parseFloat(this.state.modalInputValue * 100000000).toFixed(0);
-
-        let args = [
-          window.web3.utils.toBN(finalModalInputValue).toString(),
-        ];
-
-        this.toggle();
-        this.calltoggleLoading();
-
-        this.props.myFujiVaultETHBTC.methods
-          .borrow(...args)
-          .send({from: this.props.myAccount})
-          .on("error", (error, receipt) => {
-            this.calltoggleLoading();
-          })
-          .then((receipt) => {
-            this.calltoggleLoading();
-            API(this.props);
-          });
-      }
-    });
-  }
-
-  togglePayback(inputModalToken, inputModalAction) {
-    this.setState({
-      modal: !this.state.modal,
-      modalTitle: inputModalAction + " " + inputModalToken,
-      modalToken: inputModalToken,
-      modalAction: inputModalAction,
-      modalCall: () => {
-        
-        let finalModalInputValue = this.state.modalInputValue < 0 ? Number.parseFloat(1000000000000).toFixed(0) : Number.parseFloat(this.state.modalInputValue * 100000000).toFixed(0);
-
-        let approveArgs = [
-          this.props.myFujiVaultETHBTC.options.address,
-          window.web3.utils.toBN(finalModalInputValue).toString()
-        ]
-
-        let args = [
-          this.state.modalInputValue < 0 ? "-1" : window.web3.utils.toBN(finalModalInputValue).toString(),
-        ];
-
-        this.toggle();
-        this.calltoggleLoading();
-
-        this.props.myBTCContract.methods
-        .approve(...approveArgs)
-        .send({from: this.props.myAccount})
-        .on("error", (error, receipt) => {
+        if (pair === "ETHBTC") {
+          this.toggle();
           this.calltoggleLoading();
-        })
-        .then((receipt) => {
+
           this.props.myFujiVaultETHBTC.methods
-          .payback(...args)
-          .send({from: this.props.myAccount})
-          .on("error", (error, receipt) => {
-            this.calltoggleLoading();
-          })
-          .then((receipt) => {
-            this.calltoggleLoading();
-            API(this.props);
-          })
-        });
-      }
-    });
-  }
-
-  toggleEnterSmartVault(inputModalToken, inputModalAction) {
-    this.setState({
-      modal: !this.state.modal,
-      modalTitle: inputModalAction + " " + inputModalToken,
-      modalToken: inputModalToken,
-      modalAction: inputModalAction,
-      modalCall: () => {
-        let finalModalInputValue = Number.parseFloat(this.state.modalInputValue * 100000000).toFixed(0);
-
-        let approveArgs = [
-          this.props.mySmartVault.options.address,
-          window.web3.utils.toBN(finalModalInputValue).toString()
-        ]
-
-        let args = [
-          this.props.myBTCContract.options.address,
-          window.web3.utils.toBN(finalModalInputValue).toString(),
-        ];
-
-        this.toggle();
-        this.calltoggleLoading();
-
-        this.props.myBTCContract.methods
-        .approve(...approveArgs)
-        .send({from: this.props.myAccount})
-        .on("error", (error, receipt) => {
-          this.calltoggleLoading();
-        })
-        .then((receipt) => {
-          this.props.mySmartVault.methods
-            .stakeTokens(...args)
+            .withdraw(...args)
             .send({from: this.props.myAccount})
             .on("error", (error, receipt) => {
               this.calltoggleLoading();
@@ -240,69 +144,331 @@ class Dashboard extends React.Component {
               this.calltoggleLoading();
               API(this.props);
             });
-        });
+        }
+
+        if (pair === "AVAXUSDT") {
+          this.toggle();
+          this.calltoggleLoading();
+
+          this.props.myFujiVaultAVAXUSDT.methods
+            .withdraw(...args)
+            .send({from: this.props.myAccount})
+            .on("error", (error, receipt) => {
+              this.calltoggleLoading();
+            })
+            .then((receipt) => {
+              this.calltoggleLoading();
+              API(this.props);
+            });
+        }
       }
     });
   }
 
-  toggleLeaveSmartVault(inputModalToken, inputModalAction) {
+  toggleBorrow(inputModalToken, inputModalAction, pair) {
     this.setState({
       modal: !this.state.modal,
       modalTitle: inputModalAction + " " + inputModalToken,
       modalToken: inputModalToken,
       modalAction: inputModalAction,
       modalCall: () => {
-        let finalModalInputValue = Number.parseFloat(this.state.modalInputValue * 100000000).toFixed(0);
+        var finalModalInputValue;
+        if (pair === "ETHBTC") {
+          finalModalInputValue = Number.parseFloat(this.state.modalInputValue * 100000000).toFixed(0);
+        }
+        if (pair === "AVAXUSDT") {
+          finalModalInputValue = Number.parseFloat(this.state.modalInputValue * 1000000).toFixed(0);
+        }
 
         let args = [
-          this.props.myBTCContract.options.address,
-          window.web3.utils.toBN(finalModalInputValue).toString(),
+          finalModalInputValue
         ];
 
         this.toggle();
         this.calltoggleLoading();
 
-        this.props.mySmartVault.methods
-          .unstakeTokens(...args)
+        if (pair === "ETHBTC") {
+          this.props.myFujiVaultETHBTC.methods
+            .borrow(...args)
+            .send({from: this.props.myAccount})
+            .on("error", (error, receipt) => {
+              this.calltoggleLoading();
+            })
+            .then((receipt) => {
+              this.calltoggleLoading();
+              API(this.props);
+            });
+        }
+
+        if (pair === "AVAXUSDT") {
+          this.props.myFujiVaultAVAXUSDT.methods
+            .borrow(...args)
+            .send({from: this.props.myAccount})
+            .on("error", (error, receipt) => {
+              this.calltoggleLoading();
+            })
+            .then((receipt) => {
+              this.calltoggleLoading();
+              API(this.props);
+            });
+        }
+      }
+    });
+  }
+
+  togglePayback(inputModalToken, inputModalAction, pair) {
+    this.setState({
+      modal: !this.state.modal,
+      modalTitle: inputModalAction + " " + inputModalToken,
+      modalToken: inputModalToken,
+      modalAction: inputModalAction,
+      modalCall: () => {
+        
+        var finalModalInputValue;
+        if (pair === "ETHBTC") {
+          finalModalInputValue = this.state.modalInputValue < 0 ? Number.parseFloat(1000000000000).toFixed(0) : Number.parseFloat(this.state.modalInputValue * 100000000).toFixed(0);  
+        }
+        if (pair === "AVAXUSDT") {
+          finalModalInputValue = this.state.modalInputValue < 0 ? Number.parseFloat(1000000000000).toFixed(0) : window.web3.utils.toBN(window.web3.utils.toWei(this.state.modalInputValue, 'picoether')).toString();
+        }
+
+        let approveArgs = [
+          (pair === "ETHBTC" ? this.props.myFujiVaultETHBTC.options.address : pair === "AVAXUSDT" ? this.props.myFujiVaultAVAXUSDT.options.address : ""),
+          window.web3.utils.toBN(finalModalInputValue).toString()
+        ]
+
+        let args = [
+          this.state.modalInputValue < 0 ? "-1" : window.web3.utils.toBN(finalModalInputValue).toString(),
+        ];
+
+        if (pair === "ETHBTC") {
+          this.toggle();
+          this.calltoggleLoading();
+
+          this.props.myBTCContract.methods
+          .approve(...approveArgs)
           .send({from: this.props.myAccount})
           .on("error", (error, receipt) => {
             this.calltoggleLoading();
           })
           .then((receipt) => {
-            this.calltoggleLoading();
-            API(this.props);
+            this.props.myFujiVaultETHBTC.methods
+            .payback(...args)
+            .send({from: this.props.myAccount})
+            .on("error", (error, receipt) => {
+              this.calltoggleLoading();
+            })
+            .then((receipt) => {
+              this.calltoggleLoading();
+              API(this.props);
+            })
           });
+        }
+
+        if (pair === "AVAXUSDT") {
+          this.toggle();
+          this.calltoggleLoading();
+  
+          this.props.myUSDTContract.methods
+          .approve(...approveArgs)
+          .send({from: this.props.myAccount})
+          .on("error", (error, receipt) => {
+            this.calltoggleLoading();
+          })
+          .then((receipt) => {
+            this.props.myFujiVaultAVAXUSDT.methods
+            .payback(...args)
+            .send({from: this.props.myAccount})
+            .on("error", (error, receipt) => {
+              this.calltoggleLoading();
+            })
+            .then((receipt) => {
+              this.calltoggleLoading();
+              API(this.props);
+            })
+          });
+        }
       }
     });
   }
 
-  toggleManualPaybackSmartVault(inputModalToken, inputModalAction) {
+  toggleEnterSmartVault(inputModalToken, inputModalAction, pair) {
     this.setState({
       modal: !this.state.modal,
       modalTitle: inputModalAction + " " + inputModalToken,
       modalToken: inputModalToken,
       modalAction: inputModalAction,
       modalCall: () => {
-        let finalModalInputValue = Number.parseFloat(this.state.modalInputValue * 100000000).toFixed(0);
+        var finalModalInputValue;
+        if (pair === "ETHBTC") {
+          finalModalInputValue = this.state.modalInputValue < 0 ? Number.parseFloat(1000000000000).toFixed(0) : Number.parseFloat(this.state.modalInputValue * 100000000).toFixed(0);  
+        }
+        if (pair === "AVAXUSDT") {
+          finalModalInputValue = this.state.modalInputValue < 0 ? window.web3.utils.toBN(window.web3.utils.toWei(1000000000000, 'picoether')).toString() : window.web3.utils.toBN(window.web3.utils.toWei(this.state.modalInputValue, 'picoether')).toString();
+        }
+
+        let approveArgs = [
+          (pair === "ETHBTC" ? this.props.mySmartVaultBtc.options.address : pair === "AVAXUSDT" ? this.props.mySmartVaultUsdt.options.address : ""),
+          window.web3.utils.toBN(finalModalInputValue).toString()
+        ]
+
+        let args = [
+          (pair === "ETHBTC" ? this.props.myBTCContract.options.address : pair === "AVAXUSDT" ? this.props.myUSDTContract.options.address : ""),
+          window.web3.utils.toBN(finalModalInputValue).toString(),
+        ];
 
         this.toggle();
         this.calltoggleLoading();
 
+        if (pair === "ETHBTC") {
+          this.props.myBTCContract.methods
+          .approve(...approveArgs)
+          .send({from: this.props.myAccount})
+          .on("error", (error, receipt) => {
+            this.calltoggleLoading();
+          })
+          .then((receipt) => {
+            this.props.mySmartVaultBtc.methods
+              .stakeTokens(...args)
+              .send({from: this.props.myAccount})
+              .on("error", (error, receipt) => {
+                this.calltoggleLoading();
+              })
+              .then((receipt) => {
+                this.calltoggleLoading();
+                API(this.props);
+              });
+          });
+        }
+        if (pair === "AVAXUSDT") {
+          this.props.myUSDTContract.methods
+          .approve(...approveArgs)
+          .send({from: this.props.myAccount})
+          .on("error", (error, receipt) => {
+            this.calltoggleLoading();
+          })
+          .then((receipt) => {
+            this.props.mySmartVaultUsdt.methods
+              .stakeTokens(...args)
+              .send({from: this.props.myAccount})
+              .on("error", (error, receipt) => {
+                this.calltoggleLoading();
+              })
+              .then((receipt) => {
+                this.calltoggleLoading();
+                API(this.props);
+              });
+          });
+        }
+      }
+    });
+  }
+
+  toggleLeaveSmartVault(inputModalToken, inputModalAction, pair) {
+    this.setState({
+      modal: !this.state.modal,
+      modalTitle: inputModalAction + " " + inputModalToken,
+      modalToken: inputModalToken,
+      modalAction: inputModalAction,
+      modalCall: () => {
+        var finalModalInputValue;
+        if (pair === "ETHBTC") {
+          finalModalInputValue = this.state.modalInputValue < 0 ? Number.parseFloat(1000000000000).toFixed(0) : Number.parseFloat(this.state.modalInputValue * 100000000).toFixed(0);  
+        }
+        if (pair === "AVAXUSDT") {
+          finalModalInputValue = this.state.modalInputValue < 0 ? window.web3.utils.toBN(window.web3.utils.toWei(1000000000000, 'picoether')).toString() : window.web3.utils.toBN(window.web3.utils.toWei(this.state.modalInputValue, 'picoether')).toString();
+        }
+
         let args = [
-          this.props.myBTCContract.options.address,
+          (pair === "ETHBTC" ? this.props.myBTCContract.options.address : pair === "AVAXUSDT" ? this.props.myUSDTContract.options.address : ""),
           window.web3.utils.toBN(finalModalInputValue).toString(),
         ];
 
-        let approveArgs = [
-          this.props.myFujiVaultETHBTC.options.address,
-          window.web3.utils.toBN(finalModalInputValue).toString()
-        ]
+        if (pair === "ETHBTC") {
+          this.toggle();
+          this.calltoggleLoading();
+          this.props.mySmartVaultBtc.methods
+            .unstakeTokens(...args)
+            .send({from: this.props.myAccount})
+            .on("error", (error, receipt) => {
+              this.calltoggleLoading();
+            })
+            .then((receipt) => {
+              this.calltoggleLoading();
+              API(this.props);
+            });
+        }
 
-        let argsForFujiVault = [
-          this.state.modalInputValue < 0 ? "-1" : window.web3.utils.toBN(finalModalInputValue).toString(),
-        ];
+        if (pair === "AVAXUSDT") {
+          this.toggle();
+          this.calltoggleLoading();
+          this.props.mySmartVaultUsdt.methods
+            .unstakeTokens(...args)
+            .send({from: this.props.myAccount})
+            .on("error", (error, receipt) => {
+              this.calltoggleLoading();
+            })
+            .then((receipt) => {
+              this.calltoggleLoading();
+              API(this.props);
+            });
+        }
+      }
+    });
+  }
 
-        this.props.mySmartVault.methods
+  toggleManualPaybackSmartVault(inputModalToken, inputModalAction, pair) {
+    this.setState({
+      modal: !this.state.modal,
+      modalTitle: inputModalAction + " " + inputModalToken,
+      modalToken: inputModalToken,
+      modalAction: inputModalAction,
+      modalCall: () => {
+        var finalModalInputValue;
+        var args;
+        var approveArgs;
+        var argsForFujiVault;
+        var mySmartVaultContract;
+        var myDebtContract;
+        var myFujiVaultContract;
+        if (pair === "ETHBTC") {
+          mySmartVaultContract = this.props.mySmartVaultBtc;
+          myDebtContract = this.props.myBTCContract;
+          myFujiVaultContract = this.props.myFujiVaultETHBTC;
+          finalModalInputValue = this.state.modalInputValue < 0 ? Number.parseFloat(1000000000000).toFixed(0) : Number.parseFloat(this.state.modalInputValue * 100000000).toFixed(0);  
+          args = [
+            this.props.myBTCContract.options.address,
+            window.web3.utils.toBN(finalModalInputValue).toString(),
+          ];
+          approveArgs = [
+            this.props.myFujiVaultETHBTC.options.address,
+            window.web3.utils.toBN(finalModalInputValue).toString()
+          ]
+          argsForFujiVault = [
+            this.state.modalInputValue < 0 ? "-1" : window.web3.utils.toBN(finalModalInputValue).toString(),
+          ];
+        }
+        if (pair === "AVAXUSDT") {
+          mySmartVaultContract = this.props.mySmartVaultUsdt;
+          myDebtContract = this.props.myUSDTContract;
+          myFujiVaultContract = this.props.myFujiVaultAVAXUSDT;
+          finalModalInputValue = this.state.modalInputValue < 0 ? window.web3.utils.toBN(window.web3.utils.toWei(1000000000000, 'picoether')).toString() : window.web3.utils.toBN(window.web3.utils.toWei(this.state.modalInputValue, 'picoether')).toString();
+          args = [
+            this.props.myUSDTContract.options.address,
+            window.web3.utils.toBN(finalModalInputValue).toString(),
+          ];
+          approveArgs = [
+            this.props.myFujiVaultAVAXUSDT.options.address,
+            window.web3.utils.toBN(finalModalInputValue).toString()
+          ]
+          argsForFujiVault = [
+            this.state.modalInputValue < 0 ? "-1" : window.web3.utils.toBN(finalModalInputValue).toString(),
+          ];
+        }
+
+        this.toggle();
+        this.calltoggleLoading();
+        mySmartVaultContract.methods
           .unstakeTokens(...args)
           .send({from: this.props.myAccount})
           .on("error", (error, receipt) => {
@@ -310,14 +476,14 @@ class Dashboard extends React.Component {
           })
           .then((receipt) => {
             
-            this.props.myBTCContract.methods
+            myDebtContract.methods
             .approve(...approveArgs)
             .send({from: this.props.myAccount})
             .on("error", (error, receipt) => {
               this.calltoggleLoading();
             })
             .then((receipt) => {
-              this.props.myFujiVaultETHBTC.methods
+              myFujiVaultContract.methods
               .payback(...argsForFujiVault)
               .send({from: this.props.myAccount})
               .on("error", (error, receipt) => {
@@ -334,17 +500,27 @@ class Dashboard extends React.Component {
     });
   }
 
-  toggleFlashclose(inputModalToken, inputModalAction) {
+  toggleFlashclose(inputModalToken, inputModalAction, pair) {
     this.setState({
       modal: !this.state.modal,
       modalTitle: inputModalAction + " " + inputModalToken,
       modalToken: inputModalToken,
       modalAction: inputModalAction,
       modalCall: () => {
-        let finalModalInputValue = Number.parseFloat(this.state.modalInputValue * 100000000).toFixed(0);
+        var finalModalInputValue;
+        var myFujiVaultContract;
+        if (pair === "ETHBTC") {
+          finalModalInputValue = this.state.modalInputValue < 0 ? -1 : Number.parseFloat(this.state.modalInputValue * 100000000).toFixed(0);  
+          myFujiVaultContract = this.props.myFujiVaultETHBTC;
+         }
+        if (pair === "AVAXUSDT") {
+          finalModalInputValue = this.state.modalInputValue < 0 ? -1 : window.web3.utils.toBN(window.web3.utils.toWei(this.state.modalInputValue, 'picoether')).toString();
+          myFujiVaultContract = this.props.myFujiVaultAVAXUSDT;
+        }
+
         let args = [
           window.web3.utils.toBN(finalModalInputValue).toString(),
-          this.props.myFujiVaultETHBTC.options.address,
+          myFujiVaultContract.options.address,
           0
         ]
 
@@ -535,14 +711,14 @@ class Dashboard extends React.Component {
                     ETH
                   </td>
                   <td className={"pl-0 fw-thin"}>
-                    ${this.props.userDepositBalance * this.props.priceOfEth / 100}<br/>
-                    {this.props.userDepositBalance} ETH
+                    ${this.props.userDepositBalanceEth * this.props.priceOfEth / 100}<br/>
+                    {this.props.userDepositBalanceEth} ETH
                   </td>
                   <td className={"pl-0 fw-thin"}>
-                    <Button color={"info"} disabled={!this.props.myFujiVaultETHBTC} onClick={() => this.toggleDeposit('ETH', 'Deposit')}>
+                    <Button color={"info"} disabled={!this.props.myFujiVaultETHBTC} onClick={() => this.toggleDeposit('ETH', 'Deposit', 'ETHBTC')}>
                       Deposit
                     </Button>&nbsp;
-                    <Button color={"warning"} disabled={!this.props.myFujiVaultETHBTC || this.props.userDepositBalance <=0} onClick={() => this.toggleWithdrawn('ETH', 'Withdraw')}>
+                    <Button color={"warning"} disabled={!this.props.myFujiVaultETHBTC || this.props.userDepositBalanceEth <=0} onClick={() => this.toggleWithdrawn('ETH', 'Withdraw', 'ETHBTC')}>
                       Withdraw
                     </Button>
                   </td>
@@ -550,25 +726,25 @@ class Dashboard extends React.Component {
                     BTC
                   </td>
                   <td className={"pl-0 fw-thin"}>
-                    ${this.props.userDebtBalance * this.props.priceOfBtc / 100}<br/>
-                    {this.props.userDebtBalance} BTC
+                    ${this.props.userDebtBalanceBtc * this.props.priceOfBtc / 100}<br/>
+                    {this.props.userDebtBalanceBtc} BTC
                   </td>
                   <td className={"pl-0 fw-thin"}>
-                    <Button color={"info"} disabled={!this.props.myFujiVaultETHBTC || this.props.userDepositBalance <=0} onClick={() => this.toggleBorrow('BTC', 'Borrow')}>
+                    <Button color={"info"} disabled={!this.props.myFujiVaultETHBTC || this.props.userDepositBalanceEth <=0} onClick={() => this.toggleBorrow('BTC', 'Borrow', 'ETHBTC')}>
                       Borrow
                     </Button>&nbsp;
-                    <Button color={"warning"} disabled={!this.props.myFujiVaultETHBTC || this.props.userDebtBalance <=0} onClick={() => this.togglePayback('BTC', 'Payback')}>
+                    <Button color={"warning"} disabled={!this.props.myFujiVaultETHBTC || this.props.userDebtBalanceBtc <=0} onClick={() => this.togglePayback('BTC', 'Payback', 'ETHBTC')}>
                       Payback
                     </Button>
                   </td>
                   <td className={"pl-0 fw-normal"}>
-                  {((this.props.userDepositBalance * this.props.priceOfEth / 100) / (this.props.userDebtBalance * this.props.priceOfBtc / 100)).toFixed(2) }
+                  {((this.props.userDepositBalanceEth * this.props.priceOfEth / 100) / (this.props.userDebtBalanceBtc * this.props.priceOfBtc / 100)).toFixed(2) }
                   </td>
                   <td className={"pl-0 fw-normal"}>
-                    <Button color={"info"} disabled={!this.props.myFujiVaultETHBTC} onClick={() => this.toggleEnterSmartVault('BTC', 'Enter Smart Vault')}>
+                    <Button color={"info"} disabled={!this.props.myFujiVaultETHBTC} onClick={() => this.toggleEnterSmartVault('BTC', 'Enter Smart Vault', 'ETHBTC')}>
                       Enter Smart Vault
                     </Button>&nbsp;
-                    <Button color={"warning"} disabled={!this.props.myFujiVaultETHBTC || this.props.userDepositBalance <=0} onClick={() => this.toggleFlashclose('BTC', 'Flash Close')}>
+                    <Button color={"warning"} disabled={!this.props.myFujiVaultETHBTC || this.props.userDebtBalanceBtc <=0} onClick={() => this.toggleFlashclose('BTC', 'Flash Close', 'ETHBTC')}>
                       Flash Close
                     </Button>
                   </td>
@@ -576,6 +752,55 @@ class Dashboard extends React.Component {
                     AAVE
                   </td>
                 </tr>
+
+                <tr key={1}>
+                  <td className="fw-thin pl-0 fw-thin">
+                    AVAX
+                  </td>
+                  <td className={"pl-0 fw-thin"}>
+                    ${this.props.userDepositBalanceAvax * this.props.priceOfAvax / 100}<br/>
+                    {this.props.userDepositBalanceAvax} AVAX
+                  </td>
+                  <td className={"pl-0 fw-thin"}>
+                    <Button color={"info"} disabled={!this.props.myFujiVaultAVAXUSDT} onClick={() => this.toggleDeposit('AVAX', 'Deposit', 'AVAXUSDT')}>
+                      Deposit
+                    </Button>&nbsp;
+                    <Button color={"warning"} disabled={!this.props.myFujiVaultAVAXUSDT || this.props.userDepositBalanceAvax <=0} onClick={() => this.toggleWithdrawn('AVAX', 'Withdraw', 'AVAXUSDT')}>
+                      Withdraw
+                    </Button>
+                  </td>
+                  <td className="fw-thin pl-0 fw-thin">
+                    USDT
+                  </td>
+                  <td className={"pl-0 fw-thin"}>
+                    ${this.props.userDebtBalanceUsdt * this.props.priceOfUsdt / 100}<br/>
+                    {this.props.userDebtBalanceUsdt} USDT
+                  </td>
+                  <td className={"pl-0 fw-thin"}>
+                    <Button color={"info"} disabled={!this.props.myFujiVaultAVAXUSDT || this.props.userDepositBalanceAvax <=0} onClick={() => this.toggleBorrow('USDT', 'Borrow', 'AVAXUSDT')}>
+                      Borrow
+                    </Button>&nbsp;
+                    <Button color={"warning"} disabled={!this.props.myFujiVaultAVAXUSDT || this.props.userDebtBalanceUsdt <=0} onClick={() => this.togglePayback('USDT', 'Payback', 'AVAXUSDT')}>
+                      Payback
+                    </Button>
+                  </td>
+                  <td className={"pl-0 fw-normal"}>
+                  {((this.props.userDepositBalanceAvax * this.props.priceOfAvax / 100) / (this.props.userDebtBalanceUsdt * this.props.priceOfUsdt / 100)).toFixed(2) }
+                  </td>
+                  <td className={"pl-0 fw-normal"}>
+                    <Button color={"info"} disabled={!this.props.myFujiVaultAVAXUSDT} onClick={() => this.toggleEnterSmartVault('USDT', 'Enter Smart Vault', 'AVAXUSDT')}>
+                      Enter Smart Vault
+                    </Button>&nbsp;
+                    <Button color={"warning"} disabled={!this.props.myFujiVaultAVAXUSDT || this.props.userDepositBalanceAvax <=0} onClick={() => this.toggleFlashclose('USDT', 'Flash Close', 'AVAXUSDT')}>
+                      Flash Close
+                    </Button>
+                  </td>
+                  <td>
+                    AAVE
+                  </td>
+                </tr>
+
+
                 </tbody>
               </Table>
             </Widget>
@@ -615,10 +840,33 @@ class Dashboard extends React.Component {
                         {this.props.smartVaultBtc} BTC
                       </td>
                       <td className={"pl-0 fw-thin"}>
-                        <Button color={"info"} disabled={!this.props.myFujiVaultETHBTC || this.props.smartVaultBtc <=0} onClick={() => this.toggleManualPaybackSmartVault('BTC', 'Payback')}>
+                        <Button color={"info"} disabled={!this.props.myFujiVaultETHBTC || this.props.smartVaultBtc <=0} onClick={() => this.toggleManualPaybackSmartVault('BTC', 'Payback', 'ETHBTC')}>
                           Manual Payback Debt
                         </Button>&nbsp;
-                        <Button color={"warning"} disabled={!this.props.myFujiVaultETHBTC || this.props.smartVaultBtc <=0} onClick={() => this.toggleLeaveSmartVault('BTC', 'Leave Smart Vault')}>
+                        <Button color={"warning"} disabled={!this.props.myFujiVaultETHBTC || this.props.smartVaultBtc <=0} onClick={() => this.toggleLeaveSmartVault('BTC', 'Leave Smart Vault', 'ETHBTC')}>
+                          Leave Smart Vault
+                        </Button>&nbsp;
+                      </td>
+                      <td className="fw-thin pl-0 fw-thin">
+                        1.1
+                      </td>
+                      <td className={"pl-0 fw-thin"}>
+                        10%
+                      </td>
+                    </tr>
+                    <tr key={1}>
+                      <td className="fw-thin pl-0 fw-thin">
+                        USDT
+                      </td>
+                      <td className={"pl-0 fw-thin"}>
+                        ${this.props.smartVaultUsdt * this.props.priceOfUsdt / 100}<br/>
+                        {this.props.smartVaultUsdt} USDT
+                      </td>
+                      <td className={"pl-0 fw-thin"}>
+                        <Button color={"info"} disabled={!this.props.myFujiVaultAVAXUSDT || this.props.smartVaultUsdt <=0} onClick={() => this.toggleManualPaybackSmartVault('USDT', 'Payback', 'AVAXUSDT')}>
+                          Manual Payback Debt
+                        </Button>&nbsp;
+                        <Button color={"warning"} disabled={!this.props.myFujiVaultAVAXUSDT || this.props.smartVaultUsdt <=0} onClick={() => this.toggleLeaveSmartVault('USDT', 'Leave Smart Vault', 'AVAXUSDT')}>
                           Leave Smart Vault
                         </Button>&nbsp;
                       </td>
@@ -659,21 +907,29 @@ class Dashboard extends React.Component {
 function mapStateToProps(store) {
   return {
     myAccount: store.loanshark.myAccount,
+    selectedPair: store.loanshark.selectedPair,
     numberOfEth:  store.loanshark.userDebtBalance,
-    userDepositBalance: store.loanshark.userDepositBalance,
-    userDebtBalance:  store.loanshark.userDebtBalance,
+    userDepositBalanceEth: store.loanshark.userDepositBalanceEth,
+    userDepositBalanceAvax: store.loanshark.userDepositBalanceAvax,
+    userDebtBalanceBtc:  store.loanshark.userDebtBalanceBtc,
+    userDebtBalanceUsdt:  store.loanshark.userDebtBalanceUsdt,
     myFujiVaultETHBTC: store.loanshark.myFujiVaultETHBTC,
+    myFujiVaultAVAXUSDT: store.loanshark.myFujiVaultAVAXUSDT,
     myFliquidatorAVAX: store.loanshark.myFliquidatorAVAX,
     myFujiController: store.loanshark.myFujiController,
     myFujiOracle: store.loanshark.myFujiOracle,
-    mySmartVault: store.loanshark.mySmartVault,
+    mySmartVaultBtc: store.loanshark.mySmartVaultBtc,
+    mySmartVaultUsdt: store.loanshark.mySmartVaultUsdt,
     myETHContract: store.loanshark.myETHContract,
     myBTCContract:  store.loanshark.myBTCContract,
     myUSDTContract:  store.loanshark.myUSDTContract,
     priceOfEth: store.loanshark.priceOfEth,
     priceOfBtc: store.loanshark.priceOfBtc,
+    priceOfAvax: store.loanshark.priceOfAvax,
+    priceOfUsdt: store.loanshark.priceOfUsdt,
     providerAAVEAVAX: store.loanshark.providerAAVEAVAX,
     smartVaultBtc: store.loanshark.smartVaultBtc,
+    smartVaultUsdt: store.loanshark.smartVaultUsdt,
     myETHAmount: store.loanshark.myETHAmount,
     myBTCAmount: store.loanshark.myBTCAmount
   };

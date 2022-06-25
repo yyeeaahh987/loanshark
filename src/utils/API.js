@@ -1,12 +1,16 @@
 import {
     changeNumberOfEth, 
     changeNumberOfAvax, 
-    changeUserDepositBalance, 
-    changeUserDebtBalance,
+    changeUserDepositBalanceEth, 
+    changeUserDepositBalanceAvax, 
+    changeUserDebtBalanceBtc,
+    changeUserDebtBalanceUsdt,
     changePriceOfEth,
     changePriceOfBtc,
     changePriceOfAvax,
+    changePriceOfUsdt,
     changeSmartVaultBtc,
+    changeSmartVaultUsdt,
     changeMyETHAmount,
     changeMyBTCAmount,
     changeMyAVAXAmount,
@@ -26,29 +30,31 @@ let refreshPrice = (props) => {
         props.myFujiVaultETHBTC.methods.getNeededCollateralFor(...args).call({}, (error, result) => {
             props.dispatch(changeNumberOfEth((result / 10000000000)));
         });
+
         props.myFujiVaultETHBTC.methods.userDepositBalance(props.myAccount).call({}, (error, result) => {
-            props.dispatch(changeUserDepositBalance(window.web3.utils.fromWei(result, 'ether')));
+            props.dispatch(changeUserDepositBalanceEth(window.web3.utils.fromWei(result, 'ether')));
         });
         props.myFujiVaultETHBTC.methods.userDebtBalance(props.myAccount).call({}, (error, result) => {
-            props.dispatch(changeUserDebtBalance(window.web3.utils.fromWei(result, 'gwei') * 10));
+            props.dispatch(changeUserDebtBalanceBtc(window.web3.utils.fromWei(result, 'gwei') * 10));
         });
 
         // AVAX-USDT Vaults
         props.myFujiVaultAVAXUSDT.methods.getNeededCollateralFor(...args).call({}, (error, result) => {
             props.dispatch(changeNumberOfAvax((result / 10000000000)));
         });
+
         props.myFujiVaultAVAXUSDT.methods.userDepositBalance(props.myAccount).call({}, (error, result) => {
-            props.dispatch(changeUserDepositBalance(window.web3.utils.fromWei(result, 'ether')));
+            props.dispatch(changeUserDepositBalanceAvax(window.web3.utils.fromWei(result, 'ether')));
         });
         props.myFujiVaultAVAXUSDT.methods.userDebtBalance(props.myAccount).call({}, (error, result) => {
-            props.dispatch(changeUserDebtBalance(window.web3.utils.fromWei(result, 'gwei') * 10));
+            props.dispatch(changeUserDebtBalanceUsdt(window.web3.utils.fromWei(result, 'picoether')));
         });
 
         let argsPriceOfEth = [USDT,WETH,2]
         props.myFujiOracle.methods.getPriceOf(...argsPriceOfEth).call({}, (error, result) => {
             props.dispatch(changePriceOfEth(result));
         });
-        let argsPriceOfBtc = [USDT,WETH,2]
+        let argsPriceOfBtc = [USDT,WBTC,2]
         props.myFujiOracle.methods.getPriceOf(...argsPriceOfBtc).call({}, (error, result) => {
             props.dispatch(changePriceOfBtc(result));
         });
@@ -56,10 +62,20 @@ let refreshPrice = (props) => {
         props.myFujiOracle.methods.getPriceOf(...argsPriceOfAvax).call({}, (error, result) => {
             props.dispatch(changePriceOfAvax(result));
         });
+        let argsPriceOfUsdt = [USDT,USDT,2]
+        props.myFujiOracle.methods.getPriceOf(...argsPriceOfUsdt).call({}, (error, result) => {
+            props.dispatch(changePriceOfUsdt(result));
+        });
 
-        if (props.mySmartVault) {
-            props.mySmartVault.methods.balances(props.myAccount).call({}, (error, result) => {
+        if (props.mySmartVaultBtc) {
+            props.mySmartVaultBtc.methods.balances(props.myAccount).call({}, (error, result) => {
                 props.dispatch(changeSmartVaultBtc(window.web3.utils.fromWei(result, 'gwei') * 10));
+            });
+        }
+
+        if (props.mySmartVaultUsdt) {
+            props.mySmartVaultUsdt.methods.balances(props.myAccount).call({}, (error, result) => {
+                props.dispatch(changeSmartVaultUsdt(window.web3.utils.fromWei(result, 'gwei') * 10));
             });
         }
 
