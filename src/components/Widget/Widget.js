@@ -228,15 +228,22 @@ class Widget extends React.Component {
                 </button>
               )}
               {fullscreen && (
-                <button onClick={this.handleFullscreen} id={`fullscreenId-${randomId}`}>
-                  <i className={`glyphicon glyphicon-resize-${fullscreened ? 'small' : 'full'}`} />
-                  {showTooltip && (
-                    <UncontrolledTooltip
-                      placement={tooltipPlacement}
-                      target={`fullscreenId-${randomId}`}
-                    >Fullscreen</UncontrolledTooltip>
-                  )}
-                </button>
+                <>
+                                                  <i className={`glyphicon glyphicon-resize-${fullscreened ? 'small' : 'full'}`} />
+                                  {showTooltip && (
+                                    <UncontrolledTooltip
+                                      placement={tooltipPlacement}
+                                      target={`fullscreenId-${randomId}`}
+                                    >Fullscreen</UncontrolledTooltip>
+                                  )}
+                </>
+
+                // <button onClick={(e)=>{
+                //   console.log(`onclick full`)
+                //   this.handleFullscreen(e)
+                // }} id={`fullscreenId-${randomId}`}>
+
+                // </button>
               )}
               {!fullscreened && 
                 collapse && (
@@ -313,7 +320,14 @@ class Widget extends React.Component {
                   <button onClick={this.handleCollapse} id={`closeId-${randomId}`} className={s.customControlItem}><i title="Collapse" className={`glyphicon glyphicon-chevron-${!collapseWidget ? 'down' : 'up'}`}/></button>
               ))}
               {customFullscreen && (
-                  <button onClick={this.handleFullscreen} id={`closeId-${randomId}`} className={s.customControlItem}><i title="Fullscreen" className={`glyphicon glyphicon-resize-${fullscreened ? 'small' : 'full'}`} /></button>
+                  <button 
+                  onClick={(e)=>{
+                    console.log(`325`)
+                    this.handleFullscreen(e)
+                  }} 
+                  id={`closeId-${randomId}`} className={s.customControlItem}>
+                    <i title="Fullscreen" className={`glyphicon glyphicon-resize-${fullscreened ? 'small' : 'full'}`} />
+                    </button>
               )}
               {customReload && (
                   <button onClick={this.handleReload} id={`closeId-${randomId}`} className={s.customControlItem}><i title="I am spinning!" className="fa fa-refresh" /></button>
