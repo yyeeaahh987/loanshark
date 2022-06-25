@@ -1,0 +1,8 @@
+{
+    "hello": "hello!",
+    "link": "Let's learn React <1>here</1>",
+    "object1": {
+        "object1name1":"abc",
+        "object1name2":"abc123"
+    }
+ }
