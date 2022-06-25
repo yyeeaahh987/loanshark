@@ -2,8 +2,27 @@ import React from "react";
 import { connect } from "react-redux";
 import 'chart.js/auto';
 import {
+  Dropdown,
+  DropdownButton,
+  Form,
+  InputGroup,
+} from 'react-bootstrap';
+import {
   Row,
   Col,
+  Button,
+  Input,
+  // Dropdown,
+  DropdownToggle,
+  ButtonDropdown,
+  // InputGroup,
+  DropdownMenu,
+  DropdownItem,
+  UncontrolledDropdown,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
   ListGroup,
   ListGroupItem,
   Badge,
@@ -26,9 +45,8 @@ class Tables extends React.Component {
   parseDate(date) {
     this.dateSet = date.toDateString().split(" ");
 
-    return `${date.toLocaleString("en-us", { month: "long" })} ${
-      this.dateSet[2]
-    }, ${this.dateSet[3]}`;
+    return `${date.toLocaleString("en-us", { month: "long" })} ${this.dateSet[2]
+      }, ${this.dateSet[3]}`;
   }
 
   checkAll(ev, checkbox) {
@@ -54,27 +72,29 @@ class Tables extends React.Component {
 
   render() {
     return (
-      <div className={s.root}>
+      <div 
+      className={s.root}
+      >
         <Row>
           <Col lg={6}>
             <Widget
               title={
-                <p style={{ fontWeight: 700 }}>Deposit ETH and Borrow BTC<br/>
-                    <span style={{color: "#0000000", fontSize: "16px"}}>{this.props.numberOfEth.toFixed(2)} ETH as collateral to borrow 1 BTC</span>
+                <p style={{ fontWeight: 700 }}>Deposit ETH and Borrow BTC<br />
+                  <span style={{ color: "#0000000", fontSize: "16px" }}>{this.props.numberOfEth.toFixed(2)} ETH as collateral to borrow 1 BTC</span>
                 </p>
               }
               customDropDown
             >
-              <Trade/>
+              <Trade />
             </Widget>
             <ListGroup>
-              <h6 style={{color: '#ffffff'}}>Borrowing APY of BTC</h6><br/>
+              <h6 style={{ color: '#ffffff' }}>Borrowing APY of BTC</h6><br />
               <ListGroupItem active className="justify-content-between">
                 AAVE{' '}
-                <Badge  color="warning" pill>
+                <Badge color="warning" pill>
                   1.4%
                 </Badge>
-                <span style={{paddingLeft: "15px"}}>{' '}Current Loan Provider</span>
+                <span style={{ paddingLeft: "15px" }}>{' '}Current Loan Provider</span>
               </ListGroupItem>
               <ListGroupItem active className="justify-content-between">
                 BenQi{' '}
@@ -90,7 +110,7 @@ class Tables extends React.Component {
               </ListGroupItem>
             </ListGroup>
           </Col>
-          
+
           <Col lg={6}>
             <Widget
               title={<p style={{ fontWeight: 700 }}>Deposited, Borrowed and Health Factor</p>
@@ -99,37 +119,37 @@ class Tables extends React.Component {
             >
               <MDBContainer>
                 <Doughnut data={{
-                    labels: ["ETH $", "BTC $"],
-                    datasets: [
-                      {
-                        data: [(Number(this.props.userDepositBalance) + Number(this.props.inputEthDeposit))  * this.props.priceOfEth / 100, (Number(this.props.userDebtBalance)  + Number(this.props.inputBtcDept)) * this.props.priceOfBtc / 100],
-                        backgroundColor: [
-                          "#25859B",
-                          "#FFBF69",
-                        ],
-                        hoverBackgroundColor: [
-                          "#25859B",
-                          "#FFBF69",
-                        ]
-                      }
-                    ]
-                  }} 
+                  labels: ["ETH $", "BTC $"],
+                  datasets: [
+                    {
+                      data: [(Number(this.props.userDepositBalance) + Number(this.props.inputEthDeposit)) * this.props.priceOfEth / 100, (Number(this.props.userDebtBalance) + Number(this.props.inputBtcDept)) * this.props.priceOfBtc / 100],
+                      backgroundColor: [
+                        "#25859B",
+                        "#FFBF69",
+                      ],
+                      hoverBackgroundColor: [
+                        "#25859B",
+                        "#FFBF69",
+                      ]
+                    }
+                  ]
+                }}
                   plugins={[{
                     beforeDraw: (chart) => {
-                     var width = chart.width,
-                         height = chart.height,
-                         ctx = chart.ctx;
-                         ctx.restore();
-                         var fontSize = (height / 200).toFixed(2);
-                         ctx.font = fontSize + "em sans-serif";
-                         ctx.fillStyle = "#fff";
-                         ctx.textBaseline = "top";
-                         var text = (!(Number(this.props.userDebtBalance) + Number(this.props.inputBtcDept)) > 0? "" : (((Number(this.props.userDepositBalance) + Number(this.props.inputEthDeposit)) * this.props.priceOfEth / 100) / ( (Number(this.props.userDebtBalance)  + Number(this.props.inputBtcDept))  * this.props.priceOfBtc / 100)).toFixed(2)),
-                         textX = Math.round((width - ctx.measureText(text).width) / 2),
-                         textY = height / 2;
-                         ctx.fillText(text, textX, textY);
-                         ctx.save();
-                    } 
+                      var width = chart.width,
+                        height = chart.height,
+                        ctx = chart.ctx;
+                      ctx.restore();
+                      var fontSize = (height / 200).toFixed(2);
+                      ctx.font = fontSize + "em sans-serif";
+                      ctx.fillStyle = "#fff";
+                      ctx.textBaseline = "top";
+                      var text = (!(Number(this.props.userDebtBalance) + Number(this.props.inputBtcDept)) > 0 ? "" : (((Number(this.props.userDepositBalance) + Number(this.props.inputEthDeposit)) * this.props.priceOfEth / 100) / ((Number(this.props.userDebtBalance) + Number(this.props.inputBtcDept)) * this.props.priceOfBtc / 100)).toFixed(2)),
+                        textX = Math.round((width - ctx.measureText(text).width) / 2),
+                        textY = height / 2;
+                      ctx.fillText(text, textX, textY);
+                      ctx.save();
+                    }
                   }]}
                   options={{ responsive: true }} />
               </MDBContainer>
