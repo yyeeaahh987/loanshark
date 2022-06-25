@@ -2,8 +2,27 @@ import React from "react";
 import { connect } from "react-redux";
 import 'chart.js/auto';
 import {
+  Dropdown,
+  DropdownButton,
+  Form,
+  InputGroup,
+} from 'react-bootstrap';
+import {
   Row,
   Col,
+  Button,
+  Input,
+  // Dropdown,
+  DropdownToggle,
+  ButtonDropdown,
+  // InputGroup,
+  DropdownMenu,
+  DropdownItem,
+  UncontrolledDropdown,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
   ListGroup,
   ListGroupItem,
   Badge,
@@ -26,9 +45,8 @@ class Tables extends React.Component {
   parseDate(date) {
     this.dateSet = date.toDateString().split(" ");
 
-    return `${date.toLocaleString("en-us", { month: "long" })} ${
-      this.dateSet[2]
-    }, ${this.dateSet[3]}`;
+    return `${date.toLocaleString("en-us", { month: "long" })} ${this.dateSet[2]
+      }, ${this.dateSet[3]}`;
   }
 
   checkAll(ev, checkbox) {
@@ -54,7 +72,9 @@ class Tables extends React.Component {
 
   render() {
     return (
-      <div className={s.root}>
+      <div 
+      className={s.root}
+      >
         <Row>
           <Col lg={6}>
             <Widget
@@ -70,16 +90,16 @@ class Tables extends React.Component {
               }
               customDropDown
             >
-              <Trade/>
+              <Trade />
             </Widget>
             <ListGroup>
-              <h6 style={{color: '#ffffff'}}>Borrowing APY of BTC</h6><br/>
+              <h6 style={{ color: '#ffffff' }}>Borrowing APY of BTC</h6><br />
               <ListGroupItem active className="justify-content-between">
                 AAVE{' '}
-                <Badge  color="warning" pill>
+                <Badge color="warning" pill>
                   1.4%
                 </Badge>
-                <span style={{paddingLeft: "15px"}}>{' '}Current Loan Provider</span>
+                <span style={{ paddingLeft: "15px" }}>{' '}Current Loan Provider</span>
               </ListGroupItem>
               <ListGroupItem active className="justify-content-between">
                 BenQi{' '}
@@ -95,7 +115,7 @@ class Tables extends React.Component {
               </ListGroupItem>
             </ListGroup>
           </Col>
-          
+
           <Col lg={6}>
             <Widget
               title={<p style={{ fontWeight: 700 }}>Deposited, Borrowed and Health Factor</p>

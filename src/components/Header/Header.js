@@ -2,6 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router";
+
 import {
   Navbar, Button, Input,
   Modal,
@@ -75,7 +76,7 @@ class Header extends React.Component {
 
   constructor(props) {
     super(props);
-  
+
     this.toggleMenu = this.toggleMenu.bind(this);
     this.toggleMintETH = this.toggleMintETH.bind(this);
     this.setInput = this.setInput.bind(this);
@@ -125,7 +126,7 @@ class Header extends React.Component {
       modalTitle: '',
       modalToken: '',
       modalAction: '',
-      modalCall: () => {},
+      modalCall: () => { },
       modalInputValue: 0
     };
   }
@@ -151,7 +152,7 @@ class Header extends React.Component {
   }
 
   setInput(event) {
-    this.setState({modalInputValue: event.target.value});
+    this.setState({ modalInputValue: event.target.value });
   }
 
   toggleMessages() {
@@ -300,7 +301,7 @@ class Header extends React.Component {
 
         this.props.myETHContract.methods
           .mint(...args)
-          .send({from: this.props.myAccount})
+          .send({ from: this.props.myAccount })
           .on("error", (error, receipt) => {
             this.calltoggleLoading();
           })
@@ -330,7 +331,7 @@ class Header extends React.Component {
 
         this.props.myBTCContract.methods
           .mint(...args)
-          .send({from: this.props.myAccount})
+          .send({ from: this.props.myAccount })
           .on("error", (error, receipt) => {
             this.calltoggleLoading();
           })
@@ -351,16 +352,16 @@ class Header extends React.Component {
         console.log("account error:", err);
         console.log("accounts:", result);
 
-        this.setState({myAccount: result[0]});
+        this.setState({ myAccount: result[0] });
         this.setMyAccount(result[0]);
         const chainId = 43113 // Avax Testnet
 
         if (window.ethereum.networkVersion !== chainId) {
           try {
-              window.ethereum.request({
-                method: 'wallet_switchEthereumChain',
-                params: [{ chainId: window.web3.utils.toHex(chainId) }]
-              })
+            window.ethereum.request({
+              method: 'wallet_switchEthereumChain',
+              params: [{ chainId: window.web3.utils.toHex(chainId) }]
+            })
               .catch((error) => {
                 console.log(error);
                 // This error code indicates that the chain has not been added to MetaMask
@@ -390,6 +391,7 @@ class Header extends React.Component {
                     this.setMySmartVaultContract(new  window.web3.eth.Contract(SmartVault, SMART_VAULT_USDT));
                     
                     this.props.dispatch(changeSelectedPair('AVAXUSDT'));
+
                     this.getNeededCollateralFor()
                   });
                 }
@@ -428,23 +430,23 @@ class Header extends React.Component {
           className={`${s.root} d-print-none`}
           style={{ zIndex: 0, backgroundColor: '#000000', display: "flex" }}
         >
-          {!this.state.myAccount ? 
-            <Button style={{marginLeft: "auto"}} color={"outline-light"} className={`${s.btnShadow}`} onClick={this.ethEnabled}>
+          {!this.state.myAccount ?
+            <Button style={{ marginLeft: "auto" }} color={"outline-light"} className={`${s.btnShadow}`} onClick={this.ethEnabled}>
               Connect Wallet
             </Button>
-            : <div style={{marginLeft: "auto"}}><Input disabled={true} valid style={{width: '450px'}} value={this.state.myAccount}></Input></div>
+            : <div style={{ marginLeft: "auto" }}><Input disabled={true} valid style={{ width: '450px' }} value={this.state.myAccount}></Input></div>
           }
           &nbsp;
           <Button color={"outline-light"} disabled={!this.props.myAccount} onClick={this.getNeededCollateralFor}>Refresh</Button>
           &nbsp;
           <Button color={"outline-light"} disabled={!this.props.myETHContract}  onClick={() => this.toggleMintETH('ETH', 'Mint')}>Mint ETH</Button>
           &nbsp;
-          <Button color={"outline-light"} disabled={!this.props.myBTCContract}  onClick={() => this.toggleMintBTC('BTC', 'Mint')}>Mint BTC</Button>
+          <Button color={"outline-light"} disabled={!this.props.myBTCContract} onClick={() => this.toggleMintBTC('BTC', 'Mint')}>Mint BTC</Button>
         </Navbar>
-        <Modal isOpen={this.state.modal} toggle={this.toggle} style={{color: '#000000'}}>
+        <Modal isOpen={this.state.modal} toggle={this.toggle} style={{ color: '#000000' }}>
           <ModalHeader toggle={this.toggle}>{this.state.modalTitle}</ModalHeader>
           <ModalBody>
-          {this.state.modalAction} {this.state.modalToken} : 
+            {this.state.modalAction} {this.state.modalToken} :
             <Input
               value={this.state.modalInputValue}
               onChange={this.setInput}>
@@ -479,8 +481,8 @@ function mapStateToProps(store) {
     mySmartVaultBtc: store.loanshark.mySmartVaultBtc,
     mySmartVaultUsdt: store.loanshark.mySmartVaultUsdt,
     myETHContract: store.loanshark.myETHContract,
-    myBTCContract:  store.loanshark.myBTCContract,
-    myUSDTContract:  store.loanshark.myUSDTContract,
+    myBTCContract: store.loanshark.myBTCContract,
+    myUSDTContract: store.loanshark.myUSDTContract,
     priceOfEth: store.loanshark.priceOfEth,
     priceOfBtc: store.loanshark.priceOfBtc,
     providerAAVEAVAX: store.loanshark.providerAAVEAVAX,

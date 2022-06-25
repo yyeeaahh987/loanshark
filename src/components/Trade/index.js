@@ -1,7 +1,26 @@
 import React from "react";
 import { connect } from "react-redux";
-
-import { Row, Col, Button, Input, DropdownToggle, ButtonDropdown, InputGroup, DropdownMenu, DropdownItem } from "reactstrap";
+import {
+    Dropdown
+} from 'react-bootstrap';
+import {
+    Row,
+    Col,
+    Button,
+    Input,
+    // Dropdown,
+    DropdownToggle,
+    ButtonDropdown,
+    InputGroup,
+    DropdownMenu,
+    DropdownItem,
+    UncontrolledDropdown,
+    Modal,
+    ModalHeader,
+    ModalBody,
+    ModalFooter,
+} from "reactstrap";
+import SearchModal from '../SearchModal/index'
 import "./trade.less";
 import "./trade.scss"
 import s from "../../pages/tables/Tables.modules.scss";
@@ -22,6 +41,43 @@ import {
     toDecimalNumber
 } from '../../utils/commonFunction'
 
+const assests = ["AVAX", "ETH", "BTC"]
+const ownAssestsType = [
+    {
+        "chainId": 1,
+        "address": "FvwEAhmxKfeiG8SnEvq42hc6whRyY3EFYAvebMqDNDGCgxN5Z",
+        "name": "Avalanche",
+        "symbol": "AVAX",
+        "decimals": 8,
+        "logoURI": ""
+    },
+    {
+        "chainId": 1,
+        "address": "0xf20d962a6c8f70c731bd838a3a388d7d48fa6e15",
+        "name": "Ethereum",
+        "symbol": "ETH",
+        "decimals": 8,
+        "logoURI": ""
+    },
+]
+const borrowAssestsType = [
+    {
+        "chainId": 1,
+        "address": "FvwEAhmxKfeiG8SnEvq42hc6whRyY3EFYAvebMqDNDGCgxN5Z",
+        "name": "Bitcoin",
+        "symbol": "BTC",
+        "decimals": 8,
+        "logoURI": ""
+    },
+    {
+        "chainId": 1,
+        "address": "0xf20d962a6c8f70c731bd838a3a388d7d48fa6e15",
+        "name": "Tether",
+        "symbol": "USDT",
+        "decimals": 8,
+        "logoURI": ""
+    },
+]
 class BalanceAmount extends React.Component {
 
     render() {
@@ -29,7 +85,8 @@ class BalanceAmount extends React.Component {
             <>
                 <div className="balanceBox">
                     <div className="balanceBox__content">
-                        <div>{`You balance: ${toDecimalNumber(this.props.amount, 6)}`}</div>
+
+                        <div>{`${this.props.displayPrefixText}${toDecimalNumber(this.props.amount, 6)}`}</div>
                     </div>
                 </div>
             </>
@@ -47,6 +104,8 @@ class Trade extends React.Component {
         this.setInputEthDeposit = this.setInputEthDeposit.bind(this);
         this.setInputBtcBorrow = this.setInputBtcBorrow.bind(this);
         this.calltoggleLoading = this.calltoggleLoading.bind(this);
+        this.toggleModal = this.toggleModal.bind(this);
+        this.handleClose = this.handleClose.bind(this);
 
         this.state = {
             myAccount: false,
@@ -61,7 +120,22 @@ class Trade extends React.Component {
             myBTCContract: '',
             inputEthDeposit: 0,
             inputBtcBorrow: 0,
+            myBtcAmount: 0,
+            myEthAmount: 0,
+            currencySelectModal: false,
+            openOwnAssestDropdownMenu: false,
+            openBorrowAssestDropdownMenu: false,
+            selectedOwnAssest: "ETH",
+            selectedBorrowAssest: "BTC",
         };
+    }
+
+    toggleModal = () => {
+        this.setState({ currencySelectModal: !this.state.currencySelectModal });
+    }
+
+    handleClose = () => {
+        this.setState({ currencySelectModal: false });
     }
 
     calltoggleLoading() {
@@ -156,6 +230,28 @@ class Trade extends React.Component {
     render() {
         return (
             <>
+                {/* <Modal isOpen={this.state.currencySelectModal} toggle={this.toggleModal} id="news-close-modal">
+                    <div style={{color:"black"}}>
+                        modal
+                    </div>
+                    <ModalHeader toggle={this.toggleModal} id="news-close-modal-label">Sure?</ModalHeader>
+                    <ModalBody className="bg-white">
+                        Do you really want to unrevertably remove this super news widget?
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button color="default" onClick={this.toggleModal} data-dismiss="modal">No</Button>{' '}
+                        <Button color="danger" onClick={this.closeWithModal} id="news-widget-remove">Yes,
+                            remove widget</Button>
+                    </ModalFooter>
+                </Modal> */}
+                <SearchModal
+                    isOpen={this.state.currencySelectModal}
+                    handleClose={this.handleClose}
+                    type={"searchToken"}
+                >
+                </SearchModal>
+
+
                 <Row style={{ marginBottom: 9, marginTop: 1 }}>
                     <Col lg={12}>
                         <div style={{
@@ -164,19 +260,35 @@ class Trade extends React.Component {
                             flexDirection: "column",
                             alignItems: "center"
                         }}>
-                            <InputGroup >
-                                <ButtonDropdown
-                                    toggle={function noRefCheck() { }}
-                                >
-                                    <DropdownToggle color="info">
-                                        {this.props.selectedPair === "ETHBTC" ? "ETH" : this.props.selectedPair === "AVAXUSDT" ? "AVAX" : ""} 
-                                    </DropdownToggle>
-                                    <DropdownMenu>
-                                        <DropdownItem header>
-                                            {this.props.selectedPair === "ETHBTC" ? "ETH" : this.props.selectedPair === "AVAXUSDT" ? "AVAX" : ""} 
-                                        </DropdownItem>
-                                    </DropdownMenu>
-                                </ButtonDropdown>
+
+                            <InputGroup>
+                                <Dropdown className="currency-dropdown">
+                                    <Dropdown.Toggle variant="success" id="dropdown-basic" bsPrefix="p-0"
+                                        className="currency-dropdown__label-blue"
+                                    >
+                                        {this.state.selectedOwnAssest}
+                                    </Dropdown.Toggle>
+
+                                    <Dropdown.Menu>
+                                        {ownAssestsType.map((assest) => {
+                                            if (assest.symbol === this.state.selectedOwnAssest) return (<></>)
+                                            return (
+                                                <>
+                                                    <Dropdown.Item
+                                                        as={"span"}
+                                                        key={assest.name} value={assest.symbol} name={assest.name}
+                                                        className="currency-dropdown__option"
+                                                        onClick={(e) => {
+                                                            this.setState({ selectedOwnAssest: assest.symbol })
+                                                            if (assest.symbol === "ETH") this.setState({ selectedBorrowAssest: "BTC" })
+                                                            if (assest.symbol === "AVAX") this.setState({ selectedBorrowAssest: "USDT" })
+                                                        }}
+                                                    >{assest.symbol}</Dropdown.Item>
+                                                </>
+                                            )
+                                        })}
+                                    </Dropdown.Menu>
+                                </Dropdown>
                                 <Input
                                     title="Input"
                                     placeholder="Enter deposit amount..."
@@ -190,24 +302,37 @@ class Trade extends React.Component {
 
                             </InputGroup>
                             <BalanceAmount
-                                amount={this.props.selectedPair === "ETHBTC" ? this.props.myETHAmount : this.props.selectedPair === "AVAXUSDT" ? this.props.myAVAXAmount  : 0}
+                                amount={this.props.myETHAmount}
+                                displayPrefixText={"Your balance: "}
                             ></BalanceAmount>
                             <Button outline className="primary">
                                 ⇅
                             </Button>
                             <InputGroup style={{ width: "100%" }}  >
-                                <ButtonDropdown
-                                    toggle={function noRefCheck() { }}
-                                >
-                                    <DropdownToggle color="warning">
-                                        {this.props.selectedPair === "ETHBTC" ? "BTC" : this.props.selectedPair === "AVAXUSDT" ? "USDT" : ""} 
-                                    </DropdownToggle>
-                                    <DropdownMenu>
-                                        <DropdownItem header>
-                                            {this.props.selectedPair === "ETHBTC" ? "BTC" : this.props.selectedPair === "AVAXUSDT" ? "USDT" : ""} 
-                                        </DropdownItem>
-                                    </DropdownMenu>
-                                </ButtonDropdown>
+                                <Dropdown className="currency-dropdown">
+                                    <Dropdown.Toggle variant="success" id="dropdown-basic" bsPrefix="p-0" className="currency-dropdown__label-yellow">
+                                        {this.state.selectedBorrowAssest}
+                                    </Dropdown.Toggle>
+                                    {/* <Dropdown.Menu>
+                                        {borrowAssestsType.map((assest) => {
+                                            if (assest.symbol === this.state.selectedBorrowAssest) return (<></>)
+                                            return (
+                                                <>
+                                                    <Dropdown.Item
+                                                        as={"span"}
+                                                        key={assest.name} value={assest.symbol} name={assest.name}
+                                                        style={{
+                                                            color: "black"
+                                                        }}
+                                                        onClick={(e) => {
+                                                            // console.log(assest.symobl)
+                                                        }}
+                                                    >{assest.symbol}</Dropdown.Item>
+                                                </>
+                                            )
+                                        })}
+                                    </Dropdown.Menu> */}
+                                </Dropdown>
                                 <Input
                                     title="Input"
                                     placeholder="Enter borrow amount..."
@@ -220,7 +345,8 @@ class Trade extends React.Component {
                                 }}>Max</Button>
                             </InputGroup>
                             <BalanceAmount
-                                amount={this.props.selectedPair === "ETHBTC" ? this.props.myBTCAmount : this.props.selectedPair === "AVAXUSDT" ? this.props.myUSDTAmount  : 0}
+                                amount={this.props.myBTCAmount}
+                                displayPrefixText={"Max. allowed amount to borrow: "}
                             ></BalanceAmount>
                         </div>
                     </Col>
