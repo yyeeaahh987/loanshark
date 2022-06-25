@@ -782,17 +782,17 @@ class Dashboard extends React.Component {
 
                 <tr key={1}>
                   <td className="fw-thin pl-0 fw-thin">
-                    AVAX
+                    ONE
                   </td>
                   <td className={"pl-0 fw-thin"}>
                     ${this.props.userDepositBalanceAvax * this.props.priceOfAvax / 100}<br/>
-                    {this.props.userDepositBalanceAvax} AVAX
+                    {this.props.userDepositBalanceAvax} ONE
                   </td>
                   <td className={"pl-0 fw-thin"}>
-                    <Button color={"info"} disabled={!this.props.myFujiVaultAVAXUSDT} onClick={() => this.toggleDeposit('AVAX', 'Deposit', 'AVAXUSDT')}>
+                    <Button color={"info"} disabled={!this.props.myFujiVaultAVAXUSDT} onClick={() => this.toggleDeposit('ONE', 'Deposit', 'AVAXUSDT')}>
                       Deposit
                     </Button>&nbsp;
-                    <Button color={"warning"} disabled={!this.props.myFujiVaultAVAXUSDT || this.props.userDepositBalanceAvax <=0} onClick={() => this.toggleWithdrawn('AVAX', 'Withdraw', 'AVAXUSDT')}>
+                    <Button color={"warning"} disabled={!this.props.myFujiVaultAVAXUSDT || this.props.userDepositBalanceAvax <=0} onClick={() => this.toggleWithdrawn('ONE', 'Withdraw', 'AVAXUSDT')}>
                       Withdraw
                     </Button>
                   </td>

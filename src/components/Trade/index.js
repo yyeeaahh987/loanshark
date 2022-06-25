@@ -41,13 +41,13 @@ import {
     toDecimalNumber
 } from '../../utils/commonFunction'
 
-const assests = ["AVAX", "ETH", "BTC"]
+const assests = ["ONE", "ETH", "BTC"]
 const ownAssestsType = [
     {
         "chainId": 1,
         "address": "FvwEAhmxKfeiG8SnEvq42hc6whRyY3EFYAvebMqDNDGCgxN5Z",
         "name": "Avalanche",
-        "symbol": "AVAX",
+        "symbol": "ONE",
         "decimals": 8,
         "logoURI": ""
     },
@@ -284,7 +284,7 @@ class Trade extends React.Component {
                                                                 this.setState({ selectedBorrowAssest: "BTC" });
                                                                 this.props.dispatch(changeSelectedPair("ETHBTC"));
                                                             }
-                                                            if (assest.symbol === "AVAX") {
+                                                            if (assest.symbol === "ONE") {
                                                                 this.setState({ selectedBorrowAssest: "USDT" })
                                                                 this.props.dispatch(changeSelectedPair("AVAXUSDT"));
                                                             }

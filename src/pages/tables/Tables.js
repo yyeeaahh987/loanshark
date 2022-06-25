@@ -80,11 +80,11 @@ class Tables extends React.Component {
             <Widget
               title={
                 <p style={{ fontWeight: 700 }}>
-                  Deposit {this.props.selectedPair === "ETHBTC"? " ETH" : this.props.selectedPair === "AVAXUSDT"? " AVAX" : ""} and 
+                  Deposit {this.props.selectedPair === "ETHBTC"? " ETH" : this.props.selectedPair === "AVAXUSDT"? " ONE" : ""} and 
                   Borrow {this.props.selectedPair === "ETHBTC"? " BTC" : this.props.selectedPair === "AVAXUSDT"? " USDT" : ""}<br/>
                     <span style={{color: "#0000000", fontSize: "16px"}}>
                       {this.props.selectedPair === "ETHBTC" ? this.props.numberOfEth.toFixed(2) : this.props.selectedPair === "AVAXUSDT" ? this.props.numberOfAvax.toFixed(2) : ""}  
-                      {this.props.selectedPair === "ETHBTC"? " ETH" : this.props.selectedPair === "AVAXUSDT"? " AVAX" : ""} as collateral to borrow 1 
+                      {this.props.selectedPair === "ETHBTC"? " ETH" : this.props.selectedPair === "AVAXUSDT"? " ONE" : ""} as collateral to borrow 1 
                       {this.props.selectedPair === "ETHBTC"? " BTC" : this.props.selectedPair === "AVAXUSDT"? " USDT" : ""}</span>
                 </p>
               }
@@ -93,7 +93,7 @@ class Tables extends React.Component {
               <Trade />
             </Widget>
             <ListGroup>
-              <h6 style={{ color: '#ffffff' }}>Borrowing APY of BTC</h6><br />
+              <h6 style={{ color: '#ffffff' }}>Borrowing APY of {this.props.selectedPair === "ETHBTC"? "BTC":"USDT"}</h6><br />
               <ListGroupItem active className="justify-content-between">
                 AAVE{' '}
                 <Badge color="warning" pill>
@@ -102,15 +102,9 @@ class Tables extends React.Component {
                 <span style={{ paddingLeft: "15px" }}>{' '}Current Loan Provider</span>
               </ListGroupItem>
               <ListGroupItem active className="justify-content-between">
-                BenQi{' '}
+                Tranquil{' '}
                 <Badge pill>
                   2.0%
-                </Badge>
-              </ListGroupItem>
-              <ListGroupItem active className="justify-content-between">
-                TraderJoe{' '}
-                <Badge pill>
-                  3.1%
                 </Badge>
               </ListGroupItem>
             </ListGroup>
@@ -124,7 +118,7 @@ class Tables extends React.Component {
             >
               <MDBContainer>
                 <Doughnut data={{
-                    labels: [this.props.selectedPair === "ETHBTC"? "ETH $":"AVAX $", this.props.selectedPair === "ETHBTC"?"BTC $":"USDT $s"],
+                    labels: [this.props.selectedPair === "ETHBTC"? "ETH $":"ONE $", this.props.selectedPair === "ETHBTC"?"BTC $":"USDT $s"],
                     datasets: [
                       {
                         data: [
