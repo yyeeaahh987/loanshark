@@ -124,13 +124,19 @@ class Tables extends React.Component {
             >
               <MDBContainer>
                 <Doughnut data={{
-                    labels: ["ETH $", "BTC $"],
+                    labels: [this.props.selectedPair === "ETHBTC"? "ETH $":"AVAX $", this.props.selectedPair === "ETHBTC"?"BTC $":"USDT $s"],
                     datasets: [
                       {
                         data: [
-                          (Number(this.props.userDepositBalance) + Number(this.props.inputEthDeposit)) 
+                          (
+                            (this.props.selectedPair === "ETHBTC"? Number(this.props.userDepositBalanceEth) :  Number(this.props.userDepositBalanceAvax))
+                          + Number(this.props.inputEthDeposit)
+                          ) 
                           * (this.props.selectedPair === "ETHBTC"? this.props.priceOfEth : this.props.selectedPair === "AVAXUSDT"? this.props.priceOfAvax : 0) / 100, 
-                          (Number(this.props.userDebtBalance) + Number(this.props.inputBtcDept)) 
+                          (
+                            (this.props.selectedPair === "ETHBTC"? Number(this.props.userDebtBalanceBtc) :  Number(this.props.userDebtBalanceUsdt))
+                            + Number(this.props.inputBtcDept)
+                          ) 
                           * (this.props.selectedPair === "ETHBTC"? this.props.priceOfBtc : this.props.selectedPair === "AVAXUSDT"? this.props.priceOfUsdt : 0) / 100
                         ],
                         backgroundColor: [
@@ -154,12 +160,23 @@ class Tables extends React.Component {
                          ctx.font = fontSize + "em sans-serif";
                          ctx.fillStyle = "#fff";
                          ctx.textBaseline = "top";
-                         var text = (!(Number(this.props.userDebtBalance) + Number(this.props.inputBtcDept)) > 0? "" : 
+                         var text = (!(
+                          (this.props.selectedPair === "ETHBTC"? Number(this.props.userDebtBalanceBtc) :  Number(this.props.userDebtBalanceUsdt))
+                          + Number(this.props.inputBtcDept)
+                          ) > 0? "" : 
                          (
-                            ((Number(this.props.userDepositBalance) + Number(this.props.inputEthDeposit)) 
+                            (
+                              (
+                                (this.props.selectedPair === "ETHBTC"? Number(this.props.userDepositBalanceEth) :  Number(this.props.userDepositBalanceAvax))
+                                + Number(this.props.inputEthDeposit)
+                              ) 
                             * (this.props.selectedPair === "ETHBTC"? this.props.priceOfEth : this.props.selectedPair === "AVAXUSDT"? this.props.priceOfAvax : 0) / 100) 
                             / 
-                            ((Number(this.props.userDebtBalance) + Number(this.props.inputBtcDept)) 
+                            (
+                              (
+                                (this.props.selectedPair === "ETHBTC"? Number(this.props.userDebtBalanceBtc) :  Number(this.props.userDebtBalanceUsdt))
+                                + Number(this.props.inputBtcDept)
+                              ) 
                             * (this.props.selectedPair === "ETHBTC"? this.props.priceOfBtc : this.props.selectedPair === "AVAXUSDT"? this.props.priceOfUsdt : 0) / 100)
                          ).toFixed(2)),
                          textX = Math.round((width - ctx.measureText(text).width) / 2),
@@ -184,8 +201,10 @@ function mapStateToProps(store) {
     selectedPair: store.loanshark.selectedPair,
     numberOfEth: store.loanshark.numberOfEth,
     numberOfAvax: store.loanshark.numberOfAvax,
-    userDepositBalance: store.loanshark.userDepositBalance,
-    userDebtBalance: store.loanshark.userDebtBalance,
+    userDepositBalanceEth: store.loanshark.userDepositBalanceEth,
+    userDepositBalanceAvax: store.loanshark.userDepositBalanceAvax,
+    userDebtBalanceBtc: store.loanshark.userDebtBalanceBtc,
+    userDebtBalanceUsdt: store.loanshark.userDebtBalanceUsdt,
     priceOfEth: store.loanshark.priceOfEth,
     priceOfBtc: store.loanshark.priceOfBtc,
     priceOfUsdt: store.loanshark.priceOfUsdt,
