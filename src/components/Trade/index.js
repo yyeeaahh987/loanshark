@@ -302,7 +302,7 @@ class Trade extends React.Component {
                                     onChange={this.setInputEthDeposit}
                                 />
                                 <Button style={{ borderRadius: "0px 10px 10px 0px" }} color="dark" onClick={() => {
-                                    this.setState( this.props.selectedPair === "ETHBTC" ? this.props.myETHAmount : this.props.selectedPair === "AVAXUSDT" ? this.props.myAVAXAmount  : 0 );
+                                    this.setState({ inputEthDeposit: this.props.selectedPair === "ETHBTC" ? this.props.myETHAmount : this.props.selectedPair === "AVAXUSDT" ? this.props.myAVAXAmount  : 0 });
                                     this.props.dispatch(changeInputEthDeposit(this.props.selectedPair === "ETHBTC" ? this.props.myETHAmount : this.props.selectedPair === "AVAXUSDT" ? this.props.myAVAXAmount  : 0));
                                 }}>Max</Button>
 
