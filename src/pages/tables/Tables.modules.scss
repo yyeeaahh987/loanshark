@@ -155,5 +155,12 @@ td {
   &__option {
     color: black;
   }
+}
 
+.borrow-power{
+  padding-right: 20px;
+  &__option{
+    padding-left: 2px;
+    padding-right: 2px;
+  }
 }
