@@ -410,7 +410,7 @@ class Header extends React.Component {
                 this.setMySmartVaultContractBtc(new  window.web3.eth.Contract(SmartVault, SMART_VAULT_BTC));
                 this.setMySmartVaultContractUsdt(new  window.web3.eth.Contract(SmartVault, SMART_VAULT_USDT));
 
-                this.props.dispatch(changeSelectedPair('AVAXUSDT'));
+                this.props.dispatch(changeSelectedPair('ETHBTC'));
                 this.getNeededCollateralFor()
               })
               .catch((error) => {

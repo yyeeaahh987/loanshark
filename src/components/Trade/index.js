@@ -34,20 +34,20 @@ import API from '../../utils/API'
 import {
     changeInputEthDeposit,
     changeInputBtcDebt,
-   // changeSelectedPair,
+    changeSelectedPair,
 } from "../../actions/loanshark";
 
 import {
     toDecimalNumber
 } from '../../utils/commonFunction'
 
-const assests = ["AVAX", "ETH", "BTC"]
+const assests = ["ONE", "ETH", "BTC"]
 const ownAssestsType = [
     {
         "chainId": 1,
         "address": "FvwEAhmxKfeiG8SnEvq42hc6whRyY3EFYAvebMqDNDGCgxN5Z",
         "name": "Avalanche",
-        "symbol": "AVAX",
+        "symbol": "ONE",
         "decimals": 8,
         "logoURI": ""
     },
@@ -280,8 +280,14 @@ class Trade extends React.Component {
                                                         className="currency-dropdown__option"
                                                         onClick={(e) => {
                                                             this.setState({ selectedOwnAssest: assest.symbol })
-                                                            if (assest.symbol === "ETH") this.setState({ selectedBorrowAssest: "BTC" })
-                                                            if (assest.symbol === "AVAX") this.setState({ selectedBorrowAssest: "USDT" })
+                                                            if (assest.symbol === "ETH") {
+                                                                this.setState({ selectedBorrowAssest: "BTC" });
+                                                                this.props.dispatch(changeSelectedPair("ETHBTC"));
+                                                            }
+                                                            if (assest.symbol === "ONE") {
+                                                                this.setState({ selectedBorrowAssest: "USDT" })
+                                                                this.props.dispatch(changeSelectedPair("AVAXUSDT"));
+                                                            }
                                                         }}
                                                     >{assest.symbol}</Dropdown.Item>
                                                 </>
@@ -302,7 +308,7 @@ class Trade extends React.Component {
 
                             </InputGroup>
                             <BalanceAmount
-                                amount={this.props.myETHAmount}
+                                amount={this.props.selectedPair === "ETHBTC" ? this.props.myETHAmount : this.props.selectedPair === "AVAXUSDT" ? this.props.myAVAXAmount : 0}
                                 displayPrefixText={"Your balance: "}
                             ></BalanceAmount>
                             <Button outline className="primary">
@@ -345,8 +351,8 @@ class Trade extends React.Component {
                                 }}>Max</Button>
                             </InputGroup>
                             <BalanceAmount
-                                amount={this.props.myBTCAmount}
-                                displayPrefixText={"Max. allowed amount to borrow: "}
+                                amount={this.props.selectedPair === "ETHBTC" ? this.props.myBTCAmount : this.props.selectedPair === "AVAXUSDT" ? this.props.myUSDTAmount : 0}
+                                displayPrefixText={"Your balance: "}
                             ></BalanceAmount>
                         </div>
                     </Col>

@@ -86,7 +86,7 @@ let refreshPrice = (props) => {
             props.dispatch(changeMyETHAmount(window.web3.utils.fromWei(result, 'ether')));
         });
         props.myUSDTContract.methods.balanceOf(props.myAccount).call({}, (error, result) => {
-            props.dispatch(changeMyUSDTAmount(window.web3.utils.fromWei(result, 'ether')));
+            props.dispatch(changeMyUSDTAmount(window.web3.utils.fromWei(result, 'picoether')));
         });
 
         window.web3.eth.getBalance(props.myAccount, function(err, result) {

@@ -560,7 +560,15 @@ class Dashboard extends React.Component {
             >
               <Row className={`justify-content-between mt-3`} noGutters>
                 <Col sm={8} className={"d-flex align-items-center"}>
-                  <h3 className={"fw-semi-bold mb-0"}>${(((this.props.userDepositBalance) * this.props.priceOfEth / 100) - (this.props.userDebtBalance * this.props.priceOfBtc / 100)).toFixed(2) }</h3>
+                  <h3 className={"fw-semi-bold mb-0"}>${
+                    (
+                      (
+                        (this.props.userDepositBalanceEth) * this.props.priceOfEth / 100) - (this.props.userDebtBalanceBtc * this.props.priceOfBtc / 100
+                      ) +
+                      (
+                        (this.props.userDepositBalanceAvax) * this.props.priceOfAvax / 100) - (this.props.userDebtBalanceUsdt * this.props.priceOfUsdt / 100
+                      )
+                    ).toFixed(2) }</h3>
                 </Col>
                 <Col
                   sm={4}
@@ -581,7 +589,22 @@ class Dashboard extends React.Component {
             >
               <Row className={`justify-content-between mt-3`} noGutters>
                 <Col sm={8} className={"d-flex align-items-center"}>
-                  <h3 className={"fw-semi-bold mb-0"}>{((this.props.userDepositBalance * this.props.priceOfEth / 100) / (this.props.userDebtBalance * this.props.priceOfBtc / 100)).toFixed(2) }</h3>
+                  <h3 className={"fw-semi-bold mb-0"}>{
+                  (
+                      (
+                        ( Number(this.props.userDepositBalanceEth) * this.props.priceOfEth / 100 
+                        + Number(this.props.userDepositBalanceAvax * this.props.priceOfAvax / 100))
+                      ) 
+                    / 
+                    (
+                      (
+                        (Number(this.props.userDebtBalanceBtc) * this.props.priceOfBtc / 100
+                        + Number(this.props.userDebtBalanceUsdt) * this.props.priceOfUsdt / 100
+                        ) 
+                      )
+                    )
+                 ).toFixed(2)
+                  }</h3>
                 </Col>
                 <Col
                   sm={4}
@@ -612,7 +635,9 @@ class Dashboard extends React.Component {
                   sm={12}
                   className={"d-flex justify-content-center align-items-center"}
                 >
-                  <h3 className={"fw-semi-bold pt-1 mb-0"}> ${(this.props.userDepositBalance * this.props.priceOfEth / 100).toFixed(2)}</h3>
+                  <h3 className={"fw-semi-bold pt-1 mb-0"}> ${
+                    ((this.props.userDepositBalanceEth * this.props.priceOfEth / 100) + (this.props.userDepositBalanceAvax * this.props.priceOfAvax / 100)).toFixed(2)
+                  }</h3>
                 </Col>
                 <Col
                   sm={12}
@@ -647,7 +672,9 @@ class Dashboard extends React.Component {
                   sm={12}
                   className={"d-flex justify-content-center align-items-center"}
                 >
-                  <h3 className={"fw-semi-bold pt-1 mb-0"}> ${(this.props.userDebtBalance * this.props.priceOfBtc / 100).toFixed(2)}</h3>
+                  <h3 className={"fw-semi-bold pt-1 mb-0"}> ${
+                    ((this.props.userDebtBalanceBtc * this.props.priceOfBtc / 100) + (this.props.userDebtBalanceUsdt * this.props.priceOfUsdt / 100)).toFixed(2)
+                  }</h3>
                 </Col>
                 <Col
                   sm={12}
@@ -755,17 +782,17 @@ class Dashboard extends React.Component {
 
                 <tr key={1}>
                   <td className="fw-thin pl-0 fw-thin">
-                    AVAX
+                    ONE
                   </td>
                   <td className={"pl-0 fw-thin"}>
                     ${this.props.userDepositBalanceAvax * this.props.priceOfAvax / 100}<br/>
-                    {this.props.userDepositBalanceAvax} AVAX
+                    {this.props.userDepositBalanceAvax} ONE
                   </td>
                   <td className={"pl-0 fw-thin"}>
-                    <Button color={"info"} disabled={!this.props.myFujiVaultAVAXUSDT} onClick={() => this.toggleDeposit('AVAX', 'Deposit', 'AVAXUSDT')}>
+                    <Button color={"info"} disabled={!this.props.myFujiVaultAVAXUSDT} onClick={() => this.toggleDeposit('ONE', 'Deposit', 'AVAXUSDT')}>
                       Deposit
                     </Button>&nbsp;
-                    <Button color={"warning"} disabled={!this.props.myFujiVaultAVAXUSDT || this.props.userDepositBalanceAvax <=0} onClick={() => this.toggleWithdrawn('AVAX', 'Withdraw', 'AVAXUSDT')}>
+                    <Button color={"warning"} disabled={!this.props.myFujiVaultAVAXUSDT || this.props.userDepositBalanceAvax <=0} onClick={() => this.toggleWithdrawn('ONE', 'Withdraw', 'AVAXUSDT')}>
                       Withdraw
                     </Button>
                   </td>
