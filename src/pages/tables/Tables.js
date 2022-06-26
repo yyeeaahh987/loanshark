@@ -83,7 +83,7 @@ class Tables extends React.Component {
                   Deposit {this.props.selectedPair === "ETHBTC"? " ETH" : this.props.selectedPair === "AVAXUSDT"? " ONE" : ""} and 
                   Borrow {this.props.selectedPair === "ETHBTC"? " BTC" : this.props.selectedPair === "AVAXUSDT"? " USDT" : ""}<br/>
                     <span style={{color: "#0000000", fontSize: "16px"}}>
-                      {this.props.selectedPair === "ETHBTC" ? this.props.numberOfEth.toFixed(2) : this.props.selectedPair === "AVAXUSDT" ? this.props.numberOfAvax.toFixed(2) : ""}  
+                      {this.props.selectedPair === "ETHBTC" ? this.props.numberOfEth : this.props.selectedPair === "AVAXUSDT" ? this.props.numberOfAvax : ""}  
                       {this.props.selectedPair === "ETHBTC"? " ETH" : this.props.selectedPair === "AVAXUSDT"? " ONE" : ""} as collateral to borrow 1 
                       {this.props.selectedPair === "ETHBTC"? " BTC" : this.props.selectedPair === "AVAXUSDT"? " USDT" : ""}</span>
                 </p>
@@ -165,6 +165,7 @@ class Tables extends React.Component {
                                 + Number(this.props.inputEthDeposit)
                               ) 
                             * (this.props.selectedPair === "ETHBTC"? this.props.priceOfEth : this.props.selectedPair === "AVAXUSDT"? this.props.priceOfAvax : 0) / 100) 
+                            * this.props.LTV[this.props.selectedPair]
                             / 
                             (
                               (
@@ -205,6 +206,7 @@ function mapStateToProps(store) {
     priceOfAvax: store.loanshark.priceOfAvax,
     inputBtcDept: store.loanshark.inputBtcDept,
     inputEthDeposit: store.loanshark.inputEthDeposit,
+    LTV: store.loanshark.LTV,
   };
 }
 

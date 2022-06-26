@@ -30,6 +30,8 @@ export const CHANGE_MY_ETH_AMOUNT = 'CHANGE_MY_ETH_AMOUNT';
 export const CHANGE_MY_BTC_AMOUNT = 'CHANGE_MY_BTC_AMOUNT';
 export const CHANGE_MY_AVAX_AMOUNT = 'CHANGE_MY_AVAX_AMOUNT';
 export const CHANGE_MY_USDT_AMOUNT = 'CHANGE_MY_USDT_AMOUNT';
+export const CHANGE_LTV = 'CHANGE_LTV';
+export const CHANGE_LIQUDATION_PRICE = 'CHANGE_LIQUDATION_PRICE';
 
 export function changeMyAccount(payload) {
   return {type: CHANGE_MY_ACCOUNT,payload};
@@ -126,4 +128,10 @@ export function changeMyAVAXAmount(payload) {
 }
 export function changeMyUSDTAmount(payload) {
   return {type: CHANGE_MY_USDT_AMOUNT,payload};
+}
+export function changeLTV(payload) {
+  return {type: CHANGE_LTV,payload};
+}
+export function changeLiqudationPrice(payload) {
+  return {type: CHANGE_LIQUDATION_PRICE,payload};
 }
