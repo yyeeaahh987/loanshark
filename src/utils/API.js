@@ -14,7 +14,9 @@ import {
     changeMyETHAmount,
     changeMyBTCAmount,
     changeMyAVAXAmount,
-    changeMyUSDTAmount
+    changeMyUSDTAmount,
+    changeLTV,
+    changeLiqudationPrice
   } from "../actions/loanshark";
 
 const WBTC=process.env.REACT_APP_WBTC;
@@ -37,10 +39,16 @@ let refreshPrice = (props) => {
         props.myFujiVaultETHBTC.methods.userDebtBalance(props.myAccount).call({}, (error, result) => {
             props.dispatch(changeUserDebtBalanceBtc(window.web3.utils.fromWei(result, 'gwei') * 10));
         });
-
+        props.myFujiVaultETHBTC.methods.collatF().call({}, (error, result) => {
+            props.dispatch(changeLTV({"ETHBTC": result.b / result.a}));
+        });
+        props.myFujiVaultETHBTC.methods.safetyF().call({}, (error, result) => {
+            props.dispatch(changeLiqudationPrice({"ETHBTC": result.b / result.a}));
+        });
+        
         // AVAX-USDT Vaults
         props.myFujiVaultAVAXUSDT.methods.getNeededCollateralFor(...args).call({}, (error, result) => {
-            props.dispatch(changeNumberOfAvax((result / 10000000000)));
+            props.dispatch(changeNumberOfAvax((result / 1000000000000)));
         });
 
         props.myFujiVaultAVAXUSDT.methods.userDepositBalance(props.myAccount).call({}, (error, result) => {
@@ -48,6 +56,12 @@ let refreshPrice = (props) => {
         });
         props.myFujiVaultAVAXUSDT.methods.userDebtBalance(props.myAccount).call({}, (error, result) => {
             props.dispatch(changeUserDebtBalanceUsdt(window.web3.utils.fromWei(result, 'picoether')));
+        });
+        props.myFujiVaultAVAXUSDT.methods.collatF().call({}, (error, result) => {
+            props.dispatch(changeLTV({"AVAXUSDT": result.b / result.a}));
+        });
+        props.myFujiVaultAVAXUSDT.methods.safetyF().call({}, (error, result) => {
+            props.dispatch(changeLiqudationPrice({"AVAXUSDT": result.b / result.a}));
         });
 
         let argsPriceOfEth = [USDT,WETH,2]

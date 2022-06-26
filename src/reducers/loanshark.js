@@ -30,7 +30,9 @@ import {
   CHANGE_MY_ETH_AMOUNT,
   CHANGE_MY_BTC_AMOUNT,
   CHANGE_MY_AVAX_AMOUNT,
-  CHANGE_MY_USDT_AMOUNT
+  CHANGE_MY_USDT_AMOUNT,
+  CHANGE_LTV,
+  CHANGE_LIQUDATION_PRICE
 } from '../actions/loanshark';
 
 const defaultState = {
@@ -64,7 +66,9 @@ const defaultState = {
   myETHAmount: 0,
   myBTCAmount: 0,
   myAVAXAmount: 0,
-  myUSDTAmount: 0
+  myUSDTAmount: 0,
+  LTV: {"ETHBTC": 0, "AVAXUSDT": 0},
+  liquidationPrice: {"ETHBTC": 0, "AVAXUSDT": 0},
 }
 
 export default function loansharkReducer(state = defaultState, action) {
@@ -133,7 +137,25 @@ export default function loansharkReducer(state = defaultState, action) {
       return {...state,myAVAXAmount: action.payload};
     case CHANGE_MY_USDT_AMOUNT:
       return {...state,myUSDTAmount: action.payload};
-    default:
+    case CHANGE_LTV:
+      var newState = state;
+      if (action.payload.ETHBTC) {
+        newState.LTV.ETHBTC = action.payload.ETHBTC;
+      }
+      if (action.payload.AVAXUSDT) {
+        newState.LTV.AVAXUSDT = action.payload.AVAXUSDT;
+      }
+      return {...state,LTV: newState.LTV};
+    case CHANGE_LIQUDATION_PRICE:
+      var newState = state;
+      if (action.payload.ETHBTC) {
+        newState.liquidationPrice.ETHBTC = action.payload.ETHBTC;
+      }
+      if (action.payload.AVAXUSDT) {
+        newState.liquidationPrice.AVAXUSDT = action.payload.AVAXUSDT;
+      }
+      return {...state,liquidationPrice: newState.liquidationPrice};
+     default:
       return state;
   }
 }

@@ -487,7 +487,9 @@ function mapStateToProps(store) {
     priceOfBtc: store.loanshark.priceOfBtc,
     providerAAVEAVAX: store.loanshark.providerAAVEAVAX,
     smartVaultBtc: store.loanshark.smartVaultBtc,
-    smartVaultUsdt: store.loanshark.smartVaultUsdt
+    smartVaultUsdt: store.loanshark.smartVaultUsdt,
+    LTV: store.loanshark.LTV,
+    liquidationPrice: store.loanshark.liquidationPrice
   };
 }
 
