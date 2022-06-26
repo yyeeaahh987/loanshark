@@ -165,6 +165,7 @@ class Tables extends React.Component {
                                 + Number(this.props.inputEthDeposit)
                               ) 
                             * (this.props.selectedPair === "ETHBTC"? this.props.priceOfEth : this.props.selectedPair === "AVAXUSDT"? this.props.priceOfAvax : 0) / 100) 
+                            * this.props.LTV[this.props.selectedPair]
                             / 
                             (
                               (
@@ -205,6 +206,7 @@ function mapStateToProps(store) {
     priceOfAvax: store.loanshark.priceOfAvax,
     inputBtcDept: store.loanshark.inputBtcDept,
     inputEthDeposit: store.loanshark.inputEthDeposit,
+    LTV: store.loanshark.LTV,
   };
 }
 

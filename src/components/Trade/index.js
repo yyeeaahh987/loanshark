@@ -195,11 +195,9 @@ class Trade extends React.Component {
 
     depositAVAXAndBorrowUSDT() {
         if (this.props.myETHContract) {
-            let finalInputBtcBorrow = (this.state.inputBtcBorrow / 10).toString() + "";
-
             let args = [
                 window.web3.utils.toBN(window.web3.utils.toWei(this.state.inputEthDeposit, 'ether')).toString(),
-                window.web3.utils.toBN(window.web3.utils.toWei(finalInputBtcBorrow, 'shannon')).toString()
+                window.web3.utils.toBN(window.web3.utils.toWei(this.state.inputBtcBorrow, 'picoether')).toString()
             ]
 
             this.calltoggleLoading();

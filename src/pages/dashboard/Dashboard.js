@@ -592,8 +592,8 @@ class Dashboard extends React.Component {
                   <h3 className={"fw-semi-bold mb-0"}>{
                   (
                       (
-                        ( Number(this.props.userDepositBalanceEth) * this.props.priceOfEth / 100 
-                        + Number(this.props.userDepositBalanceAvax * this.props.priceOfAvax / 100))
+                        ( Number(this.props.userDepositBalanceEth) * this.props.priceOfEth / 100 * this.props.LTV["ETHBTC"] 
+                        + Number(this.props.userDepositBalanceAvax * this.props.priceOfAvax / 100 * this.props.LTV["AVAXUSDT"]))
                       ) 
                     / 
                     (
@@ -765,7 +765,7 @@ class Dashboard extends React.Component {
                     </Button>
                   </td>
                   <td className={"pl-0 fw-normal"}>
-                  {((this.props.userDepositBalanceEth * this.props.priceOfEth / 100) / (this.props.userDebtBalanceBtc * this.props.priceOfBtc / 100)).toFixed(2) }
+                  {((this.props.userDepositBalanceEth * this.props.priceOfEth / 100) * this.props.LTV["ETHBTC"] / (this.props.userDebtBalanceBtc * this.props.priceOfBtc / 100)).toFixed(2) }
                   </td>
                   <td className={"pl-0 fw-normal"}>
                     <Button color={"info"} disabled={!this.props.myFujiVaultETHBTC} onClick={() => this.toggleEnterSmartVault('BTC', 'Enter Smart Vault', 'ETHBTC')}>
@@ -812,7 +812,7 @@ class Dashboard extends React.Component {
                     </Button>
                   </td>
                   <td className={"pl-0 fw-normal"}>
-                  {((this.props.userDepositBalanceAvax * this.props.priceOfAvax / 100) / (this.props.userDebtBalanceUsdt * this.props.priceOfUsdt / 100)).toFixed(2) }
+                  {((this.props.userDepositBalanceAvax * this.props.priceOfAvax / 100) * this.props.LTV["AVAXUSDT"] / (this.props.userDebtBalanceUsdt * this.props.priceOfUsdt / 100)).toFixed(2) }
                   </td>
                   <td className={"pl-0 fw-normal"}>
                     <Button color={"info"} disabled={!this.props.myFujiVaultAVAXUSDT} onClick={() => this.toggleEnterSmartVault('USDT', 'Enter Smart Vault', 'AVAXUSDT')}>
@@ -958,7 +958,8 @@ function mapStateToProps(store) {
     smartVaultBtc: store.loanshark.smartVaultBtc,
     smartVaultUsdt: store.loanshark.smartVaultUsdt,
     myETHAmount: store.loanshark.myETHAmount,
-    myBTCAmount: store.loanshark.myBTCAmount
+    myBTCAmount: store.loanshark.myBTCAmount,
+    LTV: store.loanshark.LTV,
   };
 }
 
