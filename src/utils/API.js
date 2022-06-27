@@ -89,7 +89,7 @@ let refreshPrice = (props) => {
 
         if (props.mySmartVaultUsdt) {
             props.mySmartVaultUsdt.methods.balances(props.myAccount).call({}, (error, result) => {
-                props.dispatch(changeSmartVaultUsdt(window.web3.utils.fromWei(result, 'gwei') * 10));
+                props.dispatch(changeSmartVaultUsdt(window.web3.utils.fromWei(result, 'picoether')));
             });
         }
 
