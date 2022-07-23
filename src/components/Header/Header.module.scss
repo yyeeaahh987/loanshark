@@ -254,3 +254,19 @@
     }
   }
 }
+
+
+
+.test{
+  width: 100%;
+}
+
+.test123{
+  width:fit-content;
+}
+
+.test456{
+  // width:fit-content;
+  direction: rtl;
+  width: 100%;
+}
