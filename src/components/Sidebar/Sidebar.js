@@ -1,7 +1,20 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { withRouter } from "react-router-dom";
+import { withRouter, NavLink } from "react-router-dom";
+import { Container, Row, Col, Button } from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faGithub } from "@fortawesome/free-brands-svg-icons"
+import { faTwitter } from "@fortawesome/free-brands-svg-icons"
+import { faDiscord } from "@fortawesome/free-brands-svg-icons"
+// import { faFacebook } from "@fortawesome/free-regular-svg-icons"
+
+// import { solid, regular, brands } from '@fortawesome/fontawesome-svg-core/import.macro'
+
+// import { faGithub } from '@fortawesome/free-solid-svg-icons'
+// npm i --save @fortawesome/free-solid-svg-icons
+// npm i --save @fortawesome/free-regular-svg-icons
+
 import { dismissAlert } from "../../actions/alerts";
 import s from "./Sidebar.module.scss";
 import LinksGroup from "./LinksGroup/LinksGroup";
@@ -34,23 +47,12 @@ class Sidebar extends React.Component {
 
   render() {
     return (
-        <div className={`${(!this.props.sidebarOpened && !this.props.sidebarStatic ) ? s.sidebarClose : ''} ${s.sidebarWrapper}`} id={"sidebar-drawer"}>
+      <div className={`${(!this.props.sidebarOpened && !this.props.sidebarStatic) ? s.sidebarClose : ''} ${s.sidebarWrapper}`} id={"sidebar-drawer"}>
         <nav className={s.root}>
           <header className={s.logo}>
             <img src={logo} alt="LoanShark" width="180px" className={s.logoStyle} />
           </header>
           <ul className={s.nav}>
-            <LinksGroup
-                onActiveSidebarItemChange={activeItem =>
-                    this.props.dispatch(changeActiveSidebarItem(activeItem))
-                }
-                activeItem={this.props.activeItem}
-                header="Borrow"
-                isHeader
-                link="/app/main/borrow"
-                index="main"
-            >
-            </LinksGroup>
             <LinksGroup
               onActiveSidebarItemChange={activeItem =>
                 this.props.dispatch(changeActiveSidebarItem(activeItem))
@@ -62,18 +64,38 @@ class Sidebar extends React.Component {
               index="main"
             >
             </LinksGroup>
-          </ul>
-
-          <ul>
-            <hr />
             <LinksGroup
-                onActiveSidebarItemChange={activeItem =>
-                    this.props.dispatch(changeActiveSidebarItem(activeItem))
-                }
-                header="Introduction"
-                link="/introduction"
-                target="_blank"
-                isHeader
+              onActiveSidebarItemChange={activeItem =>
+                this.props.dispatch(changeActiveSidebarItem(activeItem))
+              }
+              activeItem={this.props.activeItem}
+              header="Borrow"
+              isHeader
+              link="/app/main/borrow"
+              index="main"
+            >
+            </LinksGroup>
+            <LinksGroup
+              // onActiveSidebarItemChange={activeItem =>
+              //     this.props.dispatch(changeActiveSidebarItem(activeItem))
+              // }
+              // activeItem={this.props.activeItem}
+              header="Smart Value"
+              isHeader
+              // link="/app/main/smartValue"
+              index="main"
+            >
+            </LinksGroup>
+          </ul>
+          <ul className={s.footer}>
+            <LinksGroup
+              onActiveSidebarItemChange={activeItem =>
+                this.props.dispatch(changeActiveSidebarItem(activeItem))
+              }
+              header="Introduction"
+              link="/introduction"
+              target="_blank"
+              isHeader
             >
             </LinksGroup>
             <LinksGroup
@@ -86,37 +108,37 @@ class Sidebar extends React.Component {
               isHeader
             >
             </LinksGroup>
-            <LinksGroup
-              onActiveSidebarItemChange={activeItem =>
-                this.props.dispatch(changeActiveSidebarItem(activeItem))
-              }
-              header="Twitter"
-              isHeader
-              link="/twitter"
-              target="_blank"
-              index="main"
-            >
-            </LinksGroup>
-            <LinksGroup
-                onActiveSidebarItemChange={activeItem =>
-                    this.props.dispatch(changeActiveSidebarItem(activeItem))
-                }
-                header="Discord"
-                link="/discord"
-                target="_blank"
-                isHeader
-            >
-            </LinksGroup>
-            <LinksGroup
-                onActiveSidebarItemChange={activeItem =>
-                    this.props.dispatch(changeActiveSidebarItem(activeItem))
-                }
-                header="GitHub"
-                link="/github"
-                target="_blank"
-                isHeader
-            >
-            </LinksGroup>
+
+            <div style={{ paddingLeft: "35px" }}>
+              <Container>
+                <Row>
+                  <Col style={{ padding: "0px" }}>
+                    <NavLink
+                    className={s.footer__icon}
+                    to={"/github"}
+                    >
+                    <FontAwesomeIcon icon={faGithub} />
+                    </NavLink>
+                  </Col>
+                  <Col style={{ padding: "0px" }}>
+                    <NavLink
+                    className={s.footer__icon}
+                    to={"/twitter"}
+                    >
+                    <FontAwesomeIcon icon={faTwitter} />
+                    </NavLink>
+                  </Col>
+                  <Col style={{ padding: "0px" }}>
+                    <NavLink
+                    className={s.footer__icon}
+                    to={"/discord"}
+                    >
+                    <FontAwesomeIcon icon={faDiscord} />
+                    </NavLink>
+                  </Col>
+                </Row>
+              </Container>
+            </div>
           </ul>
         </nav>
       </div>
