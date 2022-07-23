@@ -201,3 +201,12 @@
 .groupTitle {
   margin-bottom: 15px;
 }
+
+
+.footer{
+  position: fixed;
+  bottom: 0;
+  &__icon{
+    color: white;
+  }
+}
