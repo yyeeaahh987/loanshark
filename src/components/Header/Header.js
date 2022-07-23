@@ -3,14 +3,21 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router";
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faRotateRight } from "@fortawesome/free-solid-svg-icons"
+import { faArrowLeftLong } from "@fortawesome/free-solid-svg-icons"
+import { Container, Row, Col } from 'react-bootstrap';
+import { Grid } from '@mui/material';
 import {
   Navbar, Button, Input,
   Modal,
   ModalHeader,
   ModalBody,
   ModalFooter,
+  // Container,
 } from "reactstrap";
 
+import RoundShapeButton from '../Button/RoundShapeButton/RoundShapeButton'
 import {
   toggleLoading,
 } from "../../actions/navigation";
@@ -51,18 +58,19 @@ import arrowUnactive from '../../images/Arrow 6.svg'
 import arrowActive from '../../images/Arrow 5.svg'
 
 import s from "./Header.module.scss"; // eslint-disable-line css-modules/no-unused-class
+import { TabContainer } from "react-bootstrap";
 
-const MY_FujiVaultETHBTC=process.env.REACT_APP_MY_FujiVaultETHBTC;
-const MY_FujiVaultAVAXUSDT=process.env.REACT_APP_MY_FujiVaultAVAXUSDT;
-const MY_FliquidatorAVAX=process.env.REACT_APP_MY_FliquidatorAVAX;
-const MY_FujiController=process.env.REACT_APP_MY_FujiController;
-const MY_FujiOracle=process.env.REACT_APP_MY_FujiOracle;
-const WBTC=process.env.REACT_APP_WBTC;
-const WETH=process.env.REACT_APP_WETH;
-const USDT=process.env.REACT_APP_USDT;
-const AAVEAVAX=process.env.REACT_APP_ProviderAAVEAVAX;
-const SMART_VAULT_BTC=process.env.REACT_APP_SMART_VAULT_BTC;
-const SMART_VAULT_USDT=process.env.REACT_APP_SMART_VAULT_USDT;
+const MY_FujiVaultETHBTC = process.env.REACT_APP_MY_FujiVaultETHBTC;
+const MY_FujiVaultAVAXUSDT = process.env.REACT_APP_MY_FujiVaultAVAXUSDT;
+const MY_FliquidatorAVAX = process.env.REACT_APP_MY_FliquidatorAVAX;
+const MY_FujiController = process.env.REACT_APP_MY_FujiController;
+const MY_FujiOracle = process.env.REACT_APP_MY_FujiOracle;
+const WBTC = process.env.REACT_APP_WBTC;
+const WETH = process.env.REACT_APP_WETH;
+const USDT = process.env.REACT_APP_USDT;
+const AAVEAVAX = process.env.REACT_APP_ProviderAAVEAVAX;
+const SMART_VAULT_BTC = process.env.REACT_APP_SMART_VAULT_BTC;
+const SMART_VAULT_USDT = process.env.REACT_APP_SMART_VAULT_USDT;
 
 class Header extends React.Component {
   static propTypes = {
@@ -378,18 +386,18 @@ class Header extends React.Component {
                     ]
                   }).then(() => {
                     const dataHong = require('../../abi/Hong.json');
-                    this.setMyFujiVaultETHBTC(new  window.web3.eth.Contract(FujiVaultAVAX.abi, MY_FujiVaultETHBTC));
-                    this.setMyFujiVaultAVAXUSDT(new  window.web3.eth.Contract(FujiVaultAVAX.abi, MY_FujiVaultAVAXUSDT));
-                    this.setMyFliquidatorAVAX(new  window.web3.eth.Contract(FliquidatorAVAX.abi, MY_FliquidatorAVAX));
-                    this.setMyFujiController(new  window.web3.eth.Contract(Controller.abi, MY_FujiController));
-                    this.setMyFujiOracle(new  window.web3.eth.Contract(FujiOracle.abi, MY_FujiOracle));
-                    this.setMyETHContract(new  window.web3.eth.Contract(dataHong, WETH));
-                    this.setMyBTCContract(new  window.web3.eth.Contract(dataHong, WBTC));
-                    this.setMyUSDTContract(new  window.web3.eth.Contract(dataHong, USDT));
-                    this.setMyAAVEAVAXContract(new  window.web3.eth.Contract(ProviderAAVEAVAX.abi, ProviderAAVEAVAX));
-                    this.setMySmartVaultContract(new  window.web3.eth.Contract(SmartVault, SMART_VAULT_BTC));
-                    this.setMySmartVaultContract(new  window.web3.eth.Contract(SmartVault, SMART_VAULT_USDT));
-                    
+                    this.setMyFujiVaultETHBTC(new window.web3.eth.Contract(FujiVaultAVAX.abi, MY_FujiVaultETHBTC));
+                    this.setMyFujiVaultAVAXUSDT(new window.web3.eth.Contract(FujiVaultAVAX.abi, MY_FujiVaultAVAXUSDT));
+                    this.setMyFliquidatorAVAX(new window.web3.eth.Contract(FliquidatorAVAX.abi, MY_FliquidatorAVAX));
+                    this.setMyFujiController(new window.web3.eth.Contract(Controller.abi, MY_FujiController));
+                    this.setMyFujiOracle(new window.web3.eth.Contract(FujiOracle.abi, MY_FujiOracle));
+                    this.setMyETHContract(new window.web3.eth.Contract(dataHong, WETH));
+                    this.setMyBTCContract(new window.web3.eth.Contract(dataHong, WBTC));
+                    this.setMyUSDTContract(new window.web3.eth.Contract(dataHong, USDT));
+                    this.setMyAAVEAVAXContract(new window.web3.eth.Contract(ProviderAAVEAVAX.abi, ProviderAAVEAVAX));
+                    this.setMySmartVaultContract(new window.web3.eth.Contract(SmartVault, SMART_VAULT_BTC));
+                    this.setMySmartVaultContract(new window.web3.eth.Contract(SmartVault, SMART_VAULT_USDT));
+
                     this.props.dispatch(changeSelectedPair('AVAXUSDT'));
 
                     this.getNeededCollateralFor()
@@ -398,17 +406,17 @@ class Header extends React.Component {
               })
               .then(() => {
                 const dataHong = require('../../abi/Hong.json');
-                this.setMyFujiVaultETHBTC(new  window.web3.eth.Contract(FujiVaultAVAX.abi, MY_FujiVaultETHBTC));
-                this.setMyFujiVaultAVAXUSDT(new  window.web3.eth.Contract(FujiVaultAVAX.abi, MY_FujiVaultAVAXUSDT));
-                this.setMyFliquidatorAVAX(new  window.web3.eth.Contract(FliquidatorAVAX.abi, MY_FliquidatorAVAX));
-                this.setMyFujiController(new  window.web3.eth.Contract(Controller.abi, MY_FujiController));
-                this.setMyFujiOracle(new  window.web3.eth.Contract(FujiOracle.abi, MY_FujiOracle));
-                this.setMyETHContract(new  window.web3.eth.Contract(dataHong, WETH));
-                this.setMyBTCContract(new  window.web3.eth.Contract(dataHong, WBTC));
-                this.setMyUSDTContract(new  window.web3.eth.Contract(dataHong, USDT));
-                this.setMyAAVEAVAXContract(new  window.web3.eth.Contract(ProviderAAVEAVAX.abi, AAVEAVAX));
-                this.setMySmartVaultContractBtc(new  window.web3.eth.Contract(SmartVault, SMART_VAULT_BTC));
-                this.setMySmartVaultContractUsdt(new  window.web3.eth.Contract(SmartVault, SMART_VAULT_USDT));
+                this.setMyFujiVaultETHBTC(new window.web3.eth.Contract(FujiVaultAVAX.abi, MY_FujiVaultETHBTC));
+                this.setMyFujiVaultAVAXUSDT(new window.web3.eth.Contract(FujiVaultAVAX.abi, MY_FujiVaultAVAXUSDT));
+                this.setMyFliquidatorAVAX(new window.web3.eth.Contract(FliquidatorAVAX.abi, MY_FliquidatorAVAX));
+                this.setMyFujiController(new window.web3.eth.Contract(Controller.abi, MY_FujiController));
+                this.setMyFujiOracle(new window.web3.eth.Contract(FujiOracle.abi, MY_FujiOracle));
+                this.setMyETHContract(new window.web3.eth.Contract(dataHong, WETH));
+                this.setMyBTCContract(new window.web3.eth.Contract(dataHong, WBTC));
+                this.setMyUSDTContract(new window.web3.eth.Contract(dataHong, USDT));
+                this.setMyAAVEAVAXContract(new window.web3.eth.Contract(ProviderAAVEAVAX.abi, AAVEAVAX));
+                this.setMySmartVaultContractBtc(new window.web3.eth.Contract(SmartVault, SMART_VAULT_BTC));
+                this.setMySmartVaultContractUsdt(new window.web3.eth.Contract(SmartVault, SMART_VAULT_USDT));
 
                 this.props.dispatch(changeSelectedPair('ETHBTC'));
                 this.getNeededCollateralFor()
@@ -426,23 +434,60 @@ class Header extends React.Component {
   render() {
     return (
       <div>
-        <Navbar
-          className={`${s.root} d-print-none`}
-          style={{ zIndex: 0, backgroundColor: '#000000', display: "flex" }}
-        >
-          {!this.state.myAccount ?
-            <Button style={{ marginLeft: "auto" }} color={"outline-light"} className={`${s.btnShadow}`} onClick={this.ethEnabled}>
-              Connect Wallet
-            </Button>
-            : <div style={{ marginLeft: "auto" }}><Input disabled={true} valid style={{ width: '450px' }} value={this.state.myAccount}></Input></div>
-          }
-          &nbsp;
-          <Button color={"outline-light"} disabled={!this.props.myAccount} onClick={this.getNeededCollateralFor}>Refresh</Button>
-          &nbsp;
-          <Button color={"outline-light"} disabled={!this.props.myETHContract}  onClick={() => this.toggleMintETH('ETH', 'Mint')}>Mint ETH</Button>
-          &nbsp;
-          <Button color={"outline-light"} disabled={!this.props.myBTCContract} onClick={() => this.toggleMintBTC('BTC', 'Mint')}>Mint BTC</Button>
+        <Navbar>
+
+          <Grid container>
+            <Grid item xs={6} md={6}>
+              <Grid container spacing={2}>
+                <Grid item>
+                  <div>
+                    <FontAwesomeIcon onClick={() => {
+                      console.log(`on click back`)
+                    }}
+                      icon={faArrowLeftLong} />
+                  </div>
+                </Grid>
+                <Grid item>
+                  <div>
+                    <span>Back</span>
+                  </div>
+                </Grid>
+              </Grid>
+            </Grid>
+            <Grid item xs={6} md={6}>
+              <Grid container spacing={2} justifyContent="flex-end" alignItems={"center"}>
+                <Grid item>
+                  <div>
+                    {
+                      !this.state.myAccount ?
+                        <RoundShapeButton
+                          label={"Connect Wallet"}
+                          onClick={(e) => { this.ethEnabled() }}
+                        ></RoundShapeButton>
+                        :
+                        <div style={{ marginLeft: "auto" }}><Input disabled={true} valid style={{ width: '450px' }} value={this.state.myAccount}></Input></div>
+                    }
+
+                  </div>
+                </Grid>
+                <Grid item>
+                  <div>
+                    <FontAwesomeIcon onClick={() => {
+                      this.getNeededCollateralFor()
+                    }}
+                      icon={faRotateRight} />
+                  </div>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
         </Navbar>
+
+
+
+
+
+
         <Modal isOpen={this.state.modal} toggle={this.toggle} style={{ color: '#000000' }}>
           <ModalHeader toggle={this.toggle}>{this.state.modalTitle}</ModalHeader>
           <ModalBody>
@@ -468,11 +513,11 @@ function mapStateToProps(store) {
     sidebarStatic: store.navigation.sidebarStatic,
     myAccount: store.loanshark.myAccount,
     selectedPair: store.loanshark.selectedPair,
-    numberOfEth:  store.loanshark.userDebtBalance,
+    numberOfEth: store.loanshark.userDebtBalance,
     userDepositBalanceEth: store.loanshark.userDepositBalanceEth,
     userDepositBalanceAvax: store.loanshark.userDepositBalanceAvax,
-    userDebtBalanceBtc:  store.loanshark.userDebtBalanceBtc,
-    userDebtBalanceUsdt:  store.loanshark.userDebtBalanceUsdt,
+    userDebtBalanceBtc: store.loanshark.userDebtBalanceBtc,
+    userDebtBalanceUsdt: store.loanshark.userDebtBalanceUsdt,
     myFujiVaultETHBTC: store.loanshark.myFujiVaultETHBTC,
     myFujiVaultAVAXUSDT: store.loanshark.myFujiVaultAVAXUSDT,
     myFliquidatorAVAX: store.loanshark.myFliquidatorAVAX,
@@ -494,3 +539,152 @@ function mapStateToProps(store) {
 }
 
 export default withRouter(connect(mapStateToProps)(Header));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{/* <Navbar
+className={`${s.root} d-print-none`}
+style={{ zIndex: 0, backgroundColor: '#000000', display: "flex" }}
+>
+{!this.state.myAccount ?
+  <Button style={{ marginLeft: "auto" }} color={"outline-light"} className={`${s.btnShadow}`} onClick={this.ethEnabled}>
+    Connect Wallet
+  </Button>
+  : <div style={{ marginLeft: "auto" }}><Input disabled={true} valid style={{ width: '450px' }} value={this.state.myAccount}></Input></div>
+}
+&nbsp;
+<Button color={"outline-light"} disabled={!this.props.myAccount} onClick={this.getNeededCollateralFor}>Refresh</Button>
+&nbsp;
+<Button color={"outline-light"} disabled={!this.props.myETHContract} onClick={() => this.toggleMintETH('ETH', 'Mint')}>Mint ETH</Button>
+&nbsp;
+<Button color={"outline-light"} disabled={!this.props.myBTCContract} onClick={() => this.toggleMintBTC('BTC', 'Mint')}>Mint BTC</Button>
+</Navbar>
+
+
+
+ */}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// <div>
+// <Navbar
+//   className={`${s.root} d-print-none`}
+//   style={{ zIndex: 0, backgroundColor: '#000000', display: "flex" }}
+// >
+//   {!this.state.myAccount ?
+//     <Button style={{ marginLeft: "auto" }} color={"outline-light"} className={`${s.btnShadow}`} onClick={this.ethEnabled}>
+//       Connect Wallet
+//     </Button>
+//     : <div style={{ marginLeft: "auto" }}><Input disabled={true} valid style={{ width: '450px' }} value={this.state.myAccount}></Input></div>
+//   }
+//   &nbsp;
+//   <Button color={"outline-light"} disabled={!this.props.myAccount} onClick={this.getNeededCollateralFor}>Refresh</Button>
+//   &nbsp;
+//   <Button color={"outline-light"} disabled={!this.props.myETHContract}  onClick={() => this.toggleMintETH('ETH', 'Mint')}>Mint ETH</Button>
+//   &nbsp;
+//   <Button color={"outline-light"} disabled={!this.props.myBTCContract} onClick={() => this.toggleMintBTC('BTC', 'Mint')}>Mint BTC</Button>
+// </Navbar>
+// <Modal isOpen={this.state.modal} toggle={this.toggle} style={{ color: '#000000' }}>
+//   <ModalHeader toggle={this.toggle}>{this.state.modalTitle}</ModalHeader>
+//   <ModalBody>
+//     {this.state.modalAction} {this.state.modalToken} :
+//     <Input
+//       value={this.state.modalInputValue}
+//       onChange={this.setInput}>
+//     </Input>
+//   </ModalBody>
+//   <ModalFooter>
+//     <Button color="primary" onClick={this.state.modalCall}>Confirm</Button>{' '}
+//     <Button color="secondary" onClick={this.toggle}>Cancel</Button>
+//   </ModalFooter>
+// </Modal>
+// </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{/* <Row>
+<Col xs={6}>
+  <Row>
+    <Col>
+      <div>
+        <FontAwesomeIcon onClick={() => {
+          console.log(`on click back`)
+        }}
+          icon={faArrowLeftLong} />
+      </div>
+    </Col>
+    <Col>
+      <div>
+        <span>Back</span>
+      </div>
+    </Col>
+  </Row>
+</Col>
+<Col xs={6}>
+  <Row>
+    <Col xs={9}>
+      <div>
+        <RoundShapeButton
+          label={"Connect Wallet"}
+          onClick={(e) => { console.log(e) }}
+        ></RoundShapeButton>
+      </div>
+    </Col>
+    <Col>
+      <div>
+        <FontAwesomeIcon icon={faRotateRight}
+          onClick={() => {
+            console.log(`on click refresh`)
+          }}
+        />
+      </div>
+    </Col>
+  </Row>
+</Col>
+<Col xs={6}>
+
+</Col>
+<Col xs={1}>
+
+</Col>
+</Row> */}
