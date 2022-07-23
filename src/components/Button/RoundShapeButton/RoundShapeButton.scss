@@ -1,0 +1,9 @@
+.button{
+    min-width: 7.5vw;
+    background-color: white;
+    border-radius: 20px;
+    color: #303030;
+    &:hover {
+        background-color: #565656;
+    }
+}
