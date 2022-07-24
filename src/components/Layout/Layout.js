@@ -9,6 +9,11 @@ import LoadingOverlay from 'react-loading-overlay'
 import CircleLoader from 'react-spinners/CircleLoader'
 
 import Dashboard from "../../pages/dashboard";
+import SmartVault1 from "../../pages/smartvault/SmartVault1";
+import SmartVault2 from "../../pages/smartvault/SmartVault2";
+import SmartVault3 from "../../pages/smartvault/SmartVault3";
+import SmartVault4 from "../../pages/smartvault/SmartVault4";
+import SmartVault5 from "../../pages/smartvault/SmartVault5";
 import Header from "../Header";
 import Sidebar from "../Sidebar";
 import {
@@ -100,7 +105,6 @@ class Layout extends React.Component {
 
             <Hammer onSwipe={this.handleSwipe}>
               <main className={s.content}>
-                <BreadcrumbHistory url={this.props.location.pathname} />
                 <TransitionGroup>
                   <CSSTransition
                     key={this.props.location.key}
@@ -122,6 +126,31 @@ class Layout extends React.Component {
                           path="/app/main/borrow"
                           exact
                           component={Tables}
+                      />
+                      <Route
+                          path="/app/main/smartVault1"
+                          exact
+                          component={SmartVault1}
+                      />
+                      <Route
+                          path="/app/main/smartVault2"
+                          exact
+                          component={SmartVault2}
+                      />
+                      <Route
+                          path="/app/main/smartVault3"
+                          exact
+                          component={SmartVault3}
+                      />
+                      <Route
+                          path="/app/main/smartVault4"
+                          exact
+                          component={SmartVault4}
+                      />
+                      <Route
+                          path="/app/main/smartVault5"
+                          exact
+                          component={SmartVault5}
                       />
                     </Switch>
                   </CSSTransition>

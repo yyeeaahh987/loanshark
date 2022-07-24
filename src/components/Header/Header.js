@@ -473,7 +473,7 @@ class Header extends React.Component {
                 <Grid item>
                   <div>
                     <FontAwesomeIcon onClick={() => {
-                      this.getNeededCollateralFor()
+                      this.getNeededCollateralFor();
                     }}
                       icon={faRotateRight} />
                   </div>
