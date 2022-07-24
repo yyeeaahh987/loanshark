@@ -45,12 +45,25 @@ import {
   changeMySmartVaultUsdt
 } from "../../actions/loanshark";
 
+import {
+  changeLpPoolBtc,
+  changeLpTokenBtc,
+  changeVaultBtc,
+  changeTopupAction,
+} from "../../actions/backd";
+
 import Controller from '../../abi/fujidao/Controller.json';
 import FujiVaultAVAX from '../../abi/fujidao/FujiVaultAVAX.json';
 import FliquidatorAVAX from '../../abi/fujidao/FliquidatorAVAX.json';
 import FujiOracle from '../../abi/fujidao/FujiOracle.json';
 import ProviderAAVEAVAX from '../../abi/fujidao/ProviderAAVEAVAX.json';
 import SmartVault from '../../abi/fujidao/SmartVault.json';
+
+import lpPoolAbi from '../../abi/backd/lpPool.json';
+import lpTokenAbi from '../../abi/backd/lpToken.json';
+import topupActionAbi from '../../abi/backd/topupAction.json';
+import vaultBtcAbi from '../../abi/backd/vaultBtc.json';
+
 import API from '../../utils/API'
 
 import Web3 from 'web3';
@@ -60,17 +73,26 @@ import arrowActive from '../../images/Arrow 5.svg'
 import s from "./Header.module.scss"; // eslint-disable-line css-modules/no-unused-class
 import { TabContainer } from "react-bootstrap";
 
+//Fujidao Contracts
 const MY_FujiVaultETHBTC = process.env.REACT_APP_MY_FujiVaultETHBTC;
 const MY_FujiVaultAVAXUSDT = process.env.REACT_APP_MY_FujiVaultAVAXUSDT;
 const MY_FliquidatorAVAX = process.env.REACT_APP_MY_FliquidatorAVAX;
 const MY_FujiController = process.env.REACT_APP_MY_FujiController;
 const MY_FujiOracle = process.env.REACT_APP_MY_FujiOracle;
+const AAVEAVAX = process.env.REACT_APP_ProviderAAVEAVAX;
+
+//Backd Contracts
+const LP_POOL_BTC = process.env.REACT_APP_LP_POOL_BTC;
+const LP_TOKEN_BTC = process.env.REACT_APP_LP_TOKEN_BTC;
+const VAULT_BTC = process.env.REACT_APP_VAULT_BTC;
+const TOPUP_ACTION = process.env.REACT_APP_TOPUP_ACTION;
+const SMART_VAULT_BTC = process.env.REACT_APP_SMART_VAULT_BTC;
+const SMART_VAULT_USDT = process.env.REACT_APP_SMART_VAULT_USDT;
+
+//Asset Contracts
 const WBTC = process.env.REACT_APP_WBTC;
 const WETH = process.env.REACT_APP_WETH;
 const USDT = process.env.REACT_APP_USDT;
-const AAVEAVAX = process.env.REACT_APP_ProviderAAVEAVAX;
-const SMART_VAULT_BTC = process.env.REACT_APP_SMART_VAULT_BTC;
-const SMART_VAULT_USDT = process.env.REACT_APP_SMART_VAULT_USDT;
 
 class Header extends React.Component {
   static propTypes = {
@@ -398,6 +420,11 @@ class Header extends React.Component {
                     this.setMySmartVaultContract(new window.web3.eth.Contract(SmartVault, SMART_VAULT_BTC));
                     this.setMySmartVaultContract(new window.web3.eth.Contract(SmartVault, SMART_VAULT_USDT));
 
+                    this.props.dispatch(changeLpPoolBtc(new window.web3.eth.Contract(lpPoolAbi, LP_POOL_BTC)));
+                    this.props.dispatch(changeLpTokenBtc(new window.web3.eth.Contract(lpTokenAbi, LP_TOKEN_BTC)));
+                    this.props.dispatch(changeVaultBtc(new window.web3.eth.Contract(vaultBtcAbi, VAULT_BTC)));
+                    this.props.dispatch(changeTopupAction(new window.web3.eth.Contract(topupActionAbi, TOPUP_ACTION)));
+
                     this.props.dispatch(changeSelectedPair('AVAXUSDT'));
 
                     this.getNeededCollateralFor()
@@ -418,7 +445,13 @@ class Header extends React.Component {
                 this.setMySmartVaultContractBtc(new window.web3.eth.Contract(SmartVault, SMART_VAULT_BTC));
                 this.setMySmartVaultContractUsdt(new window.web3.eth.Contract(SmartVault, SMART_VAULT_USDT));
 
+                this.props.dispatch(changeLpPoolBtc(new window.web3.eth.Contract(lpPoolAbi, LP_POOL_BTC)));
+                this.props.dispatch(changeLpTokenBtc(new window.web3.eth.Contract(lpTokenAbi, LP_TOKEN_BTC)));
+                this.props.dispatch(changeVaultBtc(new window.web3.eth.Contract(vaultBtcAbi, VAULT_BTC)));
+                this.props.dispatch(changeTopupAction(new window.web3.eth.Contract(topupActionAbi, TOPUP_ACTION)));
+
                 this.props.dispatch(changeSelectedPair('ETHBTC'));
+
                 this.getNeededCollateralFor()
               })
               .catch((error) => {
@@ -534,7 +567,11 @@ function mapStateToProps(store) {
     smartVaultBtc: store.loanshark.smartVaultBtc,
     smartVaultUsdt: store.loanshark.smartVaultUsdt,
     LTV: store.loanshark.LTV,
-    liquidationPrice: store.loanshark.liquidationPrice
+    liquidationPrice: store.loanshark.liquidationPrice,
+    lpPoolBtc: store.backd.lpPoolBtc,
+    lpTokenBtc: store.backd.lpTokenBtc,
+    vaultBtc: store.backd.vaultBtc,
+    topupAction: store.backd.topupAction
   };
 }
 
