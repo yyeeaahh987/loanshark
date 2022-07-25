@@ -6,10 +6,11 @@ export class Radio extends Component {
   state = {};
 
   render() {
-    const { selected, onChange, text, value } = this.props;
+    const { selected, onChange, text, value, disabled } = this.props;
     return (
       <div
         className="modern-radio-container"
+        disabled={disabled}
         onClick={() => {
           onChange(value);
         }}

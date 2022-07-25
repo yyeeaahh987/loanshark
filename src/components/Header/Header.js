@@ -470,7 +470,7 @@ class Header extends React.Component {
         <Navbar>
 
           <Grid container>
-            <Grid item xs={6} md={6}>
+            {/* <Grid item xs={6} md={6}>
               <Grid container spacing={2}>
                 <Grid item>
                   <div>
@@ -486,8 +486,8 @@ class Header extends React.Component {
                   </div>
                 </Grid>
               </Grid>
-            </Grid>
-            <Grid item xs={6} md={6}>
+            </Grid> */}
+            <Grid item xs={12} md={12}>
               <Grid container spacing={2} justifyContent="flex-end" alignItems={"center"}>
                 <Grid item>
                   <div>
