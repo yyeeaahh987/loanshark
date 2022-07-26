@@ -19,6 +19,15 @@ import {
     changeLiqudationPrice
   } from "../actions/loanshark";
 
+import {
+  changeLpPoolBtc,
+  changeLpTokenBtc,
+  changeVaultBtc,
+  changeTopupAction,
+  changeMyBtcLpAmount,
+  changeMyProtection
+} from "../actions/backd";
+  
 const WBTC=process.env.REACT_APP_WBTC;
 const AVAX=process.env.REACT_APP_AVAX;
 const WETH=process.env.REACT_APP_WETH;
@@ -109,6 +118,21 @@ let refreshPrice = (props) => {
                 props.dispatch(changeMyAVAXAmount(window.web3.utils.fromWei(result, 'ether')));
             }
         })
+
+        //Backd
+        props.lpTokenBtc.methods.balanceOf(props.myAccount).call({},  (error, result) => {
+            props.dispatch(changeMyBtcLpAmount(window.web3.utils.fromWei(result, 'gwei') * 10));
+        });
+
+        let argsGetPosition = [
+            props.myAccount,
+            props.myAccount + "000000000000000000000000",
+            "0x66756a6964616f00000000000000000000000000000000000000000000000000"
+        ];
+
+        props.topupAction.methods.getPosition(...argsGetPosition).call({},  (error, result) => {
+            props.dispatch(changeMyProtection(result));
+        });
     }
 }
 

@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import usersImg from "../../images/usersImg.svg";
 import smileImg from "../../images/smileImg.svg";
 
+import { NavLink } from "react-router-dom";
 import {
   Row, Col, Table, 
   Input,
@@ -19,9 +20,9 @@ import {
 } from "../../actions/navigation";
 
 import API from '../../utils/API'
-import Widget from "../../components/Widget";
+import Widget from "../../components/Widget/Widget";
 
-class Dashboard extends React.Component {
+class SmartVault4 extends React.Component {
   constructor() {
     super();
     this.forceUpdate = this.forceUpdate.bind(this);
@@ -553,362 +554,56 @@ class Dashboard extends React.Component {
     return (
       <div>
         <Row>
-          <Col xl={4}>
-            <Widget
-              title={<p style={{ fontWeight: 700 }}>Account Value</p>}
-              customDropDown
-            >
-              <Row className={`justify-content-between mt-3`} noGutters>
-                <Col sm={8} className={"d-flex align-items-center"}>
-                  <h3 className={"fw-semi-bold mb-0"}>${
-                    (
-                      (
-                        (this.props.userDepositBalanceEth) * this.props.priceOfEth / 100) - (this.props.userDebtBalanceBtc * this.props.priceOfBtc / 100
-                      ) +
-                      (
-                        (this.props.userDepositBalanceAvax) * this.props.priceOfAvax / 100) - (this.props.userDebtBalanceUsdt * this.props.priceOfUsdt / 100
-                      )
-                    ).toFixed(2) }</h3>
-                </Col>
-                <Col
-                  sm={4}
-                  className={"d-flex align-items-center justify-content-end"}
-                >
-                </Col>
-              </Row>
-              <Row style={{ marginBottom: 45}}>
-                <Col sm={12}>
-                </Col>
-              </Row>
-            </Widget>
-          </Col>
-          <Col xl={4}>
-            <Widget
-              title={<p style={{ fontWeight: 700 }}>Health Factor</p>}
-              customDropDown
-            >
-              <Row className={`justify-content-between mt-3`} noGutters>
-                <Col sm={8} className={"d-flex align-items-center"}>
-                  <h3 className={"fw-semi-bold mb-0"}>{
-                  (
-                      (
-                        ( Number(this.props.userDepositBalanceEth) * this.props.priceOfEth / 100 * this.props.LTV["ETHBTC"] 
-                        + Number(this.props.userDepositBalanceAvax * this.props.priceOfAvax / 100 * this.props.LTV["AVAXUSDT"]))
-                      ) 
-                    / 
-                    (
-                      (
-                        (Number(this.props.userDebtBalanceBtc) * this.props.priceOfBtc / 100
-                        + Number(this.props.userDebtBalanceUsdt) * this.props.priceOfUsdt / 100
-                        ) 
-                      )
-                    )
-                 ).toFixed(2)
-                  }</h3>
-                </Col>
-                <Col
-                  sm={4}
-                  className={"d-flex align-items-center justify-content-end"}
-                >
-                </Col>
-              </Row>
-              <Row style={{ marginBottom: 45}}>
-                <Col sm={12}>
-                </Col>
-              </Row>
-            </Widget>
-          </Col>
-          <Col xl={window.innerWidth > 1280 ? 2 : 4} sm={6}>
-            <Widget>
-              <Row
-                className={`justify-content-center align-items-center`}
-              >
-                <Col
-                  sm={12}
-                  className={
-                    "d-flex justify-content-center align-items-center mb-2"
-                  }
-                >
-                  <img src={usersImg} alt="" style={{ paddingTop: 30 }} />
-                </Col>
-                <Col
-                  sm={12}
-                  className={"d-flex justify-content-center align-items-center"}
-                >
-                  <h3 className={"fw-semi-bold pt-1 mb-0"}> ${
-                    ((this.props.userDepositBalanceEth * this.props.priceOfEth / 100) + (this.props.userDepositBalanceAvax * this.props.priceOfAvax / 100)).toFixed(2)
-                  }</h3>
-                </Col>
-                <Col
-                  sm={12}
-                  className={"d-flex justify-content-center align-items-center"}
-                >
-                  <h5 className={"fw-thin pt-1 mb-0"}>Deposited</h5>
-                </Col>
-                <Col
-                  sm={12}
-                  className={
-                    "d-flex justify-content-center align-items-center pt-1"
-                  }
-                >
-                </Col>
-              </Row>
-            </Widget>
-          </Col>
-          <Col xl={2} sm={6}>
-            <Widget>
-              <Row
-                className={`justify-content-center align-items-center`}
-              >
-                <Col
-                  sm={12}
-                  className={
-                    "d-flex justify-content-center align-items-center mb-2"
-                  }
-                >
-                  <img src={smileImg} alt="" style={{ paddingTop: 30 }} />
-                </Col>
-                <Col
-                  sm={12}
-                  className={"d-flex justify-content-center align-items-center"}
-                >
-                  <h3 className={"fw-semi-bold pt-1 mb-0"}> ${
-                    ((this.props.userDebtBalanceBtc * this.props.priceOfBtc / 100) + (this.props.userDebtBalanceUsdt * this.props.priceOfUsdt / 100)).toFixed(2)
-                  }</h3>
-                </Col>
-                <Col
-                  sm={12}
-                  className={"d-flex justify-content-center align-items-center"}
-                >
-                  <h5 className={"fw-thin pt-1 mb-0"}>Borrowed</h5>
-                </Col>
-                <Col
-                  sm={12}
-                  className={
-                    "d-flex justify-content-center align-items-center pt-1"
-                  }
-                >
-                </Col>
-              </Row>
-            </Widget>
-          </Col>
-        </Row>
-
-        <Row>
           <Col sm={12}>
-            <Widget
-                customDropDown
-                title={<p className={"fw-bold"}>My Borrowing Position</p>}
-            >
-              <Table className={"mb-0"} borderless responsive>
-                <thead>
-                <tr>
-                  <th key={0} scope="col" className={"pl-0"}>
-                    Collateral
-                  </th>
-                  <th key={1} scope="col" className={"pl-0"}>
-                    Amount
-                  </th>
-                  <th key={2} scope="col" className={"pl-0"}>
-                  
-                  </th>
-                  <th key={3} scope="col" className={"pl-0"}>
-                    Debt
-                  </th>
-                  <th key={4} scope="col" className={"pl-0"}>
-                    Amount
-                  </th>
-                  <th key={5} scope="col" className={"pl-0"}>
-                    
-                  </th>
-                  <th key={6} scope="col" className={"pl-0"}>
-                    Health Factor
-                  </th>
-                  <th key={7} scope="col" className={"pl-0"}>
-                    Action
-                  </th>
-                  <th key={8} scope="col" className={"pl-0"}>
-                    Provider
-                  </th>
-                </tr>
-                </thead>
-                <tbody className="">
-                <tr key={0}>
-                  <td className="fw-thin pl-0 fw-thin">
-                    ETH
-                  </td>
-                  <td className={"pl-0 fw-thin"}>
-                    ${this.props.userDepositBalanceEth * this.props.priceOfEth / 100}<br/>
-                    {this.props.userDepositBalanceEth} ETH
-                  </td>
-                  <td className={"pl-0 fw-thin"}>
-                    <Button color={"info"} disabled={!this.props.myFujiVaultETHBTC} onClick={() => this.toggleDeposit('ETH', 'Deposit', 'ETHBTC')}>
-                      Deposit
-                    </Button>&nbsp;
-                    <Button color={"warning"} disabled={!this.props.myFujiVaultETHBTC || this.props.userDepositBalanceEth <=0} onClick={() => this.toggleWithdrawn('ETH', 'Withdraw', 'ETHBTC')}>
-                      Withdraw
-                    </Button>
-                  </td>
-                  <td className="fw-thin pl-0 fw-thin">
-                    BTC
-                  </td>
-                  <td className={"pl-0 fw-thin"}>
-                    ${this.props.userDebtBalanceBtc * this.props.priceOfBtc / 100}<br/>
-                    {this.props.userDebtBalanceBtc} BTC
-                  </td>
-                  <td className={"pl-0 fw-thin"}>
-                    <Button color={"info"} disabled={!this.props.myFujiVaultETHBTC || this.props.userDepositBalanceEth <=0} onClick={() => this.toggleBorrow('BTC', 'Borrow', 'ETHBTC')}>
-                      Borrow
-                    </Button>&nbsp;
-                    <Button color={"warning"} disabled={!this.props.myFujiVaultETHBTC || this.props.userDebtBalanceBtc <=0} onClick={() => this.togglePayback('BTC', 'Payback', 'ETHBTC')}>
-                      Payback
-                    </Button>
-                  </td>
-                  <td className={"pl-0 fw-normal"}>
-                  {((this.props.userDepositBalanceEth * this.props.priceOfEth / 100) * this.props.LTV["ETHBTC"] / (this.props.userDebtBalanceBtc * this.props.priceOfBtc / 100)).toFixed(2) }
-                  </td>
-                  <td className={"pl-0 fw-normal"}>
-                    <Button color={"info"} disabled={!this.props.myFujiVaultETHBTC} onClick={() => this.toggleEnterSmartVault('BTC', 'Enter Smart Vault', 'ETHBTC')}>
-                      Enter Smart Vault
-                    </Button>&nbsp;
-                    <Button color={"warning"} disabled={!this.props.myFujiVaultETHBTC || this.props.userDebtBalanceBtc <=0} onClick={() => this.toggleFlashclose('BTC', 'Flash Close', 'ETHBTC')}>
-                      Flash Close
-                    </Button>
-                  </td>
-                  <td>
-                    AAVE
-                  </td>
-                </tr>
-
-                <tr key={1}>
-                  <td className="fw-thin pl-0 fw-thin">
-                    ONE
-                  </td>
-                  <td className={"pl-0 fw-thin"}>
-                    ${this.props.userDepositBalanceAvax * this.props.priceOfAvax / 100}<br/>
-                    {this.props.userDepositBalanceAvax} ONE
-                  </td>
-                  <td className={"pl-0 fw-thin"}>
-                    <Button color={"info"} disabled={!this.props.myFujiVaultAVAXUSDT} onClick={() => this.toggleDeposit('ONE', 'Deposit', 'AVAXUSDT')}>
-                      Deposit
-                    </Button>&nbsp;
-                    <Button color={"warning"} disabled={!this.props.myFujiVaultAVAXUSDT || this.props.userDepositBalanceAvax <=0} onClick={() => this.toggleWithdrawn('ONE', 'Withdraw', 'AVAXUSDT')}>
-                      Withdraw
-                    </Button>
-                  </td>
-                  <td className="fw-thin pl-0 fw-thin">
-                    USDT
-                  </td>
-                  <td className={"pl-0 fw-thin"}>
-                    ${this.props.userDebtBalanceUsdt * this.props.priceOfUsdt / 100}<br/>
-                    {this.props.userDebtBalanceUsdt} USDT
-                  </td>
-                  <td className={"pl-0 fw-thin"}>
-                    <Button color={"info"} disabled={!this.props.myFujiVaultAVAXUSDT || this.props.userDepositBalanceAvax <=0} onClick={() => this.toggleBorrow('USDT', 'Borrow', 'AVAXUSDT')}>
-                      Borrow
-                    </Button>&nbsp;
-                    <Button color={"warning"} disabled={!this.props.myFujiVaultAVAXUSDT || this.props.userDebtBalanceUsdt <=0} onClick={() => this.togglePayback('USDT', 'Payback', 'AVAXUSDT')}>
-                      Payback
-                    </Button>
-                  </td>
-                  <td className={"pl-0 fw-normal"}>
-                  {((this.props.userDepositBalanceAvax * this.props.priceOfAvax / 100) * this.props.LTV["AVAXUSDT"] / (this.props.userDebtBalanceUsdt * this.props.priceOfUsdt / 100)).toFixed(2) }
-                  </td>
-                  <td className={"pl-0 fw-normal"}>
-                    <Button color={"info"} disabled={!this.props.myFujiVaultAVAXUSDT} onClick={() => this.toggleEnterSmartVault('USDT', 'Enter Smart Vault', 'AVAXUSDT')}>
-                      Enter Smart Vault
-                    </Button>&nbsp;
-                    <Button color={"warning"} disabled={!this.props.myFujiVaultAVAXUSDT || this.props.userDepositBalanceAvax <=0} onClick={() => this.toggleFlashclose('USDT', 'Flash Close', 'AVAXUSDT')}>
-                      Flash Close
-                    </Button>
-                  </td>
-                  <td>
-                    AAVE
-                  </td>
-                </tr>
-
-
-                </tbody>
-              </Table>
-            </Widget>
-            <Row>
-              <Col sm={12}>
-               <Widget
-                    customDropDown
-                    title={<p className={"fw-bold"}>My Smart Vault Position</p>}
+              <Widget
+                  customDropDown
+                  title={<p className={"fw-bold"}>My Smart Vault Position</p>}
+              >
+                <Table className={"mb-0"} borderless responsive>
+                  <thead>
+                  <tr>
+                    <th key={0} scope="col" className={"pl-0"}>
+                      Asset
+                    </th>
+                    <th key={1} scope="col" className={"pl-0"}>
+                      Amount
+                    </th>
+                    <th key={3} scope="col" className={"pl-0"}>
+                      Trigger Health Factor
+                    </th>
+                    <th key={4} scope="col" className={"pl-0"}>
+                      APY
+                    </th>
+                  </tr>
+                  </thead>
+                  <tbody className="">
+                  <tr key={0}>
+                    <td className="fw-thin pl-0 fw-thin">
+                      BTC
+                    </td>
+                    <td className={"pl-0 fw-thin"}>
+                      ${this.props.smartVaultBtc * this.props.priceOfBtc / 100}<br/>
+                      {this.props.smartVaultBtc} BTC
+                    </td>
+                    <td className="fw-thin pl-0 fw-thin">
+                      1.1
+                    </td>
+                    <td className={"pl-0 fw-thin"}>
+                      10%
+                    </td>
+                  </tr>
+                  </tbody>
+                </Table>
+              </Widget>
+          </Col>
+          <Col sm={12}>
+            <Button>
+              <NavLink
+                to={"/app/main/smartVault5"}
                 >
-                  <Table className={"mb-0"} borderless responsive>
-                    <thead>
-                    <tr>
-                      <th key={0} scope="col" className={"pl-0"}>
-                        Asset
-                      </th>
-                      <th key={1} scope="col" className={"pl-0"}>
-                        Amount
-                      </th>
-                      <th key={2} scope="col" className={"pl-0"}>
-                        Action
-                      </th>
-                      <th key={3} scope="col" className={"pl-0"}>
-                        Trigger Health Factor
-                      </th>
-                      <th key={4} scope="col" className={"pl-0"}>
-                        APY
-                      </th>
-                    </tr>
-                    </thead>
-                    <tbody className="">
-                    <tr key={0}>
-                      <td className="fw-thin pl-0 fw-thin">
-                        BTC
-                      </td>
-                      <td className={"pl-0 fw-thin"}>
-                        ${this.props.smartVaultBtc * this.props.priceOfBtc / 100}<br/>
-                        {this.props.smartVaultBtc} BTC
-                      </td>
-                      <td className={"pl-0 fw-thin"}>
-                        <Button color={"info"} disabled={!this.props.myFujiVaultETHBTC || this.props.smartVaultBtc <=0} onClick={() => this.toggleManualPaybackSmartVault('BTC', 'Payback', 'ETHBTC')}>
-                          Manual Payback Debt
-                        </Button>&nbsp;
-                        <Button color={"warning"} disabled={!this.props.myFujiVaultETHBTC || this.props.smartVaultBtc <=0} onClick={() => this.toggleLeaveSmartVault('BTC', 'Leave Smart Vault', 'ETHBTC')}>
-                          Leave Smart Vault
-                        </Button>&nbsp;
-                      </td>
-                      <td className="fw-thin pl-0 fw-thin">
-                        1.1
-                      </td>
-                      <td className={"pl-0 fw-thin"}>
-                        10%
-                      </td>
-                    </tr>
-                    <tr key={1}>
-                      <td className="fw-thin pl-0 fw-thin">
-                        USDT
-                      </td>
-                      <td className={"pl-0 fw-thin"}>
-                        ${this.props.smartVaultUsdt * this.props.priceOfUsdt / 100}<br/>
-                        {this.props.smartVaultUsdt} USDT
-                      </td>
-                      <td className={"pl-0 fw-thin"}>
-                        <Button color={"info"} disabled={!this.props.myFujiVaultAVAXUSDT || this.props.smartVaultUsdt <=0} onClick={() => this.toggleManualPaybackSmartVault('USDT', 'Payback', 'AVAXUSDT')}>
-                          Manual Payback Debt
-                        </Button>&nbsp;
-                        <Button color={"warning"} disabled={!this.props.myFujiVaultAVAXUSDT || this.props.smartVaultUsdt <=0} onClick={() => this.toggleLeaveSmartVault('USDT', 'Leave Smart Vault', 'AVAXUSDT')}>
-                          Leave Smart Vault
-                        </Button>&nbsp;
-                      </td>
-                      <td className="fw-thin pl-0 fw-thin">
-                        1.1
-                      </td>
-                      <td className={"pl-0 fw-thin"}>
-                        10%
-                      </td>
-                    </tr>
-                    </tbody>
-                  </Table>
-                </Widget>
-              </Col>
-            </Row>
+                + Add to Smart Vault
+                </NavLink>
+            </Button>
           </Col>
         </Row>
         <Modal isOpen={this.state.modal} toggle={this.toggle} style={{color: '#000000'}}>
@@ -935,7 +630,7 @@ function mapStateToProps(store) {
   return {
     myAccount: store.loanshark.myAccount,
     selectedPair: store.loanshark.selectedPair,
-    numberOfEth:  store.loanshark.numberOfEth,
+    numberOfEth:  store.loanshark.userDebtBalance,
     userDepositBalanceEth: store.loanshark.userDepositBalanceEth,
     userDepositBalanceAvax: store.loanshark.userDepositBalanceAvax,
     userDebtBalanceBtc:  store.loanshark.userDebtBalanceBtc,
@@ -963,4 +658,4 @@ function mapStateToProps(store) {
   };
 }
 
-export default connect(mapStateToProps)(Dashboard);
+export default connect(mapStateToProps)(SmartVault4);

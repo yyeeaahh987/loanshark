@@ -58,9 +58,9 @@ class Sidebar extends React.Component {
                 this.props.dispatch(changeActiveSidebarItem(activeItem))
               }
               activeItem={this.props.activeItem}
-              header="Dashboard"
+              header="Borrow"
               isHeader
-              link="/app/main/dashboard"
+              link="/app/main/borrow"
               index="main"
             >
             </LinksGroup>
@@ -69,9 +69,9 @@ class Sidebar extends React.Component {
                 this.props.dispatch(changeActiveSidebarItem(activeItem))
               }
               activeItem={this.props.activeItem}
-              header="Borrow"
+              header="Dashboard"
               isHeader
-              link="/app/main/borrow"
+              link="/app/main/dashboard"
               index="main"
             >
             </LinksGroup>
@@ -80,9 +80,9 @@ class Sidebar extends React.Component {
               //     this.props.dispatch(changeActiveSidebarItem(activeItem))
               // }
               // activeItem={this.props.activeItem}
-              header="Smart Value"
+              header="Smart Vault"
               isHeader
-              // link="/app/main/smartValue"
+              link="/app/main/smartVault1"
               index="main"
             >
             </LinksGroup>
