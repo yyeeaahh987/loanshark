@@ -91,7 +91,9 @@
   margin-bottom: $grid-gutter-width;
   
   background: $widget-bg-color;
+  border:solid;
   border-radius: $widget-border-radius;
+  border-color:#ffffff;
   box-shadow: var(--widget-shadow);
 
   > header {

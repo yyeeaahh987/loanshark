@@ -1,0 +1,10 @@
+.box{
+    // width: fit-content;
+    min-width: 100%;
+    border-radius: 8px;
+    border: 1px solid #ffffff;
+    &__inner{
+        // margin:0.5em 3em;
+        margin:0.5em;
+    }
+}

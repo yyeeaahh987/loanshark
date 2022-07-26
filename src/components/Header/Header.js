@@ -18,6 +18,7 @@ import {
 } from "reactstrap";
 
 import RoundShapeButton from '../Button/RoundShapeButton/RoundShapeButton'
+import DisplayBox from '../../components/DisplayBox/DisplayBox'
 import {
   toggleLoading,
 } from "../../actions/navigation";
@@ -483,6 +484,16 @@ class Header extends React.Component {
           </Grid>
         </Navbar>
 
+        {/* <DisplayBox>
+          <Grid container>
+            <Grid item>
+              123
+            </Grid>
+            <Grid item>
+              456
+            </Grid>
+          </Grid>
+        </DisplayBox> */}
 
 
 

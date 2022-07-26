@@ -74,6 +74,10 @@
 
 
 .amountBox{
+  min-height: 100px;
+  vertical-align: middle;
+  margin-left: 2em;
+  margin-right: 2em;
   &__title{
     font-weight: 1000;
     font-size: 2em; 

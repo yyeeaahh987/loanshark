@@ -100,7 +100,7 @@ class Layout extends React.Component {
 
             <Hammer onSwipe={this.handleSwipe}>
               <main className={s.content}>
-                <BreadcrumbHistory url={this.props.location.pathname} />
+                {/* <BreadcrumbHistory url={this.props.location.pathname} /> */}
                 <TransitionGroup>
                   <CSSTransition
                     key={this.props.location.key}
