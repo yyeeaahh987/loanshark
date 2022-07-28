@@ -24,6 +24,13 @@ class SmartVault1 extends React.Component {
       <div>
         <Row>
           <Col sm={12}>
+            <Widget
+                  customDropDown
+                  title={<p className={"fw-bold"}>Protection Setup</p>}
+              >
+                <p className={"fw-bold"}>Do you want to top-up by ETH or repay by BTC?</p>
+                
+              </Widget>
               <Widget
                   customDropDown
                   title={<p className={"fw-bold"}>My Smart Vault</p>}

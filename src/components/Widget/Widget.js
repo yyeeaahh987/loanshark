@@ -129,12 +129,6 @@ class Widget extends React.Component {
     let endpoint = false;
     if(!endpoint) {
       setTimeout(() => this.setState({ reloading: false }),2000);
-    } else {
-      this.setState({ reloading: true });
-      fetch('https://yourapi.com')
-        .then(response => response.json())
-        .then(json => this.setState({ apiData: json.title}))
-        .then(setTimeout(() => this.setState({ reloading: false }), 1000))
     }
   }
 

@@ -48,9 +48,9 @@ class Sidebar extends React.Component {
   render() {
     return (
       <div className={`${(!this.props.sidebarOpened && !this.props.sidebarStatic) ? s.sidebarClose : ''} ${s.sidebarWrapper}`} id={"sidebar-drawer"}>
-        <nav className={s.root}>
-          <header className={s.logo}>
-            <img src={logo} alt="LoanShark" width="180px" className={s.logoStyle} />
+        <nav className={s.root} >
+          <header className={s.logo} style={{paddingTop: '40px'}}>
+            <img src={logo} alt="LoanShark" width="161px" className={s.logoStyle} />
           </header>
           <ul className={s.nav}>
             <LinksGroup
