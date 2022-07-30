@@ -40,6 +40,7 @@ class Widget extends React.Component {
     customControls: PropTypes.bool,
     options: PropTypes.object, //eslint-disable-line,
     fetchingData: PropTypes.bool,
+    widgetSize: PropTypes.oneOf(["full","left","right"])
   };
 
   static defaultProps = {
@@ -67,6 +68,7 @@ class Widget extends React.Component {
     options: {},
     fetchingData: false,
     widgetType: "",
+    widgetSize:"full"
   };
 
   constructor(props) {
@@ -186,7 +188,13 @@ class Widget extends React.Component {
         <section
           style={{ display: hideWidget ? 'none' : '' }}
           className={
-            classNames('widget', { 'fullscreened': !!fullscreened, 'collapsed': !!collapseWidget }, s.widget, className, (reloading || fetchingData) ? s.reloading : '')
+            classNames('widget', 
+            (this.props.widgetSize==="left") ? s.widgetBorderLeft:"",
+            (this.props.widgetSize==="right") ? s.widgetBorderRight:"",
+            { 'fullscreened': !!fullscreened, 'collapsed': !!collapseWidget }, 
+            s.widget, 
+            className, 
+            (reloading || fetchingData) ? s.reloading : '')
           } {...attributes}
         >
           {

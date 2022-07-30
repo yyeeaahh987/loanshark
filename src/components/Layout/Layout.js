@@ -27,6 +27,7 @@ import BreadcrumbHistory from "../BreadcrumbHistory";
 
 // pages
 import Tables from "../../pages/tables";
+import Manage from "../../pages/manage/Manage";
 
 class Layout extends React.Component {
   static propTypes = {
@@ -161,15 +162,18 @@ class Layout extends React.Component {
                       />
                       <Route
                         path="/app/main/dashboard"
-                        exact
                         component={Dashboard}
+                      />
+                      <Route
+                        path="/app/main/manage"
+                        component={Manage}
                       />
                       <Route
                           path="/app/main/borrow"
                           exact
                           component={Tables}
                       />
-                      <Route
+                      <Route  
                           path="/app/main/smartVault1"
                           exact
                           component={SmartVault1}

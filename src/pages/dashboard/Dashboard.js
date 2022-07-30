@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-
+import { NavLink, Redirect } from "react-router-dom"
 import usersImg from "../../images/usersImg.svg";
 import smileImg from "../../images/smileImg.svg";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -655,206 +655,156 @@ class Dashboard extends React.Component {
           </Grid>
 
           <Grid item xs={12}>
-            <Table className={"mb-0"} borderless responsive style={{borderCollapse:"separate", borderSpacing:"0"}}>
-              <thead>
-                <tr>
-                  <th key={0} scope="col" className={"pl-0"}>
+            <Table className={"mb-0"} borderless responsive style={{ borderCollapse: "separate", borderSpacing: "0" }}>
+              <thead className="customTable">
+                <tr className="customTable__headRow">
+                  <th key={0} scope="col" className={"customTable__headRow__item"}>
                     Asset
                   </th>
-                  <th key={1} scope="col" className={"pl-0"}>
+                  <th key={1} scope="col" className={"customTable__headRow__item"}>
                     Collateral
                   </th>
-                  <th key={2} scope="col" className={"pl-0"}>
+                  <th key={2} scope="col" className={"customTable__headRow__item"}>
                     Debt
                   </th>
-                  <th key={3} scope="col" className={"pl-0"}>
+                  <th key={3} scope="col" className={"customTable__headRow__item"}>
                     APY
                   </th>
-                  <th key={4} scope="col" className={"pl-0"}>
+                  <th key={4} scope="col" className={"customTable__headRow__item"}>
                     Health Factor
                   </th>
-                  <th key={5} scope="col" className={"pl-0"}>
+                  <th key={5} scope="col" className={"customTable__headRow__item"}>
                     Smart Value
                   </th>
-                  <th key={6} scope="col" className={"pl-0"}>
+                  <th key={6} scope="col" className={"customTable__headRow__item"}>
                     Provider
                   </th>
-                  <th key={7} scope="col" className={"pl-0"}>
+                  <th key={7} scope="col" className={"customTable__headRow__item"}>
                     Action
                   </th>
                 </tr>
               </thead>
-              <tbody className="">
-                <tr key={0}>
-                  <td className="fw-thin pl-0 fw-thin">
+              <tbody className="customTable">
+                <tr key={0} className="customTable__dataRow">
+                  <td className="firstOne">
+                    <span style={{ paddingRight: "5px" }}>
+                      <img className="icon" src="/assets/icon/eth-logo.svg" alt="x"></img>
+                    </span>
+                    /
+                    <span style={{ padding: "5px" }}>
+                      <img className="icon" src="/assets/icon/btc-logo.svg" alt="x"></img>
+                    </span>
                     ETH/BTC
                   </td>
-                  <td className="fw-thin pl-0 fw-thin">
-                    <p>$34.192.9</p>
-                    <p>30.4ETH</p>
+                  <td className="middle">
+                    <Grid container>
+                      <Grid xs={12}>
+                        <span>$34.192.9</span>
+                      </Grid>
+                      <Grid xs={12}>
+                        <span>30.4ETH</span>
+                      </Grid>
+                    </Grid>
                   </td>
-                  <td className={"pl-0 fw-thin"}>
-                    <p>$41,340.1</p>
-                    <p>1.87ETH</p>
+                  <td className="middle">
+                    <Grid container>
+                      <Grid xs={12}>
+                        <span>$41,340.1</span>
+                      </Grid>
+                      <Grid xs={12}>
+                        <span>1.87ETH</span>
+                      </Grid>
+                    </Grid>
                   </td>
-                  <td className={"pl-0 fw-thin"}>
+                  <td className="middle">
                     20.4%
                   </td>
-                  <td className={"pl-0 fw-thin"}>
-                    20
+                  <td className="middle">
+                    <span className="customTable__dataRow__healthFactor__safe">20</span>
                   </td>
-                  <td className="fw-thin pl-0 fw-thin">
+                  <td className="middle">
                     $19,294
                   </td>
-                  <td className={"pl-0 fw-thin"}>
+                  <td className="middle">
                     AAVE
                   </td>
-                  <td className={"pl-0 fw-thin"}>
-                    <Button color={"danger"} >Manage</Button>
+                  <td className="lastOne">
+
+                    <NavLink
+                      to={{
+                        pathname: "/app/main/manage",
+                        state: {
+                          pair: "ETH_BTC"
+                        }
+                      }}
+                    >
+                      <Button className={"manage-button"}
+                      >Manage
+                      </Button>
+                    </NavLink>
+
                   </td>
                 </tr>
-                <tr key={1}>
-                  <td className="fw-thin pl-0 fw-thin">
+                <br></br>
+                <tr key={1} className="customTable__dataRow">
+                  <td className="firstOne" key={1}>
+                    <span style={{ paddingRight: "5px" }}>
+                      <img className="icon" src="/assets/icon/one-logo.svg" alt="x"></img>
+                    </span>
+                    /
+                    <span style={{ padding: "5px" }}>
+                      <img className="icon" src="/assets/icon/usdt-logo.svg" alt="x"></img>
+                    </span>
                     ONE/USDT
                   </td>
-                  <td className="fw-thin pl-0 fw-thin">
-                    <p>$34.192.9</p>
-                    <p>30.4ETH</p>
+                  <td className="middle" key={2}>
+                    <Grid container>
+                      <Grid xs={12}>
+                        <span>$41,340.1</span>
+                      </Grid>
+                      <Grid xs={12}>
+                        <span>1.87ETH</span>
+                      </Grid>
+                    </Grid>
                   </td>
-                  <td className={"pl-0 fw-thin"}>
-                    <p>$41,340.1</p>
-                    <p>1.87ETH</p>
+                  <td className="middle" key={3}>
+                    <Grid container>
+                      <Grid xs={12}>
+                        <span>$41,340.1</span>
+                      </Grid>
+                      <Grid xs={12}>
+                        <span>1.87ETH</span>
+                      </Grid>
+                    </Grid>
                   </td>
-                  <td className={"pl-0 fw-thin"}>
-                    20
-                  </td>
-                  <td className={"pl-0 fw-thin"}>
+                  <td className="middle" key={5}>
                     20.4%
                   </td>
-                  <td className="fw-thin pl-0 fw-thin">
+                  <td className="middle" key={4}>
+                    20
+                  </td>
+
+                  <td className="middle" key={6}>
                     $19,294
                   </td>
-                  <td className={"pl-0 fw-thin"}>
+                  <td className="middle" key={7}>
                     AAVE
                   </td>
-                  <td className={"pl-0 fw-thin"}>
-                    <Button color={"danger"} >Manage</Button>
+                  <td className="lastOne" key={8}>
+                    <Button className={"manage-button"} >Manage</Button>
+                  </td>
+                </tr>
+                <br></br>
+                <tr key={2} className="customTable__dataRow">
+                  <td colspan="9" className="customTable__dataRow__borrow">
+                    + Borrow
                   </td>
                 </tr>
               </tbody>
             </Table>
           </Grid>
-          <Grid item xs={12} style={{ textAlign: "center" }}>
-            + Borrow
-          </Grid>
         </Grid>
 
-        <Grid container>
-          <Grid item xs={12}>
-            <span style={{
-              fontWeight: "800",
-              fontSize: "1em",
-            }}>My Smart Value Position</span>
-          </Grid>
-
-          <Grid item xs={12}>
-            <Table className={"mb-0"} borderless responsive>
-              <thead>
-                <tr>
-                  <th key={0} scope="col" className={"pl-0"}>
-                    Debt
-                  </th>
-                  <th key={1} scope="col" className={"pl-0"}>
-                    Amount
-                  </th>
-                  <th key={2} scope="col" className={"pl-0"}>
-                    APY
-                  </th>
-                  <th key={3} scope="col" className={"pl-0"}>
-                    Health Factor
-                  </th>
-                  <th key={4} scope="col" className={"pl-0"}>
-                    Liquidation
-                  </th>
-                  <th key={5} scope="col" className={"pl-0"}>
-                    Single Top-up
-                  </th>
-                  <th key={6} scope="col" className={"pl-0"}>
-                    Action
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="">
-                <tr key={0}>
-                  <td className="fw-thin pl-0 fw-thin">
-                    BTC
-                  </td>
-                  <td className="fw-thin pl-0 fw-thin">
-                    <p>$41,340.1</p>
-                    <p>18.7ETH</p>
-                  </td>
-                  <td className={"pl-0 fw-thin"}>
-                    20.4%
-                  </td>
-                  <td className={"pl-0 fw-thin"}>
-                    20
-                  </td>
-                  <td className="fw-thin pl-0 fw-thin">
-                    1.1
-                  </td>
-                  <td className={"pl-0 fw-thin"}>
-                    0.4392
-                  </td>
-                  <td className={"pl-0 fw-thin"}>
-                    <Grid container spacing={1}>
-                      <Grid item>
-                        <Button color={"danger"}>Payback</Button>
-                      </Grid>
-                      <Grid item>
-                        <Button color={"danger"}>Leave Smart Valut</Button>
-                      </Grid>
-                    </Grid>
-                  </td>
-                </tr>
-                <tr key={1}>
-                  <td className="fw-thin pl-0 fw-thin">
-                    BTC
-                  </td>
-                  <td className="fw-thin pl-0 fw-thin">
-                    <p>$41,340.1</p>
-                    <p>18.7ETH</p>
-                  </td>
-                  <td className={"pl-0 fw-thin"}>
-                    20.4%
-                  </td>
-                  <td className={"pl-0 fw-thin"}>
-                    20
-                  </td>
-                  <td className="fw-thin pl-0 fw-thin">
-                    1.1
-                  </td>
-                  <td className={"pl-0 fw-thin"}>
-                    0.4392
-                  </td>
-                  <td className={"pl-0 fw-thin"}>
-                    <Grid container spacing={1}>
-                      <Grid item>
-                        <Button color={"danger"}>Payback</Button>
-                      </Grid>
-                      <Grid item>
-                        <Button color={"danger"}>Leave Smart Valut</Button>
-                      </Grid>
-                    </Grid>
-                  </td>
-                </tr>
-              </tbody>
-            </Table>
-          </Grid>
-          <Grid item xs={12} style={{ textAlign: "center" }}>
-            + Smart Vault
-          </Grid>
-
-        </Grid>
       </div>
     );
   }

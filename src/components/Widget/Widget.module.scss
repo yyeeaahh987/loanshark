@@ -334,3 +334,11 @@
   top: 0;
   left: 0;
 }
+
+.widgetBorderLeft{
+  border-radius: 8px 0px 0px 8px; 
+}
+
+.widgetBorderRight{
+  border-radius: 0px 8px 8px 0px;
+}
