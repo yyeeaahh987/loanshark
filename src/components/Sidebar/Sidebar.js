@@ -7,14 +7,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGithub } from "@fortawesome/free-brands-svg-icons"
 import { faTwitter } from "@fortawesome/free-brands-svg-icons"
 import { faDiscord } from "@fortawesome/free-brands-svg-icons"
-// import { faFacebook } from "@fortawesome/free-regular-svg-icons"
-
-// import { solid, regular, brands } from '@fortawesome/fontawesome-svg-core/import.macro'
-
-// import { faGithub } from '@fortawesome/free-solid-svg-icons'
-// npm i --save @fortawesome/free-solid-svg-icons
-// npm i --save @fortawesome/free-regular-svg-icons
-
 import { dismissAlert } from "../../actions/alerts";
 import s from "./Sidebar.module.scss";
 import LinksGroup from "./LinksGroup/LinksGroup";
