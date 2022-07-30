@@ -1,99 +1,37 @@
 import React from "react";
 import { connect } from "react-redux";
 
+import { NavLink } from "react-router-dom";
 import {
-  Row, Col, 
-  Input,
+  Row, Col, Table, 
   Button,
 } from 'reactstrap';
+import './SmartVault2.css';
 
-import {
-  toggleLoading,
-} from "../../actions/navigation";
-
-import API from '../../utils/API'
 import Widget from "../../components/Widget/Widget";
-import { Radio } from "../../components/Radio/Radio";
 
 class SmartVault3 extends React.Component {
   constructor() {
     super();
-    this.setSelected = this.setSelected.bind(this);
-    this.stakeToVault = this.stakeToVault.bind(this);
-    this.calltoggleLoading = this.calltoggleLoading.bind(this);
-    this.setStakeAmount = this.setStakeAmount.bind(this);
+    this.setHovered = this.setHovered.bind(this);
+    this.selectRow = this.selectRow.bind(this);
     this.state = {
-      selected: 'repay',
-      stakeAmount: 0
+      isHovered: false,
+      selectedRow: -1
     }
   }
-  
-  calltoggleLoading() {
-    this.props.dispatch(toggleLoading());
+
+  setHovered() {
+    this.setState(prevState => ({
+      isHovered: !prevState.isHovered
+    }));
   }
 
-  setSelected(value) {
-    this.setState({selected: value});
-  }
-
-  setStakeAmount(event) {
-    this.setState({ stakeAmount: event.target.value });
-  }
-
-  stakeToVault() {
-    let approveArgs = [
-      this.props.lpPoolBtc.options.address,
-      window.web3.utils.toBN((this.state.stakeAmount * 100000000).toFixed(0)).toString()
-    ]
-
-    let args = [
-      window.web3.utils.toBN((this.state.stakeAmount * 100000000).toFixed(0)).toString(),
-    ];
-
-    let argsRegister = [
-      "0xe71fa402007fad17da769d1bbefa6d0790fce2c7000000000000000000000000",
-      "0x66756a6964616f00000000000000000000000000000000000000000000000000",
-      window.web3.utils.toBN((this.state.stakeAmount * 100000000).toFixed(0)).toString(),  
-      [
-        "1200000000000000000",
-        "0",
-        "10000000000",
-        "0x9c1dcacb57ada1e9e2d3a8280b7cfc7eb936186f",
-        "0x9f2b4eeb926d8de19289e93cbf524b6522397b05",
-        "1",
-        "1",
-        "0",
-        "0x0000000000000000000000000000000000000000000000000000000000000001"
-        ]
-    ];
-
-    this.props.myBTCContract.methods
-    .approve(...approveArgs)
-    .send({from: this.props.myAccount})
-    .on("error", (error, receipt) => {
-      this.calltoggleLoading();
-    })
-    .then((receipt) => {
-      this.props.lpPoolBtc.methods
-      .deposit(...args)
-      .send({from: this.props.myAccount})
-      .on("error", (error, receipt) => {
-        this.calltoggleLoading();
-      })
-      .then((receipt) => {
-        this.props.topupAction.methods
-        .register(...argsRegister)
-        .send({from: this.props.myAccount, value: 1000000000000000000})
-        .on("error", (error, receipt) => {
-          this.calltoggleLoading();
-        })
-        .then((receipt) => {
-          this.calltoggleLoading();
-          API(this.props);
-          window.location = "/#/app/main/smartVault1";
-        })
-      })
-    });
+  selectRow(rowId) {
+    this.setState(prevState => ({
+      selectedRow: prevState.selectedRow == rowId? -1 : rowId
+    }));
+    window.location = '#/app/main/smartVault4';
   }
 
   render() {
@@ -101,39 +39,41 @@ class SmartVault3 extends React.Component {
       <div>
         <Row>
           <Col sm={12}>
-              <Widget
-                  customDropDown
-                  title={<p className={"fw-bold"}>Protection Setup</p>}
-              >
-                <p className={"fw-bold"}>Do you want to top-up by ETH or repay by BTC?</p>
-                <Radio
-                  value="topup"
-                  selected={this.state.selected}
-                  text="Top-up"
-                  disabled="disabled"
-                  onChange={this.setSelected}
-                />
-                <Radio
-                  value="repay"
-                  selected={this.state.selected}
-                  text="Repay"
-                  disabled=""
-                  onChange={this.setSelected}
-                />
-                <p className={"fw-bold"}>How much would you like to stake to smart vault?</p>
-                <Input value={this.state.stakeAmount} onChange={this.setStakeAmount}></Input>
-                <br/>
-                <p className={"fw-bold"}>At which health factor would you like to use smart vault?</p>
-                <Input disabled value="1.2"></Input>
-                <br/>
-                <p className={"fw-bold"}>How much would you like to top-up / repay each time?</p>
-                <Input disabled value="1"></Input>
-              </Widget>
-          </Col>
-          <Col sm={12}>
-              <Button onClick={ () => {
-                this.stakeToVault();
-                }}>Confirm</Button>
+              <h3 className={"fw-bold"}>Select a Smart Vault to stake</h3>
+                <Row
+                  style={{
+                    padding: '15px',
+                    borderRadius: '15px',
+                    marginLeft: '1px'
+                }}>
+                  <Col lg={3} md={12}>
+                    
+                  </Col>
+                  <Col lg={3} md={12}>
+                    APY
+                  </Col>
+                  <Col lg={3} md={12}>
+                    TVL
+                  </Col>
+                  <Col lg={3} md={12}>
+                    Your Balance
+                  </Col>
+                </Row>
+                <Row style={{marginLeft: '1px'}} key={0}  className={'rowHover'} onClick={() => this.selectRow(1)}>
+                  <Col>
+                    BTC
+                  </Col>
+                  <Col>
+                    5.4%
+                  </Col>
+                  <Col>
+                    ${this.props.totalBtcLpAmount * this.props.priceOfBtc / 100}
+                  </Col>
+                  <Col>
+                    ${this.props.myBtcLpAmount * this.props.priceOfBtc / 100}<br/>
+                    {this.props.myBtcLpAmount} BTC
+                  </Col>
+                </Row>
           </Col>
         </Row>
       </div>
@@ -144,10 +84,9 @@ class SmartVault3 extends React.Component {
 function mapStateToProps(store) {
   return {
     myAccount: store.loanshark.myAccount,
-    lpPoolBtc: store.backd.lpPoolBtc,
     priceOfBtc: store.loanshark.priceOfBtc,
-    myBTCContract: store.loanshark.myBTCContract,
-    topupAction: store.backd.topupAction
+    myBtcLpAmount: store.backd.myBtcLpAmount,
+    totalBtcLpAmount: store.backd.totalBtcLpAmount,
   };
 }
 
