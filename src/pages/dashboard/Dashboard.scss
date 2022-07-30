@@ -61,16 +61,32 @@
       align-items: flex-start;
     }
   }
-}
+} 
 
 .table {
+  // border-collapse: separate;
+  // border-spacing: 0;  
   :global(.table.table-sm) {
     td {
       font-size: 1rem;
       vertical-align: middle;
     }
+  } 
+  
+  > tbody {
+    > tr {
+      > td {
+        border: 1px solid #ffffff;
+      }
+      > td :first-child td :last-child{
+        display: block;
+        border-radius: 50px;
+        border: 1px solid #ffffff;
+      }
+    }
   }
 }
+
 
 
 .amountBox{
@@ -86,3 +102,5 @@
 
   }
 }
+
+
