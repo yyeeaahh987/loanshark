@@ -1,30 +1,23 @@
 import React from "react";
 import { connect } from "react-redux";
 
-import usersImg from "../../images/usersImg.svg";
-import smileImg from "../../images/smileImg.svg";
-
 import { NavLink } from "react-router-dom";
 import {
   Row, Col, Table, 
-  Input,
   Button,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
 } from 'reactstrap';
+import './SmartVault2.css';
 
-import {
-  toggleLoading,
-} from "../../actions/navigation";
-
-import API from '../../utils/API'
 import Widget from "../../components/Widget/Widget";
+import { faThList } from "@fortawesome/free-solid-svg-icons";
 
 class SmartVault2 extends React.Component {
   constructor() {
     super();
+  }
+
+  selectRow(rowId) {
+    window.location = '#/app/main/smartVault3';
   }
 
   render() {
@@ -32,60 +25,42 @@ class SmartVault2 extends React.Component {
       <div>
         <Row>
           <Col sm={12}>
-          <Widget
-                customDropDown
-                title={<p className={"fw-bold"}>Select a loan to protect</p>}
-            >
-              <Table className={"mb-0"} borderless responsive>
-                <thead>
-                <tr>
-                  <th key={0} scope="col" className={"pl-0"}>
+              <h3 className={"fw-bold"}>Select a loan to protect</h3>
+              <Row
+                style={{
+                  padding: '15px',
+                  borderRadius: '15px',
+                  marginLeft: '1px'
+              }}>
+                  <Col lg={3} md={12}>
+                    
+                  </Col>
+                  <Col lg={3} md={12}>
                     Collateral
-                  </th>
-                  <th key={1} scope="col" className={"pl-0"}>
-                    Amount
-                  </th>
-                  <th key={3} scope="col" className={"pl-0"}>
+                  </Col>
+                  <Col lg={3} md={12}>
                     Debt
-                  </th>
-                  <th key={4} scope="col" className={"pl-0"}>
-                    Amount
-                  </th>
-                  <th key={6} scope="col" className={"pl-0"}>
+                  </Col>
+                  <Col lg={3} md={12}>
                     Health Factor
-                  </th>
-                </tr>
-                </thead>
-                <tbody className="">
-                <tr key={0}>
-                  <td className="fw-thin pl-0 fw-thin">
-                    ETH
-                  </td>
-                  <td className={"pl-0 fw-thin"}>
+                  </Col>
+              </Row>
+              <Row style={{marginLeft: '1px'}} key={0}  className={'rowHover'} onClick={() => this.selectRow(1)}>
+                  <Col lg={3} md={12}>
+                    ETH / BTC
+                  </Col>
+                  <Col lg={3} md={12}>
                     ${this.props.userDepositBalanceEth * this.props.priceOfEth / 100}<br/>
                     {this.props.userDepositBalanceEth} ETH
-                  </td>
-                  <td className="fw-thin pl-0 fw-thin">
-                    BTC
-                  </td>
-                  <td className={"pl-0 fw-thin"}>
+                  </Col>
+                  <Col lg={3} md={12}>
                     ${this.props.userDebtBalanceBtc * this.props.priceOfBtc / 100}<br/>
                     {this.props.userDebtBalanceBtc} BTC
-                  </td>
-                  <td className={"pl-0 fw-normal"}>
-                  {((this.props.userDepositBalanceEth * this.props.priceOfEth / 100) * this.props.LTV["ETHBTC"] / (this.props.userDebtBalanceBtc * this.props.priceOfBtc / 100)).toFixed(2) }
-                  </td>
-                </tr>
-                </tbody>
-              </Table>
-            </Widget>
-          </Col>
-          <Col sm={12}>
-            <NavLink
-              to={"/app/main/smartVault3"}
-              >
-                <Button>Next</Button>
-            </NavLink>
+                  </Col>
+                  <Col lg={3} md={12}>
+                    {((this.props.userDepositBalanceEth * this.props.priceOfEth / 100) * this.props.LTV["ETHBTC"] / (this.props.userDebtBalanceBtc * this.props.priceOfBtc / 100)).toFixed(2) }
+                  </Col>
+                </Row>
           </Col>
         </Row>
       </div>
