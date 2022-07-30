@@ -1,4 +1,5 @@
 import React from "react";
+import Wave from 'react-wavify'
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Switch, Route, withRouter, Redirect } from "react-router";
@@ -90,6 +91,46 @@ class Layout extends React.Component {
         active={this.props.loadingActive}
         spinner={<CircleLoader color={"#ffffff"} size={150} />}
       >
+        <div style={{position: "fixed", bottom: "0", width: "100vw", zIndex: "1", pointerEvents: "none" }}>
+          <Wave
+            style={{position:"fixed", bottom:"0"}}
+            fill="#777777"
+            paused={false}
+            opacity="0.1"
+            options={{
+              height: 80,
+              amplitude: 20,
+              speed: 0.2,
+              points: 4,
+            }}
+          /> 
+
+        <Wave
+          style={{position:"fixed", bottom:"0"}}
+          fill="#888888"
+          paused={false}
+          opacity="0.2"
+          options={{
+            height: 50,
+            amplitude: 10,
+            speed: 0.2,
+            points: 7,
+          }}
+        />
+          <Wave
+          style={{position:"fixed", bottom:"0"}}
+          fill="#999999"
+          paused={false}
+          opacity="0.2"
+          options={{
+            height: 20,
+            amplitude: 5,
+            speed: 0.2,
+            points: 11,
+          }}
+        />
+        </div>
+        
         <div
           className={[
             s.root,
