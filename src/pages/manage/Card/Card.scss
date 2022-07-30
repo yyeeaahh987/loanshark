@@ -178,30 +178,37 @@
 .customButton {
     background-color: black;
     color: white;
-    &:active{
+
+    &:active {
         background-color: black;
         color: white;
     }
-    &:focus{
+
+    &:focus {
         background-color: black;
         color: white;
     }
-    &:hover{
+
+    &:hover {
         background-color: black;
         color: white;
     }
+
     &__select {
         background-color: white;
         color: black;
-        &:active{
+
+        &:active {
             background-color: white;
             color: black;
         }
-        &:focus{
+
+        &:focus {
             background-color: white;
             color: black;
         }
-        &:hover{
+
+        &:hover {
             background-color: white;
             color: black;
         }
@@ -215,6 +222,7 @@
         border: solid white;
         border-width: 1px 0px 1px 1px;
     }
+
     &__right {
         border-radius: 0px 8px 8px 0px;
         width: 100%;
@@ -223,47 +231,79 @@
     }
 }
 
-.max-button{
+.max-button {
     height: fit-content;
     padding: 1px 16px;
 }
 
-.deposite-button{
+.deposite-button {
     width: 100%;
     background-color: white;
     color: black;
     border-radius: 8px 8px 8px 8px;
     border: 1px solid white;
-    &:active{
+
+    &:active {
         background-color: black;
         color: white;
     }
-    &:focus{
+
+    &:focus {
         background-color: black;
         color: white
     }
-    &:hover{
+
+    &:hover {
         border: 1px solid white;
         background-color: black;
         color: white
     }
 }
-.amount-text{
+
+.delete-button {
+    width: 100%;
+    background-color: rgb(207, 204, 19);
+    color: black;
+    border-radius: 8px 8px 8px 8px;
+    border: 1px solid rgb(207, 204, 19);
+
+    &:active {
+        border: 1px solid rgb(207, 204, 19);
+        background-color: rgb(207, 204, 19) !important;
+        color: black !important;
+    }
+
+    &:focus {
+        border: 1px solid rgb(207, 204, 19);
+        background-color: rgb(207, 204, 19);
+        color: black !important;
+    }
+
+    &:hover {
+        border: 1px solid white;
+        background-color: transparent;
+        color: white !important
+    }
+}
+
+.amount-text {
     font-size: 3.5em;
     font-weight: bold;
     background-color: transparent;
     border-width: 0px;
     padding: 0px;
-    color:white;
-    &:active{
+    color: white;
+
+    &:active {
         background-color: transparent;
-    border-width: 0px;
-    color:white;
+        border-width: 0px;
+        color: white;
     }
-    &:focus{
+
+    &:focus {
         background-color: transparent;
-    border-width: 0px;
-    color:white;    
+        border-width: 0px;
+        color: white;
     }
 }
 

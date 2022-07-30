@@ -169,7 +169,7 @@ class Card extends React.Component {
                     <br></br>
                     <br></br>
                     <Grid item xs={12}>
-                        <Button className={"deposite-button"} color={"danger"}>Delete Smart Vault Position</Button>
+                        <Button className={"delete-button"}>Delete Smart Vault Position</Button>
                     </Grid>
                 </>)
             default:
@@ -182,7 +182,7 @@ class Card extends React.Component {
             <Grid container>
                 <Grid item xs={12}>
                     <Widget
-                        title={<p style={{ fontWeight: 700 }}>Collateral</p>}
+                        title={<p style={{ fontWeight: 700 }}>{this.props.title}</p>}
                         customDropDown={false}
                         widgetSize={this.props.widgetSize}
                     >
