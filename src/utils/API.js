@@ -25,7 +25,8 @@ import {
   changeVaultBtc,
   changeTopupAction,
   changeMyBtcLpAmount,
-  changeMyProtection
+  changeMyProtection,
+  changeTotalBtcLpAmount,
 } from "../actions/backd";
   
 const WBTC=process.env.REACT_APP_WBTC;
@@ -132,6 +133,10 @@ let refreshPrice = (props) => {
 
         props.topupAction.methods.getPosition(...argsGetPosition).call({},  (error, result) => {
             props.dispatch(changeMyProtection(result));
+        });
+
+        props.lpTokenBtc.methods.totalSupply().call({}, (error, result) => {
+            props.dispatch(changeTotalBtcLpAmount(window.web3.utils.fromWei(result, 'gwei') * 10));
         });
     }
 }

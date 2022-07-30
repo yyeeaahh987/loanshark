@@ -505,7 +505,7 @@ class Header extends React.Component {
                 </Grid>
                 <Grid item>
                   <div>
-                    <FontAwesomeIcon onClick={() => {
+                    <FontAwesomeIcon style={{cursor: "pointer" }}onClick={() => {
                       this.getNeededCollateralFor();
                     }}
                       icon={faRotateRight} />
@@ -568,10 +568,12 @@ function mapStateToProps(store) {
     smartVaultUsdt: store.loanshark.smartVaultUsdt,
     LTV: store.loanshark.LTV,
     liquidationPrice: store.loanshark.liquidationPrice,
+
     lpPoolBtc: store.backd.lpPoolBtc,
     lpTokenBtc: store.backd.lpTokenBtc,
     vaultBtc: store.backd.vaultBtc,
-    topupAction: store.backd.topupAction
+    topupAction: store.backd.topupAction,
+    totalBtcLpAmount: store.backd.totalBtcLpAmount
   };
 }
 

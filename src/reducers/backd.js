@@ -4,6 +4,7 @@ import {
   CHANGE_VAULT_BTC, 
   CHANGE_TOPUP_ACTION,
   CHANGE_MY_BTC_LP_AMOUNT,
+  CHANGE_TOTAL_BTC_LP_AMOUNT,
   CHANGE_MY_PROTECTION
 } from '../actions/backd';
 
@@ -13,6 +14,7 @@ const defaultState = {
   vaultBtc: null,
   topupAction: null,
   myBtcLpAmount: null,
+  totalBtcLpAmount: null,
   myProtection: [],
 }
 
@@ -28,6 +30,8 @@ export default function backdReducer(state = defaultState, action) {
       return {...state,topupAction: action.payload};
     case CHANGE_MY_BTC_LP_AMOUNT:
       return {...state,myBtcLpAmount: action.payload};
+    case CHANGE_TOTAL_BTC_LP_AMOUNT:
+      return {...state,totalBtcLpAmount: action.payload};
     case CHANGE_MY_PROTECTION:
       return {...state,myProtection: action.payload};
      default:
