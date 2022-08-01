@@ -9,7 +9,7 @@ import Hammer from "rc-hammerjs";
 import LoadingOverlay from 'react-loading-overlay'
 import CircleLoader from 'react-spinners/CircleLoader'
 
-import Dashboard from "../../pages/dashboard";
+import OldDashboard from "../../pages/dashboard/OldDashboard";
 import SmartVault1 from "../../pages/smartvault/SmartVault1";
 import SmartVault2 from "../../pages/smartvault/SmartVault2";
 import SmartVault3 from "../../pages/smartvault/SmartVault3";
@@ -162,7 +162,7 @@ class Layout extends React.Component {
                       />
                       <Route
                         path="/app/main/dashboard"
-                        component={Dashboard}
+                        component={OldDashboard}
                       />
                       <Route
                         path="/app/main/manage"
