@@ -30,16 +30,20 @@ td {
     height: 100%;
     border-top-right-radius: 0px;
     border-bottom-right-radius: 0px;
-    background-color: #2CA0BA;
+    color: #000000;
+    background-color: #ffffff;
 
     &:hover {
-      background-color: #25859b;
+      color: #000000;
+      background-color: #ffffff;
     }
     &:active {
-      background-color: #25859b !important;
+      color: #000000;
+      background-color: #ffffff !important;
     }
     &:focus {
-      background-color: #2CA0BA;
+      color: #000000;
+      background-color: #ffffff;
     }
   }
 
@@ -48,16 +52,20 @@ td {
     height: 100%;
     border-top-right-radius: 0px;
     border-bottom-right-radius: 0px;
-    background-color: #FFBF69;
+    color: #000000;
+    background-color: #ffffff;
 
     &:hover {
-      background-color: #ffaf43;
+      color: #000000;
+      background-color: #ffffff;
     }
     &:active {
-      background-color: #ffaf43 !important;
+      color: #000000;
+      background-color: #ffffff !important;
     }
     &:focus {
-      background-color: #FFBF69;
+      color: #000000;
+      background-color: #ffffff;
     }
   }
 
