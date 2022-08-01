@@ -82,7 +82,7 @@
     "js-cookie": "^3.0.1",
     "line-awesome": "github:icons8/line-awesome",
     "mdbreact": "^5.2.0",
-    "moment": "^2.29.1",
+    "moment": "^2.29.4",
     "rc-hammerjs": "^0.6.10",
     "react": "^16.14.0",
     "react-animate-height": "^2.0.23",
