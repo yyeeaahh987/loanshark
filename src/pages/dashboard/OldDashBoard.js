@@ -754,7 +754,9 @@ class OldDashboard extends React.Component {
                     border: 'solid',
                     borderColor: '#ffffff',
                     borderRadius: '15px',
-                    borderWith: '1px'
+                    borderWith: '1px',
+                    display: 'flex',
+                    alignItems: 'center'
                 }}>
                   <Col lg={2}  className="fw-thin pl-0 fw-thin">
                     <img style={{padding: '5px'}} className="icon" src="/assets/icon/avalanche-avax-logo.svg" alt="x"></img> / <img style={{padding: '5px'}} className="icon" src="/assets/icon/usdt-logo.svg" alt="x"></img> AVAX/USDT

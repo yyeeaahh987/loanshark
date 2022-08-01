@@ -125,7 +125,6 @@ class SmartVault4 extends React.Component {
             .then((receipt) => {
               this.calltoggleLoading();
               API(this.props);
-              window.location = "/#/app/main/dashboard";
             })
           // })
         });
