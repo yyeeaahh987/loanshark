@@ -15,7 +15,8 @@ import {
     ModalBody,
     ModalFooter,
 } from 'reactstrap';
-
+import { MDBContainer } from "mdbreact";
+import { Doughnut } from "react-chartjs-2";
 import {
     toggleLoading,
 } from "../../actions/navigation";
@@ -695,7 +696,78 @@ class Manage extends React.Component {
                                         >
                                             <Grid container>
                                                 <Grid item XS={12}>
-                                                    GRAPH
+                                                    <div  style={{ minWidth:"300px",minHeight:"300px" }}>
+                                                        <MDBContainer>
+                                                            <Doughnut width={10} data={{
+                                                                labels: ["$ETH", "$BTC"],
+                                                                datasets: [
+                                                                    {
+                                                                        data: [0.2, 0.5],
+                                                                        backgroundColor: [
+                                                                            "#5CD68A",
+                                                                            "#5C83D6",
+                                                                        ],
+                                                                        hoverBackgroundColor: [
+                                                                            "#5CD68A",
+                                                                            "#5C83D6",
+                                                                        ]
+                                                                    }
+                                                                ]
+                                                            }}
+                                                                plugins={[{
+                                                                    beforeDraw: (chart)=>{
+                                                                        var width = chart.width,
+                                                                        height = chart.height,
+                                                                        ctx = chart.ctx;
+                                                                        ctx.restore();
+                                                                        var fontSize = (height / 200).toFixed(2);
+                                                                        ctx.font = fontSize + "em sans-serif";
+                                                                        ctx.fillStyle = "#fff";
+                                                                        ctx.textBaseline = "top";
+                                                                        let text = 20,
+                                                                        textX = Math.round((width - ctx.measureText(2).width) / 2),
+                                                                        textY = height / 2 + 5;
+                                                                        ctx.fillText(text,textX,textY);
+                                                                        ctx.save();
+                                                                    }
+                                                                    // beforeDraw: (chart) => {
+                                                                    //     var width = chart.width,
+                                                                    //         height = chart.height,
+                                                                    //         ctx = chart.ctx;
+                                                                    //     ctx.restore();
+                                                                    //     var fontSize = (height / 200).toFixed(2);
+                                                                    //     ctx.font = fontSize + "em sans-serif";
+                                                                    //     ctx.fillStyle = "#fff";
+                                                                    //     ctx.textBaseline = "top";
+                                                                    //     var text = (!(
+                                                                    //         (this.props.selectedPair === "ETHBTC" ? Number(this.props.userDebtBalanceBtc) : Number(this.props.userDebtBalanceUsdt))
+                                                                    //         + Number(this.props.inputBtcDept)
+                                                                    //     ) > 0 ? "" :
+                                                                    //         (
+                                                                    //             (
+                                                                    //                 (
+                                                                    //                     (this.props.selectedPair === "ETHBTC" ? Number(this.props.userDepositBalanceEth) : Number(this.props.userDepositBalanceAvax))
+                                                                    //                     + Number(this.props.inputEthDeposit)
+                                                                    //                 )
+                                                                    //                 * (this.props.selectedPair === "ETHBTC" ? this.props.priceOfEth : this.props.selectedPair === "AVAXUSDT" ? this.props.priceOfAvax : 0) / 100)
+                                                                    //             * this.props.LTV[this.props.selectedPair]
+                                                                    //             /
+                                                                    //             (
+                                                                    //                 (
+                                                                    //                     (this.props.selectedPair === "ETHBTC" ? Number(this.props.userDebtBalanceBtc) : Number(this.props.userDebtBalanceUsdt))
+                                                                    //                     + Number(this.props.inputBtcDept)
+                                                                    //                 )
+                                                                    //                 * (this.props.selectedPair === "ETHBTC" ? this.props.priceOfBtc : this.props.selectedPair === "AVAXUSDT" ? this.props.priceOfUsdt : 0) / 100)
+                                                                    //         ).toFixed(2)),
+                                                                    //         textX = Math.round((width - ctx.measureText(text).width) / 2),
+                                                                    //         textY = height / 2 + 5;
+                                                                    //     ctx.fillText(text, textX, textY);
+                                                                    //     ctx.save();
+                                                                    // }
+                                                                }]}
+                                                                options={{ responsive: true }} />
+                                                        </MDBContainer>
+                                                    </div>
                                                 </Grid>
                                             </Grid>
                                         </Widget>
