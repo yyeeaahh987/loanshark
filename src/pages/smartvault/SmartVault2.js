@@ -47,7 +47,7 @@ class SmartVault2 extends React.Component {
               </Row>
               <Row style={{marginLeft: '1px'}} key={0}  className={'rowHover'} onClick={() => this.selectRow(1)}>
                   <Col lg={3} md={12}>
-                    ETH / BTC
+                    <img style={{padding: '5px'}} className="icon" src="/assets/icon/eth-logo.svg" alt="x"></img> ETH / <img style={{padding: '5px'}} className="icon" src="/assets/icon/btc-logo.svg" alt="x"></img> BTC
                   </Col>
                   <Col lg={3} md={12}>
                     ${this.props.userDepositBalanceEth * this.props.priceOfEth / 100}<br/>
