@@ -159,7 +159,7 @@ class SmartVault4 extends React.Component {
                 <tbody className="">
                 <tr key={0} className={'table-light'} style={{color: '#000000'}}>
                   <td className="fw-thin pl-4">
-                    ETH / BTC
+                    <img style={{padding: '5px'}} className="icon" src="/assets/icon/eth-logo.svg" alt="x"></img> ETH / <img style={{padding: '5px'}} className="icon" src="/assets/icon/btc-logo.svg" alt="x"></img> BTC
                   </td>
                   <td className={"pl-0 fw-thin"}>
                     ${this.props.userDepositBalanceEth * this.props.priceOfEth / 100}<br/>
@@ -189,7 +189,8 @@ class SmartVault4 extends React.Component {
             <Col lg={4} md={12}>
                 <Widget style={{paddingTop: '20px'}} >
                   <p className={"fw-bold"}>Selected Smart Vault</p>
-                  <p className={"fw-bold"}>BTC</p>
+                  <p className={"fw-bold"}><img style={{padding: '5px'}} className="icon" src="/assets/icon/btc-logo.svg" alt="x"></img> BTC</p>
+                  
                   <Row style={{paddingTop: '20px'}} >
                     <Col lg={4} md={12}>Your Balance:</Col>
                     <Col style={{textAlign: 'right'}} lg={8} md={12}>

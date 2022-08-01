@@ -8,17 +8,7 @@ import {
     Col,
     Button,
     Input,
-    // Dropdown,
-    DropdownToggle,
-    ButtonDropdown,
     InputGroup,
-    DropdownMenu,
-    DropdownItem,
-    UncontrolledDropdown,
-    Modal,
-    ModalHeader,
-    ModalBody,
-    ModalFooter,
 } from "reactstrap";
 import SearchModal from '../SearchModal/index'
 import "./trade.less";
@@ -41,13 +31,12 @@ import {
     toDecimalNumber
 } from '../../utils/commonFunction'
 
-const assests = ["ONE", "ETH", "BTC"]
 const ownAssestsType = [
     {
         "chainId": 1,
         "address": "FvwEAhmxKfeiG8SnEvq42hc6whRyY3EFYAvebMqDNDGCgxN5Z",
         "name": "Avalanche",
-        "symbol": "ONE",
+        "symbol": "AVAX",
         "decimals": 8,
         "logoURI": ""
     },
@@ -60,26 +49,7 @@ const ownAssestsType = [
         "logoURI": ""
     },
 ]
-const borrowAssestsType = [
-    {
-        "chainId": 1,
-        "address": "FvwEAhmxKfeiG8SnEvq42hc6whRyY3EFYAvebMqDNDGCgxN5Z",
-        "name": "Bitcoin",
-        "symbol": "BTC",
-        "decimals": 8,
-        "logoURI": ""
-    },
-    {
-        "chainId": 1,
-        "address": "0xf20d962a6c8f70c731bd838a3a388d7d48fa6e15",
-        "name": "Tether",
-        "symbol": "USDT",
-        "decimals": 8,
-        "logoURI": ""
-    },
-]
 class BalanceAmount extends React.Component {
-
     render() {
         return (
             <>
@@ -98,32 +68,18 @@ class Trade extends React.Component {
     constructor(props) {
         super(props);
 
-        this.depositWETHAndBorrowWBTC = this.depositWETHAndBorrowWBTC.bind(this);
-        this.depositAVAXAndBorrowUSDT = this.depositAVAXAndBorrowUSDT.bind(this);
-        this.setInputEthDeposit = this.setInputEthDeposit.bind(this);
-        this.setInputBtcBorrow = this.setInputBtcBorrow.bind(this);
-        this.calltoggleLoading = this.calltoggleLoading.bind(this);
         this.toggleModal = this.toggleModal.bind(this);
         this.handleClose = this.handleClose.bind(this);
+        this.calltoggleLoading = this.calltoggleLoading.bind(this);
+        this.setInputEthDeposit = this.setInputEthDeposit.bind(this);
+        this.setInputBtcBorrow = this.setInputBtcBorrow.bind(this);
+        this.depositWETHAndBorrowWBTC = this.depositWETHAndBorrowWBTC.bind(this);
+        this.depositAVAXAndBorrowUSDT = this.depositAVAXAndBorrowUSDT.bind(this);
 
         this.state = {
-            myAccount: false,
-            ethNeededCollateral: 0,
-            userDepositBalance: 0,
-            userDebtBalance: 0,
-            myFujiVaultETHBTC: '',
-            myFliquidatorAVAX: '',
-            myFujiController: '',
-            myFujiOracle: '',
-            myETHContract: '',
-            myBTCContract: '',
             inputEthDeposit: 0,
             inputBtcBorrow: 0,
-            myBtcAmount: 0,
-            myEthAmount: 0,
-            currencySelectModal: false,
-            openOwnAssestDropdownMenu: false,
-            openBorrowAssestDropdownMenu: false
+            currencySelectModal: false
         };
     }
 
@@ -192,7 +148,6 @@ class Trade extends React.Component {
         }
     }
 
-
     depositAVAXAndBorrowUSDT() {
         if (this.props.myETHContract) {
             let args = [
@@ -224,7 +179,7 @@ class Trade extends React.Component {
 
     render() {
         var borrowPower =
-            this.state.inputEthDeposit
+            this.props.inputEthDeposit
             * (this.props.selectedPair === "ETHBTC" ? this.props.priceOfEth : this.props.priceOfAvax)
             * this.props.LTV[this.props.selectedPair]
             * this.props.liquidationPrice[this.props.selectedPair]
@@ -233,27 +188,12 @@ class Trade extends React.Component {
 
         return (
             <>
-                {/* <Modal isOpen={this.state.currencySelectModal} toggle={this.toggleModal} id="news-close-modal">
-                    <div style={{color:"black"}}>
-                        modal
-                    </div>
-                    <ModalHeader toggle={this.toggleModal} id="news-close-modal-label">Sure?</ModalHeader>
-                    <ModalBody className="bg-white">
-                        Do you really want to unrevertably remove this super news widget?
-                    </ModalBody>
-                    <ModalFooter>
-                        <Button color="default" onClick={this.toggleModal} data-dismiss="modal">No</Button>{' '}
-                        <Button color="danger" onClick={this.closeWithModal} id="news-widget-remove">Yes,
-                            remove widget</Button>
-                    </ModalFooter>
-                </Modal> */}
                 <SearchModal
                     isOpen={this.state.currencySelectModal}
                     handleClose={this.handleClose}
                     type={"searchToken"}
                 >
                 </SearchModal>
-
 
                 <Row style={{ marginBottom: 9, marginTop: 1 }}>
                     <Col lg={12}>
@@ -269,7 +209,10 @@ class Trade extends React.Component {
                                     <Dropdown.Toggle variant="success" id="dropdown-basic" bsPrefix="p-0"
                                         className="currency-dropdown__label-blue"
                                     >
-                                        {this.props.selectedPair === "ETHBTC" ? "ETH" : "ONE"} &#x25bc;
+                                        {this.props.selectedPair === "ETHBTC" ? 
+                                            <img style={{padding: '5px'}} className="icon" src="/assets/icon/eth-logo.svg" alt="x"></img> : 
+                                            <img style={{padding: '5px'}} className="icon" src="/assets/icon/avalanche-avax-logo.svg" alt="x"></img>} {' '}
+                                        {this.props.selectedPair === "ETHBTC" ? "ETH" : "AVAX"} &#x25bc;
                                     </Dropdown.Toggle>
 
                                     <Dropdown.Menu>
@@ -284,7 +227,7 @@ class Trade extends React.Component {
                                                             if (assest.symbol === "ETH") {
                                                                 this.props.dispatch(changeSelectedPair("ETHBTC"));
                                                             }
-                                                            if (assest.symbol === "ONE") {
+                                                            if (assest.symbol === "AVAX") {
                                                                 this.props.dispatch(changeSelectedPair("AVAXUSDT"));
                                                             }
                                                         }}
@@ -296,11 +239,12 @@ class Trade extends React.Component {
                                 </Dropdown>
                                 <Input
                                     title="Input"
+                                    style={{backgroundColor: 'transparent', color: '#ffffff'}} 
                                     placeholder="Enter deposit amount..."
                                     value={this.state.inputEthDeposit}
                                     onChange={this.setInputEthDeposit}
                                 />
-                                <Button style={{ borderRadius: "0px 10px 10px 0px" }} color="dark" onClick={() => {
+                                <Button style={{ borderRadius: "0px 10px 10px 0px", color: '#000000' }} color="light" onClick={() => {
                                     this.setState({ inputEthDeposit: this.props.selectedPair === "ETHBTC" ? this.props.myETHAmount : this.props.selectedPair === "AVAXUSDT" ? this.props.myAVAXAmount : 0 });
                                     this.props.dispatch(changeInputEthDeposit(this.props.selectedPair === "ETHBTC" ? this.props.myETHAmount : this.props.selectedPair === "AVAXUSDT" ? this.props.myAVAXAmount : 0));
                                 }}>Max</Button>
@@ -316,30 +260,15 @@ class Trade extends React.Component {
                             <InputGroup style={{ width: "100%" }}  >
                                 <Dropdown className="currency-dropdown">
                                     <Dropdown.Toggle variant="success" id="dropdown-basic" bsPrefix="p-0" className="currency-dropdown__label-yellow">
+                                        {this.props.selectedPair === "ETHBTC" ? 
+                                            <img style={{padding: '5px'}} className="icon" src="/assets/icon/btc-logo.svg" alt="x"></img> : 
+                                            <img style={{padding: '5px'}} className="icon" src="/assets/icon/usdt-logo.svg" alt="x"></img>} {' '}
                                         {this.props.selectedPair === "ETHBTC" ? "BTC" : "USDT"}
                                     </Dropdown.Toggle>
-                                    {/* <Dropdown.Menu>
-                                        {borrowAssestsType.map((assest) => {
-                                            if (assest.symbol === this.state.selectedBorrowAssest) return (<></>)
-                                            return (
-                                                <>
-                                                    <Dropdown.Item
-                                                        as={"span"}
-                                                        key={assest.name} value={assest.symbol} name={assest.name}
-                                                        style={{
-                                                            color: "black"
-                                                        }}
-                                                        onClick={(e) => {
-                                                            // console.log(assest.symobl)
-                                                        }}
-                                                    >{assest.symbol}</Dropdown.Item>
-                                                </>
-                                            )
-                                        })}
-                                    </Dropdown.Menu> */}
                                 </Dropdown>
                                 <Input
                                     title="Input"
+                                    style={{backgroundColor: 'transparent', color: '#ffffff'}} 
                                     placeholder="Enter borrow amount..."
                                     value={this.state.inputBtcBorrow}
                                     onChange={this.setInputBtcBorrow}
@@ -359,28 +288,28 @@ class Trade extends React.Component {
                     <Col xs={9}>
                         <Row  className="justify-content-end borrow-power">
                             <Col xs={"auto"} className={"borrow-power__option"}>
-                                <Button color="dark"
+                                <Button color="light" style={{color: '#000000'}}
                                     onClick={() => {
                                         this.setState({ inputBtcBorrow: isNaN(borrowPower)===true?0:(borrowPower * 0.25).toFixed(6) });
                                         this.props.dispatch(changeInputBtcDebt((borrowPower * 0.25).toFixed(6)));
                                     }}>25%</Button>
                             </Col>
                             <Col xs={"auto"} className={"borrow-power__option"}>
-                                <Button color="dark"
+                                <Button color="light" style={{color: '#000000'}} 
                                     onClick={() => {
                                         this.setState({ inputBtcBorrow: isNaN(borrowPower)===true?0:(borrowPower * 0.5).toFixed(6) });
                                         this.props.dispatch(changeInputBtcDebt((borrowPower * 0.5).toFixed(6)));
                                     }}>50%</Button>
                             </Col>
                             <Col xs={"auto"} className={"borrow-power__option"}>
-                                <Button color="dark"
+                                <Button color="light" style={{color: '#000000'}}
                                     onClick={() => {
                                         this.setState({ inputBtcBorrow: isNaN(borrowPower)===true?0:(borrowPower * 0.75).toFixed(6) });
                                         this.props.dispatch(changeInputBtcDebt((borrowPower * 0.75).toFixed(6)));
                                     }}>75%</Button>
                             </Col>
                             <Col xs={"auto"} className={"borrow-power__option"}>
-                                <Button color="dark"
+                                <Button color="light" style={{color: '#000000'}}
                                     onClick={() => {
                                         this.setState({ inputBtcBorrow: isNaN(borrowPower)===true?0:(borrowPower * 0.9).toFixed(6) });
                                         this.props.dispatch(changeInputBtcDebt((borrowPower * 0.9).toFixed(6)));
@@ -391,70 +320,8 @@ class Trade extends React.Component {
                 </Row>
 
                 <Row style={{ marginBottom: 9, marginTop: 20 }}>
-
-                </Row>
-
-                <Row style={{ marginBottom: 0, marginTop: 0 }}>
-                    <Col lg={5}>
-                        Current Price of {this.props.selectedPair === "ETHBTC" ? "ETH" : "ONE"}:
-                    </Col>
-                    <Col lg={7} style={{ textAlign: 'right' }} >
-                        {(this.props.selectedPair === "ETHBTC" ? this.props.priceOfEth : this.props.priceOfAvax) / 100}
-                    </Col>
-                </Row>
-                <Row style={{ marginBottom: 0, marginTop: 0 }}>
-                    <Col lg={5}>
-                        Current Price of {this.props.selectedPair === "ETHBTC" ? "BTC" : "USDT"}:
-                    </Col>
-                    <Col lg={7} style={{ textAlign: 'right' }} >
-                        {(this.props.selectedPair === "ETHBTC" ? this.props.priceOfBtc : this.props.priceOfUsdt) / 100}
-                    </Col>
-                </Row>
-                <Row style={{ marginBottom: 9, marginTop: 20 }}>
-
-                </Row>
-                <Row style={{ marginBottom: 0, marginTop: 0 }}>
-                    <Col lg={5}>
-                        LTV:
-                    </Col>
-                    <Col lg={7} style={{ textAlign: 'right' }} >
-                        {(this.props.LTV[this.props.selectedPair] * this.props.liquidationPrice[this.props.selectedPair] * 100).toFixed(4)} %
-                    </Col>
-                </Row>
-                <Row style={{ marginBottom: 0, marginTop: 0 }}>
-                    <Col lg={5}>
-                        Max Borrow Power:
-                    </Col>
-                    <Col lg={7} style={{ textAlign: 'right' }} >
-                        {isNaN(borrowPower) == true ? 0 : borrowPower} {this.props.selectedPair === "ETHBTC" ? "BTC" : "USDT"}
-                    </Col>
-                </Row>
-
-                <Row style={{ marginBottom: 0, marginTop: 0 }}>
-                    <Col lg={5}>
-                        Liquidity Threshold:
-                    </Col>
-                    <Col lg={7} style={{ textAlign: 'right' }} >
-                        {(this.props.LTV[this.props.selectedPair] * 100).toFixed(4)} %
-                    </Col>
-                </Row>
-                <Row style={{ marginBottom: 0, marginTop: 0 }}>
-                    <Col lg={5}>
-                        Liquidation Price of {this.props.selectedPair === "ETHBTC" ? "ETH" : "ONE"}:
-                    </Col>
-                    <Col lg={7} style={{ textAlign: 'right' }}>
-                        {
-                            (isNaN((this.state.inputBtcBorrow * (this.props.selectedPair === "ETHBTC" ? this.props.priceOfBtc : this.props.priceOfUsdt) / 100)
-                                / this.state.inputEthDeposit
-                                / this.props.LTV[this.props.selectedPair]) == true ? 0 : (this.state.inputBtcBorrow * (this.props.selectedPair === "ETHBTC" ? this.props.priceOfBtc : this.props.priceOfUsdt) / 100)
-                                / this.state.inputEthDeposit
-                            / this.props.LTV[this.props.selectedPair])
-                        }
-                    </Col>
-                </Row>
-                <Row style={{ marginBottom: 9, marginTop: 20 }}>
                     <Col lg={12} className={s.root}>
-                        <Button disabled={!this.props.myFujiVaultETHBTC || !(this.state.inputEthDeposit > 0)} color={"primary"} style={{ width: "100%" }}
+                        <Button disabled={!this.props.myFujiVaultETHBTC || !(this.state.inputEthDeposit > 0)} color="light" block style={{color: '#000000'}}
                             onClick={this.props.selectedPair === "ETHBTC" ? this.depositWETHAndBorrowWBTC : this.props.selectedPair === "AVAXUSDT" ? this.depositAVAXAndBorrowUSDT : null} >
                             Deposit and Borrow
                         </Button>
