@@ -32,6 +32,7 @@ import { Doughnut } from "react-chartjs-2";
 
 import Widget from "../../components/Widget";
 import Trade from "../../components/Trade";
+import TradeInfo from "../../components/TradeInfo";
 import s from "./Tables.modules.scss";
 
 class Tables extends React.Component {
@@ -76,15 +77,15 @@ class Tables extends React.Component {
       className={s.root}
       >
         <Row>
-          <Col lg={6}>
+          <Col xl={7} lg={7}>
             <Widget
               title={
                 <p style={{ fontWeight: 700 }}>
-                  Deposit {this.props.selectedPair === "ETHBTC"? " ETH" : this.props.selectedPair === "AVAXUSDT"? " ONE" : ""} and 
+                  Deposit {this.props.selectedPair === "ETHBTC"? " ETH" : this.props.selectedPair === "AVAXUSDT"? " AVAX" : ""} and 
                   Borrow {this.props.selectedPair === "ETHBTC"? " BTC" : this.props.selectedPair === "AVAXUSDT"? " USDT" : ""}<br/>
                     <span style={{color: "#0000000", fontSize: "16px"}}>
                       {this.props.selectedPair === "ETHBTC" ? this.props.numberOfEth : this.props.selectedPair === "AVAXUSDT" ? this.props.numberOfAvax : ""}  
-                      {this.props.selectedPair === "ETHBTC"? " ETH" : this.props.selectedPair === "AVAXUSDT"? " ONE" : ""} as collateral to borrow 1 
+                      {this.props.selectedPair === "ETHBTC"? " ETH" : this.props.selectedPair === "AVAXUSDT"? " AVAX" : ""} as collateral to borrow 1 
                       {this.props.selectedPair === "ETHBTC"? " BTC" : this.props.selectedPair === "AVAXUSDT"? " USDT" : ""}</span>
                 </p>
               }
@@ -92,33 +93,18 @@ class Tables extends React.Component {
             >
               <Trade />
             </Widget>
-            <ListGroup>
-              <h6 style={{ color: '#ffffff' }}>Borrowing APY of {this.props.selectedPair === "ETHBTC"? "BTC":"USDT"}</h6><br />
-              <ListGroupItem active className="justify-content-between">
-                AAVE{' '}
-                <Badge color="warning" pill>
-                  1.4%
-                </Badge>
-                <span style={{ paddingLeft: "15px" }}>{' '}Current Loan Provider</span>
-              </ListGroupItem>
-              <ListGroupItem active className="justify-content-between">
-                Tranquil{' '}
-                <Badge pill>
-                  2.0%
-                </Badge>
-              </ListGroupItem>
-            </ListGroup>
           </Col>
 
-          <Col lg={6}>
+          <Col xl={5} lg={5}>
             <Widget
               title={<p style={{ fontWeight: 700 }}>Deposited, Borrowed and Health Factor</p>
               }
               customDropDown
             >
+              <div style={{marginLeft: "25%", marginRight: "25%"}}>
               <MDBContainer>
-                <Doughnut data={{
-                    labels: [this.props.selectedPair === "ETHBTC"? "ETH $":"ONE $", this.props.selectedPair === "ETHBTC"?"BTC $":"USDT $s"],
+                <Doughnut width={10} data={{
+                    labels: [this.props.selectedPair === "ETHBTC"? "ETH $":"AVAX $", this.props.selectedPair === "ETHBTC"?"BTC $":"USDT $s"],
                     datasets: [
                       {
                         data: [
@@ -134,12 +120,12 @@ class Tables extends React.Component {
                           * (this.props.selectedPair === "ETHBTC"? this.props.priceOfBtc : this.props.selectedPair === "AVAXUSDT"? this.props.priceOfUsdt : 0) / 100
                         ],
                         backgroundColor: [
-                          "#25859B",
-                          "#FFBF69",
+                          "#5CD68A",
+                          "#5C83D6",
                         ],
                         hoverBackgroundColor: [
-                          "#25859B",
-                          "#FFBF69",
+                          "#5CD68A",
+                          "#5C83D6",
                         ]
                       }
                     ]
@@ -175,15 +161,38 @@ class Tables extends React.Component {
                             * (this.props.selectedPair === "ETHBTC"? this.props.priceOfBtc : this.props.selectedPair === "AVAXUSDT"? this.props.priceOfUsdt : 0) / 100)
                          ).toFixed(2)),
                          textX = Math.round((width - ctx.measureText(text).width) / 2),
-                         textY = height / 2;
+                         textY = height / 2 + 5;
                          ctx.fillText(text, textX, textY);
                          ctx.save();
                     } 
                   }]}
                   options={{ responsive: true }} />
               </MDBContainer>
+              </div>
+            </Widget>
+            <Widget title={' '}>
+              <TradeInfo />
+            </Widget>
+            <Widget title={<p style={{ fontWeight: 700 }}>Borrowing APY of {this.props.selectedPair === "ETHBTC"? "BTC":"USDT"}</p>}>
+                <Row>
+                  <Col>
+                    <span style={{ color: "#00ff00" }}>AAVE</span>
+                  </Col>
+                  <Col lg={6} style={{ textAlign: 'right' }} >
+                    <span style={{ color: "#00ff00" }}>1.4%</span>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col>
+                    Tranquil
+                  </Col>
+                  <Col lg={6} style={{ textAlign: 'right' }} >
+                    2.0%
+                  </Col>
+                </Row>
             </Widget>
           </Col>
+          <Col xl={0} lg={0}></Col>
         </Row>
       </div>
     );
