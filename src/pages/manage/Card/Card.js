@@ -137,7 +137,7 @@ class Card extends React.Component {
                     <br></br>
                     <br></br>
                     <Grid item xs={12}>
-                        <Button className={"deposite-button"} color={"danger"}>Deposit</Button>
+                        <Button className={"deposite-button"}>Deposit</Button>
                     </Grid>
                 </>)
             case "Debt":
@@ -157,19 +157,19 @@ class Card extends React.Component {
                     <br></br>
                     <br></br>
                     <Grid item xs={12}>
-                        <Button className={"deposite-button"} color={"danger"}>Borrow</Button>
+                        <Button className={"deposite-button"}>Borrow</Button>
                     </Grid>
                 </>)
             case "Current Smart Vault Balance":
                 return (<>
                     <Grid item xs={12}>
-                        <Button className={"deposite-button"} color={"danger"}>Withdraw</Button>
+                        <Button className={"deposite-button"}>Withdraw</Button>
                     </Grid>
                     <br></br>
                     <br></br>
                     <br></br>
                     <Grid item xs={12}>
-                        <Button className={"deposite-button"} color={"danger"}>Delete Smart Vault Position</Button>
+                        <Button className={"delete-button"}>Delete Smart Vault Position</Button>
                     </Grid>
                 </>)
             default:
@@ -182,7 +182,7 @@ class Card extends React.Component {
             <Grid container>
                 <Grid item xs={12}>
                     <Widget
-                        title={<p style={{ fontWeight: 700 }}>Collateral</p>}
+                        title={<p style={{ fontWeight: 700 }}>{this.props.title}</p>}
                         customDropDown={false}
                         widgetSize={this.props.widgetSize}
                     >

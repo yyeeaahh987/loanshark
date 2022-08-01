@@ -103,7 +103,7 @@ class Tables extends React.Component {
             >
               <div style={{marginLeft: "25%", marginRight: "25%"}}>
               <MDBContainer>
-                <Doughnut width={10} data={{
+              <Doughnut width={10} data={{
                     labels: [this.props.selectedPair === "ETHBTC"? "ETH $":"AVAX $", this.props.selectedPair === "ETHBTC"?"BTC $":"USDT $s"],
                     datasets: [
                       {

@@ -15,7 +15,8 @@ import {
     ModalBody,
     ModalFooter,
 } from 'reactstrap';
-
+import { MDBContainer } from "mdbreact";
+import { Doughnut } from "react-chartjs-2";
 import {
     toggleLoading,
 } from "../../actions/navigation";
@@ -562,168 +563,290 @@ class Manage extends React.Component {
 
                 <Grid container>
                     {/* main info table */}
-                    <Grid xs={7} item>
-                        <Grid container>
-                            <Grid item xs={12}>
-                                <Table className={"mb-0"} borderless responsive style={{ borderCollapse: "separate", borderSpacing: "0" }}>
-                                    <thead className="customTable">
-                                        <tr className="customTable__headRow">
-                                            <th key={0} scope="col" className={"customTable__headRow__item"}>
-                                                Asset
-                                            </th>
-                                            <th key={1} scope="col" className={"customTable__headRow__item"}>
-                                                Collateral
-                                            </th>
-                                            <th key={2} scope="col" className={"customTable__headRow__item"}>
-                                                Debt
-                                            </th>
-                                            <th key={3} scope="col" className={"customTable__headRow__item"}>
-                                                APY
-                                            </th>
-                                            <th key={4} scope="col" className={"customTable__headRow__item"}>
-                                                Health Factor
-                                            </th>
-                                            <th key={5} scope="col" className={"customTable__headRow__item"}>
-                                                Smart Value
-                                            </th>
-                                            <th key={6} scope="col" className={"customTable__headRow__item"}>
-                                                Provider
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody className="customTable">
-                                        <tr key={0} className="customTable__dataRow">
-                                            <td className="firstOne">
-                                                <span style={{ paddingRight: "5px" }}>
-                                                    <img className="icon" src="/assets/icon/eth-logo.svg" alt="x"></img>
-                                                </span>
-                                                /
-                                                <span style={{ padding: "5px" }}>
-                                                    <img className="icon" src="/assets/icon/btc-logo.svg" alt="x"></img>
-                                                </span>
-                                                ETH/BTC
-                                            </td>
-                                            <td className="middle">
-                                                <Grid container>
-                                                    <Grid xs={12}>
-                                                        <span>$34.192.9</span>
-                                                    </Grid>
-                                                    <Grid xs={12}>
-                                                        <span>30.4ETH</span>
-                                                    </Grid>
-                                                </Grid>
-                                            </td>
-                                            <td className="middle">
-                                                <Grid container>
-                                                    <Grid xs={12}>
-                                                        <span>$41,340.1</span>
-                                                    </Grid>
-                                                    <Grid xs={12}>
-                                                        <span>1.87ETH</span>
-                                                    </Grid>
-                                                </Grid>
-                                            </td>
-                                            <td className="middle">
-                                                20.4%
-                                            </td>
-                                            <td className="middle">
-                                                <span className="customTable__dataRow__healthFactor__safe">20</span>
-                                            </td>
-                                            <td className="middle">
-                                                $19,294
-                                            </td>
-                                            <td className="lastOne">
-                                                AAVE
-                                            </td>
-                                        </tr>
-                                        <br></br>
-                                    </tbody>
-                                </Table>
-                            </Grid>
-                            <Grid item xs={12}>
+                    <Grid item xs={12}>
+                        <Grid container spacing={2}>
 
+
+                            <Grid xs={7} item>
                                 <Grid container>
-                                    <Grid item xs={6}>
-                                        <Card
-                                            widgetSize={"left"}
-                                            title={"Collateral"}
-                                            leftSelectButton={"Deposit"}
-                                            rightSelectButton={"Withdraw"}
-                                            currency={"eth"}
-                                            openBorrowingPower={false}
-                                            bottomButtonTitle={"Deposit"}
-                                        ></Card>
+                                    <Grid item xs={12}>
+                                        <Table className={"mb-0"} borderless responsive style={{ borderCollapse: "separate", borderSpacing: "0" }}>
+                                            <thead className="customTable">
+                                                <tr className="customTable__headRow">
+                                                    <th key={0} scope="col" className={"customTable__headRow__item"}>
+                                                        Asset
+                                                    </th>
+                                                    <th key={1} scope="col" className={"customTable__headRow__item"}>
+                                                        Collateral
+                                                    </th>
+                                                    <th key={2} scope="col" className={"customTable__headRow__item"}>
+                                                        Debt
+                                                    </th>
+                                                    <th key={3} scope="col" className={"customTable__headRow__item"}>
+                                                        APY
+                                                    </th>
+                                                    <th key={4} scope="col" className={"customTable__headRow__item"}>
+                                                        Health Factor
+                                                    </th>
+                                                    <th key={5} scope="col" className={"customTable__headRow__item"}>
+                                                        Smart Value
+                                                    </th>
+                                                    <th key={6} scope="col" className={"customTable__headRow__item"}>
+                                                        Provider
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody className="customTable">
+                                                <tr key={0} className="customTable__dataRow">
+                                                    <td className="firstOne">
+                                                        <span style={{ paddingRight: "5px" }}>
+                                                            <img className="icon" src="/assets/icon/eth-logo.svg" alt="x"></img>
+                                                        </span>
+                                                        /
+                                                        <span style={{ padding: "5px" }}>
+                                                            <img className="icon" src="/assets/icon/btc-logo.svg" alt="x"></img>
+                                                        </span>
+                                                        ETH/BTC
+                                                    </td>
+                                                    <td className="middle">
+                                                        <Grid container>
+                                                            <Grid xs={12}>
+                                                                <span>$34.192.9</span>
+                                                            </Grid>
+                                                            <Grid xs={12}>
+                                                                <span>30.4ETH</span>
+                                                            </Grid>
+                                                        </Grid>
+                                                    </td>
+                                                    <td className="middle">
+                                                        <Grid container>
+                                                            <Grid xs={12}>
+                                                                <span>$41,340.1</span>
+                                                            </Grid>
+                                                            <Grid xs={12}>
+                                                                <span>1.87ETH</span>
+                                                            </Grid>
+                                                        </Grid>
+                                                    </td>
+                                                    <td className="middle">
+                                                        20.4%
+                                                    </td>
+                                                    <td className="middle">
+                                                        <span className="customTable__dataRow__healthFactor__safe">20</span>
+                                                    </td>
+                                                    <td className="middle">
+                                                        $19,294
+                                                    </td>
+                                                    <td className="lastOne">
+                                                        AAVE
+                                                    </td>
+                                                </tr>
+                                                <br></br>
+                                            </tbody>
+                                        </Table>
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <Grid container>
+                                            <Grid item xs={6}>
+                                                <Card
+                                                    widgetSize={"left"}
+                                                    title={"Collateral"}
+                                                    leftSelectButton={"Deposit"}
+                                                    rightSelectButton={"Withdraw"}
+                                                    currency={"eth"}
+                                                    openBorrowingPower={false}
+                                                    bottomButtonTitle={"Deposit"}
+                                                ></Card>
+                                            </Grid>
+                                            <Grid item xs={6}>
+                                                <Card
+                                                    widgetSize={"right"}
+                                                    title={"Debt"}
+                                                    leftSelectButton={"Borrow"}
+                                                    rightSelectButton={"Payback"}
+                                                    currency={"btc"}
+                                                    openBorrowingPower={true}
+                                                    bottomButtonTitle={"Borrow"}
+                                                ></Card>
+                                            </Grid>
+                                        </Grid>
                                     </Grid>
                                     <Grid item xs={6}>
                                         <Card
-                                            widgetSize={"right"}
-                                            title={"Debt"}
-                                            leftSelectButton={"Borrow"}
-                                            rightSelectButton={"Payback"}
-                                            currency={"btc"}
-                                            openBorrowingPower={true}
+                                            widgetSize={"full"}
+                                            title={"Current Smart Vault Balance"}
+                                            leftSelectButton={""}
+                                            rightSelectButton={""}
+                                            currency={"eth"}
+                                            openBorrowingPower={false}
                                             bottomButtonTitle={"Borrow"}
                                         ></Card>
                                     </Grid>
                                 </Grid>
                             </Grid>
-                            <Grid item xs={6}>
-                                <Card
-                                    widgetSize={"full"}
-                                    title={"Current Smart Vault Balance"}
-                                    leftSelectButton={""}
-                                    rightSelectButton={""}
-                                    currency={"eth"}
-                                    openBorrowingPower={false}
-                                    bottomButtonTitle={"Borrow"}
-                                ></Card>
+                            {/* circle table */}
+                            <Grid xs={5} item>
+                                <Grid container>
+                                    <Grid item xs={12} style={{ minHeight: "48px" }}>
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <Widget
+                                            title={<p style={{ fontWeight: 700 }}>Deposited Borrowed ealth Factory</p>}
+                                            customDropDown={false}
+                                        >
+                                            <Grid container>
+                                                <Grid item XS={12}>
+                                                    <div  style={{ minWidth:"300px",minHeight:"300px" }}>
+                                                        <MDBContainer>
+                                                            <Doughnut width={10} data={{
+                                                                labels: ["$ETH", "$BTC"],
+                                                                datasets: [
+                                                                    {
+                                                                        data: [0.2, 0.5],
+                                                                        backgroundColor: [
+                                                                            "#5CD68A",
+                                                                            "#5C83D6",
+                                                                        ],
+                                                                        hoverBackgroundColor: [
+                                                                            "#5CD68A",
+                                                                            "#5C83D6",
+                                                                        ]
+                                                                    }
+                                                                ]
+                                                            }}
+                                                                plugins={[{
+                                                                    beforeDraw: (chart)=>{
+                                                                        var width = chart.width,
+                                                                        height = chart.height,
+                                                                        ctx = chart.ctx;
+                                                                        ctx.restore();
+                                                                        var fontSize = (height / 200).toFixed(2);
+                                                                        ctx.font = fontSize + "em sans-serif";
+                                                                        ctx.fillStyle = "#fff";
+                                                                        ctx.textBaseline = "top";
+                                                                        let text = 20,
+                                                                        textX = Math.round((width - ctx.measureText(2).width) / 2),
+                                                                        textY = height / 2 + 5;
+                                                                        ctx.fillText(text,textX,textY);
+                                                                        ctx.save();
+                                                                    }
+                                                                    // beforeDraw: (chart) => {
+                                                                    //     var width = chart.width,
+                                                                    //         height = chart.height,
+                                                                    //         ctx = chart.ctx;
+                                                                    //     ctx.restore();
+                                                                    //     var fontSize = (height / 200).toFixed(2);
+                                                                    //     ctx.font = fontSize + "em sans-serif";
+                                                                    //     ctx.fillStyle = "#fff";
+                                                                    //     ctx.textBaseline = "top";
+                                                                    //     var text = (!(
+                                                                    //         (this.props.selectedPair === "ETHBTC" ? Number(this.props.userDebtBalanceBtc) : Number(this.props.userDebtBalanceUsdt))
+                                                                    //         + Number(this.props.inputBtcDept)
+                                                                    //     ) > 0 ? "" :
+                                                                    //         (
+                                                                    //             (
+                                                                    //                 (
+                                                                    //                     (this.props.selectedPair === "ETHBTC" ? Number(this.props.userDepositBalanceEth) : Number(this.props.userDepositBalanceAvax))
+                                                                    //                     + Number(this.props.inputEthDeposit)
+                                                                    //                 )
+                                                                    //                 * (this.props.selectedPair === "ETHBTC" ? this.props.priceOfEth : this.props.selectedPair === "AVAXUSDT" ? this.props.priceOfAvax : 0) / 100)
+                                                                    //             * this.props.LTV[this.props.selectedPair]
+                                                                    //             /
+                                                                    //             (
+                                                                    //                 (
+                                                                    //                     (this.props.selectedPair === "ETHBTC" ? Number(this.props.userDebtBalanceBtc) : Number(this.props.userDebtBalanceUsdt))
+                                                                    //                     + Number(this.props.inputBtcDept)
+                                                                    //                 )
+                                                                    //                 * (this.props.selectedPair === "ETHBTC" ? this.props.priceOfBtc : this.props.selectedPair === "AVAXUSDT" ? this.props.priceOfUsdt : 0) / 100)
+                                                                    //         ).toFixed(2)),
+                                                                    //         textX = Math.round((width - ctx.measureText(text).width) / 2),
+                                                                    //         textY = height / 2 + 5;
+                                                                    //     ctx.fillText(text, textX, textY);
+                                                                    //     ctx.save();
+                                                                    // }
+                                                                }]}
+                                                                options={{ responsive: true }} />
+                                                        </MDBContainer>
+                                                    </div>
+                                                </Grid>
+                                            </Grid>
+                                        </Widget>
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <Widget
+                                            title={<p style={{ fontWeight: 700 }}></p>}
+                                            customDropDown={false}
+                                        >
+                                            <Grid container>
+                                                <Grid item xs={12}>
+                                                    <Grid container justifyContent={"space-between"}>
+                                                        <Grid item>
+                                                            <span>Current Price of ETH:</span>
+                                                        </Grid>
+                                                        <Grid item>
+                                                            <span>$1,031</span>
+                                                        </Grid>
+                                                    </Grid>
+                                                </Grid>
+                                                <Grid item xs={12}>
+                                                    <Grid container justifyContent={"space-between"}>
+                                                        <Grid item>
+                                                            <span>Current Price of BTC:</span>
+                                                        </Grid>
+                                                        <Grid item>
+                                                            <span>$19,224</span>
+                                                        </Grid>
+                                                    </Grid>
+                                                </Grid>
+                                                <Grid item xs={12}>
+                                                    <Grid container justifyContent={"space-between"}>
+                                                        <Grid item>
+                                                            <span>LTV:</span>
+                                                        </Grid>
+                                                        <Grid item>
+                                                            <span>14%</span>
+                                                        </Grid>
+                                                    </Grid>
+                                                </Grid>
+                                                <Grid item xs={12}>
+                                                    <Grid container justifyContent={"space-between"}>
+                                                        <Grid item>
+                                                            <span>Max Borrow Power:</span>
+                                                        </Grid>
+                                                        <Grid item>
+                                                            <span>13.45</span>
+                                                        </Grid>
+                                                    </Grid>
+                                                </Grid>
+                                                <Grid item xs={12}>
+                                                    <Grid container justifyContent={"space-between"}>
+                                                        <Grid item>
+                                                            <span>Liquidity Threshold:</span>
+                                                        </Grid>
+                                                        <Grid item>
+                                                            <span>20.534%</span>
+                                                        </Grid>
+                                                    </Grid>
+                                                </Grid>
+                                                <Grid item xs={12}>
+                                                    <Grid container justifyContent={"space-between"}>
+                                                        <Grid item>
+                                                            <span>Liquidation Price of ETH:</span>
+                                                        </Grid>
+                                                        <Grid item>
+                                                            <span>$350</span>
+                                                        </Grid>
+                                                    </Grid>
+                                                </Grid>
+                                            </Grid>
+                                        </Widget>
+                                    </Grid>
+                                </Grid>
                             </Grid>
                         </Grid>
                     </Grid>
-                    {/* circle table */}
-                    <Grid xs={5} item>
-                        <Grid container>
-                            <Grid item xs={12}>
-                                <Widget
-                                    title={<p style={{ fontWeight: 700 }}>Deposited Borrowed ealth Factory</p>}
-                                    customDropDown={false}
-                                >
-                                    <Grid container>
-                                        <Grid item XS={12}>
-                                            GRAPH
-                                        </Grid>
-                                    </Grid>
-                                </Widget>
-                            </Grid>
-                            <Grid item xs={12}>
-                                <Widget
-                                    title={<p style={{ fontWeight: 700 }}></p>}
-                                    customDropDown={false}
-                                >
-                                    <Grid container>
-                                        <Grid item xs={12}>
-                                            Current Price of ETH:
-                                        </Grid>
-                                        <Grid item xs={12}>
-                                            Current Price of BTC:
-                                        </Grid>
-                                        <Grid item xs={12}>
-                                            LTV:
-                                        </Grid>
-                                        <Grid item xs={12}>
-                                            Max Borrow Power:
-                                        </Grid>
-                                        <Grid item xs={12}>
-                                            Liquidity Threshold:
-                                        </Grid>
-                                        <Grid item xs={12}>
-                                            Liquidation Price of ETH:
-                                        </Grid>
-                                    </Grid>
-                                </Widget>
-                            </Grid>
-                        </Grid>
-                    </Grid>
+
+
                 </Grid>
             </div>
         );
