@@ -29,6 +29,7 @@ class SmartVault2 extends React.Component {
               <Row
                 style={{
                   padding: '15px',
+                  borderWidth: '1px',
                   borderRadius: '15px',
                   marginLeft: '1px'
               }}>

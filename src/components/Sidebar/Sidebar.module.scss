@@ -28,17 +28,17 @@
   min-width: $sidebar-width-open;
   transition: width $sidebar-transition-time ease-in-out;
   background-color: var(--sidebar-bg-color);
-  z-index: 0;
+  z-index: 100;
   box-shadow: 4px 4px 25px rgba(109, 105, 105, 0.15);
 }
 
 .sidebarClose.sidebarWrapper {
   @include media-breakpoint-down(sm) {
-    min-width: 0;
+    min-width: 15px;
   }
   & .root {
     @include media-breakpoint-down(sm) {
-      width: 0;
+      width: 15px;
     }
   }
 }

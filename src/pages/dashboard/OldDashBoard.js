@@ -710,9 +710,9 @@ class OldDashboard extends React.Component {
                     marginTop: '10px',
                     marginLeft: '1px',
                     border: 'solid',
+                    borderWidth: '1px',
                     borderColor: '#ffffff',
                     borderRadius: '15px',
-                    borderWith: '1px',
                     display: 'flex',
                     alignItems: 'center'
                 }}>
@@ -752,9 +752,9 @@ class OldDashboard extends React.Component {
                     marginTop: '10px',
                     marginLeft: '1px',
                     border: 'solid',
+                    borderWidth: '1px',
                     borderColor: '#ffffff',
                     borderRadius: '15px',
-                    borderWith: '1px',
                     display: 'flex',
                     alignItems: 'center'
                 }}>
@@ -800,6 +800,7 @@ class OldDashboard extends React.Component {
             <Row
                   style={{
                     padding: '15px',
+                    borderWith: '1px',
                     borderRadius: '15px',
                     marginLeft: '1px',
                 }}>
@@ -827,7 +828,7 @@ class OldDashboard extends React.Component {
                     border: 'solid',
                     borderColor: '#ffffff',
                     borderRadius: '15px',
-                    borderWith: '1px',
+                    borderWidth: '1px',
                     display: 'flex',
                     alignItems: 'center'
                 }}>
@@ -846,7 +847,7 @@ class OldDashboard extends React.Component {
                   </Col>
                   <Col lg={4} className={"pl-0 fw-thin"}>
                     <Button style={{color: '#000000'}} color={"light"} disabled={!this.props.myBtcLpAmount} onClick={() => this.leaveVault()}>
-                      Leave Smart Valut
+                      Leave Smart Vault
                     </Button>
                   </Col>
             </Row>
