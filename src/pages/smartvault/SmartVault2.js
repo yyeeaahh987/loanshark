@@ -46,7 +46,9 @@ class SmartVault2 extends React.Component {
                     Health Factor
                   </Col>
               </Row>
-              <Row style={{marginLeft: '1px'}} key={0}  className={'rowHover'} onClick={() => this.selectRow(1)}>
+              <Row style={{marginLeft: '1px', 
+                    display: 'flex',
+                    alignItems: 'center'}} key={0}  className={'rowHover'} onClick={() => this.selectRow(1)}>
                   <Col lg={3} md={12}>
                     <img style={{padding: '5px'}} className="icon" src="/assets/icon/eth-logo.svg" alt="x"></img> ETH / <img style={{padding: '5px'}} className="icon" src="/assets/icon/btc-logo.svg" alt="x"></img> BTC
                   </Col>

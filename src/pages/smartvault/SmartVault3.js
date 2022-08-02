@@ -59,7 +59,9 @@ class SmartVault3 extends React.Component {
                     Your Balance
                   </Col>
                 </Row>
-                <Row style={{marginLeft: '1px'}} key={0}  className={'rowHover'} onClick={() => this.selectRow(1)}>
+                <Row style={{marginLeft: '1px',
+                    display: 'flex',
+                    alignItems: 'center'}} key={0}  className={'rowHover'} onClick={() => this.selectRow(1)}>
                   <Col>
                     <img style={{padding: '5px'}} className="icon" src="/assets/icon/btc-logo.svg" alt="x"></img> BTC
                   </Col>
