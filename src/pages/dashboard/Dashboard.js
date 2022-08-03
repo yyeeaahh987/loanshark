@@ -25,7 +25,7 @@ import API from '../../utils/API'
 import DisplayBox from '../../components/DisplayBox/DisplayBox'
 import Widget from "../../components/Widget";
 import TableRow from '../../components/TableRow/TableRow'
-
+import Popup from '../../components/Popup/Popup'
 
 
 class Dashboard extends React.Component {
@@ -42,11 +42,15 @@ class Dashboard extends React.Component {
     this.state = {
       modal: false,
       modalTitle: '',
+      subHeading:"",
       modalToken: '',
       modalAction: '',
       modalCall: () => { },
       modalInputValue: 0,
-      loadingActive: false
+      modalValue:0,
+      modalOnChange:()=>{},
+      modalOnCall:()=>{},
+      loadingActive: false,
     };
 
   }
@@ -65,66 +69,6 @@ class Dashboard extends React.Component {
     this.setState({ modalInputValue: event.target.value });
   }
 
-  toggleDeposit(inputModalToken, inputModalAction, pair) {
-    this.setState({
-      modal: !this.state.modal,
-      modalTitle: inputModalAction + " " + inputModalToken,
-      modalToken: inputModalToken,
-      modalAction: inputModalAction,
-      modalCall: () => {
-        let approveArgs = [
-          (pair === "ETHBTC" ? this.props.myFujiVaultETHBTC.options.address : pair === "AVAXUSDT" ? this.props.myFujiVaultAVAXUSDT.options.address : ""),
-          window.web3.utils.toBN(window.web3.utils.toWei(this.state.modalInputValue, 'ether')).toString()
-        ]
-
-        let args = [
-          window.web3.utils.toBN(window.web3.utils.toWei(this.state.modalInputValue, 'ether')).toString(),
-        ];
-
-        if (pair === "ETHBTC") {
-          this.toggle();
-          this.calltoggleLoading();
-
-          this.props.myETHContract.methods
-            .approve(...approveArgs)
-            .send({ from: this.props.myAccount })
-            .on("error", (error, receipt) => {
-              this.calltoggleLoading();
-            })
-            .then((receipt) => {
-              this.props.myFujiVaultETHBTC.methods
-                .deposit(...args)
-                .send({ from: this.props.myAccount })
-                .on("error", (error, receipt) => {
-                  this.calltoggleLoading();
-                })
-                .then((receipt) => {
-                  this.calltoggleLoading();
-                  API(this.props);
-                })
-            });
-        }
-
-        if (pair === "AVAXUSDT") {
-          this.toggle();
-          this.calltoggleLoading();
-
-          let a = window.web3.utils.toBN(window.web3.utils.toWei(this.state.modalInputValue, 'ether')).toString();
-          this.props.myFujiVaultAVAXUSDT.methods
-            .deposit(...args)
-            .send({ from: this.props.myAccount, value: a })
-            .on("error", (error, receipt) => {
-              this.calltoggleLoading();
-            })
-            .then((receipt) => {
-              this.calltoggleLoading();
-              API(this.props);
-            })
-        }
-
-      }
-    });
-  }
 
   toggleWithdrawn(inputModalToken, inputModalAction, pair) {
     this.setState({
@@ -548,6 +492,75 @@ class Dashboard extends React.Component {
     });
   }
 
+
+  toggleDeposit(inputModalToken, inputModalAction, pair) {
+    // this.setState({
+    //   modal: !this.state.modal,
+    //   modalTitle: inputModalAction + " " + inputModalToken,
+    //   modalToken: inputModalToken,
+    //   modalAction: inputModalAction,
+    //   modalCall: () => {
+    //     let approveArgs = [
+    //       (pair === "ETHBTC" ? this.props.myFujiVaultETHBTC.options.address : pair === "AVAXUSDT" ? this.props.myFujiVaultAVAXUSDT.options.address : ""),
+    //       window.web3.utils.toBN(window.web3.utils.toWei(this.state.modalInputValue, 'ether')).toString()
+    //     ]
+
+    //     let args = [
+    //       window.web3.utils.toBN(window.web3.utils.toWei(this.state.modalInputValue, 'ether')).toString(),
+    //     ];
+
+    //     if (pair === "ETHBTC") {
+    //       this.toggle();
+    //       this.calltoggleLoading();
+
+    //       this.props.myETHContract.methods
+    //         .approve(...approveArgs)
+    //         .send({ from: this.props.myAccount })
+    //         .on("error", (error, receipt) => {
+    //           this.calltoggleLoading();
+    //         })
+    //         .then((receipt) => {
+    //           this.props.myFujiVaultETHBTC.methods
+    //             .deposit(...args)
+    //             .send({ from: this.props.myAccount })
+    //             .on("error", (error, receipt) => {
+    //               this.calltoggleLoading();
+    //             })
+    //             .then((receipt) => {
+    //               this.calltoggleLoading();
+    //               API(this.props);
+    //             })
+    //         });
+    //     }
+
+    //     if (pair === "AVAXUSDT") {
+    //       this.toggle();
+    //       this.calltoggleLoading();
+
+    //       let a = window.web3.utils.toBN(window.web3.utils.toWei(this.state.modalInputValue, 'ether')).toString();
+    //       this.props.myFujiVaultAVAXUSDT.methods
+    //         .deposit(...args)
+    //         .send({ from: this.props.myAccount, value: a })
+    //         .on("error", (error, receipt) => {
+    //           this.calltoggleLoading();
+    //         })
+    //         .then((receipt) => {
+    //           this.calltoggleLoading();
+    //           API(this.props);
+    //         })
+    //     }
+
+    //   }
+    // });
+  }
+
+  calculateHealthFactor(depositeAmouont, priceOfDeposite, LTV, debtAmount, priceOfDebt) {
+    console.log(`depositeAmouont`, depositeAmouont)
+    console.log(`debtAmount`, debtAmount)
+    if (debtAmount === undefined || debtAmount === null || debtAmount === 0) return "-"
+    return ((depositeAmouont * priceOfDeposite / 100) * LTV / (debtAmount * priceOfDebt / 100)).toFixed(2)
+  }
+
   componentDidMount() {
     window.addEventListener("resize", this.forceUpdate.bind(this))
   }
@@ -559,16 +572,16 @@ class Dashboard extends React.Component {
   render() {
     return (
       <div>
-        {/* <TableRow>
-
-        </TableRow> */}
-
-
         <Grid container spacing={2}>
           <Grid item xl={3} lg={3} md={4}>
-
             <Widget
-              title={<p style={{ fontWeight: 700 }}>$100,423.39</p>}
+              title={<p style={{ fontWeight: 700 }}>
+                {
+                  (((this.props.userDepositBalanceEth) * this.props.priceOfEth / 100) - (this.props.userDebtBalanceBtc * this.props.priceOfBtc / 100) +
+                    ((this.props.userDepositBalanceAvax) * this.props.priceOfAvax / 100) - (this.props.userDebtBalanceUsdt * this.props.priceOfUsdt / 100))
+                    .toFixed(2)
+                }
+              </p>}
               customDropDown={false}
             >
               <Row className={`justify-content-between mt-3`} noGutters>
@@ -584,7 +597,9 @@ class Dashboard extends React.Component {
           <Grid item xl={3} lg={3} md={4}>
 
             <Widget
-              title={<p style={{ fontWeight: 700 }}>$48902.3</p>}
+              title={<p style={{ fontWeight: 700 }}>
+                {((this.props.userDepositBalanceEth * this.props.priceOfEth / 100) + (this.props.userDepositBalanceAvax * this.props.priceOfAvax / 100)).toFixed(2)}
+              </p>}
               customDropDown={false}
             >
               <Row className={`justify-content-between mt-3`} noGutters>
@@ -600,7 +615,9 @@ class Dashboard extends React.Component {
           <Grid item xl={3} lg={3} md={4}>
 
             <Widget
-              title={<p style={{ fontWeight: 700 }}>$56,729.00</p>}
+              title={<p style={{ fontWeight: 700 }}>
+                {((this.props.userDebtBalanceBtc * this.props.priceOfBtc / 100) + (this.props.userDebtBalanceUsdt * this.props.priceOfUsdt / 100)).toFixed(2)}
+              </p>}
               customDropDown={false}
             >
               <Row className={`justify-content-between mt-3`} noGutters>
@@ -621,7 +638,7 @@ class Dashboard extends React.Component {
                   <FontAwesomeIcon onClick={() => {
                   }}
                     icon={faCaretDown} />
-                  <span style={{ fontWeight: 700 }}>$6730.3</span>
+                  <span style={{ fontWeight: 700 }}>need to get function</span>
                 </span>
               }
               customDropDown={false}
@@ -636,8 +653,6 @@ class Dashboard extends React.Component {
                     }}
                       icon={faCaretDown} />
                   </span>
-
-
                 </Col>
               </Row>
             </Widget>
@@ -699,37 +714,47 @@ class Dashboard extends React.Component {
                   <td className="middle">
                     <Grid container>
                       <Grid xs={12}>
-                        <span>$34.192.9</span>
+                        <span>{`$${(this.props.userDepositBalanceEth * this.props.priceOfEth / 100).toFixed(2)}`}</span>
                       </Grid>
                       <Grid xs={12}>
-                        <span>30.4ETH</span>
+                        <span>{this.props.userDepositBalanceEth} ETH</span>
                       </Grid>
                     </Grid>
                   </td>
                   <td className="middle">
                     <Grid container>
                       <Grid xs={12}>
-                        <span>$41,340.1</span>
+                        <span>{`$${(this.props.userDebtBalanceBtc * this.props.priceOfBtc / 100).toFixed(2)}`}</span>
                       </Grid>
                       <Grid xs={12}>
-                        <span>1.87ETH</span>
+                        <span>{`${(this.props.userDebtBalanceBtc).toFixed(2)}`} BTC</span>
                       </Grid>
                     </Grid>
                   </td>
                   <td className="middle">
-                    20.4%
+                    20.4% (hardcode)
                   </td>
                   <td className="middle">
-                    <span className="customTable__dataRow__healthFactor__safe">20</span>
+                    <span
+                      className={
+                        `customTable__dataRow__healthFactor__
+                      ${(this.calculateHealthFactor(this.props.userDepositBalanceEth, this.props.priceOfEth, this.props.LTV["ETHBTC"], this.props.userDebtBalanceBtc, this.props.priceOfBtc) === "" || this.calculateHealthFactor(this.props.priceOfEth, this.props.priceOfEth, this.props.LTV["ETHBTC"], this.props.userDebtBalanceBtc, this.props.priceOfBtc) < 5
+                        ) ? "safe" : "danger"}`
+                      }
+                    >
+                      {
+                        `${this.calculateHealthFactor(this.props.userDepositBalanceEth, this.props.priceOfEth, this.props.LTV["ETHBTC"], this.props.userDebtBalanceBtc, this.props.priceOfBtc) !== "-" ? "$ " : ""}
+                      ${this.calculateHealthFactor(this.props.userDepositBalanceEth, this.props.priceOfEth, this.props.LTV["ETHBTC"], this.props.userDebtBalanceBtc, this.props.priceOfBtc)}`
+                      }
+                    </span>
                   </td>
                   <td className="middle">
-                    $19,294
+                    $19,294 (hardcode)
                   </td>
                   <td className="middle">
-                    AAVE
+                    AAVE (hardcode)
                   </td>
                   <td className="lastOne">
-
                     <NavLink
                       to={{
                         pathname: "/app/main/manage",
@@ -742,68 +767,114 @@ class Dashboard extends React.Component {
                       >Manage
                       </Button>
                     </NavLink>
-
                   </td>
                 </tr>
                 <br></br>
                 <tr key={1} className="customTable__dataRow">
                   <td className="firstOne" key={1}>
                     <span style={{ paddingRight: "5px" }}>
-                      <img className="icon" src="/assets/icon/one-logo.svg" alt="x"></img>
+                      <img className="icon" src="/assets/icon/avax-logo.svg" alt="x"></img>
                     </span>
                     /
                     <span style={{ padding: "5px" }}>
                       <img className="icon" src="/assets/icon/usdt-logo.svg" alt="x"></img>
                     </span>
-                    ONE/USDT
+                    AVAX/USDT
                   </td>
                   <td className="middle" key={2}>
                     <Grid container>
                       <Grid xs={12}>
-                        <span>$41,340.1</span>
+                        <span>{`$${(this.props.userDepositBalanceAvax * this.props.userDepositBalanceAvax / 100).toFixed(2)}`}</span>
                       </Grid>
                       <Grid xs={12}>
-                        <span>1.87ETH</span>
+                        <span>{this.props.userDepositBalanceAvax} AVAX</span>
                       </Grid>
                     </Grid>
                   </td>
                   <td className="middle" key={3}>
                     <Grid container>
                       <Grid xs={12}>
-                        <span>$41,340.1</span>
+                        <span>{`$${(this.props.userDebtBalanceUsdt * this.props.userDebtBalanceUsdt / 100).toFixed(2)}`}</span>
                       </Grid>
                       <Grid xs={12}>
-                        <span>1.87ETH</span>
+                        <span>{`${(this.props.userDebtBalanceUsdt).toFixed(2)}`} USDT</span>
                       </Grid>
                     </Grid>
                   </td>
                   <td className="middle" key={5}>
-                    20.4%
+                    20.4% (hardcode)
                   </td>
                   <td className="middle" key={4}>
-                    20
+                    <span
+                      className={
+                        `customTable__dataRow__healthFactor__
+                      ${(this.calculateHealthFactor(this.props.userDepositBalanceAvax, this.props.priceOfAvax, this.props.LTV["AVAXUSDT"], this.props.userDebtBalanceUsdt, this.props.priceOfUsdt) === "" || this.calculateHealthFactor(this.props.priceOfEth, this.props.priceOfEth, this.props.LTV["ETHBTC"], this.props.userDebtBalanceBtc, this.props.priceOfBtc) < 5
+                        ) ? "safe" : "danger"}`
+                      }
+                    >
+                      {
+                        `${this.calculateHealthFactor(this.props.userDepositBalanceAvax, this.props.priceOfEth, this.props.LTV["AVAXUSDT"], this.props.userDebtBalanceUsdt, this.props.priceOfUsdt) !== "-" ? "$ " : ""}
+                      ${this.calculateHealthFactor(this.props.userDepositBalanceAvax, this.props.priceOfEth, this.props.LTV["AVAXUSDT"], this.props.userDebtBalanceUsdt, this.props.priceOfUsdt)}`
+                      }
+                    </span>
                   </td>
 
-                  <td className="middle" key={6}>
-                    $19,294
+                  <td className="middle">
+                    $19,294 (hardcode)
                   </td>
-                  <td className="middle" key={7}>
-                    AAVE
+                  <td className="middle">
+                    AAVE (hardcode)
                   </td>
                   <td className="lastOne" key={8}>
-                    <Button className={"manage-button"} >Manage</Button>
+                    <NavLink
+                      to={{
+                        pathname: "/app/main/manage",
+                        state: {
+                          pair: "AVAX_USDT"
+                        }
+                      }}
+                    >
+                      <Button className={"manage-button"}
+                      >Manage
+                      </Button>
+                    </NavLink>
                   </td>
                 </tr>
                 <br></br>
                 <tr key={2} className="customTable__dataRow">
+
                   <td colspan="9" className="customTable__dataRow__borrow">
-                    + Borrow
+                    <NavLink
+                      to={{
+                        pathname: "/app/main/borrow",
+                      }}
+                    >
+                      <span style={{ color: "white" }}>+ Borrow</span>
+                    </NavLink>
                   </td>
+
                 </tr>
               </tbody>
             </Table>
           </Grid>
         </Grid>
+        <Popup
+          modal={this.state.modal}
+          close={() => {
+            this.setState({
+              modal: !this.state.modal
+            })
+          }}
+          modalTitle={this.state.modalTitle}
+          subHeading={this.state.modalSubHeading}
+          modalAction={""}
+          modalToken={""}
+          value={this.state.modalValue}
+          onChange={this.state.modalOnChange}
+          modalCall={this.state.modalOnCall}
+        >
+        </Popup >
+
 
       </div>
     );

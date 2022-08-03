@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
-
+import { Switch, Route, withRouter, Redirect } from "react-router";
+import PropTypes from "prop-types";
 import usersImg from "../../images/usersImg.svg";
 import smileImg from "../../images/smileImg.svg";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -27,11 +28,21 @@ import DisplayBox from '../../components/DisplayBox/DisplayBox'
 import Widget from "../../components/Widget";
 import TableRow from '../../components/TableRow/TableRow'
 import Card from './Card/Card'
+import Popup from '../../components/Popup/Popup'
 
 
 class Manage extends React.Component {
-    constructor() {
-        super();
+    static propTypes = {
+        location: PropTypes.shape({
+            pathname: PropTypes.string,
+            state: PropTypes.shape({
+                pair: PropTypes.string,
+            }),
+        }).isRequired,
+    };
+
+    constructor(props) {
+        super(props);
         // this.forceUpdate = this.forceUpdate.bind(this);
         // this.toggle = this.toggle.bind(this);
         // this.toggleDeposit = this.toggleDeposit.bind(this);
@@ -49,518 +60,66 @@ class Manage extends React.Component {
         //   modalInputValue: 0,
         //   loadingActive: false
         // };
+        this.state = {
+            depositeCurrency: "",
+            depositeAmount: 0,
+            depositeCurrencyIconPath: "",
+            debitCurrency: "",
+            debitAmount: 0,
+            debitCurrencyIconPath: "",
+            modal: false,
+            modalTitle: '',
+            subHeading: "",
+            modalToken: '',
+            modalAction: '',
+            modalCall: () => { },
+            modalInputValue: 0,
+            modalValue: 0,
+            modalOnChange: () => { },
+            modalOnCall: () => { },
+            loadingActive: false,
+            collateralAction:"deposit",
+            collateralAmount:0,
+            debtAction:"borrow",
+            debtAmount:0,
 
+        }
+    }
+    componentDidMount() {
+        if ((this?.props?.location?.state?.pair ?? "") === "") return
+        let tempPari = this.props.location.state.pair.split("_")
+        let deposite = tempPari[0]
+        let debit = tempPari[1]
+        if (deposite === "AVAX") {
+            this.setState({
+                depositeCurrency: deposite,
+                depositeAmount: this.props.userDepositBalanceAvax,
+                depositeCurrencyIconPath: `/assets/icon/${deposite.toLowerCase()}-logo.svg`,
+                debitCurrency: debit,
+                debitAmount: this.props.userDebtBalanceUsdt,
+                debitCurrencyIconPath: `/assets/icon/${debit.toLowerCase()}-logo.svg`,
+            })
+        }
+        if (deposite === "ETH") {
+            this.setState({
+                depositeCurrency: deposite,
+                depositeAmount: this.props.userDepositBalanceEth,
+                depositeCurrencyIconPath: `/assets/icon/${deposite.toLowerCase()}-logo.svg`,
+                debitCurrency: debit,
+                debitAmount: this.props.userDebtBalanceBtc,
+                debitCurrencyIconPath: `/assets/icon/${debit.toLowerCase()}-logo.svg`,
+            })
+        }
     }
 
-    //   toggle() {
-    //     this.setState({
-    //       modal: !this.state.modal,
-    //     })
-    //   }
-
-    //   calltoggleLoading() {
-    //     this.props.dispatch(toggleLoading());
-    //   }
-
-    //   setInput(event) {
-    //     this.setState({ modalInputValue: event.target.value });
-    //   }
-
-    //   toggleDeposit(inputModalToken, inputModalAction, pair) {
-    //     this.setState({
-    //       modal: !this.state.modal,
-    //       modalTitle: inputModalAction + " " + inputModalToken,
-    //       modalToken: inputModalToken,
-    //       modalAction: inputModalAction,
-    //       modalCall: () => {
-    //         let approveArgs = [
-    //           (pair === "ETHBTC" ? this.props.myFujiVaultETHBTC.options.address : pair === "AVAXUSDT" ? this.props.myFujiVaultAVAXUSDT.options.address : ""),
-    //           window.web3.utils.toBN(window.web3.utils.toWei(this.state.modalInputValue, 'ether')).toString()
-    //         ]
-
-    //         let args = [
-    //           window.web3.utils.toBN(window.web3.utils.toWei(this.state.modalInputValue, 'ether')).toString(),
-    //         ];
-
-    //         if (pair === "ETHBTC") {
-    //           this.toggle();
-    //           this.calltoggleLoading();
-
-    //           this.props.myETHContract.methods
-    //             .approve(...approveArgs)
-    //             .send({ from: this.props.myAccount })
-    //             .on("error", (error, receipt) => {
-    //               this.calltoggleLoading();
-    //             })
-    //             .then((receipt) => {
-    //               this.props.myFujiVaultETHBTC.methods
-    //                 .deposit(...args)
-    //                 .send({ from: this.props.myAccount })
-    //                 .on("error", (error, receipt) => {
-    //                   this.calltoggleLoading();
-    //                 })
-    //                 .then((receipt) => {
-    //                   this.calltoggleLoading();
-    //                   API(this.props);
-    //                 })
-    //             });
-    //         }
-
-    //         if (pair === "AVAXUSDT") {
-    //           this.toggle();
-    //           this.calltoggleLoading();
-
-    //           let a = window.web3.utils.toBN(window.web3.utils.toWei(this.state.modalInputValue, 'ether')).toString();
-    //           this.props.myFujiVaultAVAXUSDT.methods
-    //             .deposit(...args)
-    //             .send({ from: this.props.myAccount, value: a })
-    //             .on("error", (error, receipt) => {
-    //               this.calltoggleLoading();
-    //             })
-    //             .then((receipt) => {
-    //               this.calltoggleLoading();
-    //               API(this.props);
-    //             })
-    //         }
-
-    //       }
-    //     });
-    //   }
-
-    //   toggleWithdrawn(inputModalToken, inputModalAction, pair) {
-    //     this.setState({
-    //       modal: !this.state.modal,
-    //       modalTitle: inputModalAction + " " + inputModalToken,
-    //       modalToken: inputModalToken,
-    //       modalAction: inputModalAction,
-    //       modalCall: () => {
-    //         let args = [
-    //           window.web3.utils.toBN(window.web3.utils.toWei(this.state.modalInputValue, 'ether')).toString(),
-    //         ];
-
-    //         if (pair === "ETHBTC") {
-    //           this.toggle();
-    //           this.calltoggleLoading();
-
-    //           this.props.myFujiVaultETHBTC.methods
-    //             .withdraw(...args)
-    //             .send({ from: this.props.myAccount })
-    //             .on("error", (error, receipt) => {
-    //               this.calltoggleLoading();
-    //             })
-    //             .then((receipt) => {
-    //               this.calltoggleLoading();
-    //               API(this.props);
-    //             });
-    //         }
-
-    //         if (pair === "AVAXUSDT") {
-    //           this.toggle();
-    //           this.calltoggleLoading();
-
-    //           this.props.myFujiVaultAVAXUSDT.methods
-    //             .withdraw(...args)
-    //             .send({ from: this.props.myAccount })
-    //             .on("error", (error, receipt) => {
-    //               this.calltoggleLoading();
-    //             })
-    //             .then((receipt) => {
-    //               this.calltoggleLoading();
-    //               API(this.props);
-    //             });
-    //         }
-    //       }
-    //     });
-    //   }
-
-    //   toggleBorrow(inputModalToken, inputModalAction, pair) {
-    //     this.setState({
-    //       modal: !this.state.modal,
-    //       modalTitle: inputModalAction + " " + inputModalToken,
-    //       modalToken: inputModalToken,
-    //       modalAction: inputModalAction,
-    //       modalCall: () => {
-    //         var finalModalInputValue;
-    //         if (pair === "ETHBTC") {
-    //           finalModalInputValue = Number.parseFloat(this.state.modalInputValue * 100000000).toFixed(0);
-    //         }
-    //         if (pair === "AVAXUSDT") {
-    //           finalModalInputValue = Number.parseFloat(this.state.modalInputValue * 1000000).toFixed(0);
-    //         }
-
-    //         let args = [
-    //           finalModalInputValue
-    //         ];
-
-    //         this.toggle();
-    //         this.calltoggleLoading();
-
-    //         if (pair === "ETHBTC") {
-    //           this.props.myFujiVaultETHBTC.methods
-    //             .borrow(...args)
-    //             .send({ from: this.props.myAccount })
-    //             .on("error", (error, receipt) => {
-    //               this.calltoggleLoading();
-    //             })
-    //             .then((receipt) => {
-    //               this.calltoggleLoading();
-    //               API(this.props);
-    //             });
-    //         }
-
-    //         if (pair === "AVAXUSDT") {
-    //           this.props.myFujiVaultAVAXUSDT.methods
-    //             .borrow(...args)
-    //             .send({ from: this.props.myAccount })
-    //             .on("error", (error, receipt) => {
-    //               this.calltoggleLoading();
-    //             })
-    //             .then((receipt) => {
-    //               this.calltoggleLoading();
-    //               API(this.props);
-    //             });
-    //         }
-    //       }
-    //     });
-    //   }
-
-    //   togglePayback(inputModalToken, inputModalAction, pair) {
-    //     this.setState({
-    //       modal: !this.state.modal,
-    //       modalTitle: inputModalAction + " " + inputModalToken,
-    //       modalToken: inputModalToken,
-    //       modalAction: inputModalAction,
-    //       modalCall: () => {
-
-    //         var finalModalInputValue;
-    //         if (pair === "ETHBTC") {
-    //           finalModalInputValue = this.state.modalInputValue < 0 ? Number.parseFloat(1000000000000).toFixed(0) : Number.parseFloat(this.state.modalInputValue * 100000000).toFixed(0);
-    //         }
-    //         if (pair === "AVAXUSDT") {
-    //           finalModalInputValue = this.state.modalInputValue < 0 ? Number.parseFloat(1000000000000).toFixed(0) : window.web3.utils.toBN(window.web3.utils.toWei(this.state.modalInputValue, 'picoether')).toString();
-    //         }
-
-    //         let approveArgs = [
-    //           (pair === "ETHBTC" ? this.props.myFujiVaultETHBTC.options.address : pair === "AVAXUSDT" ? this.props.myFujiVaultAVAXUSDT.options.address : ""),
-    //           window.web3.utils.toBN(finalModalInputValue).toString()
-    //         ]
-
-    //         let args = [
-    //           this.state.modalInputValue < 0 ? "-1" : window.web3.utils.toBN(finalModalInputValue).toString(),
-    //         ];
-
-    //         if (pair === "ETHBTC") {
-    //           this.toggle();
-    //           this.calltoggleLoading();
-
-    //           this.props.myBTCContract.methods
-    //             .approve(...approveArgs)
-    //             .send({ from: this.props.myAccount })
-    //             .on("error", (error, receipt) => {
-    //               this.calltoggleLoading();
-    //             })
-    //             .then((receipt) => {
-    //               this.props.myFujiVaultETHBTC.methods
-    //                 .payback(...args)
-    //                 .send({ from: this.props.myAccount })
-    //                 .on("error", (error, receipt) => {
-    //                   this.calltoggleLoading();
-    //                 })
-    //                 .then((receipt) => {
-    //                   this.calltoggleLoading();
-    //                   API(this.props);
-    //                 })
-    //             });
-    //         }
-
-    //         if (pair === "AVAXUSDT") {
-    //           this.toggle();
-    //           this.calltoggleLoading();
-
-    //           this.props.myUSDTContract.methods
-    //             .approve(...approveArgs)
-    //             .send({ from: this.props.myAccount })
-    //             .on("error", (error, receipt) => {
-    //               this.calltoggleLoading();
-    //             })
-    //             .then((receipt) => {
-    //               this.props.myFujiVaultAVAXUSDT.methods
-    //                 .payback(...args)
-    //                 .send({ from: this.props.myAccount })
-    //                 .on("error", (error, receipt) => {
-    //                   this.calltoggleLoading();
-    //                 })
-    //                 .then((receipt) => {
-    //                   this.calltoggleLoading();
-    //                   API(this.props);
-    //                 })
-    //             });
-    //         }
-    //       }
-    //     });
-    //   }
-
-    //   toggleEnterSmartVault(inputModalToken, inputModalAction, pair) {
-    //     this.setState({
-    //       modal: !this.state.modal,
-    //       modalTitle: inputModalAction + " " + inputModalToken,
-    //       modalToken: inputModalToken,
-    //       modalAction: inputModalAction,
-    //       modalCall: () => {
-    //         var finalModalInputValue;
-    //         if (pair === "ETHBTC") {
-    //           finalModalInputValue = this.state.modalInputValue < 0 ? Number.parseFloat(1000000000000).toFixed(0) : Number.parseFloat(this.state.modalInputValue * 100000000).toFixed(0);
-    //         }
-    //         if (pair === "AVAXUSDT") {
-    //           finalModalInputValue = this.state.modalInputValue < 0 ? window.web3.utils.toBN(window.web3.utils.toWei(1000000000000, 'picoether')).toString() : window.web3.utils.toBN(window.web3.utils.toWei(this.state.modalInputValue, 'picoether')).toString();
-    //         }
-
-    //         let approveArgs = [
-    //           (pair === "ETHBTC" ? this.props.mySmartVaultBtc.options.address : pair === "AVAXUSDT" ? this.props.mySmartVaultUsdt.options.address : ""),
-    //           window.web3.utils.toBN(finalModalInputValue).toString()
-    //         ]
-
-    //         let args = [
-    //           (pair === "ETHBTC" ? this.props.myBTCContract.options.address : pair === "AVAXUSDT" ? this.props.myUSDTContract.options.address : ""),
-    //           window.web3.utils.toBN(finalModalInputValue).toString(),
-    //         ];
-
-    //         this.toggle();
-    //         this.calltoggleLoading();
-
-    //         if (pair === "ETHBTC") {
-    //           this.props.myBTCContract.methods
-    //             .approve(...approveArgs)
-    //             .send({ from: this.props.myAccount })
-    //             .on("error", (error, receipt) => {
-    //               this.calltoggleLoading();
-    //             })
-    //             .then((receipt) => {
-    //               this.props.mySmartVaultBtc.methods
-    //                 .stakeTokens(...args)
-    //                 .send({ from: this.props.myAccount })
-    //                 .on("error", (error, receipt) => {
-    //                   this.calltoggleLoading();
-    //                 })
-    //                 .then((receipt) => {
-    //                   this.calltoggleLoading();
-    //                   API(this.props);
-    //                 });
-    //             });
-    //         }
-    //         if (pair === "AVAXUSDT") {
-    //           this.props.myUSDTContract.methods
-    //             .approve(...approveArgs)
-    //             .send({ from: this.props.myAccount })
-    //             .on("error", (error, receipt) => {
-    //               this.calltoggleLoading();
-    //             })
-    //             .then((receipt) => {
-    //               this.props.mySmartVaultUsdt.methods
-    //                 .stakeTokens(...args)
-    //                 .send({ from: this.props.myAccount })
-    //                 .on("error", (error, receipt) => {
-    //                   this.calltoggleLoading();
-    //                 })
-    //                 .then((receipt) => {
-    //                   this.calltoggleLoading();
-    //                   API(this.props);
-    //                 });
-    //             });
-    //         }
-    //       }
-    //     });
-    //   }
-
-    //   toggleLeaveSmartVault(inputModalToken, inputModalAction, pair) {
-    //     this.setState({
-    //       modal: !this.state.modal,
-    //       modalTitle: inputModalAction + " " + inputModalToken,
-    //       modalToken: inputModalToken,
-    //       modalAction: inputModalAction,
-    //       modalCall: () => {
-    //         var finalModalInputValue;
-    //         if (pair === "ETHBTC") {
-    //           finalModalInputValue = this.state.modalInputValue < 0 ? Number.parseFloat(1000000000000).toFixed(0) : Number.parseFloat(this.state.modalInputValue * 100000000).toFixed(0);
-    //         }
-    //         if (pair === "AVAXUSDT") {
-    //           finalModalInputValue = this.state.modalInputValue < 0 ? window.web3.utils.toBN(window.web3.utils.toWei(1000000000000, 'picoether')).toString() : window.web3.utils.toBN(window.web3.utils.toWei(this.state.modalInputValue, 'picoether')).toString();
-    //         }
-
-    //         let args = [
-    //           (pair === "ETHBTC" ? this.props.myBTCContract.options.address : pair === "AVAXUSDT" ? this.props.myUSDTContract.options.address : ""),
-    //           window.web3.utils.toBN(finalModalInputValue).toString(),
-    //         ];
-
-    //         if (pair === "ETHBTC") {
-    //           this.toggle();
-    //           this.calltoggleLoading();
-    //           this.props.mySmartVaultBtc.methods
-    //             .unstakeTokens(...args)
-    //             .send({ from: this.props.myAccount })
-    //             .on("error", (error, receipt) => {
-    //               this.calltoggleLoading();
-    //             })
-    //             .then((receipt) => {
-    //               this.calltoggleLoading();
-    //               API(this.props);
-    //             });
-    //         }
-
-    //         if (pair === "AVAXUSDT") {
-    //           this.toggle();
-    //           this.calltoggleLoading();
-    //           this.props.mySmartVaultUsdt.methods
-    //             .unstakeTokens(...args)
-    //             .send({ from: this.props.myAccount })
-    //             .on("error", (error, receipt) => {
-    //               this.calltoggleLoading();
-    //             })
-    //             .then((receipt) => {
-    //               this.calltoggleLoading();
-    //               API(this.props);
-    //             });
-    //         }
-    //       }
-    //     });
-    //   }
-
-    //   toggleManualPaybackSmartVault(inputModalToken, inputModalAction, pair) {
-    //     this.setState({
-    //       modal: !this.state.modal,
-    //       modalTitle: inputModalAction + " " + inputModalToken,
-    //       modalToken: inputModalToken,
-    //       modalAction: inputModalAction,
-    //       modalCall: () => {
-    //         var finalModalInputValue;
-    //         var args;
-    //         var approveArgs;
-    //         var argsForFujiVault;
-    //         var mySmartVaultContract;
-    //         var myDebtContract;
-    //         var myFujiVaultContract;
-    //         if (pair === "ETHBTC") {
-    //           mySmartVaultContract = this.props.mySmartVaultBtc;
-    //           myDebtContract = this.props.myBTCContract;
-    //           myFujiVaultContract = this.props.myFujiVaultETHBTC;
-    //           finalModalInputValue = this.state.modalInputValue < 0 ? Number.parseFloat(1000000000000).toFixed(0) : Number.parseFloat(this.state.modalInputValue * 100000000).toFixed(0);
-    //           args = [
-    //             this.props.myBTCContract.options.address,
-    //             window.web3.utils.toBN(finalModalInputValue).toString(),
-    //           ];
-    //           approveArgs = [
-    //             this.props.myFujiVaultETHBTC.options.address,
-    //             window.web3.utils.toBN(finalModalInputValue).toString()
-    //           ]
-    //           argsForFujiVault = [
-    //             this.state.modalInputValue < 0 ? "-1" : window.web3.utils.toBN(finalModalInputValue).toString(),
-    //           ];
-    //         }
-    //         if (pair === "AVAXUSDT") {
-    //           mySmartVaultContract = this.props.mySmartVaultUsdt;
-    //           myDebtContract = this.props.myUSDTContract;
-    //           myFujiVaultContract = this.props.myFujiVaultAVAXUSDT;
-    //           finalModalInputValue = this.state.modalInputValue < 0 ? window.web3.utils.toBN(window.web3.utils.toWei(1000000000000, 'picoether')).toString() : window.web3.utils.toBN(window.web3.utils.toWei(this.state.modalInputValue, 'picoether')).toString();
-    //           args = [
-    //             this.props.myUSDTContract.options.address,
-    //             window.web3.utils.toBN(finalModalInputValue).toString(),
-    //           ];
-    //           approveArgs = [
-    //             this.props.myFujiVaultAVAXUSDT.options.address,
-    //             window.web3.utils.toBN(finalModalInputValue).toString()
-    //           ]
-    //           argsForFujiVault = [
-    //             this.state.modalInputValue < 0 ? "-1" : window.web3.utils.toBN(finalModalInputValue).toString(),
-    //           ];
-    //         }
-
-    //         this.toggle();
-    //         this.calltoggleLoading();
-    //         mySmartVaultContract.methods
-    //           .unstakeTokens(...args)
-    //           .send({ from: this.props.myAccount })
-    //           .on("error", (error, receipt) => {
-    //             this.calltoggleLoading();
-    //           })
-    //           .then((receipt) => {
-
-    //             myDebtContract.methods
-    //               .approve(...approveArgs)
-    //               .send({ from: this.props.myAccount })
-    //               .on("error", (error, receipt) => {
-    //                 this.calltoggleLoading();
-    //               })
-    //               .then((receipt) => {
-    //                 myFujiVaultContract.methods
-    //                   .payback(...argsForFujiVault)
-    //                   .send({ from: this.props.myAccount })
-    //                   .on("error", (error, receipt) => {
-    //                     this.calltoggleLoading();
-    //                   })
-    //                   .then((receipt) => {
-    //                     this.calltoggleLoading();
-    //                     API(this.props);
-    //                   })
-    //               });
-
-    //           });
-    //       }
-    //     });
-    //   }
-
-    //   toggleFlashclose(inputModalToken, inputModalAction, pair) {
-    //     this.setState({
-    //       modal: !this.state.modal,
-    //       modalTitle: inputModalAction + " " + inputModalToken,
-    //       modalToken: inputModalToken,
-    //       modalAction: inputModalAction,
-    //       modalCall: () => {
-    //         var finalModalInputValue;
-    //         var myFujiVaultContract;
-    //         if (pair === "ETHBTC") {
-    //           finalModalInputValue = this.state.modalInputValue < 0 ? -1 : Number.parseFloat(this.state.modalInputValue * 100000000).toFixed(0);
-    //           myFujiVaultContract = this.props.myFujiVaultETHBTC;
-    //         }
-    //         if (pair === "AVAXUSDT") {
-    //           finalModalInputValue = this.state.modalInputValue < 0 ? -1 : window.web3.utils.toBN(window.web3.utils.toWei(this.state.modalInputValue, 'picoether')).toString();
-    //           myFujiVaultContract = this.props.myFujiVaultAVAXUSDT;
-    //         }
-
-    //         let args = [
-    //           window.web3.utils.toBN(finalModalInputValue).toString(),
-    //           myFujiVaultContract.options.address,
-    //           0
-    //         ]
-
-    //         this.toggle();
-    //         this.calltoggleLoading();
-
-    //         this.props.myFliquidatorAVAX.methods
-    //           .flashClose(...args)
-    //           .send({ from: this.props.myAccount })
-    //           .on("error", (error, receipt) => {
-    //             this.calltoggleLoading();
-    //           })
-    //           .then((receipt) => {
-    //             this.calltoggleLoading();
-    //             API(this.props);
-    //           });;
-    //       }
-    //     });
-    //   }
-
-    //   componentDidMount() {
-    //     window.addEventListener("resize", this.forceUpdate.bind(this))
-    //   }
-
-    //   forceUpdate() {
-    //     return this.setState({})
-    //   }
 
     render() {
+        if ((this.props?.location?.state?.pair ?? "") === "") {
+            //redirect for no pair get from history
+            return <Redirect to="/app/main/dashboard" />
+        }
         return (
             <div>
-
                 <Grid container>
                     {/* main info table */}
                     <Grid item xs={12}>
@@ -568,7 +127,9 @@ class Manage extends React.Component {
 
 
                             <Grid xs={7} item>
-                                <Grid container>
+                                <Grid container
+                                    abc={console.log(this.state)}
+                                >
                                     <Grid item xs={12}>
                                         <Table className={"mb-0"} borderless responsive style={{ borderCollapse: "separate", borderSpacing: "0" }}>
                                             <thead className="customTable">
@@ -600,45 +161,45 @@ class Manage extends React.Component {
                                                 <tr key={0} className="customTable__dataRow">
                                                     <td className="firstOne">
                                                         <span style={{ paddingRight: "5px" }}>
-                                                            <img className="icon" src="/assets/icon/eth-logo.svg" alt="x"></img>
+                                                            <img className="icon" src={this.state.depositeCurrencyIconPath} alt="x"></img>
                                                         </span>
                                                         /
                                                         <span style={{ padding: "5px" }}>
-                                                            <img className="icon" src="/assets/icon/btc-logo.svg" alt="x"></img>
+                                                            <img className="icon" src={this.state.debitCurrencyIconPath} alt="x"></img>
                                                         </span>
-                                                        ETH/BTC
+                                                        {`${this.state.depositeCurrency}/${this.state.debitCurrency}`}
                                                     </td>
                                                     <td className="middle">
                                                         <Grid container>
                                                             <Grid xs={12}>
-                                                                <span>$34.192.9</span>
+                                                                <span>{`$${(this.props.userDepositBalanceEth * this.props.priceOfEth / 100).toFixed(2)}`}</span>
                                                             </Grid>
                                                             <Grid xs={12}>
-                                                                <span>30.4ETH</span>
+                                                                <span>{this.props.userDepositBalanceEth} ETH</span>
                                                             </Grid>
                                                         </Grid>
                                                     </td>
                                                     <td className="middle">
                                                         <Grid container>
                                                             <Grid xs={12}>
-                                                                <span>$41,340.1</span>
+                                                                <span>{`$${(this.props.userDebtBalanceBtc * this.props.priceOfBtc / 100).toFixed(2)}`}</span>
                                                             </Grid>
                                                             <Grid xs={12}>
-                                                                <span>1.87ETH</span>
+                                                                <span>{`${(this.props.userDebtBalanceBtc).toFixed(2)}`} BTC</span>
                                                             </Grid>
                                                         </Grid>
                                                     </td>
                                                     <td className="middle">
-                                                        20.4%
+                                                        20.4% (hardcode)
                                                     </td>
                                                     <td className="middle">
                                                         <span className="customTable__dataRow__healthFactor__safe">20</span>
                                                     </td>
                                                     <td className="middle">
-                                                        $19,294
+                                                        $19,294 (hardcode)
                                                     </td>
                                                     <td className="lastOne">
-                                                        AAVE
+                                                        AAVE (hardcode)
                                                     </td>
                                                 </tr>
                                                 <br></br>
@@ -651,11 +212,39 @@ class Manage extends React.Component {
                                                 <Card
                                                     widgetSize={"left"}
                                                     title={"Collateral"}
-                                                    leftSelectButton={"Deposit"}
-                                                    rightSelectButton={"Withdraw"}
-                                                    currency={"eth"}
+                                                    leftSelectButton={"deposit"}
+                                                    rightSelectButton={"withdraw"}
+                                                    currency={this.state.depositeCurrency}
+                                                    currencyIconPath={this.state.depositeCurrencyIconPath}
+                                                    maxBalance={99999}
                                                     openBorrowingPower={false}
                                                     bottomButtonTitle={"Deposit"}
+                                                    action={this.state.collateralAction}
+                                                    onClickSelect={(e)=>{
+                                                        if(e.target.name===this.state.collateralAction) return 
+                                                        switch(e.target.name){
+                                                            case "deposit":
+                                                            case "withdraw":
+                                                                this.setState({
+                                                                    collateralAction:e.target.name,
+                                                                    collateralAmount:0
+                                                                })
+                                                                break;
+                                                            default:
+                                                                break;
+                                                        }
+                                                    }}
+                                                    onChangeInput={(e)=>{
+                                                        this.setState({
+                                                            collateralAmount:e.target.value === "" ? 0 : e.target.value
+                                                        })
+                                                    }}
+                                                    amount={this.state.collateralAmount}
+                                                    onClickMax={()=>{
+                                                        this.setState({
+                                                            collateralAmount:99999,
+                                                        })
+                                                    }}
                                                 ></Card>
                                             </Grid>
                                             <Grid item xs={6}>
@@ -665,8 +254,10 @@ class Manage extends React.Component {
                                                     leftSelectButton={"Borrow"}
                                                     rightSelectButton={"Payback"}
                                                     currency={"btc"}
+                                                    
                                                     openBorrowingPower={true}
                                                     bottomButtonTitle={"Borrow"}
+                                                    action={this.state.debtAction}
                                                 ></Card>
                                             </Grid>
                                         </Grid>
@@ -696,7 +287,7 @@ class Manage extends React.Component {
                                         >
                                             <Grid container>
                                                 <Grid item XS={12}>
-                                                    <div  style={{ minWidth:"300px",minHeight:"300px" }}>
+                                                    <div style={{ minWidth: "300px", minHeight: "300px" }}>
                                                         <MDBContainer>
                                                             <Doughnut width={10} data={{
                                                                 labels: ["$ETH", "$BTC"],
@@ -715,19 +306,19 @@ class Manage extends React.Component {
                                                                 ]
                                                             }}
                                                                 plugins={[{
-                                                                    beforeDraw: (chart)=>{
+                                                                    beforeDraw: (chart) => {
                                                                         var width = chart.width,
-                                                                        height = chart.height,
-                                                                        ctx = chart.ctx;
+                                                                            height = chart.height,
+                                                                            ctx = chart.ctx;
                                                                         ctx.restore();
                                                                         var fontSize = (height / 200).toFixed(2);
                                                                         ctx.font = fontSize + "em sans-serif";
                                                                         ctx.fillStyle = "#fff";
                                                                         ctx.textBaseline = "top";
                                                                         let text = 20,
-                                                                        textX = Math.round((width - ctx.measureText(2).width) / 2),
-                                                                        textY = height / 2 + 5;
-                                                                        ctx.fillText(text,textX,textY);
+                                                                            textX = Math.round((width - ctx.measureText(2).width) / 2),
+                                                                            textY = height / 2 + 5;
+                                                                        ctx.fillText(text, textX, textY);
                                                                         ctx.save();
                                                                     }
                                                                     // beforeDraw: (chart) => {
@@ -848,6 +439,23 @@ class Manage extends React.Component {
 
 
                 </Grid>
+
+                <Popup
+                    modal={this.state.modal}
+                    close={() => {
+                        this.setState({
+                            modal: !this.state.modal
+                        })
+                    }}
+                    modalTitle={this.state.modalTitle}
+                    subHeading={this.state.modalSubHeading}
+                    modalAction={""}
+                    modalToken={""}
+                    value={this.state.modalValue}
+                    onChange={this.state.modalOnChange}
+                    modalCall={this.state.modalOnCall}
+                >
+                </Popup >
             </div>
         );
     }
