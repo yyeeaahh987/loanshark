@@ -29,6 +29,7 @@ class SmartVault2 extends React.Component {
               <Row
                 style={{
                   padding: '15px',
+                  borderWidth: '1px',
                   borderRadius: '15px',
                   marginLeft: '1px'
               }}>
@@ -45,17 +46,19 @@ class SmartVault2 extends React.Component {
                     Health Factor
                   </Col>
               </Row>
-              <Row style={{marginLeft: '1px'}} key={0}  className={'rowHover'} onClick={() => this.selectRow(1)}>
+              <Row style={{marginLeft: '1px', 
+                    display: 'flex',
+                    alignItems: 'center'}} key={0}  className={'rowHover'} onClick={() => this.selectRow(1)}>
                   <Col lg={3} md={12}>
                     <img style={{padding: '5px'}} className="icon" src="/assets/icon/eth-logo.svg" alt="x"></img> ETH / <img style={{padding: '5px'}} className="icon" src="/assets/icon/btc-logo.svg" alt="x"></img> BTC
                   </Col>
                   <Col lg={3} md={12}>
-                    ${this.props.userDepositBalanceEth * this.props.priceOfEth / 100}<br/>
-                    {this.props.userDepositBalanceEth} ETH
+                    ${parseFloat((this.props.userDepositBalanceEth * this.props.priceOfEth / 100).toFixed(6))}<br/>
+                    {parseFloat(Number(this.props.userDepositBalanceEth).toFixed(6))} ETH
                   </Col>
                   <Col lg={3} md={12}>
-                    ${this.props.userDebtBalanceBtc * this.props.priceOfBtc / 100}<br/>
-                    {this.props.userDebtBalanceBtc} BTC
+                    ${parseFloat((this.props.userDebtBalanceBtc * this.props.priceOfBtc / 100).toFixed(6))}<br/>
+                    {parseFloat(Number(this.props.userDebtBalanceBtc).toFixed(6))} BTC
                   </Col>
                   <Col lg={3} md={12}>
                     {((this.props.userDepositBalanceEth * this.props.priceOfEth / 100) * this.props.LTV["ETHBTC"] / (this.props.userDebtBalanceBtc * this.props.priceOfBtc / 100)).toFixed(2) }

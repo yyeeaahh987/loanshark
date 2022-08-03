@@ -34,11 +34,11 @@
 
 .sidebarClose.sidebarWrapper {
   @include media-breakpoint-down(sm) {
-    min-width: 0;
+    min-width: 15px;
   }
   & .root {
     @include media-breakpoint-down(sm) {
-      width: 0;
+      width: 15px;
     }
   }
 }

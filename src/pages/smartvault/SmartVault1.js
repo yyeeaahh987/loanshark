@@ -28,7 +28,7 @@ class SmartVault1 extends React.Component {
         <h3 className={"fw-bold"}>Start using Smart Vault</h3>
         <Row>
           <Col sm={6}>
-              <p className={"fw-bold"}>Do you want to top-up or repay?</p>
+              <p className={"fw-bold"}>Choose the way to protect your loan automatically</p>
               <Radio
                   value="topup"
                   selected={this.state.selected}

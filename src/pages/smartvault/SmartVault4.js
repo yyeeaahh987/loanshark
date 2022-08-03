@@ -85,7 +85,7 @@ class SmartVault4 extends React.Component {
         let argsRegister = [
           this.props.myAccount + "000000000000000000000000",
           "0x66756a6964616f00000000000000000000000000000000000000000000000000",
-          window.web3.utils.toBN((this.state.stakeAmount * 100000000).toFixed(0)).toString(),  
+          window.web3.utils.toBN((this.state.stakeAmount * 10000000).toFixed(0)).toString(),  
           [
             window.web3.utils.toBN(window.web3.utils.toWei((this.state.triggerHealthFactor).toString(), 'ether')).toString(),  
             "0",
@@ -115,19 +115,18 @@ class SmartVault4 extends React.Component {
           .on("error", (error, receipt) => {
             this.calltoggleLoading();
           })
-          .then((receipt) => {
-            this.props.topupAction.methods
-            .register(...argsRegister)
-            .send({from: this.props.myAccount, value: 1000000000000000000})
-            .on("error", (error, receipt) => {
-              this.calltoggleLoading();
-            })
+          // .then((receipt) => {
+          //   this.props.topupAction.methods
+          //   .register(...argsRegister)
+          //   .send({from: this.props.myAccount, value: 1000000000000000000})
+          //   .on("error", (error, receipt) => {
+          //     this.calltoggleLoading();
+          //   })
             .then((receipt) => {
               this.calltoggleLoading();
               API(this.props);
-              window.location = "/#/app/main/smartVault1";
             })
-          })
+          // })
         });
       }
     })
@@ -162,12 +161,12 @@ class SmartVault4 extends React.Component {
                     <img style={{padding: '5px'}} className="icon" src="/assets/icon/eth-logo.svg" alt="x"></img> ETH / <img style={{padding: '5px'}} className="icon" src="/assets/icon/btc-logo.svg" alt="x"></img> BTC
                   </td>
                   <td className={"pl-0 fw-thin"}>
-                    ${this.props.userDepositBalanceEth * this.props.priceOfEth / 100}<br/>
-                    {this.props.userDepositBalanceEth} ETH
+                    ${parseFloat((this.props.userDepositBalanceEth * this.props.priceOfEth / 100).toFixed(6))}<br/>
+                    {parseFloat(Number(this.props.userDepositBalanceEth).toFixed(6))} ETH
                   </td>
                   <td className={"pl-0 fw-thin"}>
-                    ${this.props.userDebtBalanceBtc * this.props.priceOfBtc / 100}<br/>
-                    {this.props.userDebtBalanceBtc} BTC
+                    ${parseFloat((this.props.userDebtBalanceBtc * this.props.priceOfBtc / 100).toFixed(6))}<br/>
+                    {parseFloat(Number(this.props.userDebtBalanceBtc).toFixed(6))} BTC
                   </td>
                   <td className={"pl-0 fw-normal"}>
                   {((this.props.userDepositBalanceEth * this.props.priceOfEth / 100) * this.props.LTV["ETHBTC"] / (this.props.userDebtBalanceBtc * this.props.priceOfBtc / 100)).toFixed(2) }
