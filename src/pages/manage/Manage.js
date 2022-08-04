@@ -63,9 +63,11 @@ class Manage extends React.Component {
         this.state = {
             depositeCurrency: "",
             depositeAmount: 0,
+            maxDepositeAmount:0,
             depositeCurrencyIconPath: "",
             debitCurrency: "",
             debitAmount: 0,
+            maxDebitAmount:0,
             debitCurrencyIconPath: "",
             modal: false,
             modalTitle: '',
@@ -78,10 +80,10 @@ class Manage extends React.Component {
             modalOnChange: () => { },
             modalOnCall: () => { },
             loadingActive: false,
-            collateralAction:"deposit",
-            collateralAmount:0,
-            debtAction:"borrow",
-            debtAmount:0,
+            collateralAction: "deposit",
+            collateralAmount: 0,
+            debitAction: "borrow",
+
 
         }
     }
@@ -94,9 +96,11 @@ class Manage extends React.Component {
             this.setState({
                 depositeCurrency: deposite,
                 depositeAmount: this.props.userDepositBalanceAvax,
+                maxDepositeAmount: 9999,
                 depositeCurrencyIconPath: `/assets/icon/${deposite.toLowerCase()}-logo.svg`,
                 debitCurrency: debit,
                 debitAmount: this.props.userDebtBalanceUsdt,
+                maxDebitAmount:9999,
                 debitCurrencyIconPath: `/assets/icon/${debit.toLowerCase()}-logo.svg`,
             })
         }
@@ -216,48 +220,81 @@ class Manage extends React.Component {
                                                     rightSelectButton={"withdraw"}
                                                     currency={this.state.depositeCurrency}
                                                     currencyIconPath={this.state.depositeCurrencyIconPath}
-                                                    maxBalance={99999}
+                                                    maxBalance={this.state.maxDepositeAmount}
                                                     openBorrowingPower={false}
                                                     bottomButtonTitle={"Deposit"}
                                                     action={this.state.collateralAction}
-                                                    onClickSelect={(e)=>{
-                                                        if(e.target.name===this.state.collateralAction) return 
-                                                        switch(e.target.name){
+                                                    onClickSelect={(e) => {
+                                                        if (e.target.name === this.state.collateralAction) return
+                                                        switch (e.target.name) {
                                                             case "deposit":
                                                             case "withdraw":
                                                                 this.setState({
-                                                                    collateralAction:e.target.name,
-                                                                    collateralAmount:0
+                                                                    collateralAction: e.target.name,
+                                                                    collateralAmount: 0
                                                                 })
                                                                 break;
                                                             default:
                                                                 break;
                                                         }
                                                     }}
-                                                    onChangeInput={(e)=>{
+                                                    onChangeInput={(e) => {
                                                         this.setState({
-                                                            collateralAmount:e.target.value === "" ? 0 : e.target.value
+                                                            collateralAmount: e.target.value === "" ? 0 : e.target.value
                                                         })
                                                     }}
                                                     amount={this.state.collateralAmount}
-                                                    onClickMax={()=>{
+                                                    onClickMax={() => {
                                                         this.setState({
-                                                            collateralAmount:99999,
+                                                            collateralAmount: this.state.maxDepositeAmount,
                                                         })
                                                     }}
+                                              
                                                 ></Card>
                                             </Grid>
                                             <Grid item xs={6}>
                                                 <Card
                                                     widgetSize={"right"}
                                                     title={"Debt"}
-                                                    leftSelectButton={"Borrow"}
-                                                    rightSelectButton={"Payback"}
-                                                    currency={"btc"}
-                                                    
+                                                    leftSelectButton={"borrow"}
+                                                    rightSelectButton={"payback"}
+                                                    currency={this.state.debitCurrency}
+                                                    currencyIconPath={this.state.debitCurrencyIconPath}
+                                                    maxBalance={this.state.maxDebitAmount}
+                                                    amount={this.state.debitAmount}
                                                     openBorrowingPower={true}
                                                     bottomButtonTitle={"Borrow"}
-                                                    action={this.state.debtAction}
+                                                    action={this.state.debitAction}
+                                                    onClickSelect={(e) => {
+                                                        if (e.target.name === this.state.collateralAction) return
+                                                        switch (e.target.name) {
+                                                            case "borrow":
+                                                            case "payback":
+                                                                this.setState({
+                                                                    debitAction: e.target.name,
+                                                                    debitAmount: 0
+                                                                })
+                                                                break;
+                                                            default:
+                                                                break;
+                                                        }
+                                                    }}
+                                                    onChangeInput={(e) => {
+                                                        this.setState({
+                                                            debitAmount: e.target.value === "" ? 0 : e.target.value
+                                                        })
+                                                    }}
+                                                    onClickMax={() => {
+                                                        this.setState({
+                                                            debitAmount: this.state.maxDebitAmount,
+                                                        })
+                                                    }}
+                                                    onClickBorrowingPowerChange={(e)=>{
+                                                        let finalAmount= (this.state.maxDebitAmount*e.target.name/100).toFixed(2)
+                                                        this.setState({
+                                                            debitAmount: finalAmount,
+                                                        })
+                                                    }}
                                                 ></Card>
                                             </Grid>
                                         </Grid>

@@ -171,7 +171,7 @@ class Layout extends React.Component {
                       />
                       <Route
                           path="/app/main/borrow"
-                          exact
+                          exact   
                           component={Tables}
                       />
                       <Route  

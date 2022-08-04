@@ -43,6 +43,7 @@ class Card extends React.Component {
         amount: PropTypes.number,
         maxBalance: PropTypes.number,
         onClickMax: PropTypes.func,
+        onClickBorrowingPowerChange: PropTypes.func,
         // onClickLeftSelect: PropTypes.func,
         // onClickRightSelect: PropTypes.func,
     };
@@ -61,7 +62,8 @@ class Card extends React.Component {
         onChangeInput: () => { },
         amount: 0,
         maxBalance: 0,
-        onClickMax:()=>{},
+        onClickMax: () => { },
+        onClickBorrowingPowerChange: () => { },
     };
 
     constructor(props) {
@@ -104,7 +106,7 @@ class Card extends React.Component {
                                     className={`customButton${this.props.action === this.props.leftSelectButton ? `__select` : ``} pairButton__left`}
                                     name={this.props.leftSelectButton}
                                     onClick={this.props.onClickSelect}
-                                >{this.props.leftSelectButton}</Button>
+                                ><span style={{ textTransform: "capitalize" }}>{this.props.leftSelectButton}</span></Button>
                             </div>
                         </Grid>
                         <Grid item xs={6}>
@@ -113,7 +115,7 @@ class Card extends React.Component {
                                     className={`customButton${this.props.action === this.props.rightSelectButton ? `__select` : ``} pairButton__right`}
                                     onClick={this.props.onClickSelect}
                                     name={this.props.rightSelectButton}
-                                >{this.props.rightSelectButton}</Button>
+                                ><span style={{ textTransform: "capitalize" }}>{this.props.rightSelectButton}</span></Button>
                             </div>
                         </Grid>
                     </>
@@ -146,16 +148,43 @@ class Card extends React.Component {
                 </>)
             case "Debt":
                 return (<>
-                    <Grid item xs={12} style={{ minHeight: "72px" }}>
-                        <span >
-                            <span
-                                style={{
-                                    fontSize: "26px",
-                                }}
-                            >Borrowing Power: </span>
-                            <Button>25%</Button>
-                            <Button>50%</Button>
-                        </span>
+                    <br></br>
+                    <br></br>
+                    <br></br>
+                    <Grid item xs={12}>
+                        <Grid container spacing={1} style={{paddingTop:"5%"}}>
+                            <Grid item>
+                                <span
+                                    style={{
+                                        fontSize: "20px",
+                                    }}
+                                >Borrowing Power: </span>
+                            </Grid>
+                            <Grid item>
+                                <Button className={"customButton__select borrowing-power-button"}
+                                name={25}
+                                onClick={this.props.onClickBorrowingPowerChange}
+                                >25%</Button>
+                            </Grid>
+                            <Grid item>
+                                <Button className={"customButton__select borrowing-power-button"}
+                                name={50}
+                                onClick={this.props.onClickBorrowingPowerChange}
+                                >50%</Button>
+                            </Grid>
+                            <Grid item>
+                                <Button className={"customButton__select borrowing-power-button"}
+                                name={75}
+                                onClick={this.props.onClickBorrowingPowerChange}
+                                >75%</Button>
+                            </Grid>
+                            <Grid item>
+                                <Button className={"customButton__select borrowing-power-button"}
+                                name={100}
+                                onClick={this.props.onClickBorrowingPowerChange}
+                                >100%</Button>
+                            </Grid>
+                        </Grid>
                     </Grid>
                     <br></br>
                     <br></br>
@@ -225,18 +254,24 @@ class Card extends React.Component {
                                                                 textAlign: "end",
                                                                 // padding: "5px",
                                                             }}>
-
-                                                                <span style={{
-                                                                    fontSize: "16px",
-                                                                    fontWeight: "bold",
-                                                                }}>balance: {`${this.props.maxBalance} ${this.props.currency.toUpperCase()}`}</span>
-
+                                                                <div>
+                                                                    <span style={{
+                                                                        fontSize: "16px",
+                                                                        fontWeight: "bold",
+                                                                    }}>balance: {`${this.props.maxBalance}`}</span>
+                                                                </div>
+                                                                <div>
+                                                                    <span style={{
+                                                                        fontSize: "16px",
+                                                                        fontWeight: "bold",
+                                                                    }}>{this.props.currency.toUpperCase()}</span>
+                                                                </div>
                                                             </Grid>
                                                             <Grid item xs={12} style={{ textAlign: "end" }}>
                                                                 <Grid container justifyContent={"end"} spacing={1}>
                                                                     <Grid item>
                                                                         <Button className={"customButton__select max-button"}
-                                                                        onClick={this.props.onClickMax}
+                                                                            onClick={this.props.onClickMax}
                                                                         >MAX</Button>
                                                                     </Grid>
                                                                     <Grid item>
