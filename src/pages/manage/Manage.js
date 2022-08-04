@@ -225,6 +225,10 @@ class Manage extends React.Component {
                                                     bottomButtonTitle={"Deposit"}
                                                     action={this.state.collateralAction}
                                                     onClickSelect={(e) => {
+                                                        console.log(e)
+                                                        console.log(e.target)
+                                                        console.log(e.target.name)
+                                                        console.log(this.state.collateralAction)
                                                         if (e.target.name === this.state.collateralAction) return
                                                         switch (e.target.name) {
                                                             case "deposit":

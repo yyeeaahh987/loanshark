@@ -104,18 +104,21 @@ class Card extends React.Component {
                             <div>
                                 <Button
                                     className={`customButton${this.props.action === this.props.leftSelectButton ? `__select` : ``} pairButton__left`}
+                                    style={{ textTransform: "capitalize" }}
+                                    abc={console.log(this.props.leftSelectButton)}
                                     name={this.props.leftSelectButton}
                                     onClick={this.props.onClickSelect}
-                                ><span style={{ textTransform: "capitalize" }}>{this.props.leftSelectButton}</span></Button>
+                                >{this.props.leftSelectButton}</Button>
                             </div>
                         </Grid>
                         <Grid item xs={6}>
                             <div>
                                 <Button
                                     className={`customButton${this.props.action === this.props.rightSelectButton ? `__select` : ``} pairButton__right`}
-                                    onClick={this.props.onClickSelect}
+                                    style={{ textTransform: "capitalize" }}
                                     name={this.props.rightSelectButton}
-                                ><span style={{ textTransform: "capitalize" }}>{this.props.rightSelectButton}</span></Button>
+                                    onClick={this.props.onClickSelect}
+                                >{this.props.rightSelectButton}</Button>
                             </div>
                         </Grid>
                     </>
@@ -213,9 +216,7 @@ class Card extends React.Component {
     render() {
         return (
             <Grid container>
-                <Grid item xs={12}
-                    abc={console.log(this.state.iconPath)}
-                >
+                <Grid item xs={12}>
                     <Widget
                         title={<p style={{ fontWeight: 700 }}>{this.props.title}</p>}
                         customDropDown={false}
