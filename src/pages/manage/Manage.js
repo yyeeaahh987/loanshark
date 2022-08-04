@@ -131,9 +131,7 @@ class Manage extends React.Component {
 
 
                             <Grid xs={7} item>
-                                <Grid container
-                                    abc={console.log(this.state)}
-                                >
+                                <Grid container>
                                     <Grid item xs={12}>
                                         <Table className={"mb-0"} borderless responsive style={{ borderCollapse: "separate", borderSpacing: "0" }}>
                                             <thead className="customTable">
@@ -225,10 +223,6 @@ class Manage extends React.Component {
                                                     bottomButtonTitle={"Deposit"}
                                                     action={this.state.collateralAction}
                                                     onClickSelect={(e) => {
-                                                        console.log(e)
-                                                        console.log(e.target)
-                                                        console.log(e.target.name)
-                                                        console.log(this.state.collateralAction)
                                                         if (e.target.name === this.state.collateralAction) return
                                                         switch (e.target.name) {
                                                             case "deposit":

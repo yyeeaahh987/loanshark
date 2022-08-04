@@ -91,7 +91,7 @@ class Card extends React.Component {
     }
 
     componentDidMount() {
-        console.log(this.props.currency)
+        // console.log(this.props.currency)
     }
 
     switchPairButton(param) {
@@ -105,7 +105,6 @@ class Card extends React.Component {
                                 <Button
                                     className={`customButton${this.props.action === this.props.leftSelectButton ? `__select` : ``} pairButton__left`}
                                     style={{ textTransform: "capitalize" }}
-                                    abc={console.log(this.props.leftSelectButton)}
                                     name={this.props.leftSelectButton}
                                     onClick={this.props.onClickSelect}
                                 >{this.props.leftSelectButton}</Button>
