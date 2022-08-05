@@ -34,8 +34,18 @@ class Card extends React.Component {
         leftSelectButton: PropTypes.string,
         rightSelectButton: PropTypes.string,
         currency: PropTypes.string,
+        currencyIconPath: PropTypes.string,
         openBorrowingPower: PropTypes.bool,
         bottomButtonTitle: PropTypes.string,
+        action: PropTypes.string,
+        onClickSelect: PropTypes.func,
+        onChangeInput: PropTypes.func,
+        amount: PropTypes.number,
+        maxBalance: PropTypes.number,
+        onClickMax: PropTypes.func,
+        onClickBorrowingPowerChange: PropTypes.func,
+        // onClickLeftSelect: PropTypes.func,
+        // onClickRightSelect: PropTypes.func,
     };
 
     static defaultProps = {
@@ -44,8 +54,16 @@ class Card extends React.Component {
         leftSelectButton: "",
         rightSelectButton: "",
         currency: "",
+        currencyIconPath: "",
         openBorrowingPower: false,
         bottomButtonTitle: "",
+        action: "",
+        onClickSelect: () => { },
+        onChangeInput: () => { },
+        amount: 0,
+        maxBalance: 0,
+        onClickMax: () => { },
+        onClickBorrowingPowerChange: () => { },
     };
 
     constructor(props) {
@@ -66,17 +84,18 @@ class Card extends React.Component {
             rightSelectTitle: "",
             amount: 0.00,
             balanceAmount: 30.00,
-            currency: "eth",
             openBorrowingPower: false,
             bottomButtonTitle: "Deposit",
             iconPath: `/assets/icon/${this.props.currency}-logo.svg`,
         };
+    }
 
+    componentDidMount() {
+        // console.log(this.props.currency)
     }
 
     switchPairButton(param) {
         switch (param) {
-
             case "Debt":
             case "Collateral":
                 return (
@@ -84,31 +103,20 @@ class Card extends React.Component {
                         <Grid item xs={6}>
                             <div>
                                 <Button
-                                    className={`customButton${this.state.leftSelect === true ? `__select` : ``} pairButton__left`}
-                                    onClick={() => {
-                                        if (this.state.leftSelect === false) {
-                                            this.setState({
-                                                leftSelect: !this.state.leftSelect,
-                                                rightSelect: !this.state.rightSelect,
-                                            })
-                                        }
-                                    }}
+                                    className={`customButton${this.props.action === this.props.leftSelectButton ? `__select` : ``} pairButton__left`}
+                                    style={{ textTransform: "capitalize" }}
+                                    name={this.props.leftSelectButton}
+                                    onClick={this.props.onClickSelect}
                                 >{this.props.leftSelectButton}</Button>
                             </div>
                         </Grid>
                         <Grid item xs={6}>
                             <div>
                                 <Button
-                                    className={`customButton${this.state.rightSelect === true ? `__select` : ``} pairButton__right`}
-                                    onClick={() => {
-                                        if (this.state.rightSelect === false) {
-                                            console.log(`select right`)
-                                            this.setState({
-                                                leftSelect: !this.state.leftSelect,
-                                                rightSelect: !this.state.rightSelect,
-                                            })
-                                        }
-                                    }}
+                                    className={`customButton${this.props.action === this.props.rightSelectButton ? `__select` : ``} pairButton__right`}
+                                    style={{ textTransform: "capitalize" }}
+                                    name={this.props.rightSelectButton}
+                                    onClick={this.props.onClickSelect}
                                 >{this.props.rightSelectButton}</Button>
                             </div>
                         </Grid>
@@ -117,11 +125,11 @@ class Card extends React.Component {
                 break;
             case "Current Smart Vault Balance":
                 return (
-                <>
-                                    <br></br>
-                    <br></br>
-                    <br></br>
-                </>)
+                    <>
+                        <br></br>
+                        <br></br>
+                        <br></br>
+                    </>)
                 break;
             default:
                 return (<></>)
@@ -142,16 +150,43 @@ class Card extends React.Component {
                 </>)
             case "Debt":
                 return (<>
-                    <Grid item xs={12} style={{ minHeight: "72px" }}>
-                        <span >
-                            <span
-                                style={{
-                                    fontSize: "26px",
-                                }}
-                            >Borrowing Power: </span>
-                            <Button>25%</Button>
-                            <Button>50%</Button>
-                        </span>
+                    <br></br>
+                    <br></br>
+                    <br></br>
+                    <Grid item xs={12}>
+                        <Grid container spacing={1} style={{paddingTop:"5%"}}>
+                            <Grid item>
+                                <span
+                                    style={{
+                                        fontSize: "20px",
+                                    }}
+                                >Borrowing Power: </span>
+                            </Grid>
+                            <Grid item>
+                                <Button className={"customButton__select borrowing-power-button"}
+                                name={25}
+                                onClick={this.props.onClickBorrowingPowerChange}
+                                >25%</Button>
+                            </Grid>
+                            <Grid item>
+                                <Button className={"customButton__select borrowing-power-button"}
+                                name={50}
+                                onClick={this.props.onClickBorrowingPowerChange}
+                                >50%</Button>
+                            </Grid>
+                            <Grid item>
+                                <Button className={"customButton__select borrowing-power-button"}
+                                name={75}
+                                onClick={this.props.onClickBorrowingPowerChange}
+                                >75%</Button>
+                            </Grid>
+                            <Grid item>
+                                <Button className={"customButton__select borrowing-power-button"}
+                                name={100}
+                                onClick={this.props.onClickBorrowingPowerChange}
+                                >100%</Button>
+                            </Grid>
+                        </Grid>
                     </Grid>
                     <br></br>
                     <br></br>
@@ -209,12 +244,8 @@ class Card extends React.Component {
                                                             className={`amount-text`}
                                                             title="Input"
                                                             // placeholder="Enter deposit amount..."
-                                                            value={this.state.amount}
-                                                            onChange={(e) => {
-                                                                this.setState({
-                                                                    amount: e.target.value
-                                                                })
-                                                            }}
+                                                            value={this.props.amount}
+                                                            onChange={this.props.onChangeInput}
                                                         />
                                                     </Grid>
                                                     <Grid item xs={5}>
@@ -223,17 +254,25 @@ class Card extends React.Component {
                                                                 textAlign: "end",
                                                                 // padding: "5px",
                                                             }}>
-
-                                                                <span style={{
-                                                                    fontSize: "16px",
-                                                                    fontWeight: "bold",
-                                                                }}>balance: {`${this.state.balanceAmount} ${this.state.currency.toUpperCase()}`}</span>
-
+                                                                <div>
+                                                                    <span style={{
+                                                                        fontSize: "16px",
+                                                                        fontWeight: "bold",
+                                                                    }}>balance: {`${this.props.maxBalance}`}</span>
+                                                                </div>
+                                                                <div>
+                                                                    <span style={{
+                                                                        fontSize: "16px",
+                                                                        fontWeight: "bold",
+                                                                    }}>{this.props.currency.toUpperCase()}</span>
+                                                                </div>
                                                             </Grid>
                                                             <Grid item xs={12} style={{ textAlign: "end" }}>
                                                                 <Grid container justifyContent={"end"} spacing={1}>
                                                                     <Grid item>
-                                                                        <Button className={"customButton__select max-button"}>MAX</Button>
+                                                                        <Button className={"customButton__select max-button"}
+                                                                            onClick={this.props.onClickMax}
+                                                                        >MAX</Button>
                                                                     </Grid>
                                                                     <Grid item>
                                                                         <label
@@ -245,9 +284,10 @@ class Card extends React.Component {
                                                                             }}
                                                                         >
                                                                             <img className="icon"
-                                                                                src={this.state.iconPath}
+                                                                                src={this.props.currencyIconPath}
+                                                                                // src={this.state.iconPath}
                                                                                 alt="x"></img>
-                                                                            <span style={{ color: "black" }}>{this.state.currency.toUpperCase()}</span>
+                                                                            <span style={{ color: "black" }}>{this.props.currency.toUpperCase()}</span>
                                                                         </label>
                                                                     </Grid>
                                                                 </Grid>

@@ -9,7 +9,8 @@ import Hammer from "rc-hammerjs";
 import LoadingOverlay from 'react-loading-overlay'
 import CircleLoader from 'react-spinners/CircleLoader'
 
-import OldDashboard from "../../pages/dashboard/OldDashboard";
+import OldDashboard from "../../pages/dashboard/OldDashBoard";
+import Dashboard from "../../pages/dashboard/Dashboard";
 import SmartVault1 from "../../pages/smartvault/SmartVault1";
 import SmartVault2 from "../../pages/smartvault/SmartVault2";
 import SmartVault3 from "../../pages/smartvault/SmartVault3";
@@ -162,7 +163,7 @@ class Layout extends React.Component {
                       />
                       <Route
                         path="/app/main/dashboard"
-                        component={OldDashboard}
+                        component={Dashboard}
                       />
                       <Route
                         path="/app/main/manage"
@@ -170,7 +171,7 @@ class Layout extends React.Component {
                       />
                       <Route
                           path="/app/main/borrow"
-                          exact
+                          exact   
                           component={Tables}
                       />
                       <Route  
