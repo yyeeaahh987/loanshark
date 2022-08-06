@@ -5,6 +5,7 @@ import usersImg from "../../images/usersImg.svg";
 import smileImg from "../../images/smileImg.svg";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons"
+import { faFire } from "@fortawesome/free-solid-svg-icons"
 import { Grid } from '@mui/material';
 import {
   Row, Col, Table,
@@ -692,10 +693,10 @@ class Dashboard extends React.Component {
                     Smart Value
                   </th>
                   <th key={6} scope="col" className={"customTable__headRow__item"}>
-                    Provider
+                    Protection
                   </th>
                   <th key={7} scope="col" className={"customTable__headRow__item"}>
-                    Action
+                    
                   </th>
                 </tr>
               </thead>
@@ -751,8 +752,10 @@ class Dashboard extends React.Component {
                   <td className="middle">
                     $19,294 (hardcode)
                   </td>
-                  <td className="middle">
-                    AAVE (hardcode)
+                  <td className="middle" style={{color:"orange"}}>
+                  <FontAwesomeIcon onClick={() => {
+                  }}
+                    icon={faFire} />
                   </td>
                   <td className="lastOne">
                     <NavLink
@@ -823,7 +826,7 @@ class Dashboard extends React.Component {
                     $19,294 (hardcode)
                   </td>
                   <td className="middle">
-                    AAVE (hardcode)
+                    unprotected (hardcode)
                   </td>
                   <td className="lastOne" key={8}>
                     <NavLink
