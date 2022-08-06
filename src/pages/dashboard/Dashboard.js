@@ -5,6 +5,7 @@ import usersImg from "../../images/usersImg.svg";
 import smileImg from "../../images/smileImg.svg";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons"
+import { faFire } from "@fortawesome/free-solid-svg-icons"
 import { Grid } from '@mui/material';
 import {
   Row, Col, Table,
@@ -42,14 +43,14 @@ class Dashboard extends React.Component {
     this.state = {
       modal: false,
       modalTitle: '',
-      subHeading:"",
+      subHeading: "",
       modalToken: '',
       modalAction: '',
       modalCall: () => { },
       modalInputValue: 0,
-      modalValue:0,
-      modalOnChange:()=>{},
-      modalOnCall:()=>{},
+      modalValue: 0,
+      modalOnChange: () => { },
+      modalOnCall: () => { },
       loadingActive: false,
     };
 
@@ -692,10 +693,10 @@ class Dashboard extends React.Component {
                     Smart Value
                   </th>
                   <th key={6} scope="col" className={"customTable__headRow__item"}>
-                    Provider
+                    Protection
                   </th>
                   <th key={7} scope="col" className={"customTable__headRow__item"}>
-                    Action
+                    
                   </th>
                 </tr>
               </thead>
@@ -751,8 +752,10 @@ class Dashboard extends React.Component {
                   <td className="middle">
                     $19,294 (hardcode)
                   </td>
-                  <td className="middle">
-                    AAVE (hardcode)
+                  <td className="middle" style={{color:"orange"}}>
+                  <FontAwesomeIcon onClick={() => {
+                  }}
+                    icon={faFire} />
                   </td>
                   <td className="lastOne">
                     <NavLink
@@ -823,7 +826,7 @@ class Dashboard extends React.Component {
                     $19,294 (hardcode)
                   </td>
                   <td className="middle">
-                    AAVE (hardcode)
+                    unprotected (hardcode)
                   </td>
                   <td className="lastOne" key={8}>
                     <NavLink
@@ -858,6 +861,117 @@ class Dashboard extends React.Component {
             </Table>
           </Grid>
         </Grid>
+
+        <br></br>
+        <br></br>
+        <Grid container>
+          <Grid item xs={12}>
+            <span style={{
+              fontWeight: "800",
+              fontSize: "1em",
+            }}>My Smart Value Position</span>
+          </Grid>
+
+          <Grid item xs={12}>
+            <Table className={"mb-0"} borderless responsive style={{ borderCollapse: "separate", borderSpacing: "0" }}>
+              <thead className="customTable">
+                <tr className="customTable__headRow">
+                  <th key={0} scope="col" className={"customTable__headRow__item"}>
+                    Debt
+                  </th>
+                  <th key={1} scope="col" className={"customTable__headRow__item"}>
+                    Staking Amount
+                  </th>
+                  <th key={2} scope="col" className={"customTable__headRow__item"}>
+                    APY
+                  </th>
+                  <th key={3} scope="col" className={"customTable__headRow__item"}>
+                    TVL
+                  </th>
+                  <th key={4} scope="col" className={"customTable__headRow__item"}>
+
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="customTable">
+                <tr key={0} className="customTable__dataRow">
+                  <td className="firstOne">
+                    <span style={{ padding: "5px" }}>
+                      <img className="icon" src="/assets/icon/btc-logo.svg" alt="x"></img>
+                    </span>
+                    BTC
+                  </td>
+                  <td className="middle">
+                    <Grid container>
+                      <Grid xs={12}>
+                        <span>$41340.1</span>
+                      </Grid>
+                      <Grid xs={12}>
+                        <span>1.87 ETH</span>
+                      </Grid>
+                    </Grid>
+                  </td>
+                  <td className="middle">
+                    20.4% (hardcode)
+                  </td>
+                  <td className="middle">
+                    20.1B (hardcode)
+                  </td>
+                  <td className="lastOne" style={{textAlign:"end"}}>
+                  <Button className={"manage-button"} style={{position: "relative",right:"4em"}}
+                      >Leave Smart Vault
+                      </Button>
+                  </td>
+                </tr>
+                <br></br>
+                <tr key={0} className="customTable__dataRow">
+                  <td className="firstOne">
+                    <span style={{ padding: "5px" }}>
+                      <img className="icon" src="/assets/icon/usdt-logo.svg" alt="x"></img>
+                    </span>
+                    USDT
+                  </td>
+                  <td className="middle">
+                    <Grid container>
+                      <Grid xs={12}>
+                        <span>$41340.1</span>
+                      </Grid>
+                      <Grid xs={12}>
+                        <span>1.87 USDT</span>
+                      </Grid>
+                    </Grid>
+                  </td>
+                  <td className="middle">
+                    40% (hardcode)
+                  </td>
+                  <td className="middle">
+                    40.4B (hardcode)
+                  </td>
+                  <td className="lastOne" style={{textAlign:"end"}}>
+                  <Button className={"manage-button"} style={{position: "relative",right:"4em"}}
+                      >Leave Smart Vault
+                      </Button>
+                  </td>
+                </tr>
+                <br></br>
+                <tr key={2} className="customTable__dataRow">
+
+                  <td colspan="9" className="customTable__dataRow__borrow">
+                    <NavLink
+                      to={{
+                        pathname: "/app/main/smartVault1",
+                      }}
+                    >
+                      <span style={{ color: "white" }}>+ Smart Vault</span>
+                    </NavLink>
+                  </td>
+
+                </tr>
+              </tbody>
+            </Table>
+          </Grid>
+        </Grid>
+
         <Popup
           modal={this.state.modal}
           close={() => {
