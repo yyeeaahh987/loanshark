@@ -1,29 +1,14 @@
 import React from "react";
 import { connect } from "react-redux";
-
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCaretDown } from "@fortawesome/free-solid-svg-icons"
 import { Grid } from '@mui/material';
 import PropTypes from 'prop-types';
 import {
-    Row, Col, Table,
     Input,
     Button,
-    Modal,
-    ModalHeader,
-    ModalBody,
-    ModalFooter,
 } from 'reactstrap';
 
-import {
-    toggleLoading,
-} from "../../../actions/navigation";
 import './Card.scss'
-
-import API from '../../../utils/API'
-import DisplayBox from '../../../components/DisplayBox/DisplayBox'
 import Widget from '../../../components/Widget';
-import TableRow from '../../../components/TableRow/TableRow'
 
 
 
@@ -44,8 +29,6 @@ class Card extends React.Component {
         maxBalance: PropTypes.number,
         onClickMax: PropTypes.func,
         onClickBorrowingPowerChange: PropTypes.func,
-        // onClickLeftSelect: PropTypes.func,
-        // onClickRightSelect: PropTypes.func,
     };
 
     static defaultProps = {
