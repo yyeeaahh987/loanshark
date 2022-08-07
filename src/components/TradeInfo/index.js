@@ -4,6 +4,7 @@ import {
     Row,
     Col
 } from "reactstrap";
+import Widget from "../../components/Widget";
 import "./trade.less";
 import "./trade.scss"
 
@@ -22,7 +23,7 @@ class TradeInfo extends React.Component {
         ).toFixed(2);
 
         return (
-            <>
+            <Widget title={' '}>
                 <Row style={{ marginBottom: 0, marginTop: 0 }}>
                     <Col lg={6}>
                         Current Price of {this.props.selectedPair === "ETHBTC" ? "ETH" : "AVAX"}:
@@ -81,7 +82,7 @@ class TradeInfo extends React.Component {
                         }
                     </Col>
                 </Row>
-            </>
+            </Widget>
         )
     }
 };

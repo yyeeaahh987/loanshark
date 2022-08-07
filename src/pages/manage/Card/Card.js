@@ -51,14 +51,6 @@ class Card extends React.Component {
 
     constructor(props) {
         super(props);
-        // this.forceUpdate = this.forceUpdate.bind(this);
-        // this.toggle = this.toggle.bind(this);
-        // this.toggleDeposit = this.toggleDeposit.bind(this);
-        // this.toggleBorrow = this.toggleBorrow.bind(this);
-        // this.togglePayback = this.togglePayback.bind(this);
-        // this.toggleWithdrawn = this.toggleWithdrawn.bind(this);
-        // this.calltoggleLoading = this.calltoggleLoading.bind(this);
-        // this.setInput = this.setInput.bind(this);
         this.state = {
             leftSelect: true,
             rightSelect: false,
@@ -71,10 +63,6 @@ class Card extends React.Component {
             bottomButtonTitle: "Deposit",
             iconPath: `/assets/icon/${this.props.currency}-logo.svg`,
         };
-    }
-
-    componentDidMount() {
-        // console.log(this.props.currency)
     }
 
     switchPairButton(param) {
@@ -139,11 +127,7 @@ class Card extends React.Component {
                     <Grid item xs={12}>
                         <Grid container spacing={1} style={{paddingTop:"5%"}}>
                             <Grid item>
-                                <span
-                                    style={{
-                                        fontSize: "20px",
-                                    }}
-                                >Borrowing Power: </span>
+                                <span>Borrowing Power: </span>
                             </Grid>
                             <Grid item>
                                 <Button className={"customButton__select borrowing-power-button"}
@@ -165,9 +149,9 @@ class Card extends React.Component {
                             </Grid>
                             <Grid item>
                                 <Button className={"customButton__select borrowing-power-button"}
-                                name={100}
+                                name={90}
                                 onClick={this.props.onClickBorrowingPowerChange}
-                                >100%</Button>
+                                >90%</Button>
                             </Grid>
                         </Grid>
                     </Grid>
@@ -181,13 +165,10 @@ class Card extends React.Component {
             case "Current Smart Vault Balance":
                 return (<>
                     <Grid item xs={12}>
-                        <Button className={"deposite-button"}>Withdraw</Button>
                     </Grid>
                     <br></br>
-                    <br></br>
-                    <br></br>
                     <Grid item xs={12}>
-                        <Button className={"delete-button"}>Delete Smart Vault Position</Button>
+                        <Button className={"delete-button"}>Leave Smart Vault</Button>
                     </Grid>
                 </>)
             default:

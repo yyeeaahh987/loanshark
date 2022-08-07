@@ -471,26 +471,20 @@ class Header extends React.Component {
         <Navbar>
 
           <Grid container>
-            {/* <Grid item xs={6} md={6}>
-              <Grid container spacing={2}>
-                <Grid item>
-                  <div>
-                    <FontAwesomeIcon onClick={() => {
-                      console.log(`on click back`)
-                    }}
-                      icon={faArrowLeftLong} />
-                  </div>
-                </Grid>
-                <Grid item>
-                  <div>
-                    <span>Back</span>
-                  </div>
-                </Grid>
-              </Grid>
-            </Grid> */}
             <Grid item xs={12} md={12}>
-              <Grid container spacing={2} justifyContent="flex-end" alignItems={"center"}>
-                <Grid item>
+              <Grid container spacing={2} alignItems={"center"}>
+                {this.props.location.pathname == '/app/main/borrow' || 
+                this.props.location.pathname == '/app/main/dashboard' ||
+                this.props.location.pathname == '/app/main/smartVault1'  ? null : <>
+                  <Grid item>
+                    <Button color={"text"} onClick={() => this.props.history.goBack() }
+                          icon={faArrowLeftLong} 
+                      ><FontAwesomeIcon icon={faArrowLeftLong} /> <span>Back</span>
+                    </Button>
+                  </Grid>
+                  </>
+                }
+                <Grid item style={{marginLeft: "auto"}}>
                   <div>
                     {
                       !this.state.myAccount ?
@@ -501,7 +495,6 @@ class Header extends React.Component {
                         :
                         <div style={{ marginLeft: "auto" }}><Input disabled={true} valid style={{ width: '450px' }} value={this.state.myAccount}></Input></div>
                     }
-
                   </div>
                 </Grid>
                 <Grid item>
@@ -516,22 +509,6 @@ class Header extends React.Component {
             </Grid>
           </Grid>
         </Navbar>
-
-        {/* <DisplayBox>
-          <Grid container>
-            <Grid item>
-              123
-            </Grid>
-            <Grid item>
-              456
-            </Grid>
-          </Grid>
-        </DisplayBox> */}
-
-
-
-
-
         <Modal isOpen={this.state.modal} toggle={this.toggle} style={{ color: '#000000' }}>
           <ModalHeader toggle={this.toggle}>{this.state.modalTitle}</ModalHeader>
           <ModalBody>

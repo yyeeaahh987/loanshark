@@ -9,7 +9,6 @@ import Hammer from "rc-hammerjs";
 import LoadingOverlay from 'react-loading-overlay'
 import CircleLoader from 'react-spinners/CircleLoader'
 
-import OldDashboard from "../../pages/dashboard/OldDashBoard";
 import Dashboard from "../../pages/dashboard/Dashboard";
 import SmartVault1 from "../../pages/smartvault/SmartVault1";
 import SmartVault2 from "../../pages/smartvault/SmartVault2";

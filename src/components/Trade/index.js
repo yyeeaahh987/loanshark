@@ -211,7 +211,7 @@ class Trade extends React.Component {
                                     >
                                         {this.props.selectedPair === "ETHBTC" ? 
                                             <img style={{padding: '5px'}} className="icon" src="/assets/icon/eth-logo.svg" alt="x"></img> : 
-                                            <img style={{padding: '5px'}} className="icon" src="/assets/icon/avalanche-avax-logo.svg" alt="x"></img>} {' '}
+                                            <img style={{padding: '5px'}} className="icon" src="/assets/icon/avax-logo.svg" alt="x"></img>} {' '}
                                         {this.props.selectedPair === "ETHBTC" ? "ETH" : "AVAX"} &#x25bc;
                                     </Dropdown.Toggle>
 

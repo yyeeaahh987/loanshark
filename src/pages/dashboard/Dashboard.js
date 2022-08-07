@@ -631,33 +631,6 @@ class Dashboard extends React.Component {
             </Widget>
           </Grid>
 
-          <Grid item xl={3} lg={3} md={4}>
-
-            <Widget
-              title={
-                <span>
-                  <FontAwesomeIcon onClick={() => {
-                  }}
-                    icon={faCaretDown} />
-                  <span style={{ fontWeight: 700 }}>need to get function</span>
-                </span>
-              }
-              customDropDown={false}
-            >
-              <Row className={`justify-content-between mt-3`} noGutters>
-                <Col sm={8} className={"d-flex align-items-center"}>
-                  <span>
-                    <span className={"fw-semi-bold mb-0"}>
-                      7 Days Changes
-                    </span>
-                    <FontAwesomeIcon onClick={() => {
-                    }}
-                      icon={faCaretDown} />
-                  </span>
-                </Col>
-              </Row>
-            </Widget>
-          </Grid>
         </Grid>
 
         <br></br>
@@ -682,9 +655,6 @@ class Dashboard extends React.Component {
                   </th>
                   <th key={2} scope="col" className={"customTable__headRow__item"}>
                     Debt
-                  </th>
-                  <th key={3} scope="col" className={"customTable__headRow__item"}>
-                    APY
                   </th>
                   <th key={4} scope="col" className={"customTable__headRow__item"}>
                     Health Factor
@@ -733,9 +703,6 @@ class Dashboard extends React.Component {
                     </Grid>
                   </td>
                   <td className="middle">
-                    20.4% (hardcode)
-                  </td>
-                  <td className="middle">
                     <span
                       className={
                         `customTable__dataRow__healthFactor__
@@ -744,18 +711,16 @@ class Dashboard extends React.Component {
                       }
                     >
                       {
-                        `${this.calculateHealthFactor(this.props.userDepositBalanceEth, this.props.priceOfEth, this.props.LTV["ETHBTC"], this.props.userDebtBalanceBtc, this.props.priceOfBtc) !== "-" ? "$ " : ""}
+                        `${this.calculateHealthFactor(this.props.userDepositBalanceEth, this.props.priceOfEth, this.props.LTV["ETHBTC"], this.props.userDebtBalanceBtc, this.props.priceOfBtc) !== "-" ? " " : ""}
                       ${this.calculateHealthFactor(this.props.userDepositBalanceEth, this.props.priceOfEth, this.props.LTV["ETHBTC"], this.props.userDebtBalanceBtc, this.props.priceOfBtc)}`
                       }
                     </span>
                   </td>
                   <td className="middle">
-                    $19,294 (hardcode)
+                    ${this.props.myBtcLpAmount * this.props.priceOfBtc}
                   </td>
                   <td className="middle" style={{color:"orange"}}>
-                  <FontAwesomeIcon onClick={() => {
-                  }}
-                    icon={faFire} />
+                    {this.props.myBtcLpAmount > 0 ? <FontAwesomeIcon icon={faFire}/> : <span>Unprotected</span>}
                   </td>
                   <td className="lastOne">
                     <NavLink
@@ -800,12 +765,9 @@ class Dashboard extends React.Component {
                         <span>{`$${(this.props.userDebtBalanceUsdt * this.props.userDebtBalanceUsdt / 100).toFixed(2)}`}</span>
                       </Grid>
                       <Grid xs={12}>
-                        <span>{`${(this.props.userDebtBalanceUsdt).toFixed(2)}`} USDT</span>
+                        <span>{`${Number(this.props.userDebtBalanceUsdt).toFixed(2)}`} USDT</span>
                       </Grid>
                     </Grid>
-                  </td>
-                  <td className="middle" key={5}>
-                    20.4% (hardcode)
                   </td>
                   <td className="middle" key={4}>
                     <span
@@ -816,17 +778,17 @@ class Dashboard extends React.Component {
                       }
                     >
                       {
-                        `${this.calculateHealthFactor(this.props.userDepositBalanceAvax, this.props.priceOfEth, this.props.LTV["AVAXUSDT"], this.props.userDebtBalanceUsdt, this.props.priceOfUsdt) !== "-" ? "$ " : ""}
+                        `${this.calculateHealthFactor(this.props.userDepositBalanceAvax, this.props.priceOfEth, this.props.LTV["AVAXUSDT"], this.props.userDebtBalanceUsdt, this.props.priceOfUsdt) !== "-" ? " " : ""}
                       ${this.calculateHealthFactor(this.props.userDepositBalanceAvax, this.props.priceOfEth, this.props.LTV["AVAXUSDT"], this.props.userDebtBalanceUsdt, this.props.priceOfUsdt)}`
                       }
                     </span>
                   </td>
 
                   <td className="middle">
-                    $19,294 (hardcode)
+                    -
                   </td>
                   <td className="middle">
-                    unprotected (hardcode)
+                    -
                   </td>
                   <td className="lastOne" key={8}>
                     <NavLink
@@ -845,15 +807,14 @@ class Dashboard extends React.Component {
                 </tr>
                 <br></br>
                 <tr key={2} className="customTable__dataRow">
-
-                  <td colspan="9" className="customTable__dataRow__borrow">
-                    <NavLink
-                      to={{
-                        pathname: "/app/main/borrow",
-                      }}
-                    >
-                      <span style={{ color: "white" }}>+ Borrow</span>
-                    </NavLink>
+                  <td colspan="9">
+                      <NavLink
+                        to={{
+                          pathname: "/app/main/borrow",
+                        }}
+                      >
+                        <Button block className={"white", "manage-button", "customTable__dataRow__borrow"}><span style={{ color: "white" }}>+ Borrow</span></Button>
+                      </NavLink>
                   </td>
 
                 </tr>
@@ -869,7 +830,7 @@ class Dashboard extends React.Component {
             <span style={{
               fontWeight: "800",
               fontSize: "1em",
-            }}>My Smart Value Position</span>
+            }}>My Smart Vault Position</span>
           </Grid>
 
           <Grid item xs={12}>
@@ -877,7 +838,7 @@ class Dashboard extends React.Component {
               <thead className="customTable">
                 <tr className="customTable__headRow">
                   <th key={0} scope="col" className={"customTable__headRow__item"}>
-                    Debt
+                    Asset
                   </th>
                   <th key={1} scope="col" className={"customTable__headRow__item"}>
                     Staking Amount
@@ -902,50 +863,14 @@ class Dashboard extends React.Component {
                     BTC
                   </td>
                   <td className="middle">
-                    <Grid container>
-                      <Grid xs={12}>
-                        <span>$41340.1</span>
-                      </Grid>
-                      <Grid xs={12}>
-                        <span>1.87 ETH</span>
-                      </Grid>
-                    </Grid>
+                    ${this.props.myBtcLpAmount * this.props.priceOfBtc / 100}<br/>
+                    {this.props.myBtcLpAmount} BTC
                   </td>
                   <td className="middle">
-                    20.4% (hardcode)
+                    5.4%
                   </td>
                   <td className="middle">
-                    20.1B (hardcode)
-                  </td>
-                  <td className="lastOne" style={{textAlign:"end"}}>
-                  <Button className={"manage-button"} style={{position: "relative",right:"4em"}}
-                      >Leave Smart Vault
-                      </Button>
-                  </td>
-                </tr>
-                <br></br>
-                <tr key={0} className="customTable__dataRow">
-                  <td className="firstOne">
-                    <span style={{ padding: "5px" }}>
-                      <img className="icon" src="/assets/icon/usdt-logo.svg" alt="x"></img>
-                    </span>
-                    USDT
-                  </td>
-                  <td className="middle">
-                    <Grid container>
-                      <Grid xs={12}>
-                        <span>$41340.1</span>
-                      </Grid>
-                      <Grid xs={12}>
-                        <span>1.87 USDT</span>
-                      </Grid>
-                    </Grid>
-                  </td>
-                  <td className="middle">
-                    40% (hardcode)
-                  </td>
-                  <td className="middle">
-                    40.4B (hardcode)
+                    ${this.props.totalBtcLpAmount * this.props.priceOfBtc / 100}
                   </td>
                   <td className="lastOne" style={{textAlign:"end"}}>
                   <Button className={"manage-button"} style={{position: "relative",right:"4em"}}
@@ -956,14 +881,14 @@ class Dashboard extends React.Component {
                 <br></br>
                 <tr key={2} className="customTable__dataRow">
 
-                  <td colspan="9" className="customTable__dataRow__borrow">
+                  <td colspan="9" className="">
                     <NavLink
-                      to={{
-                        pathname: "/app/main/smartVault1",
-                      }}
-                    >
-                      <span style={{ color: "white" }}>+ Smart Vault</span>
-                    </NavLink>
+                        to={{
+                          pathname: "/app/main/smartVault1",
+                        }}
+                      >
+                        <Button block className={"white", "manage-button", "customTable__dataRow__borrow"}><span style={{ color: "white" }}>+ Smart Vault</span></Button>
+                      </NavLink>
                   </td>
 
                 </tr>
@@ -1024,6 +949,9 @@ function mapStateToProps(store) {
     myETHAmount: store.loanshark.myETHAmount,
     myBTCAmount: store.loanshark.myBTCAmount,
     LTV: store.loanshark.LTV,
+
+    myBtcLpAmount: store.backd.myBtcLpAmount,
+    totalBtcLpAmount: store.backd.totalBtcLpAmount,
   };
 }
 
