@@ -49,7 +49,7 @@ class Manage extends React.Component {
         // this.toggleBorrow = this.toggleBorrow.bind(this);
         // this.togglePayback = this.togglePayback.bind(this);
         // this.toggleWithdrawn = this.toggleWithdrawn.bind(this);
-        // this.calltoggleLoading = this.calltoggleLoading.bind(this);
+        this.calltoggleLoading = this.calltoggleLoading.bind(this);
         // this.setInput = this.setInput.bind(this);
         // this.state = {
         //   modal: false,
@@ -63,11 +63,13 @@ class Manage extends React.Component {
         this.state = {
             depositeCurrency: "",
             depositeAmount: 0,
-            maxDepositeAmount:0,
+            maxDepositeAmount: 0,
+            maxWithdrawAmount: 0,
             depositeCurrencyIconPath: "",
             debitCurrency: "",
             debitAmount: 0,
-            maxDebitAmount:0,
+            maxDebitAmount: 0,
+            maxPaybackAmount: 0,
             debitCurrencyIconPath: "",
             modal: false,
             modalTitle: '',
@@ -83,10 +85,11 @@ class Manage extends React.Component {
             collateralAction: "deposit",
             collateralAmount: 0,
             debitAction: "borrow",
-
-
+            depositeCurrencyPrice: 0,
+            debitCurrencyPrice: 0,
         }
     }
+
     componentDidMount() {
         if ((this?.props?.location?.state?.pair ?? "") === "") return
         let tempPari = this.props.location.state.pair.split("_")
@@ -95,27 +98,40 @@ class Manage extends React.Component {
         if (deposite === "AVAX") {
             this.setState({
                 depositeCurrency: deposite,
-                depositeAmount: this.props.userDepositBalanceAvax,
-                maxDepositeAmount: 9999,
+                depositeCurrencyPrice: Number(this.props.priceOfAvax),
+                depositeAmount: Number(this.props.userDepositBalanceAvax),
+                maxDepositeAmount: Number(this.props.myAVAXAmount),
+                maxWithdrawAmount: Number(this.props.userDepositBalanceAvax),
                 depositeCurrencyIconPath: `/assets/icon/${deposite.toLowerCase()}-logo.svg`,
                 debitCurrency: debit,
-                debitAmount: this.props.userDebtBalanceUsdt,
-                maxDebitAmount:9999,
+                debitCurrencyPrice: Number(this.props.priceOfUsdt),
+                debitAmount: Number(this.props.userDebtBalanceUsdt),
+                maxDebitAmount: Number(this.props.myUSDTAmount),
+                maxPaybackAmount: Number(this.props.userDebtBalanceUsdt),
                 debitCurrencyIconPath: `/assets/icon/${debit.toLowerCase()}-logo.svg`,
             })
         }
         if (deposite === "ETH") {
             this.setState({
                 depositeCurrency: deposite,
-                depositeAmount: this.props.userDepositBalanceEth,
+                depositeCurrencyPrice: Number(this.props.priceOfEth),
+                depositeAmount: Number(this.props.userDepositBalanceEth),
+                maxDepositeAmount: Number(this.props.myETHAmount),
+                maxWithdrawAmount: Number(this.props.userDepositBalanceEth),
                 depositeCurrencyIconPath: `/assets/icon/${deposite.toLowerCase()}-logo.svg`,
                 debitCurrency: debit,
-                debitAmount: this.props.userDebtBalanceBtc,
+                debitCurrencyPrice: Number(this.props.priceOfBtc),
+                debitAmount: Number(this.props.userDebtBalanceBtc),
+                maxDebitAmount: Number(this.props.myBTCAmount),
+                maxPaybackAmount: Number(this.props.userDebtBalanceBtc),
                 debitCurrencyIconPath: `/assets/icon/${debit.toLowerCase()}-logo.svg`,
             })
         }
     }
 
+    calltoggleLoading() {
+        this.props.dispatch(toggleLoading());
+    }
 
     render() {
         if ((this.props?.location?.state?.pair ?? "") === "") {
@@ -123,7 +139,10 @@ class Manage extends React.Component {
             return <Redirect to="/app/main/dashboard" />
         }
         return (
-            <div>
+            <div
+                def={console.log(this.props)}
+                abc={console.log(this.state)}
+            >
                 <Grid container>
                     {/* main info table */}
                     <Grid item xs={12}>
@@ -174,20 +193,20 @@ class Manage extends React.Component {
                                                     <td className="middle">
                                                         <Grid container>
                                                             <Grid xs={12}>
-                                                                <span>{`$${(this.props.userDepositBalanceEth * this.props.priceOfEth / 100).toFixed(2)}`}</span>
+                                                                <span>{`$${(this.state.depositeAmount * this.state.depositeCurrencyPrice / 100).toFixed(2)}`}</span>
                                                             </Grid>
                                                             <Grid xs={12}>
-                                                                <span>{this.props.userDepositBalanceEth} ETH</span>
+                                                                <span>{`${Number(this.state.depositeAmount).toFixed(2)}`} {this.state.depositeCurrency}</span>
                                                             </Grid>
                                                         </Grid>
                                                     </td>
                                                     <td className="middle">
                                                         <Grid container>
                                                             <Grid xs={12}>
-                                                                <span>{`$${(this.props.userDebtBalanceBtc * this.props.priceOfBtc / 100).toFixed(2)}`}</span>
+                                                                <span>{`$${(this.state.debitAmount * this.state.debitCurrencyPrice / 100).toFixed(2)}`}</span>
                                                             </Grid>
                                                             <Grid xs={12}>
-                                                                <span>{`${(this.props.userDebtBalanceBtc).toFixed(2)}`} BTC</span>
+                                                                <span>{`${Number(this.state.debitAmount).toFixed(2)}`} {this.state.debitCurrency}</span>
                                                             </Grid>
                                                         </Grid>
                                                     </td>
@@ -218,7 +237,10 @@ class Manage extends React.Component {
                                                     rightSelectButton={"withdraw"}
                                                     currency={this.state.depositeCurrency}
                                                     currencyIconPath={this.state.depositeCurrencyIconPath}
-                                                    maxBalance={this.state.maxDepositeAmount}
+                                                    maxBalance={
+                                                        this.state.collateralAction === "deposit" ?
+                                                            this.state.maxDepositeAmount : (this.state.collateralAction === "withdraw" ? this.state.maxWithdrawAmount : 0)
+                                                    }
                                                     openBorrowingPower={false}
                                                     bottomButtonTitle={"Deposit"}
                                                     action={this.state.collateralAction}
@@ -247,7 +269,96 @@ class Manage extends React.Component {
                                                             collateralAmount: this.state.maxDepositeAmount,
                                                         })
                                                     }}
-                                              
+                                                    onClickDeposite={() => {
+                                                        this.calltoggleLoading();
+                                                        let pair = `${this.state.depositeCurrency}${this.state.debitCurrency}`
+                                                        let approveArgs = []
+                                                        switch (pair) {
+                                                            case "ETHBTC":
+                                                                approveArgs.push(this.props.myFujiVaultETHBTC.options.address)
+                                                                break;
+                                                            case "AVAXUSDT":
+                                                                approveArgs.push(this.props.myFujiVaultAVAXUSDT.options.address)
+                                                                break;
+                                                            default:
+                                                        }
+                                                        approveArgs.push(window.web3.utils.toBN(window.web3.utils.toWei(this.state.collateralAmount, 'ether')).toString())
+
+                                                        let args = [
+                                                            window.web3.utils.toBN(window.web3.utils.toWei(this.state.collateralAmount, 'ether')).toString(),
+                                                        ];
+
+                                                        switch (pair) {
+                                                            case "ETHBTC":
+                                                                this.props.myETHContract.methods
+                                                                    .approve(...approveArgs)
+                                                                    .send({ from: this.props.myAccount })
+                                                                    .on("error", (error, receipt) => {
+                                                                        this.calltoggleLoading();
+                                                                    })
+                                                                    .then((receipt) => {
+                                                                        this.props.myFujiVaultETHBTC.methods
+                                                                            .deposit(...args)
+                                                                            .send({ from: this.props.myAccount })
+                                                                            .on("error", (error, receipt) => {
+                                                                                this.calltoggleLoading();
+                                                                            })
+                                                                            .then((receipt) => {
+                                                                                this.calltoggleLoading();
+                                                                                API(this.props);
+                                                                            })
+                                                                    });
+                                                                break;
+                                                            case "AVAXUSDT":
+                                                                let a = window.web3.utils.toBN(window.web3.utils.toWei(this.state.collateralAmount, 'ether')).toString();
+                                                                this.props.myFujiVaultAVAXUSDT.methods
+                                                                    .deposit(...args)
+                                                                    .send({ from: this.props.myAccount, value: a })
+                                                                    .on("error", (error, receipt) => {
+                                                                        this.calltoggleLoading();
+                                                                    })
+                                                                    .then((receipt) => {
+                                                                        this.calltoggleLoading();
+                                                                        API(this.props);
+                                                                    })
+                                                                break;
+                                                            default:
+                                                        }
+                                                    }}
+                                                    onClickWithdraw={() => {
+                                                        this.calltoggleLoading();
+                                                        let args = [
+                                                            window.web3.utils.toBN(window.web3.utils.toWei(this.state.collateralAmount, 'ether')).toString(),
+                                                        ];
+                                                        let pair = `${this.state.depositeCurrency}${this.state.debitCurrency}`
+                                                        switch (pair) {
+                                                            case "ETHBTC":
+                                                                this.props.myFujiVaultETHBTC.methods
+                                                                    .withdraw(...args)
+                                                                    .send({ from: this.props.myAccount })
+                                                                    .on("error", (error, receipt) => {
+                                                                        this.calltoggleLoading();
+                                                                    })
+                                                                    .then((receipt) => {
+                                                                        this.calltoggleLoading();
+                                                                        API(this.props);
+                                                                    });
+                                                                break;
+                                                            case "AVAXUSDT":
+                                                                this.props.myFujiVaultAVAXUSDT.methods
+                                                                    .withdraw(...args)
+                                                                    .send({ from: this.props.myAccount })
+                                                                    .on("error", (error, receipt) => {
+                                                                        this.calltoggleLoading();
+                                                                    })
+                                                                    .then((receipt) => {
+                                                                        this.calltoggleLoading();
+                                                                        API(this.props);
+                                                                    });
+                                                                break;
+                                                            default:
+                                                        }
+                                                    }}
                                                 ></Card>
                                             </Grid>
                                             <Grid item xs={6}>
@@ -258,13 +369,18 @@ class Manage extends React.Component {
                                                     rightSelectButton={"payback"}
                                                     currency={this.state.debitCurrency}
                                                     currencyIconPath={this.state.debitCurrencyIconPath}
-                                                    maxBalance={this.state.maxDebitAmount}
+                                                    maxBalance={
+                                                        this.state.debitAction === "borrow" ?
+                                                            this.state.maxDebitAmount : (this.state.debitAction === "payback" ? this.state.maxPaybackAmount : 0)
+                                                    }
+
+
                                                     amount={this.state.debitAmount}
                                                     openBorrowingPower={true}
                                                     bottomButtonTitle={"Borrow"}
                                                     action={this.state.debitAction}
                                                     onClickSelect={(e) => {
-                                                        if (e.target.name === this.state.collateralAction) return
+                                                        if (e.target.name === this.state.debitAction) return
                                                         switch (e.target.name) {
                                                             case "borrow":
                                                             case "payback":
@@ -283,15 +399,134 @@ class Manage extends React.Component {
                                                         })
                                                     }}
                                                     onClickMax={() => {
-                                                        this.setState({
-                                                            debitAmount: this.state.maxDebitAmount,
-                                                        })
+                                                        switch (this.state.debitAction) {
+                                                            case "borrow":
+                                                                this.setState({
+                                                                    debitAmount: this.state.maxDebitAmount,
+                                                                })
+                                                                break;
+                                                            case "payback":
+                                                                this.setState({
+                                                                    debitAmount: this.state.maxPaybackAmount,
+                                                                })
+                                                                break;
+                                                            default:
+                                                                break;
+                                                        }
                                                     }}
-                                                    onClickBorrowingPowerChange={(e)=>{
-                                                        let finalAmount= (this.state.maxDebitAmount*e.target.name/100).toFixed(2)
+                                                    onClickBorrowingPowerChange={(e) => {
+                                                        let finalAmount = (this.state.maxDebitAmount * e.target.name / 100).toFixed(2)
                                                         this.setState({
                                                             debitAmount: finalAmount,
                                                         })
+                                                    }}
+                                                    onClickBorrow={() => {
+                                                        this.calltoggleLoading();
+                                                        let finalModalInputValue;
+                                                        let pair = `${this.state.depositeCurrency}${this.state.debitCurrency}`
+                                                        switch (pair) {
+                                                            case "ETHBTC":
+                                                                finalModalInputValue = Number.parseFloat(this.state.debitAmount * 100000000).toFixed(0);
+                                                                break;
+                                                            case "AVAXUSDT":
+                                                                finalModalInputValue = Number.parseFloat(this.state.debitAmount * 1000000).toFixed(0);
+                                                                break;
+                                                            default:
+                                                        }
+                                                        let args = [finalModalInputValue];
+
+                                                        switch (pair) {
+                                                            case "ETHBTC":
+                                                                this.props.myFujiVaultETHBTC.methods
+                                                                    .borrow(...args)
+                                                                    .send({ from: this.props.myAccount })
+                                                                    .on("error", (error, receipt) => {
+                                                                        this.calltoggleLoading();
+                                                                    })
+                                                                    .then((receipt) => {
+                                                                        this.calltoggleLoading();
+                                                                        API(this.props);
+                                                                    });
+                                                                break;
+                                                            case "AVAXUSDT":
+                                                                this.props.myFujiVaultAVAXUSDT.methods
+                                                                    .borrow(...args)
+                                                                    .send({ from: this.props.myAccount })
+                                                                    .on("error", (error, receipt) => {
+                                                                        this.calltoggleLoading();
+                                                                    })
+                                                                    .then((receipt) => {
+                                                                        this.calltoggleLoading();
+                                                                        API(this.props);
+                                                                    });
+                                                                break;
+                                                            default:
+                                                        }
+                                                    }}
+                                                    onClickPayback={() => {
+                                                        this.calltoggleLoading();
+                                                        let finalModalInputValue;
+                                                        let approveArgs = []
+                                                        let pair = `${this.state.depositeCurrency}${this.state.debitCurrency}`
+                                                        switch (pair) {
+                                                            case "ETHBTC":
+                                                                finalModalInputValue = this.state.debitAmount < 0 ? Number.parseFloat(1000000000000).toFixed(0) : Number.parseFloat(this.state.debitAmount * 100000000).toFixed(0);
+                                                                approveArgs.push(this.props.myFujiVaultETHBTC.options.address)
+                                                                break;
+                                                            case "AVAXUSDT":
+                                                                finalModalInputValue = this.state.debitAmount < 0 ? Number.parseFloat(1000000000000).toFixed(0) : window.web3.utils.toBN(window.web3.utils.toWei(this.state.debitAmount, 'picoether')).toString();
+                                                                approveArgs.push(this.props.myFujiVaultAVAXUSDT.options.address)
+                                                                break;
+                                                            default:
+                                                        }
+                                                        approveArgs.push(window.web3.utils.toBN(finalModalInputValue).toString())
+                                                        let args = [
+                                                            this.state.debitAmount < 0 ? "-1" : window.web3.utils.toBN(finalModalInputValue).toString(),
+                                                        ];
+
+                                                        switch (pair) {
+                                                            case "ETHBTC":
+                                                                this.props.myBTCContract.methods
+                                                                    .approve(...approveArgs)
+                                                                    .send({ from: this.props.myAccount })
+                                                                    .on("error", (error, receipt) => {
+                                                                          this.calltoggleLoading();
+                                                                    })
+                                                                    .then((receipt) => {
+                                                                        this.props.myFujiVaultETHBTC.methods
+                                                                            .payback(...args)
+                                                                            .send({ from: this.props.myAccount })
+                                                                            .on("error", (error, receipt) => {
+                                                                                this.calltoggleLoading();
+                                                                            })
+                                                                            .then((receipt) => {
+                                                                                this.calltoggleLoading();
+                                                                                API(this.props);
+                                                                            })
+                                                                    });
+                                                                break;
+                                                            case "AVAXUSDT":
+                                                                this.props.myUSDTContract.methods
+                                                                    .approve(...approveArgs)
+                                                                    .send({ from: this.props.myAccount })
+                                                                    .on("error", (error, receipt) => {
+                                                                        this.calltoggleLoading();
+                                                                    })
+                                                                    .then((receipt) => {
+                                                                        this.props.myFujiVaultAVAXUSDT.methods
+                                                                            .payback(...args)
+                                                                            .send({ from: this.props.myAccount })
+                                                                            .on("error", (error, receipt) => {
+                                                                                this.calltoggleLoading();
+                                                                            })
+                                                                            .then((receipt) => {
+                                                                                this.calltoggleLoading();
+                                                                                API(this.props);
+                                                                            })
+                                                                    });
+                                                                break;
+                                                            default:
+                                                        }
                                                     }}
                                                 ></Card>
                                             </Grid>
@@ -317,28 +552,41 @@ class Manage extends React.Component {
                                     </Grid>
                                     <Grid item xs={12}>
                                         <Widget
-                                            title={<p style={{ fontWeight: 700 }}>Deposited Borrowed ealth Factory</p>}
+                                            title={<p style={{ fontWeight: 700 }}>Deposited Borrowed health Factory</p>}
                                             customDropDown={false}
                                         >
                                             <Grid container>
                                                 <Grid item XS={12}>
                                                     <div style={{ minWidth: "300px", minHeight: "300px" }}>
-                                                        <MDBContainer>
+                                                        <MDBContainer
+                                                        def={console.log(`${this.state.depositeCurrency}${this.state.debitCurrency}`.toUpperCase() === "ETHBTC")}
+                                                        >
                                                             <Doughnut width={10} data={{
-                                                                labels: ["$ETH", "$BTC"],
+                                                                labels: [`${this.state.depositeCurrency} $`,`${this.state.debitCurrency} $`],
                                                                 datasets: [
                                                                     {
-                                                                        data: [0.2, 0.5],
-                                                                        backgroundColor: [
-                                                                            "#5CD68A",
-                                                                            "#5C83D6",
-                                                                        ],
-                                                                        hoverBackgroundColor: [
-                                                                            "#5CD68A",
-                                                                            "#5C83D6",
-                                                                        ]
+                                                                      data: [
+                                                                        (
+                                                                          (`${this.state.depositeCurrency}${this.state.debitCurrency}`.toUpperCase() === "ETHBTC"? Number(this.props.userDepositBalanceEth) :  Number(this.props.userDepositBalanceAvax))
+                                                                        + Number(this.state.collateralAmount)
+                                                                        ) 
+                                                                        * (`${this.state.depositeCurrency}${this.state.debitCurrency}`.toUpperCase() === "ETHBTC"? this.props.priceOfEth : `${this.state.depositeCurrency}${this.state.debitCurrency}`.toUpperCase() === "AVAXUSDT"? this.props.priceOfAvax : 0) / 100, 
+                                                                        (
+                                                                          (`${this.state.depositeCurrency}${this.state.debitCurrency}`.toUpperCase() === "ETHBTC"? Number(this.props.userDebtBalanceBtc) :  Number(this.props.userDebtBalanceUsdt))
+                                                                          + Number(this.props.debitAmount)
+                                                                        ) 
+                                                                        * (`${this.state.depositeCurrency}${this.state.debitCurrency}`.toUpperCase() === "ETHBTC"? this.props.priceOfBtc : `${this.state.depositeCurrency}${this.state.debitCurrency}`.toUpperCase() === "AVAXUSDT"? this.props.priceOfUsdt : 0) / 100
+                                                                      ],
+                                                                      backgroundColor: [
+                                                                        "#5CD68A",
+                                                                        "#5C83D6",
+                                                                      ],
+                                                                      hoverBackgroundColor: [
+                                                                        "#5CD68A",
+                                                                        "#5C83D6",
+                                                                      ]
                                                                     }
-                                                                ]
+                                                                  ]
                                                             }}
                                                                 plugins={[{
                                                                     beforeDraw: (chart) => {
@@ -350,46 +598,31 @@ class Manage extends React.Component {
                                                                         ctx.font = fontSize + "em sans-serif";
                                                                         ctx.fillStyle = "#fff";
                                                                         ctx.textBaseline = "top";
-                                                                        let text = 20,
-                                                                            textX = Math.round((width - ctx.measureText(2).width) / 2),
+                                                                        var text = (!(
+                                                                            (`${this.state.depositeCurrency}${this.state.debitCurrency}`.toUpperCase() === "ETHBTC" ? Number(this.props.userDebtBalanceBtc) : Number(this.props.userDebtBalanceUsdt))
+                                                                            + Number(this.props.inputBtcDept)
+                                                                        ) > 0 ? "" :
+                                                                            (
+                                                                                (
+                                                                                    (
+                                                                                        (`${this.state.depositeCurrency}${this.state.debitCurrency}`.toUpperCase() === "ETHBTC" ? Number(this.props.userDepositBalanceEth) : Number(this.props.userDepositBalanceAvax))
+                                                                                        + Number(this.props.collateralAmount)
+                                                                                    )
+                                                                                    * (`${this.state.depositeCurrency}${this.state.debitCurrency}`.toUpperCase() === "ETHBTC" ? this.props.priceOfEth : `${this.state.depositeCurrency}${this.state.debitCurrency}`.toUpperCase() === "AVAXUSDT" ? this.props.priceOfAvax : 0) / 100)
+                                                                                * this.props.LTV[`${this.state.depositeCurrency}${this.state.debitCurrency}`.toUpperCase()]
+                                                                                /
+                                                                                (
+                                                                                    (
+                                                                                        (`${this.state.depositeCurrency}${this.state.debitCurrency}`.toUpperCase() === "ETHBTC" ? Number(this.props.userDebtBalanceBtc) : Number(this.props.userDebtBalanceUsdt))
+                                                                                        + Number(this.props.debitAmount)
+                                                                                    )
+                                                                                    * (`${this.state.depositeCurrency}${this.state.debitCurrency}`.toUpperCase() === "ETHBTC" ? this.props.priceOfBtc : `${this.state.depositeCurrency}${this.state.debitCurrency}`.toUpperCase() === "AVAXUSDT" ? this.props.priceOfUsdt : 0) / 100)
+                                                                            ).toFixed(2)),
+                                                                            textX = Math.round((width - ctx.measureText(text).width) / 2),
                                                                             textY = height / 2 + 5;
                                                                         ctx.fillText(text, textX, textY);
                                                                         ctx.save();
                                                                     }
-                                                                    // beforeDraw: (chart) => {
-                                                                    //     var width = chart.width,
-                                                                    //         height = chart.height,
-                                                                    //         ctx = chart.ctx;
-                                                                    //     ctx.restore();
-                                                                    //     var fontSize = (height / 200).toFixed(2);
-                                                                    //     ctx.font = fontSize + "em sans-serif";
-                                                                    //     ctx.fillStyle = "#fff";
-                                                                    //     ctx.textBaseline = "top";
-                                                                    //     var text = (!(
-                                                                    //         (this.props.selectedPair === "ETHBTC" ? Number(this.props.userDebtBalanceBtc) : Number(this.props.userDebtBalanceUsdt))
-                                                                    //         + Number(this.props.inputBtcDept)
-                                                                    //     ) > 0 ? "" :
-                                                                    //         (
-                                                                    //             (
-                                                                    //                 (
-                                                                    //                     (this.props.selectedPair === "ETHBTC" ? Number(this.props.userDepositBalanceEth) : Number(this.props.userDepositBalanceAvax))
-                                                                    //                     + Number(this.props.inputEthDeposit)
-                                                                    //                 )
-                                                                    //                 * (this.props.selectedPair === "ETHBTC" ? this.props.priceOfEth : this.props.selectedPair === "AVAXUSDT" ? this.props.priceOfAvax : 0) / 100)
-                                                                    //             * this.props.LTV[this.props.selectedPair]
-                                                                    //             /
-                                                                    //             (
-                                                                    //                 (
-                                                                    //                     (this.props.selectedPair === "ETHBTC" ? Number(this.props.userDebtBalanceBtc) : Number(this.props.userDebtBalanceUsdt))
-                                                                    //                     + Number(this.props.inputBtcDept)
-                                                                    //                 )
-                                                                    //                 * (this.props.selectedPair === "ETHBTC" ? this.props.priceOfBtc : this.props.selectedPair === "AVAXUSDT" ? this.props.priceOfUsdt : 0) / 100)
-                                                                    //         ).toFixed(2)),
-                                                                    //         textX = Math.round((width - ctx.measureText(text).width) / 2),
-                                                                    //         textY = height / 2 + 5;
-                                                                    //     ctx.fillText(text, textX, textY);
-                                                                    //     ctx.save();
-                                                                    // }
                                                                 }]}
                                                                 options={{ responsive: true }} />
                                                         </MDBContainer>
@@ -491,7 +724,7 @@ class Manage extends React.Component {
                     modalCall={this.state.modalOnCall}
                 >
                 </Popup >
-            </div>
+            </div >
         );
     }
 }
@@ -524,7 +757,15 @@ function mapStateToProps(store) {
         smartVaultUsdt: store.loanshark.smartVaultUsdt,
         myETHAmount: store.loanshark.myETHAmount,
         myBTCAmount: store.loanshark.myBTCAmount,
+        myAVAXAmount: store.loanshark.myAVAXAmount,
+        myUSDTAmount: store.loanshark.myUSDTAmount,
         LTV: store.loanshark.LTV,
+
+        lpPoolBtc: store.backd.lpPoolBtc,
+        lpTokenBtc: store.backd.lpTokenBtc,
+        myBtcLpAmount: store.backd.myBtcLpAmount,
+        totalBtcLpAmount: store.backd.totalBtcLpAmount,
+        topupAction: store.backd.topupAction,
     };
 }
 
