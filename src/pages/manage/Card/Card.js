@@ -22,6 +22,8 @@ class Card extends React.Component {
         currencyIconPath: PropTypes.string,
         openBorrowingPower: PropTypes.bool,
         bottomButtonTitle: PropTypes.string,
+        onClickDeposite: PropTypes.func,
+        onClickWithdraw: PropTypes.func,
         action: PropTypes.string,
         onClickSelect: PropTypes.func,
         onChangeInput: PropTypes.func,
@@ -29,6 +31,8 @@ class Card extends React.Component {
         maxBalance: PropTypes.number,
         onClickMax: PropTypes.func,
         onClickBorrowingPowerChange: PropTypes.func,
+        onClickBorrow: PropTypes.func,
+        onClickPayback: PropTypes.func,
     };
 
     static defaultProps = {
@@ -40,6 +44,8 @@ class Card extends React.Component {
         currencyIconPath: "",
         openBorrowingPower: false,
         bottomButtonTitle: "",
+        onClickDeposite: () => { },
+        onClickWithdraw: () => { },
         action: "",
         onClickSelect: () => { },
         onChangeInput: () => { },
@@ -47,6 +53,8 @@ class Card extends React.Component {
         maxBalance: 0,
         onClickMax: () => { },
         onClickBorrowingPowerChange: () => { },
+        onClickBorrow: () => { },
+        onClickPayback: () => { },
     };
 
     constructor(props) {
@@ -106,7 +114,8 @@ class Card extends React.Component {
                 return (<></>)
         }
     }
-    switchBottomButton(param) {
+
+    switchBottomButton(param, action) {
         switch (param) {
             case "Collateral":
                 return (<>
@@ -116,7 +125,19 @@ class Card extends React.Component {
                     <br></br>
                     <br></br>
                     <Grid item xs={12}>
-                        <Button className={"deposite-button"}>Deposit</Button>
+                        <Button className={"deposite-button"}
+                            onClick={() => {
+                                switch (action) {
+                                    case "deposit":
+                                        this.props.onClickDeposite()
+                                        break;
+                                    case "withdraw":
+                                        this.props.onClickWithdraw()
+                                        break;
+                                    default:
+                                }
+                            }}
+                        >{action}</Button>
                     </Grid>
                 </>)
             case "Debt":
@@ -125,26 +146,26 @@ class Card extends React.Component {
                     <br></br>
                     <br></br>
                     <Grid item xs={12}>
-                        <Grid container spacing={1} style={{paddingTop:"5%"}}>
+                        <Grid container spacing={1} style={{ paddingTop: "5%" }}>
                             <Grid item>
                                 <span>Borrowing Power: </span>
                             </Grid>
                             <Grid item>
                                 <Button className={"customButton__select borrowing-power-button"}
-                                name={25}
-                                onClick={this.props.onClickBorrowingPowerChange}
+                                    name={25}
+                                    onClick={this.props.onClickBorrowingPowerChange}
                                 >25%</Button>
                             </Grid>
                             <Grid item>
                                 <Button className={"customButton__select borrowing-power-button"}
-                                name={50}
-                                onClick={this.props.onClickBorrowingPowerChange}
+                                    name={50}
+                                    onClick={this.props.onClickBorrowingPowerChange}
                                 >50%</Button>
                             </Grid>
                             <Grid item>
                                 <Button className={"customButton__select borrowing-power-button"}
-                                name={75}
-                                onClick={this.props.onClickBorrowingPowerChange}
+                                    name={75}
+                                    onClick={this.props.onClickBorrowingPowerChange}
                                 >75%</Button>
                             </Grid>
                             <Grid item>
@@ -159,7 +180,19 @@ class Card extends React.Component {
                     <br></br>
                     <br></br>
                     <Grid item xs={12}>
-                        <Button className={"deposite-button"}>Borrow</Button>
+                        <Button className={"deposite-button"} onClick={() => {
+                            console.log(action)
+                            switch (action) {
+                                case "borrow":
+                                    this.props.onClickBorrow()
+                                    break;
+                                case "payback":
+                                    this.props.onClickPayback()
+                                    break;
+                                default:
+                            }
+                        }}
+                        >{action}</Button>
                     </Grid>
                 </>)
             case "Current Smart Vault Balance":
@@ -266,7 +299,7 @@ class Card extends React.Component {
                             </Grid>
                             <br></br>
                             <br></br>
-                            {this.switchBottomButton(this.props.title)}
+                            {this.switchBottomButton(this.props.title, this.props.action)}
                         </Grid>
                     </Widget>
                 </Grid>

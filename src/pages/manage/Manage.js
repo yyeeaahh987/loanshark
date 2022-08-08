@@ -17,6 +17,10 @@ import {
 import Card from './Card/Card'
 import Popup from '../../components/Popup/Popup'
 
+import {
+    toggleLoading,
+  } from "../../actions/navigation";
+  
 
 class Manage extends React.Component {
     static propTypes = {
@@ -30,14 +34,17 @@ class Manage extends React.Component {
 
     constructor(props) {
         super(props);
+        this.calltoggleLoading = this.calltoggleLoading.bind(this);
         this.state = {
             depositCurrency: "",
             depositAmount: 0,
-            maxdepositAmount:0,
+            maxDepositAmount: 0,
+            maxWithdrawAmount: 0,
             depositCurrencyIconPath: "",
             debtCurrency: "",
             debtAmount: 0,
-            maxdebtAmount:0,
+            maxDebtAmount: 0,
+            maxPaybackAmount: 0,
             debtCurrencyIconPath: "",
             modal: false,
             modalTitle: '',
@@ -53,6 +60,8 @@ class Manage extends React.Component {
             collateralAction: "deposit",
             collateralAmount: 0,
             debtAction: "borrow",
+            depositCurrencyPrice: 0,
+            debtCurrencyPrice: 0,
         }
     }
 
@@ -71,14 +80,22 @@ class Manage extends React.Component {
             var borrowPower = borrowPower  / this.props.priceOfUsdt;
 
             this.setState({
+
                 depositCurrency: deposit,
                 depositAmount: this.props.userDepositBalanceAvax,
+                depositCurrencyPrice: Number(this.props.priceOfAvax),
                 maxdepositAmount: Number(this.props.myAVAXAmount).toFixed(6),
+                maxWithdrawAmount: Number(this.props.userDepositBalanceAvax),
                 depositCurrencyIconPath: `/assets/icon/${deposit.toLowerCase()}-logo.svg`,
                 debtCurrency: debt,
                 debtAmount: 0,
                 maxdebtAmount: Number(borrowPower).toFixed(6),
                 debtCurrencyIconPath: `/assets/icon/${debt.toLowerCase()}-logo.svg`,
+
+                debtCurrencyPrice: Number(this.props.priceOfUsdt),
+                debtAmount: Number(this.props.userDebtBalanceUsdt),
+                maxDebtAmount: Number(this.props.myUSDTAmount),
+                maxPaybackAmount: Number(this.props.userDebtBalanceUsdt),
             })
             this.props.dispatch(changeSelectedPair("AVAXUSDT"));
         }
@@ -99,6 +116,11 @@ class Manage extends React.Component {
                 debtAmount: 0,
                 maxdebtAmount: Number(borrowPower).toFixed(6),
                 debtCurrencyIconPath: `/assets/icon/${debt.toLowerCase()}-logo.svg`,
+
+                maxWithdrawAmount: Number(this.props.userDepositBalanceEth),
+                debtCurrencyPrice: Number(this.props.priceOfBtc),
+                maxDetAmount: Number(this.props.myBTCAmount),
+                maxPaybackAmount: Number(this.props.userDebtBalanceBtc),
             })
             this.props.dispatch(changeSelectedPair("ETHBTC"));
         }
@@ -112,6 +134,10 @@ class Manage extends React.Component {
         return ((depositAmouont * priceOfdeposit / 100) * LTV / (debtAmount * priceOfDebt / 100)).toFixed(2)
     }
 
+    calltoggleLoading() {
+        this.props.dispatch(toggleLoading());
+    }
+
     render() {
         if ((this.props?.location?.state?.pair ?? "") === "") {
             //redirect for no pair get from history
@@ -123,7 +149,10 @@ class Manage extends React.Component {
         let debt = tempPari[1]
 
         return (
-            <div>
+            <div
+                def={console.log(this.props)}
+                abc={console.log(this.state)}
+            >
                 <Grid container>
                     <Grid item xs={12}>
                         <Table className={"mb-0"} borderless responsive style={{ borderCollapse: "separate", borderSpacing: "0" }}>
@@ -245,7 +274,6 @@ class Manage extends React.Component {
                     <Grid item xs={12}>
                         <Grid container spacing={2}>
                             <Grid xs={7} item>
-                                
                                 <Grid container spacing={2}>
                                     <Grid item xs={6}>
                                         <Card
@@ -261,14 +289,15 @@ class Manage extends React.Component {
                                             action={this.state.collateralAction}
                                             onClickSelect={(e) => {
                                                 if (e.target.name === this.state.collateralAction) return;
-                                                
                                                 switch (e.target.name) {
                                                     case "deposit":
+
                                                         this.setState({
                                                             collateralAction: e.target.name,
                                                             collateralAmount: 0,
                                                             maxdepositAmount: (deposit === "ETH"? Number(this.props.myETHAmount).toFixed(6) : Number(this.props.myAVAXAmount).toFixed(6))
                                                         })
+
                                                         break;
                                                     case "withdraw":
                                                         this.setState({
@@ -292,7 +321,12 @@ class Manage extends React.Component {
                                                     collateralAmount: this.state.maxdepositAmount,
                                                 })
                                             }}
-                                        
+                                            onClickDeposit={() => {
+                                                alert("deposit")
+                                            }}
+                                            onClickWithdraw={() => {
+                                                alert("withdraw")
+                                            }}
                                         ></Card>
                                     </Grid>
                                     <Grid item xs={6}>
@@ -351,6 +385,12 @@ class Manage extends React.Component {
                                                     debtAmount: finalAmount,
                                                 })
                                             }}
+                                            onClickPayback={() => {
+                                                alert("payback")
+                                            }}
+                                            onClickBorrow={() => {
+                                                alert("borrow")
+                                            }}
                                         ></Card>
                                     </Grid>
                                     {debt === "BTC"? 
@@ -379,7 +419,6 @@ class Manage extends React.Component {
                                     </Grid>
                                     <Grid item xs={12}>
                                         <HealthFactorPieChart />
-                                    </Grid>
                                     <Grid item xs={12}>
                                         <TradeInfo />
                                     </Grid>
@@ -389,6 +428,7 @@ class Manage extends React.Component {
                     </Grid>
                 </Grid>
 
+            </Grid>
                 <Popup
                     modal={this.state.modal}
                     close={() => {
@@ -405,7 +445,7 @@ class Manage extends React.Component {
                     modalCall={this.state.modalOnCall}
                 >
                 </Popup >
-            </div>
+            </div >
         );
     }
 }
@@ -443,8 +483,11 @@ function mapStateToProps(store) {
         LTV: store.loanshark.LTV,
         liquidationPrice: store.loanshark.liquidationPrice,
 
+        lpPoolBtc: store.backd.lpPoolBtc,
+        lpTokenBtc: store.backd.lpTokenBtc,
         myBtcLpAmount: store.backd.myBtcLpAmount,
         totalBtcLpAmount: store.backd.totalBtcLpAmount,
+        topupAction: store.backd.topupAction,
     };
 }
 

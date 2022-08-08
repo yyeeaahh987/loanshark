@@ -556,8 +556,6 @@ class Dashboard extends React.Component {
   }
 
   calculateHealthFactor(depositeAmouont, priceOfDeposite, LTV, debtAmount, priceOfDebt) {
-    console.log(`depositeAmouont`, depositeAmouont)
-    console.log(`debtAmount`, debtAmount)
     if (debtAmount === undefined || debtAmount === null || debtAmount === 0) return "-"
     return ((depositeAmouont * priceOfDeposite / 100) * LTV / (debtAmount * priceOfDebt / 100)).toFixed(2)
   }
@@ -572,7 +570,7 @@ class Dashboard extends React.Component {
 
   render() {
     return (
-      <div>
+      <div abc={console.log(this.props)}>
         <Grid container spacing={2}>
           <Grid item xl={3} lg={3} md={4}>
             <Widget
@@ -617,6 +615,7 @@ class Dashboard extends React.Component {
 
             <Widget
               title={<p style={{ fontWeight: 700 }}>
+                {/* {((this.props.userDebtBalanceBtc * this.props.priceOfBtc / 100) + (this.props.userDebtBalanceUsdt * this.props.priceOfUsdt / 100)).toFixed(2)} */}
                 {((this.props.userDebtBalanceBtc * this.props.priceOfBtc / 100) + (this.props.userDebtBalanceUsdt * this.props.priceOfUsdt / 100)).toFixed(2)}
               </p>}
               customDropDown={false}
@@ -739,6 +738,7 @@ class Dashboard extends React.Component {
                 </tr>
                 <br></br>
                 <tr key={1} className="customTable__dataRow">
+                  {/* asset */}
                   <td className="firstOne" key={1}>
                     <span style={{ paddingRight: "5px" }}>
                       <img className="icon" src="/assets/icon/avax-logo.svg" alt="x"></img>
@@ -749,10 +749,11 @@ class Dashboard extends React.Component {
                     </span>
                     AVAX/USDT
                   </td>
+                  {/* collateral */}
                   <td className="middle" key={2}>
                     <Grid container>
                       <Grid xs={12}>
-                        <span>{`$${(this.props.userDepositBalanceAvax * this.props.userDepositBalanceAvax / 100).toFixed(2)}`}</span>
+                        <span>{`$${(this.props.userDepositBalanceAvax * this.props.priceOfAvax / 100).toFixed(2)}`}</span>
                       </Grid>
                       <Grid xs={12}>
                         <span>{this.props.userDepositBalanceAvax} AVAX</span>
@@ -761,8 +762,8 @@ class Dashboard extends React.Component {
                   </td>
                   <td className="middle" key={3}>
                     <Grid container>
-                      <Grid xs={12}>
-                        <span>{`$${(this.props.userDebtBalanceUsdt * this.props.userDebtBalanceUsdt / 100).toFixed(2)}`}</span>
+                      <Grid xs={12}>    
+                        <span>{`$${(this.props.userDebtBalanceUsdt * Number(this.props.priceOfUsdt) / 100).toFixed(2)}`}</span>
                       </Grid>
                       <Grid xs={12}>
                         <span>{`${Number(this.props.userDebtBalanceUsdt).toFixed(2)}`} USDT</span>
@@ -779,7 +780,8 @@ class Dashboard extends React.Component {
                     >
                       {
                         `${this.calculateHealthFactor(this.props.userDepositBalanceAvax, this.props.priceOfEth, this.props.LTV["AVAXUSDT"], this.props.userDebtBalanceUsdt, this.props.priceOfUsdt) !== "-" ? " " : ""}
-                      ${this.calculateHealthFactor(this.props.userDepositBalanceAvax, this.props.priceOfEth, this.props.LTV["AVAXUSDT"], this.props.userDebtBalanceUsdt, this.props.priceOfUsdt)}`
+                      ${this.calculateHealthFactor(this.props.userDepositBalanceAvax, this.props.priceOfEth, this.props.LTV["AVAXUSDT"], this.props.userDebtBalanceUsdt, this.props.priceOfUsdt)}`+`_wrong`
+
                       }
                     </span>
                   </td>
@@ -792,7 +794,7 @@ class Dashboard extends React.Component {
                   </td>
                   <td className="lastOne" key={8}>
                     <NavLink
-                      to={{
+                      to={{     
                         pathname: "/app/main/manage",
                         state: {
                           pair: "AVAX_USDT"
