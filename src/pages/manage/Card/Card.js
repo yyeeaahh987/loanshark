@@ -22,7 +22,7 @@ class Card extends React.Component {
         currencyIconPath: PropTypes.string,
         openBorrowingPower: PropTypes.bool,
         bottomButtonTitle: PropTypes.string,
-        onClickDeposite: PropTypes.func,
+        onClickDeposit: PropTypes.func,
         onClickWithdraw: PropTypes.func,
         action: PropTypes.string,
         onClickSelect: PropTypes.func,
@@ -44,7 +44,7 @@ class Card extends React.Component {
         currencyIconPath: "",
         openBorrowingPower: false,
         bottomButtonTitle: "",
-        onClickDeposite: () => { },
+        onClickDeposit: () => { },
         onClickWithdraw: () => { },
         action: "",
         onClickSelect: () => { },
@@ -125,11 +125,11 @@ class Card extends React.Component {
                     <br></br>
                     <br></br>
                     <Grid item xs={12}>
-                        <Button className={"deposite-button"}
+                        <Button className={"deposit-button"}
                             onClick={() => {
                                 switch (action) {
                                     case "deposit":
-                                        this.props.onClickDeposite()
+                                        this.props.onClickDeposit()
                                         break;
                                     case "withdraw":
                                         this.props.onClickWithdraw()
@@ -180,7 +180,7 @@ class Card extends React.Component {
                     <br></br>
                     <br></br>
                     <Grid item xs={12}>
-                        <Button className={"deposite-button"} onClick={() => {
+                        <Button className={"deposit-button"} onClick={() => {
                             console.log(action)
                             switch (action) {
                                 case "borrow":
