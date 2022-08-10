@@ -7,11 +7,6 @@ import { Doughnut } from "react-chartjs-2";
 import Widget from "../../components/Widget";
 
 class HealthFactorPieChart extends React.Component {
-
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     return (
       <Widget

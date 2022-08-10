@@ -1,21 +1,12 @@
 import React from "react";
 import { connect } from "react-redux";
 
-import { NavLink } from "react-router-dom";
 import {
-  Row, Col, Table, 
-  Button,
+  Row, Col
 } from 'reactstrap';
 import './SmartVault2.css';
 
-import Widget from "../../components/Widget/Widget";
-import { faThList } from "@fortawesome/free-solid-svg-icons";
-
 class SmartVault2 extends React.Component {
-  constructor() {
-    super();
-  }
-
   selectRow(rowId) {
     window.location = '#/app/main/smartVault3';
   }

@@ -1,24 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { UncontrolledTooltip } from 'reactstrap';
 import s from './Widget.module.scss';
 import classNames from 'classnames';
 import Loader from '../Loader'; // eslint-disable-line css-modules/no-unused-class
 import AnimateHeight from 'react-animate-height';
 import uuidv4 from 'uuid/v4'
 import {
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
-  UncontrolledDropdown,
   Button,
   Modal,
   ModalHeader,
   ModalBody,
   ModalFooter,
 } from 'reactstrap';
-
-import dropdownImg from '../../images/widget-menu.svg'
 
 class Widget extends React.Component {
   static propTypes = {
@@ -169,7 +162,6 @@ class Widget extends React.Component {
       options, //eslint-disable-line
       ...attributes
     } = this.props;
-    const mainControls = !!(close || fullscreen || collapse || refresh || settings || settingsInverse);
 
     const {
       reloading,

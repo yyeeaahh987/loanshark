@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { Switch, Route, Redirect } from 'react-router';
 import { HashRouter } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
-import { withTranslation } from 'react-i18next';
 
 import '../styles/theme.scss';
 import LayoutComponent from '../components/Layout';

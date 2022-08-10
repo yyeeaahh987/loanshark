@@ -282,10 +282,10 @@ class Trade extends React.Component {
                     </Col>
                 </Row>
                 <Row>
-                    <Col lg={3}>
+                    <Col lg={3} md={12}>
                         Borrow Power:
                     </Col>
-                    <Col xs={9}>
+                    <Col lg={9} md={12}>
                         <Row  className="justify-content-end borrow-power">
                             <Col xs={"auto"} className={"borrow-power__option"}>
                                 <Button color="light" style={{color: '#000000'}}

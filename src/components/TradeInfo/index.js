@@ -9,10 +9,6 @@ import "./trade.less";
 import "./trade.scss"
 
 class TradeInfo extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
     render() {
         var borrowPower = (
             this.props.inputEthDeposit
@@ -56,7 +52,7 @@ class TradeInfo extends React.Component {
                         Max Borrow Power:
                     </Col>
                     <Col lg={6} style={{ textAlign: 'right' }} >
-                        {isNaN(borrowPower) == true ? 0 : borrowPower} {this.props.selectedPair === "ETHBTC" ? "BTC" : "USDT"}
+                        {isNaN(borrowPower) === true ? 0 : borrowPower} {this.props.selectedPair === "ETHBTC" ? "BTC" : "USDT"}
                     </Col>
                 </Row>
 
@@ -76,7 +72,7 @@ class TradeInfo extends React.Component {
                         {
                             (isNaN((this.props.inputBtcDept * (this.props.selectedPair === "ETHBTC" ? this.props.priceOfBtc : this.props.priceOfUsdt) / 100)
                                 / this.props.inputEthDeposit
-                                / this.props.LTV[this.props.selectedPair]) == true ? 0 : (this.props.inputBtcDept * (this.props.selectedPair === "ETHBTC" ? this.props.priceOfBtc : this.props.priceOfUsdt) / 100)
+                                / this.props.LTV[this.props.selectedPair]) === true ? 0 : (this.props.inputBtcDept * (this.props.selectedPair === "ETHBTC" ? this.props.priceOfBtc : this.props.priceOfUsdt) / 100)
                                 / this.props.inputEthDeposit
                             / this.props.LTV[this.props.selectedPair]).toFixed(2)
                         }
@@ -86,8 +82,6 @@ class TradeInfo extends React.Component {
         )
     }
 };
-
-
 
 function mapStateToProps(store) {
     return {

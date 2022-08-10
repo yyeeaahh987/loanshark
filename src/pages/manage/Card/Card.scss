@@ -294,7 +294,7 @@
 }
 
 .amount-text {
-    font-size: 3.5em;
+    font-size: 2.5em;
     font-weight: bold;
     background-color: transparent;
     border-width: 0px;
@@ -317,4 +317,8 @@
 .icon {
     width: 32px;
     height: 32px;
+}
+
+input[disabled]{
+    background: transparent !important;
 }
