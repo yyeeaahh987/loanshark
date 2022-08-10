@@ -536,9 +536,9 @@ class Manage extends React.Component {
                     {/* main info table */}
                     <Grid item xs={12}>
                         <Grid container spacing={2}>
-                            <Grid xs={7} item>
+                            <Grid lg={7} md={12} item>
                                 <Grid container spacing={2}>
-                                    <Grid item xs={6}>
+                                    <Grid item lg={6} md={12}>
                                         <Card
                                             widgetSize={"left"}
                                             title={"Collateral"}
@@ -591,7 +591,7 @@ class Manage extends React.Component {
                                             }}
                                         ></Card>
                                     </Grid>
-                                    <Grid item xs={6}>
+                                    <Grid item lg={6} md={12}>
                                         <Card
                                             widgetSize={"right"}
                                             title={"Debt"}
@@ -656,7 +656,7 @@ class Manage extends React.Component {
                                         ></Card>
                                     </Grid>
                                     {debt === "BTC" ?
-                                        <Grid item xs={6}>
+                                        <Grid item lg={6} md={12}>
                                             <Card
                                                 widgetSize={"full"}
                                                 title={"Current Smart Vault Balance"}
@@ -683,7 +683,7 @@ class Manage extends React.Component {
                                 </Grid>
                             </Grid>
                             {/* circle table */}
-                            <Grid xs={5} item>
+                            <Grid lg={5} md={12} item>
                                 <Grid container>
                                     <Grid item xs={12}>
                                     </Grid>
