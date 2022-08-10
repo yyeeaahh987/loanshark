@@ -6,9 +6,7 @@ import {
   Input,
   Button,
   Modal,
-  ModalHeader,
   ModalBody,
-  ModalFooter,
 } from 'reactstrap';
 
 import {
@@ -17,7 +15,6 @@ import {
 
 import API from '../../utils/API'
 import Widget from "../../components/Widget/Widget";
-import { Radio } from "../../components/Radio/Radio";
 
 class SmartVault4 extends React.Component {
   constructor() {
@@ -82,22 +79,22 @@ class SmartVault4 extends React.Component {
           window.web3.utils.toBN((this.state.stakeAmount * 100000000).toFixed(0)).toString(),
         ];
 
-        let argsRegister = [
-          this.props.myAccount + "000000000000000000000000",
-          "0x66756a6964616f00000000000000000000000000000000000000000000000000",
-          window.web3.utils.toBN((this.state.stakeAmount * 10000000).toFixed(0)).toString(),  
-          [
-            window.web3.utils.toBN(window.web3.utils.toWei((this.state.triggerHealthFactor).toString(), 'ether')).toString(),  
-            "0",
-            window.web3.utils.toBN((this.state.stakeAmount * 100000000).toFixed(0)).toString(),  
-            "0x9c1dcacb57ada1e9e2d3a8280b7cfc7eb936186f",
-            "0x9f2b4eeb926d8de19289e93cbf524b6522397b05",
-            window.web3.utils.toBN((this.state.singleTopupAmount * 100000000).toFixed(0)).toString(),  
-            window.web3.utils.toBN((this.state.stakeAmount * 100000000).toFixed(0)).toString(),  
-            window.web3.utils.toBN((this.state.stakeAmount * 100000000).toFixed(0)).toString(),  
-            "0x0000000000000000000000000000000000000000000000000000000000000001"
-            ]
-        ];
+        // let argsRegister = [
+        //   this.props.myAccount + "000000000000000000000000",
+        //   "0x66756a6964616f00000000000000000000000000000000000000000000000000",
+        //   window.web3.utils.toBN((this.state.stakeAmount * 10000000).toFixed(0)).toString(),  
+        //   [
+        //     window.web3.utils.toBN(window.web3.utils.toWei((this.state.triggerHealthFactor).toString(), 'ether')).toString(),  
+        //     "0",
+        //     window.web3.utils.toBN((this.state.stakeAmount * 100000000).toFixed(0)).toString(),  
+        //     "0x9c1dcacb57ada1e9e2d3a8280b7cfc7eb936186f",
+        //     "0x9f2b4eeb926d8de19289e93cbf524b6522397b05",
+        //     window.web3.utils.toBN((this.state.singleTopupAmount * 100000000).toFixed(0)).toString(),  
+        //     window.web3.utils.toBN((this.state.stakeAmount * 100000000).toFixed(0)).toString(),  
+        //     window.web3.utils.toBN((this.state.stakeAmount * 100000000).toFixed(0)).toString(),  
+        //     "0x0000000000000000000000000000000000000000000000000000000000000001"
+        //     ]
+        // ];
     
         this.toggle();
         this.calltoggleLoading();
@@ -243,16 +240,15 @@ function mapStateToProps(store) {
     myAccount: store.loanshark.myAccount,
     lpPoolBtc: store.backd.lpPoolBtc,
     priceOfBtc: store.loanshark.priceOfBtc,
+    priceOfEth: store.loanshark.priceOfEth,
     myBTCContract: store.loanshark.myBTCContract,
-    topupAction: store.backd.topupAction,
-
     userDepositBalanceEth: store.loanshark.userDepositBalanceEth,
     userDebtBalanceBtc:  store.loanshark.userDebtBalanceBtc,
-    priceOfEth: store.loanshark.priceOfEth,
-    priceOfBtc: store.loanshark.priceOfBtc,
+
     LTV: store.loanshark.LTV,
     myBtcLpAmount: store.backd.myBtcLpAmount,
     totalBtcLpAmount: store.backd.totalBtcLpAmount,
+    topupAction: store.backd.topupAction,
   };
 }
 

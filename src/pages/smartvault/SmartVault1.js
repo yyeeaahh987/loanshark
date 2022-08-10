@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { NavLink } from "react-router-dom";
 
 import {
-  Row, Col, Button
+  Row, Col
 } from 'reactstrap';
 
 import { Radio } from "../../components/Radio/Radio";

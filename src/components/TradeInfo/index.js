@@ -4,14 +4,11 @@ import {
     Row,
     Col
 } from "reactstrap";
+import Widget from "../../components/Widget";
 import "./trade.less";
 import "./trade.scss"
 
 class TradeInfo extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
     render() {
         var borrowPower = (
             this.props.inputEthDeposit
@@ -22,7 +19,7 @@ class TradeInfo extends React.Component {
         ).toFixed(2);
 
         return (
-            <>
+            <Widget title={' '}>
                 <Row style={{ marginBottom: 0, marginTop: 0 }}>
                     <Col lg={6}>
                         Current Price of {this.props.selectedPair === "ETHBTC" ? "ETH" : "AVAX"}:
@@ -55,7 +52,7 @@ class TradeInfo extends React.Component {
                         Max Borrow Power:
                     </Col>
                     <Col lg={6} style={{ textAlign: 'right' }} >
-                        {isNaN(borrowPower) == true ? 0 : borrowPower} {this.props.selectedPair === "ETHBTC" ? "BTC" : "USDT"}
+                        {isNaN(borrowPower) === true ? 0 : borrowPower} {this.props.selectedPair === "ETHBTC" ? "BTC" : "USDT"}
                     </Col>
                 </Row>
 
@@ -75,18 +72,16 @@ class TradeInfo extends React.Component {
                         {
                             (isNaN((this.props.inputBtcDept * (this.props.selectedPair === "ETHBTC" ? this.props.priceOfBtc : this.props.priceOfUsdt) / 100)
                                 / this.props.inputEthDeposit
-                                / this.props.LTV[this.props.selectedPair]) == true ? 0 : (this.props.inputBtcDept * (this.props.selectedPair === "ETHBTC" ? this.props.priceOfBtc : this.props.priceOfUsdt) / 100)
+                                / this.props.LTV[this.props.selectedPair]) === true ? 0 : (this.props.inputBtcDept * (this.props.selectedPair === "ETHBTC" ? this.props.priceOfBtc : this.props.priceOfUsdt) / 100)
                                 / this.props.inputEthDeposit
                             / this.props.LTV[this.props.selectedPair]).toFixed(2)
                         }
                     </Col>
                 </Row>
-            </>
+            </Widget>
         )
     }
 };
-
-
 
 function mapStateToProps(store) {
     return {

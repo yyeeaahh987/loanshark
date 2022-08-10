@@ -211,7 +211,7 @@ class Trade extends React.Component {
                                     >
                                         {this.props.selectedPair === "ETHBTC" ? 
                                             <img style={{padding: '5px'}} className="icon" src="/assets/icon/eth-logo.svg" alt="x"></img> : 
-                                            <img style={{padding: '5px'}} className="icon" src="/assets/icon/avalanche-avax-logo.svg" alt="x"></img>} {' '}
+                                            <img style={{padding: '5px'}} className="icon" src="/assets/icon/avax-logo.svg" alt="x"></img>} {' '}
                                         {this.props.selectedPair === "ETHBTC" ? "ETH" : "AVAX"} &#x25bc;
                                     </Dropdown.Toggle>
 
@@ -282,10 +282,10 @@ class Trade extends React.Component {
                     </Col>
                 </Row>
                 <Row>
-                    <Col lg={3}>
+                    <Col lg={3} md={12}>
                         Borrow Power:
                     </Col>
-                    <Col xs={9}>
+                    <Col lg={9} md={12}>
                         <Row  className="justify-content-end borrow-power">
                             <Col xs={"auto"} className={"borrow-power__option"}>
                                 <Button color="light" style={{color: '#000000'}}
