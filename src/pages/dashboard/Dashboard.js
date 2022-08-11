@@ -615,7 +615,6 @@ class Dashboard extends React.Component {
 
             <Widget
               title={<p style={{ fontWeight: 700 }}>
-                {/* {((this.props.userDebtBalanceBtc * this.props.priceOfBtc / 100) + (this.props.userDebtBalanceUsdt * this.props.priceOfUsdt / 100)).toFixed(2)} */}
                 {((this.props.userDebtBalanceBtc * this.props.priceOfBtc / 100) + (this.props.userDebtBalanceUsdt * this.props.priceOfUsdt / 100)).toFixed(2)}
               </p>}
               customDropDown={false}
