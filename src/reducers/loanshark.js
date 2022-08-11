@@ -147,14 +147,14 @@ export default function loansharkReducer(state = defaultState, action) {
       }
       return {...state,LTV: newState.LTV};
     case CHANGE_LIQUDATION_PRICE:
-      var newState = state;
+      var newState2 = state;
       if (action.payload.ETHBTC) {
-        newState.liquidationPrice.ETHBTC = action.payload.ETHBTC;
+        newState2.liquidationPrice.ETHBTC = action.payload.ETHBTC;
       }
       if (action.payload.AVAXUSDT) {
-        newState.liquidationPrice.AVAXUSDT = action.payload.AVAXUSDT;
+        newState2.liquidationPrice.AVAXUSDT = action.payload.AVAXUSDT;
       }
-      return {...state,liquidationPrice: newState.liquidationPrice};
+      return {...state,liquidationPrice: newState2.liquidationPrice};
      default:
       return state;
   }

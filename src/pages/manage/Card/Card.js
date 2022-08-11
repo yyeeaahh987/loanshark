@@ -22,7 +22,7 @@ class Card extends React.Component {
         currencyIconPath: PropTypes.string,
         openBorrowingPower: PropTypes.bool,
         bottomButtonTitle: PropTypes.string,
-        onClickDeposite: PropTypes.func,
+        onClickDeposit: PropTypes.func,
         onClickWithdraw: PropTypes.func,
         action: PropTypes.string,
         onClickSelect: PropTypes.func,
@@ -44,7 +44,7 @@ class Card extends React.Component {
         currencyIconPath: "",
         openBorrowingPower: false,
         bottomButtonTitle: "",
-        onClickDeposite: () => { },
+        onClickDeposit: () => { },
         onClickWithdraw: () => { },
         action: "",
         onClickSelect: () => { },
@@ -59,14 +59,6 @@ class Card extends React.Component {
 
     constructor(props) {
         super(props);
-        // this.forceUpdate = this.forceUpdate.bind(this);
-        // this.toggle = this.toggle.bind(this);
-        // this.toggleDeposit = this.toggleDeposit.bind(this);
-        // this.toggleBorrow = this.toggleBorrow.bind(this);
-        // this.togglePayback = this.togglePayback.bind(this);
-        // this.toggleWithdrawn = this.toggleWithdrawn.bind(this);
-        // this.calltoggleLoading = this.calltoggleLoading.bind(this);
-        // this.setInput = this.setInput.bind(this);
         this.state = {
             leftSelect: true,
             rightSelect: false,
@@ -78,11 +70,8 @@ class Card extends React.Component {
             openBorrowingPower: false,
             bottomButtonTitle: "Deposit",
             iconPath: `/assets/icon/${this.props.currency}-logo.svg`,
+            smartVaultView: (this.props.title === "Current Smart Vault Balance"? true: false)
         };
-    }
-
-    componentDidMount() {
-        // console.log(this.props.currency)
     }
 
     switchPairButton(param) {
@@ -113,7 +102,6 @@ class Card extends React.Component {
                         </Grid>
                     </>
                 )
-                break;
             case "Current Smart Vault Balance":
                 return (
                     <>
@@ -121,7 +109,6 @@ class Card extends React.Component {
                         <br></br>
                         <br></br>
                     </>)
-                break;
             default:
                 return (<></>)
         }
@@ -137,11 +124,11 @@ class Card extends React.Component {
                     <br></br>
                     <br></br>
                     <Grid item xs={12}>
-                        <Button className={"deposite-button"}
+                        <Button className={"deposit-button"}
                             onClick={() => {
                                 switch (action) {
                                     case "deposit":
-                                        this.props.onClickDeposite()
+                                        this.props.onClickDeposit()
                                         break;
                                     case "withdraw":
                                         this.props.onClickWithdraw()
@@ -160,11 +147,7 @@ class Card extends React.Component {
                     <Grid item xs={12}>
                         <Grid container spacing={1} style={{ paddingTop: "5%" }}>
                             <Grid item>
-                                <span
-                                    style={{
-                                        fontSize: "20px",
-                                    }}
-                                >Borrowing Power: </span>
+                                <span>Borrowing Power: </span>
                             </Grid>
                             <Grid item>
                                 <Button className={"customButton__select borrowing-power-button"}
@@ -186,9 +169,9 @@ class Card extends React.Component {
                             </Grid>
                             <Grid item>
                                 <Button className={"customButton__select borrowing-power-button"}
-                                    name={100}
-                                    onClick={this.props.onClickBorrowingPowerChange}
-                                >100%</Button>
+                                name={90}
+                                onClick={this.props.onClickBorrowingPowerChange}
+                                >90%</Button>
                             </Grid>
                         </Grid>
                     </Grid>
@@ -196,7 +179,7 @@ class Card extends React.Component {
                     <br></br>
                     <br></br>
                     <Grid item xs={12}>
-                        <Button className={"deposite-button"} onClick={() => {
+                        <Button className={"deposit-button"} onClick={() => {
                             console.log(action)
                             switch (action) {
                                 case "borrow":
@@ -214,13 +197,14 @@ class Card extends React.Component {
             case "Current Smart Vault Balance":
                 return (<>
                     <Grid item xs={12}>
-                        <Button className={"deposite-button"}>Withdraw</Button>
                     </Grid>
                     <br></br>
-                    <br></br>
-                    <br></br>
                     <Grid item xs={12}>
-                        <Button className={"delete-button"}>Delete Smart Vault Position</Button>
+                        <Button className={"delete-button"}
+                         onClick={() => {
+                           this.props.onClickWithdraw()
+                        }}
+                        >Leave Smart Vault</Button>
                     </Grid>
                 </>)
             default:
@@ -259,6 +243,7 @@ class Card extends React.Component {
                                                         <Input
                                                             className={`amount-text`}
                                                             title="Input"
+                                                            disabled={this.state.smartVaultView}
                                                             // placeholder="Enter deposit amount..."
                                                             value={this.props.amount}
                                                             onChange={this.props.onChangeInput}
@@ -270,22 +255,16 @@ class Card extends React.Component {
                                                                 textAlign: "end",
                                                                 // padding: "5px",
                                                             }}>
-                                                                <div>
+                                                                <div  hidden={this.state.smartVaultView}>
                                                                     <span style={{
                                                                         fontSize: "16px",
                                                                         fontWeight: "bold",
                                                                     }}>balance: {`${this.props.maxBalance}`}</span>
                                                                 </div>
-                                                                <div>
-                                                                    <span style={{
-                                                                        fontSize: "16px",
-                                                                        fontWeight: "bold",
-                                                                    }}>{this.props.currency.toUpperCase()}</span>
-                                                                </div>
                                                             </Grid>
                                                             <Grid item xs={12} style={{ textAlign: "end" }}>
-                                                                <Grid container justifyContent={"end"} spacing={1}>
-                                                                    <Grid item>
+                                                                <Grid container justifyContent={"end"} alignItems={"center"} spacing={1}>
+                                                                    <Grid item hidden={this.state.smartVaultView}>
                                                                         <Button className={"customButton__select max-button"}
                                                                             onClick={this.props.onClickMax}
                                                                         >MAX</Button>
@@ -298,11 +277,12 @@ class Card extends React.Component {
                                                                                 backgroundColor: "white",
                                                                                 padding: "3px 10px"
                                                                             }}
-                                                                        >
+                                                                        > 
                                                                             <img className="icon"
                                                                                 src={this.props.currencyIconPath}
                                                                                 // src={this.state.iconPath}
                                                                                 alt="x"></img>
+                                                                                {'    '}
                                                                             <span style={{ color: "black" }}>{this.props.currency.toUpperCase()}</span>
                                                                         </label>
                                                                     </Grid>

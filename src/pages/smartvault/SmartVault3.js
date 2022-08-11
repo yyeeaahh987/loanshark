@@ -1,14 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
-
-import { NavLink } from "react-router-dom";
-import {
-  Row, Col, Table, 
-  Button,
-} from 'reactstrap';
+import { Row, Col} from 'reactstrap';
 import './SmartVault2.css';
-
-import Widget from "../../components/Widget/Widget";
 
 class SmartVault3 extends React.Component {
   constructor() {
@@ -29,7 +22,7 @@ class SmartVault3 extends React.Component {
 
   selectRow(rowId) {
     this.setState(prevState => ({
-      selectedRow: prevState.selectedRow == rowId? -1 : rowId
+      selectedRow: prevState.selectedRow === rowId? -1 : rowId
     }));
     window.location = '#/app/main/smartVault4';
   }

@@ -28,18 +28,14 @@
   min-width: $sidebar-width-open;
   transition: width $sidebar-transition-time ease-in-out;
   background-color: var(--sidebar-bg-color);
-  z-index: 0;
+  z-index: 100;
   box-shadow: 4px 4px 25px rgba(109, 105, 105, 0.15);
 }
 
 .sidebarClose.sidebarWrapper {
-  @include media-breakpoint-down(sm) {
-    min-width: 15px;
-  }
+  min-width: 0px;
   & .root {
-    @include media-breakpoint-down(sm) {
-      width: 15px;
-    }
+    width: 0px;
   }
 }
 
@@ -47,7 +43,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 66px;
+  overflow-y: hidden;
+  height: 80px;
   background-color: #222222;
   font-size: 30px;
   width: 100%;
@@ -62,10 +59,6 @@
   span {
     font-weight: $font-weight-bold;
   }
-}
-
-.sidebarClose .logo {
-  display: none;
 }
 
 .staticSidebar .logo {
@@ -83,6 +76,7 @@
     background-color: rgba(#000000, 0.2);
     width: 85%;
   }
+  bottom: 0;
   padding: 34px 0 10px;
   overflow-y: auto;
   overflow-x: hidden;

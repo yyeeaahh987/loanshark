@@ -20,10 +20,6 @@ import {
   } from "../actions/loanshark";
 
 import {
-  changeLpPoolBtc,
-  changeLpTokenBtc,
-  changeVaultBtc,
-  changeTopupAction,
   changeMyBtcLpAmount,
   changeMyProtection,
   changeTotalBtcLpAmount,

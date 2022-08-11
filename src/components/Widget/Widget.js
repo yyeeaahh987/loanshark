@@ -1,24 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { UncontrolledTooltip } from 'reactstrap';
 import s from './Widget.module.scss';
 import classNames from 'classnames';
 import Loader from '../Loader'; // eslint-disable-line css-modules/no-unused-class
 import AnimateHeight from 'react-animate-height';
 import uuidv4 from 'uuid/v4'
 import {
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
-  UncontrolledDropdown,
   Button,
   Modal,
   ModalHeader,
   ModalBody,
   ModalFooter,
 } from 'reactstrap';
-
-import dropdownImg from '../../images/widget-menu.svg'
 
 class Widget extends React.Component {
   static propTypes = {
@@ -169,7 +162,6 @@ class Widget extends React.Component {
       options, //eslint-disable-line
       ...attributes
     } = this.props;
-    const mainControls = !!(close || fullscreen || collapse || refresh || settings || settingsInverse);
 
     const {
       reloading,
@@ -205,114 +197,7 @@ class Widget extends React.Component {
             )
           }
 
-          {
-            !customControls && mainControls && (
-              <div className={`${s.widgetControls} widget-controls`}>
-                {settings && (
-                  <button><i className="la la-cog" /></button>
-                )}
-                {settingsInverse && (
-                  <button className={`bg-gray-transparent ${s.inverse}`}><i
-                    className="la la-cog text-white"
-                  /></button>
-                )}
-                {refresh && (
-                  <button onClick={this.handleReload} id={`reloadId-${randomId}`}>
-                    {typeof refresh === 'string' ?
-                      <strong className="text-gray-light">{refresh}</strong> :
-                      <i className="la la-refresh" />}
-                    {showTooltip && (
-                      <UncontrolledTooltip
-                        placement={tooltipPlacement}
-                        target={`reloadId-${randomId}`}
-                      >Reload</UncontrolledTooltip>
-                    )}
-                  </button>
-                )}
-                {fullscreen && (
-                  <>
-                    <i className={`glyphicon glyphicon-resize-${fullscreened ? 'small' : 'full'}`} />
-                    {showTooltip && (
-                      <UncontrolledTooltip
-                        placement={tooltipPlacement}
-                        target={`fullscreenId-${randomId}`}
-                      >Fullscreen</UncontrolledTooltip>
-                    )}
-                  </>
 
-                  // <button onClick={(e)=>{
-                  //   console.log(`onclick full`)
-                  //   this.handleFullscreen(e)
-                  // }} id={`fullscreenId-${randomId}`}>
-
-                  // </button>
-                )}
-                {!fullscreened &&
-                  collapse && (
-                    <span>
-                      <button onClick={this.handleCollapse} id={`collapseId-${randomId}`}>
-                        <i className={`la la-angle-${!collapseWidget ? 'down' : 'up'}`} />
-                        {showTooltip && (
-                          <UncontrolledTooltip
-                            placement={tooltipPlacement}
-                            target={`collapseId-${randomId}`}
-                          >Collapse</UncontrolledTooltip>
-                        )}
-                      </button>
-                    </span>
-                  )
-                }
-                {!fullscreened && (
-                  (close && !prompt) ? (
-                    <button onClick={this.handleClose} id={`closeId-${randomId}`}>
-                      {typeof close === 'string' ?
-                        <strong className="text-gray-light">{close}</strong> :
-                        <i className="la la-remove" />}
-                      {showTooltip && (
-                        <UncontrolledTooltip
-                          placement={tooltipPlacement}
-                          target={`closeId-${randomId}`}
-                        >Close</UncontrolledTooltip>
-                      )}
-                    </button>
-                  ) : (
-                    <button onClick={this.toggleModal} id={`closeId-${randomId}`}>
-                      {typeof close === 'string' ?
-                        <strong className="text-gray-light">{close}</strong> :
-                        <i className="la la-remove" />}
-                      {showTooltip && (
-                        <UncontrolledTooltip
-                          placement={tooltipPlacement}
-                          target={`closeId-${randomId}`}
-                        >Modal</UncontrolledTooltip>
-                      )}
-                    </button>
-                  ))}
-              </div>
-            )}
-
-          {/* is ... dropdown button */}
-          {customDropDown && (
-            <div className={`${s.widgetControls} widget-controls`}>
-              <UncontrolledDropdown>
-                <DropdownToggle
-                  tag="span"
-                  data-toggle="dropdown"
-
-                >
-                  <img src={dropdownImg} alt="dropdown" />
-                </DropdownToggle>
-                <DropdownMenu className="bg-widget-transparent" right style={{ padding: 10 }}>
-
-                  <DropdownItem onClick={this.handleFullscreen} title={!fullscreened ? "Full Screen" : "Restore"}>{!fullscreened ? "Fullscreen" : "Restore"} </DropdownItem>
-                  <DropdownItem divider />
-                  {!fullscreened && (!prompt ? <DropdownItem onClick={this.handleClose} title="Close">Close</DropdownItem>
-                    : <DropdownItem onClick={this.toggleModal} title="Close">Close</DropdownItem>)}
-                </DropdownMenu>
-              </UncontrolledDropdown>
-            </div>
-          )}
-          
           {
             customControls && (
               <div className={`${s.widgetControls} widget-controls`}>
