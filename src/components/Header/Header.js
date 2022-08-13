@@ -112,6 +112,7 @@ class Header extends React.Component {
 		this.changeArrowImg = this.changeArrowImg.bind(this);
 		this.changeArrowImgOut = this.changeArrowImgOut.bind(this);
 		this.ethEnabled = this.ethEnabled.bind(this);
+		this.ethDisabled = this.ethDisabled.bind(this);
 		this.getNeededCollateralFor = this.getNeededCollateralFor.bind(this);
 
 		this.setMyFujiVaultETHBTC = this.setMyFujiVaultETHBTC.bind(this);
@@ -414,8 +415,8 @@ class Header extends React.Component {
 										this.setMyBTCContract(new window.web3.eth.Contract(dataHong, WBTC));
 										this.setMyUSDTContract(new window.web3.eth.Contract(dataHong, USDT));
 										this.setMyAAVEAVAXContract(new window.web3.eth.Contract(ProviderAAVEAVAX.abi, ProviderAAVEAVAX));
-										this.setMySmartVaultContract(new window.web3.eth.Contract(SmartVault, SMART_VAULT_BTC));
-										this.setMySmartVaultContract(new window.web3.eth.Contract(SmartVault, SMART_VAULT_USDT));
+										this.setMySmartVaultContractBtc(new window.web3.eth.Contract(SmartVault, SMART_VAULT_BTC));
+										this.setMySmartVaultContractUsdt(new window.web3.eth.Contract(SmartVault, SMART_VAULT_USDT));
 
 										this.props.dispatch(changeLpPoolBtc(new window.web3.eth.Contract(lpPoolAbi, LP_POOL_BTC)));
 										this.props.dispatch(changeLpTokenBtc(new window.web3.eth.Contract(lpTokenAbi, LP_TOKEN_BTC)));
@@ -461,6 +462,12 @@ class Header extends React.Component {
 		}
 	}
 
+	
+	ethDisabled() {
+		window.location.reload();
+	}
+
+
 	render() {
 		return (
 			<div>
@@ -490,7 +497,22 @@ class Header extends React.Component {
 													onClick={(e) => { this.ethEnabled() }}
 												></RoundShapeButton>
 												:
-												<div style={{ marginLeft: "auto" }}><Input className={s.addressClass} id={"sidebar-drawer"} disabled={true} valid style={{ width: '450px' }} value={this.state.myAccount}></Input></div>
+												<div style={{ marginLeft: "auto" }}>
+													<Input
+													 className={s.addressClass} id={"sidebar-drawer"} disabled={true} valid value={this.state.myAccount}></Input>
+												</div>
+										}
+									</div>
+								</Grid>
+								<Grid item>
+									<div>
+										{
+											this.state.myAccount ?
+											<RoundShapeButton
+												label={"Disconnect"}
+												onClick={(e) => { this.ethDisabled() }}
+											></RoundShapeButton>
+											: null
 										}
 									</div>
 								</Grid>

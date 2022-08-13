@@ -8,6 +8,7 @@ import {
   Modal,
   ModalBody,
 } from 'reactstrap';
+import './SmartVault2.css';
 
 import {
   toggleLoading,
@@ -171,13 +172,13 @@ class SmartVault4 extends React.Component {
                 </tr>
                 </tbody>
               </Table>
-                  <p className={"fw-bold"}>How much would you like to stake to smart vault?</p>
+                  <p className={"fw-bold"}>Input the amount of (BTC) you would like to deposit into the smart vault</p>
                   <Input style={{backgroundColor: 'transparent', color: '#ffffff'}} value={this.state.stakeAmount} onChange={this.setStakeAmount}></Input>
                   <br/>
-                  <p className={"fw-bold"}>At which health factor would you like to use smart vault?</p>
+                  <p className={"fw-bold"}>Input the target health factor to trigger the automatic top-up/repayment action</p>
                   <Input style={{backgroundColor: 'transparent', color: '#ffffff'}} value={this.state.triggerHealthFactor} onChange={this.setTriggerHealthFactor}></Input>
                   <br/>
-                  <p className={"fw-bold"}>How much would you like to top-up / repay each time?</p>
+                  <p className={"fw-bold"}>Input the amount of (BTC) you would like Loanshark to repay for you each time the target heath factor is hit</p>
                   <Input style={{backgroundColor: 'transparent', color: '#ffffff'}} value={this.state.singleTopupAmount} onChange={this.setSingleTopupAmount}></Input>
                   <br/>
             </Col>
@@ -220,9 +221,9 @@ class SmartVault4 extends React.Component {
                 </Col>
                 <Col style={{paddingTop: '20px', paddingLeft: '40px', paddingRight: '40px'}} sm={12}>
                   When the health factor drops below <span style={{color: '#00ff00'}}>{this.state.triggerHealthFactor}</span>, 
-                  it will be topped up with <span className={'fw-bold'}>{this.state.singleTopupAmount} BTC (~${this.state.singleTopupAmount * this.props.priceOfBtc})</span>.
+                  it will be topped up with <span className={'fw-bold'}>{this.state.singleTopupAmount} BTC (~${Number(this.state.singleTopupAmount * this.props.priceOfBtc  / 100).toFixed(8)})</span>.
                   This will be repeated each time the health factor drops below <span style={{color: '#00ff00'}}>{this.state.triggerHealthFactor}</span>,
-                  until a total of <span className={'fw-bold'}>{this.state.stakeAmount} BTC (~${this.state.stakeAmount * this.props.priceOfBtc})</span> is topped up. 1 AVAX will be given for gas fee.
+                  until a total of <span className={'fw-bold'}>{this.state.stakeAmount} BTC (~${Number(this.state.stakeAmount * this.props.priceOfBtc / 100).toFixed(8)})</span> is topped up. 1 AVAX will be given for gas fee.
                 </Col>
                 <Col style={{paddingTop: '20px', paddingLeft: '40px', paddingRight: '40px'}} sm={12}>
                   <Button block color={'light'} style={{padding: '20px', color: '#000000'}} onClick={this.state.modalCall}>Confirm</Button>

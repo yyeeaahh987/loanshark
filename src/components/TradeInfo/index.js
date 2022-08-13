@@ -49,7 +49,7 @@ class TradeInfo extends React.Component {
                 </Row>
                 <Row style={{ marginBottom: 0, marginTop: 0 }}>
                     <Col lg={6}>
-                        Max Borrow Power:
+                        Max Borrowing Capacity:
                     </Col>
                     <Col lg={6} style={{ textAlign: 'right' }} >
                         {isNaN(borrowPower) === true ? 0 : borrowPower} {this.props.selectedPair === "ETHBTC" ? "BTC" : "USDT"}

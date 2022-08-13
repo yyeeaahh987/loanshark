@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import {
     Input,
     Button,
+    ButtonGroup
 } from 'reactstrap';
 
 import './Card.scss'
@@ -31,6 +32,7 @@ class Card extends React.Component {
         maxBalance: PropTypes.number,
         onClickMax: PropTypes.func,
         onClickBorrowingPowerChange: PropTypes.func,
+        onClickDepositChange: PropTypes.func,
         onClickBorrow: PropTypes.func,
         onClickPayback: PropTypes.func,
     };
@@ -53,6 +55,7 @@ class Card extends React.Component {
         maxBalance: 0,
         onClickMax: () => { },
         onClickBorrowingPowerChange: () => { },
+        onClickDepositChange: () => { },
         onClickBorrow: () => { },
         onClickPayback: () => { },
     };
@@ -118,13 +121,40 @@ class Card extends React.Component {
         switch (param) {
             case "Collateral":
                 return (<>
-                    <Grid item xs={12} style={{ minHeight: "72px" }}>
+                    <Grid item xs={12}>
+                        <Grid container spacing={1} style={{ paddingTop: "5%" }}>
+                            <Grid item>
+                                <span style={{fontSize: '12px'}}>{action === "deposit" ? "Deposit By Percentage" : "Withdraw By Percentage"}: </span>
+                                <ButtonGroup aria-label="Borrowing Power" size="xs">
+                                    <Button className={"borrow-power-button"} size="xs"
+                                        name={25}
+                                        onClick={this.props.onClickDepositChange}
+                                    >25%</Button>
+                                    <Button className={"borrow-power-button"} size="xs"
+                                        name={50}
+                                        onClick={this.props.onClickDepositChange}
+                                    >50%</Button>
+                                    <Button className={"borrow-power-button"} size="xs"
+                                        name={75}
+                                        onClick={this.props.onClickDepositChange}
+                                    >75%</Button>
+                                    <Button className={"borrow-power-button"} size="xs"
+                                    name={90}
+                                    onClick={this.props.onClickDepositChange}
+                                    >90%</Button>
+                                    <Button className={"borrow-power-button"} size="xs"
+                                    name={100}
+                                    onClick={this.props.onClickDepositChange}
+                                    >Max</Button>
+                                 </ButtonGroup>
+                            </Grid>
+                        </Grid>
                     </Grid>
                     <br></br>
                     <br></br>
                     <br></br>
                     <Grid item xs={12}>
-                        <Button className={"deposit-button"}
+                        <Button style={{textTransform: 'capitalize'}} className={"deposit-button"}
                             onClick={() => {
                                 switch (action) {
                                     case "deposit":
@@ -141,37 +171,32 @@ class Card extends React.Component {
                 </>)
             case "Debt":
                 return (<>
-                    <br></br>
-                    <br></br>
-                    <br></br>
                     <Grid item xs={12}>
                         <Grid container spacing={1} style={{ paddingTop: "5%" }}>
                             <Grid item>
-                                <span>Borrowing Power: </span>
-                            </Grid>
-                            <Grid item>
-                                <Button className={"customButton__select borrowing-power-button"}
-                                    name={25}
+                                <span style={{fontSize: '12px'}}>{action === "borrow" ? "Borrowing Power" : "Payback By Percentage"}: </span>
+                                <ButtonGroup aria-label="Borrowing Power" size="xs">
+                                    <Button className={"borrow-power-button"} size="xs"
+                                        name={25}
+                                        onClick={this.props.onClickBorrowingPowerChange}
+                                    >25%</Button>
+                                    <Button className={"borrow-power-button"} size="xs"
+                                        name={50}
+                                        onClick={this.props.onClickBorrowingPowerChange}
+                                    >50%</Button>
+                                    <Button className={"borrow-power-button"} size="xs"
+                                        name={75}
+                                        onClick={this.props.onClickBorrowingPowerChange}
+                                    >75%</Button>
+                                    <Button className={"borrow-power-button"} size="xs"
+                                    name={90}
                                     onClick={this.props.onClickBorrowingPowerChange}
-                                >25%</Button>
-                            </Grid>
-                            <Grid item>
-                                <Button className={"customButton__select borrowing-power-button"}
-                                    name={50}
+                                    >90%</Button>
+                                    <Button className={"borrow-power-button"} size="xs"
+                                    name={100}
                                     onClick={this.props.onClickBorrowingPowerChange}
-                                >50%</Button>
-                            </Grid>
-                            <Grid item>
-                                <Button className={"customButton__select borrowing-power-button"}
-                                    name={75}
-                                    onClick={this.props.onClickBorrowingPowerChange}
-                                >75%</Button>
-                            </Grid>
-                            <Grid item>
-                                <Button className={"customButton__select borrowing-power-button"}
-                                name={90}
-                                onClick={this.props.onClickBorrowingPowerChange}
-                                >90%</Button>
+                                    >Max</Button>
+                                 </ButtonGroup>
                             </Grid>
                         </Grid>
                     </Grid>
@@ -179,8 +204,7 @@ class Card extends React.Component {
                     <br></br>
                     <br></br>
                     <Grid item xs={12}>
-                        <Button className={"deposit-button"} onClick={() => {
-                            console.log(action)
+                        <Button style={{textTransform: 'capitalize'}} className={"deposit-button"} onClick={() => {
                             switch (action) {
                                 case "borrow":
                                     this.props.onClickBorrow()
@@ -197,14 +221,11 @@ class Card extends React.Component {
             case "Current Smart Vault Balance":
                 return (<>
                     <Grid item xs={12}>
-                    </Grid>
-                    <br></br>
-                    <Grid item xs={12}>
                         <Button className={"delete-button"}
                          onClick={() => {
                            this.props.onClickWithdraw()
                         }}
-                        >Leave Smart Vault</Button>
+                        >Withdraw All From Smart Vault</Button>
                     </Grid>
                 </>)
             default:
@@ -229,7 +250,7 @@ class Card extends React.Component {
                             <Grid item xs={12}>
                                 <div style={{
                                     // width:"100%",
-                                    borderRadius: "8px 8px 8px 8px",
+                                    borderRadius: "10px 10px 10px 10px",
                                     border: "1px solid white",
                                 }}
                                 >
@@ -239,7 +260,7 @@ class Card extends React.Component {
                                                 padding: "5px 12px",
                                             }}>
                                                 <Grid container>
-                                                    <Grid item xs={7}>
+                                                    <Grid style={{display: "flex", flexDirection: "column", justifyContent: "center"}} item xs={7}>
                                                         <Input
                                                             className={`amount-text`}
                                                             title="Input"
@@ -257,23 +278,18 @@ class Card extends React.Component {
                                                             }}>
                                                                 <div  hidden={this.state.smartVaultView}>
                                                                     <span style={{
-                                                                        fontSize: "16px",
+                                                                        fontSize: "14px",
                                                                         fontWeight: "bold",
                                                                     }}>balance: {`${this.props.maxBalance}`}</span>
                                                                 </div>
                                                             </Grid>
                                                             <Grid item xs={12} style={{ textAlign: "end" }}>
                                                                 <Grid container justifyContent={"end"} alignItems={"center"} spacing={1}>
-                                                                    <Grid item hidden={this.state.smartVaultView}>
-                                                                        <Button className={"customButton__select max-button"}
-                                                                            onClick={this.props.onClickMax}
-                                                                        >MAX</Button>
-                                                                    </Grid>
                                                                     <Grid item>
                                                                         <label
                                                                             style={{
                                                                                 border: "1px solid white",
-                                                                                borderRadius: "16px",
+                                                                                borderRadius: "10px",
                                                                                 backgroundColor: "white",
                                                                                 padding: "3px 10px"
                                                                             }}
@@ -283,7 +299,7 @@ class Card extends React.Component {
                                                                                 // src={this.state.iconPath}
                                                                                 alt="x"></img>
                                                                                 {'    '}
-                                                                            <span style={{ color: "black" }}>{this.props.currency.toUpperCase()}</span>
+                                                                            <span style={{ color: "black", fontSize: "14px", fontWeight: "bold", }}>{this.props.currency.toUpperCase()}</span>
                                                                         </label>
                                                                     </Grid>
                                                                 </Grid>

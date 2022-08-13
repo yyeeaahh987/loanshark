@@ -272,11 +272,13 @@
 }
 
 .addressClass {
-  display:none;
+  display:block;
+  width: 100px;
 }
 
 @media (min-width: 768px) {
     .addressClass {
       display:block;
+      width: 450px;
     }
 }

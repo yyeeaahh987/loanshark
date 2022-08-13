@@ -1,3 +1,4 @@
+export const RESET = 'RESET';
 export const CHANGE_MY_ACCOUNT = 'CHANGE_MY_ACCOUNT';
 export const CHANGE_SELECTED_PAIR = 'CHANGE_SELECTED_PAIR';
 export const CHANGE_NUMBER_OF_ETH = 'CHANGE_NUMBER_OF_ETH';
@@ -33,6 +34,9 @@ export const CHANGE_MY_USDT_AMOUNT = 'CHANGE_MY_USDT_AMOUNT';
 export const CHANGE_LTV = 'CHANGE_LTV';
 export const CHANGE_LIQUDATION_PRICE = 'CHANGE_LIQUDATION_PRICE';
 
+export function reset(payload) {
+  return {type: RESET,payload};
+}
 export function changeMyAccount(payload) {
   return {type: CHANGE_MY_ACCOUNT,payload};
 }

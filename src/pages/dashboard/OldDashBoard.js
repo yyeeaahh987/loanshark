@@ -685,7 +685,7 @@ class OldDashboard extends React.Component {
                 <Row
                   style={{
                     padding: '15px',
-                    borderRadius: '15px',
+                    borderRadius: '10px',
                     marginLeft: '1px',
                 }}>
                   <Col lg={2} key={0} scope="col" className={"pl-0"}>
@@ -712,7 +712,7 @@ class OldDashboard extends React.Component {
                     border: 'solid',
                     borderWidth: '1px',
                     borderColor: '#ffffff',
-                    borderRadius: '15px',
+                    borderRadius: '10px',
                     display: 'flex',
                     alignItems: 'center'
                 }}>
@@ -754,7 +754,7 @@ class OldDashboard extends React.Component {
                     border: 'solid',
                     borderWidth: '1px',
                     borderColor: '#ffffff',
-                    borderRadius: '15px',
+                    borderRadius: '10px',
                     display: 'flex',
                     alignItems: 'center'
                 }}>
@@ -801,7 +801,7 @@ class OldDashboard extends React.Component {
                   style={{
                     padding: '15px',
                     borderWith: '1px',
-                    borderRadius: '15px',
+                    borderRadius: '10px',
                     marginLeft: '1px',
                 }}>
                   <Col lg={2} key={0} scope="col" className={"pl-0"}>
@@ -827,7 +827,7 @@ class OldDashboard extends React.Component {
                     marginLeft: '1px',
                     border: 'solid',
                     borderColor: '#ffffff',
-                    borderRadius: '15px',
+                    borderRadius: '10px',
                     borderWidth: '1px',
                     display: 'flex',
                     alignItems: 'center'

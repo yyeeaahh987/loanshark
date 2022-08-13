@@ -75,7 +75,7 @@ class Manage extends React.Component {
                 depositCurrency: deposit,
                 depositAmount: this.props.userDepositBalanceAvax,
                 depositCurrencyPrice: Number(this.props.priceOfAvax),
-                maxdepositAmount: Number(this.props.myAVAXAmount).toFixed(6),
+                maxdepositAmount: Number(this.props.myAVAXAmount),
                 maxWithdrawAmount: Number(this.props.userDepositBalanceAvax),
                 depositCurrencyIconPath: `/assets/icon/${deposit.toLowerCase()}-logo.svg`,
                 debtCurrency: debt,
@@ -99,17 +99,17 @@ class Manage extends React.Component {
             this.setState({
                 depositCurrency: deposit,
                 depositAmount: this.props.userDepositBalanceEth,
-                maxdepositAmount: Number(this.props.myETHAmount).toFixed(6),
+                maxdepositAmount: Number(this.props.myETHAmount),
                 depositCurrencyIconPath: `/assets/icon/${deposit.toLowerCase()}-logo.svg`,
                 debtCurrency: debt,
                 debtAmount: 0,
-                maxdebtAmount: Number(borrowPower).toFixed(6),
+                maxdebtAmount: Number(borrowPower).toFixed(8),
                 debtCurrencyIconPath: `/assets/icon/${debt.toLowerCase()}-logo.svg`,
 
                 maxWithdrawAmount: Number(this.props.userDepositBalanceEth),
                 debtCurrencyPrice: Number(this.props.priceOfBtc),
-                maxDetAmount: Number(this.props.myBTCAmount),
-                maxPaybackAmount: Number(this.props.userDebtBalanceBtc),
+                maxDetAmount: Number(this.props.myBTCAmount).toFixed(8),
+                maxPaybackAmount: Number(this.props.userDebtBalanceBtc).toFixed(8),
             })
             this.props.dispatch(changeSelectedPair("ETHBTC"));
         }
@@ -519,11 +519,12 @@ class Manage extends React.Component {
                                         }
                                     </td>
                                     <td className="middle">
-                                        {debt === "BTC" ?
-                                            this.props.myBtcLpAmount * this.props.priceOfBtc
+                                        ${debt === "BTC" ?
+                                            this.props.myBtcLpAmount * this.props.priceOfBtc / 100
                                             :
                                             '-'
-                                        }
+                                        }<br/>
+                                        {this.props.myBtcLpAmount} BTC
                                     </td>
                                     <td className="lastOne">
                                         AAVE
@@ -557,7 +558,7 @@ class Manage extends React.Component {
                                                         this.setState({
                                                             collateralAction: e.target.name,
                                                             collateralAmount: 0,
-                                                            maxdepositAmount: (deposit === "ETH" ? Number(this.props.myETHAmount).toFixed(6) : Number(this.props.myAVAXAmount).toFixed(6))
+                                                            maxdepositAmount: (deposit === "ETH" ? Number(this.props.myETHAmount) : Number(this.props.myAVAXAmount))
                                                         })
 
                                                         break;
@@ -565,12 +566,18 @@ class Manage extends React.Component {
                                                         this.setState({
                                                             collateralAction: e.target.name,
                                                             collateralAmount: 0,
-                                                            maxdepositAmount: deposit === "ETH" ? Number(this.props.userDepositBalanceEth).toFixed(6) : Number(this.props.userDepositBalanceAvax).toFixed(6)
+                                                            maxdepositAmount: deposit === "ETH" ? Number(this.props.userDepositBalanceEth) : Number(this.props.userDepositBalanceAvax)
                                                         })
                                                         break;
                                                     default:
                                                         break;
                                                 }
+                                            }}
+                                            onClickDepositChange={(e) => {
+                                                let finalAmount = (this.state.maxdepositAmount * e.target.name / 100).toFixed(18)
+                                                this.setState({
+                                                    collateralAmount: finalAmount,
+                                                })
                                             }}
                                             onChangeInput={(e) => {
                                                 this.setState({
@@ -584,10 +591,10 @@ class Manage extends React.Component {
                                                 })
                                             }}
                                             onClickDeposit={() => {
-                                                this.toggleDeposit(deposit, 'Deposit', deposit + debt)
+                                                this.toggleDeposit(deposit, 'You are depositing', deposit + debt)
                                             }}
                                             onClickWithdraw={() => {
-                                                this.toggleWithdrawn(deposit, 'Withdraw', deposit + debt)
+                                                this.toggleWithdrawn(deposit, 'You are withdrawing', deposit + debt)
                                             }}
                                         ></Card>
                                     </Grid>
@@ -617,14 +624,14 @@ class Manage extends React.Component {
                                                         this.setState({
                                                             debtAction: e.target.name,
                                                             debtAmount: 0,
-                                                            maxdebtAmount: borrowPower.toFixed(6)
+                                                            maxdebtAmount: borrowPower.toFixed(8)
                                                         })
                                                         break;
                                                     case "payback":
                                                         this.setState({
                                                             debtAction: e.target.name,
                                                             debtAmount: 0,
-                                                            maxdebtAmount: debt === "BTC" ? Number(this.props.userDebtBalanceBtc).toFixed(6) : Number(this.props.userDebtBalanceUsdt).toFixed(6)
+                                                            maxdebtAmount: debt === "BTC" ? Number(this.props.userDebtBalanceBtc).toFixed(8) : Number(this.props.userDebtBalanceUsdt).toFixed(8)
                                                         })
                                                         break;
                                                     default:
@@ -642,16 +649,16 @@ class Manage extends React.Component {
                                                 })
                                             }}
                                             onClickBorrowingPowerChange={(e) => {
-                                                let finalAmount = (this.state.maxdebtAmount * e.target.name / 100).toFixed(6)
+                                                let finalAmount = (this.state.maxdebtAmount * e.target.name / 100).toFixed(8)
                                                 this.setState({
                                                     debtAmount: finalAmount,
                                                 })
                                             }}
                                             onClickPayback={() => {
-                                                this.togglePayback(debt, 'Payback', deposit + debt)
+                                                this.togglePayback(debt, 'You are paying back', deposit + debt)
                                             }}
                                             onClickBorrow={() => {
-                                                this.toggleBorrow(debt, 'Borrow', deposit + debt)
+                                                this.toggleBorrow(debt, 'You are borrowing', deposit + debt)
                                             }}
                                         ></Card>
                                     </Grid>
@@ -673,7 +680,7 @@ class Manage extends React.Component {
                                                     })
                                                 }}
                                                 onClickWithdraw={() => {
-                                                    this.toggleLeaveSmartVault(debt, 'Leave Smart Vault', deposit + debt)
+                                                    this.toggleLeaveSmartVault(debt, `${'You are withdrawing $' + Number(this.props.myBtcLpAmount * this.props.priceOfBtc / 100).toFixed(8) + ' from Smart Vault'}`, 0)
                                                 }}
                                             ></Card>
                                         </Grid>
@@ -713,7 +720,7 @@ class Manage extends React.Component {
                                 <Input disabled className={`amount-text`}
                                     style={{ backgroundColor: 'transparent', color: '#ffffff' }}
                                     value={Number(this.state.modalInputValue)}>
-                                </Input>
+                                </Input> {this.state.modalToken}
                             </Col>
                             <Col style={{ paddingTop: '20px', paddingLeft: '40px', paddingRight: '40px' }} sm={12}>
                                 <Button block color={'light'} style={{ padding: '5px', color: '#000000' }} onClick={this.state.modalCall}>Confirm</Button>

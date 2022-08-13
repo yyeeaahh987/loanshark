@@ -58,12 +58,7 @@ class Tables extends React.Component {
             <Widget
               title={
                 <p style={{ fontWeight: 700 }}>
-                  Deposit {this.props.selectedPair === "ETHBTC"? " ETH" : this.props.selectedPair === "AVAXUSDT"? " AVAX" : ""} and 
-                  Borrow {this.props.selectedPair === "ETHBTC"? " BTC" : this.props.selectedPair === "AVAXUSDT"? " USDT" : ""}<br/>
-                    <span style={{color: "#0000000", fontSize: "16px"}}>
-                      {this.props.selectedPair === "ETHBTC" ? this.props.numberOfEth : this.props.selectedPair === "AVAXUSDT" ? this.props.numberOfAvax : ""}  
-                      {this.props.selectedPair === "ETHBTC"? " ETH" : this.props.selectedPair === "AVAXUSDT"? " AVAX" : ""} as collateral to borrow 1 
-                      {this.props.selectedPair === "ETHBTC"? " BTC" : this.props.selectedPair === "AVAXUSDT"? " USDT" : ""}</span>
+                  Borrow
                 </p>
               }
               customDropDown
@@ -86,7 +81,7 @@ class Tables extends React.Component {
                 </Row>
                 <Row>
                   <Col>
-                    Tranquil
+                    Benqi
                   </Col>
                   <Col lg={6} style={{ textAlign: 'right' }} >
                     2.0%
