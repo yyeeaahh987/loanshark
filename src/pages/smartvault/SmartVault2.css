@@ -17,15 +17,24 @@ th, td {
     background-color: #000000;
     border: solid;
     border-width: 1px;
-    border-color: #ffffff;
+    border-color: rgb(122, 122, 122);
     cursor: pointer;
     padding: 15px;
     border-radius: 15px;
     display: 'flex';
-    align-items: 'center'
+    align-items: 'center';
+    box-shadow: var(--widget-shadow);
 }
 
 .rowHover:hover {
   color: #000000;
   background-color: #ffffff;
+}
+
+.table-light {
+  box-shadow: var(--widget-shadow);
+}
+
+.smart-vault-input {
+  box-shadow: var(--widget-shadow) !important; 
 }

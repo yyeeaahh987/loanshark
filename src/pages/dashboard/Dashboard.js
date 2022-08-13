@@ -1,8 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
 import { NavLink } from "react-router-dom"
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faFire } from "@fortawesome/free-solid-svg-icons"
 import { Grid } from '@mui/material';
 import { Row, Col, Table, Button, Modal, ModalBody } from 'reactstrap';
 import { toggleLoading } from "../../actions/navigation";
@@ -93,55 +91,50 @@ class Dashboard extends React.Component {
 		return (
 			<div abc={console.log(this.props)}>
 				<Grid container spacing={2}>
-					<Grid item xl={3} lg={3} md={4}>
+					<Grid item xl={3} lg={3} xs={12}>
 						<Widget
 							title={<p style={{ fontWeight: 700 }}>
-								{
-									(((this.props.userDepositBalanceEth) * this.props.priceOfEth / 100) - (this.props.userDebtBalanceBtc * this.props.priceOfBtc / 100) +
-										((this.props.userDepositBalanceAvax) * this.props.priceOfAvax / 100) - (this.props.userDebtBalanceUsdt * this.props.priceOfUsdt / 100))
-										.toFixed(2)
-								}
+								${((this.props.userDepositBalanceEth * this.props.priceOfEth / 100) + (this.props.userDepositBalanceAvax * this.props.priceOfAvax / 100)).toFixed(2)}
 							</p>}
 							customDropDown={false}
 						>
 							<Row className={`justify-content-between mt-3`} noGutters>
-								<Col sm={8} className={"d-flex align-items-center"}>
+								<Col sm={12} className={"d-flex align-items-center"}>
 									<p className={"fw-semi-bold mb-0"}>
-										Available Balance
+										Your Collateral
 									</p>
 								</Col>
 							</Row>
 						</Widget>
 					</Grid>
 
-					<Grid item xl={3} lg={3} md={4}>
+					<Grid item xl={3} lg={3} xs={12}>
 						<Widget
 							title={<p style={{ fontWeight: 700 }}>
-								{((this.props.userDepositBalanceEth * this.props.priceOfEth / 100) + (this.props.userDepositBalanceAvax * this.props.priceOfAvax / 100)).toFixed(2)}
+								${((this.props.userDebtBalanceBtc * this.props.priceOfBtc / 100) + (this.props.userDebtBalanceUsdt * this.props.priceOfUsdt / 100)).toFixed(2)}
 							</p>}
 							customDropDown={false}
 						>
 							<Row className={`justify-content-between mt-3`} noGutters>
-								<Col sm={8} className={"d-flex align-items-center"}>
+								<Col sm={12} className={"d-flex align-items-center"}>
 									<p className={"fw-semi-bold mb-0"}>
-										Total Deposited
+										Your Debt
 									</p>
 								</Col>
 							</Row>
 						</Widget>
 					</Grid>
-
-					<Grid item xl={3} lg={3} md={4}>
+					<Grid item xl={3} lg={3} xs={12}>
 						<Widget
 							title={<p style={{ fontWeight: 700 }}>
-								{((this.props.userDebtBalanceBtc * this.props.priceOfBtc / 100) + (this.props.userDebtBalanceUsdt * this.props.priceOfUsdt / 100)).toFixed(2)}
+								${(this.props.myBtcLpAmount * this.props.priceOfBtc / 100).toFixed(2)}
 							</p>}
 							customDropDown={false}
 						>
 							<Row className={`justify-content-between mt-3`} noGutters>
-								<Col sm={8} className={"d-flex align-items-center"}>
+								<Col sm={12} className={"d-flex align-items-center"}>
 									<p className={"fw-semi-bold mb-0"}>
-										Total Borrowed
+									Your Smart Vault Balance
 									</p>
 								</Col>
 							</Row>
@@ -175,17 +168,14 @@ class Dashboard extends React.Component {
 										Health Factor
 									</th>
 									<th key={5} scope="col" className={"customTable__headRow__item"}>
-										Smart Value
-									</th>
-									<th key={6} scope="col" className={"customTable__headRow__item"}>
 										Protection
 									</th>
-									<th key={7} scope="col" className={"customTable__headRow__item"}>
+									<th key={6} scope="col" className={"customTable__headRow__item"}>
 
 									</th>
 								</tr>
 							</thead>
-							<tbody className="customTable">
+							<tbody hidden={this.props.userDepositBalanceEth <= 0} className="customTable">
 								<tr key={0} className="customTable__dataRow">
 									<td className="firstOne">
 										<span style={{ paddingRight: "5px" }}>
@@ -213,7 +203,7 @@ class Dashboard extends React.Component {
 												<span>{`$${(this.props.userDebtBalanceBtc * this.props.priceOfBtc / 100).toFixed(2)}`}</span>
 											</Grid>
 											<Grid xs={12}>
-												<span>{`${(this.props.userDebtBalanceBtc).toFixed(2)}`} BTC</span>
+												<span>{this.props.userDebtBalanceBtc} BTC</span>
 											</Grid>
 										</Grid>
 									</td>
@@ -231,11 +221,8 @@ class Dashboard extends React.Component {
 											}
 										</span>
 									</td>
-									<td className="middle">
-										${this.props.myBtcLpAmount * this.props.priceOfBtc}
-									</td>
 									<td className="middle" style={{ color: "orange" }}>
-										{this.props.myBtcLpAmount > 0 ? <FontAwesomeIcon icon={faFire} /> : <span>Unprotected</span>}
+										{this.props.myBtcLpAmount > 0 ? <span>Protected by ${this.props.myBtcLpAmount * this.props.priceOfBtc / 100}</span>: <span>Unprotected</span>}
 									</td>
 									<td className="lastOne">
 										<NavLink
@@ -253,7 +240,7 @@ class Dashboard extends React.Component {
 									</td>
 								</tr>
 								<br></br>
-								<tr key={1} className="customTable__dataRow">
+								<tr hidden key={1} className="customTable__dataRow">
 									{/* asset */}
 									<td className="firstOne" key={1}>
 										<span style={{ paddingRight: "5px" }}>
@@ -323,7 +310,6 @@ class Dashboard extends React.Component {
 										</NavLink>
 									</td>
 								</tr>
-								<br></br>
 							</tbody>
 						</Table>
 						<NavLink
@@ -362,13 +348,10 @@ class Dashboard extends React.Component {
 									<th key={3} scope="col" className={"customTable__headRow__item"}>
 										TVL
 									</th>
-									<th key={4} scope="col" className={"customTable__headRow__item"}>
-
-									</th>
 								</tr>
 							</thead>
 							<tbody className="customTable">
-								<tr key={0} className="customTable__dataRow">
+								<tr hidden={this.props.myBtcLpAmount <= 0} key={0} className="customTable__dataRow">
 									<td className="firstOne">
 										<span style={{ padding: "5px" }}>
 											<img className="icon" src="/assets/icon/btc-logo.svg" alt="x"></img>
@@ -382,16 +365,11 @@ class Dashboard extends React.Component {
 									<td className="middle">
 										5.4%
 									</td>
-									<td className="middle">
+									<td className="lastOne">
 										${this.props.totalBtcLpAmount * this.props.priceOfBtc / 100}
 									</td>
-									<td className="lastOne" style={{ textAlign: "end" }}>
-										<Button className={"manage-button"} style={{ position: "relative", right: "4em" }}
-											onClick={() => { this.toggleLeaveSmartVault("BTC", 'Leave Smart Vault', "ETHBTC") }}
-										>Leave Smart Vault
-										</Button>
-									</td>
 								</tr>
+								<br></br>
 								<br></br>
 							</tbody>
 						</Table>
@@ -400,6 +378,7 @@ class Dashboard extends React.Component {
 							to={{
 								pathname: "/app/main/smartVault1",
 							}}
+							hidden={this.props.myBtcLpAmount > 0}
 						>
 							<Button block outline color={"light"} className={"customTable__dataRow__borrow"}>+ Smart Vault</Button>
 						</NavLink>

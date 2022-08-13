@@ -1,9 +1,24 @@
 .button{
-    min-width: 7.5vw;
-    background-color: white;
-    border-radius: 20px;
-    color: #303030;
-    &:hover {
-        background-color: #565656;
+    background-color: white  !important;
+    color: black  !important;
+    border: 1px solid white  !important;
+  
+    &:active {
+      border: 1px solid black !important;
+      background-color: white !important;
+      color: white !important;
     }
-}
+  
+    &:focus {
+      border: 1px solid black !important;
+      background-color: black;
+      color: white !important;
+    }
+  
+    &:hover {
+      border: 1px solid white;
+      background-color: black !important;
+      color: white !important
+    }
+  }
+  

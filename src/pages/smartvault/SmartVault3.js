@@ -36,7 +36,7 @@ class SmartVault3 extends React.Component {
                 <Row
                   style={{
                     padding: '15px',
-                    borderRadius: '15px',
+                    borderRadius: '10px',
                     marginLeft: '1px'
                 }}>
                   <Col lg={3} md={12}>
@@ -62,7 +62,7 @@ class SmartVault3 extends React.Component {
                     5.4%
                   </Col>
                   <Col>
-                    ${this.props.totalBtcLpAmount * this.props.priceOfBtc / 100}
+                    ${Number(this.props.totalBtcLpAmount * this.props.priceOfBtc / 100).toFixed(2)}
                   </Col>
                   <Col>
                     ${this.props.myBtcLpAmount * this.props.priceOfBtc / 100}<br/>

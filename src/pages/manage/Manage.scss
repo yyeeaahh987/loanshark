@@ -118,28 +118,27 @@
   &__subtitle {}
 }
 
-
 .firstOne {
-
-  border-top: 1px solid #ffffff !important; 
-  border-left: 1px solid #ffffff !important; 
-  border-bottom: 1px solid #ffffff !important; 
-  border-radius: 10px 0px 0px 10px !important; 
+  border-top: 1px solid rgb(122, 122, 122) !important;
+  border-left: 1px solid rgb(122, 122, 122) !important;
+  border-bottom: 1px solid rgb(122, 122, 122) !important;
+  border-radius: 10px 0px 0px 10px !important;
 
 }
 
 .middle {
 
-  border-top: 1px solid #ffffff !important; 
-  border-bottom: 1px solid #ffffff !important; 
+  border-top: 1px solid rgb(122, 122, 122) !important;
+  border-bottom: 1px solid rgb(122, 122, 122) !important;
 }
 
 .lastOne {
-  border-top: 1px solid #ffffff !important; 
-  border-right: 1px solid #ffffff !important; 
-  border-bottom: 1px solid #ffffff !important; 
-  border-radius: 0px 10px 10px 0px !important; 
+  border-top: 1px solid rgb(122, 122, 122) !important;
+  border-right: 1px solid rgb(122, 122, 122) !important;
+  border-bottom: 1px solid rgb(122, 122, 122) !important;
+  border-radius: 0px 10px 10px 0px !important;
 }
+
 .tableRow{
   padding-bottom: 2px;
 }
@@ -156,7 +155,7 @@
     &__borrow{
       text-align: center;
       border-radius: 10px 10px 10px 10px !important; 
-      border: 2px dashed #FFFFFF !important;    
+      border: 1px dashed #FFFFFF !important;    
     }
     &__healthFactor{
       &__safe{
