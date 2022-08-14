@@ -149,11 +149,11 @@ class Manage extends React.Component {
             modalCall: () => {
                 let approveArgs = [
                     (pair === "ETHBTC" ? this.props.myFujiVaultETHBTC.options.address : pair === "AVAXUSDT" ? this.props.myFujiVaultAVAXUSDT.options.address : ""),
-                    window.web3.utils.toBN(window.web3.utils.toWei(this.state.modalInputValue, 'ether')).toString()
+                    window.web3.utils.toBN(window.web3.utils.toWei( (this.state.modalInputValue +""), 'ether')).toString()
                 ]
 
                 let args = [
-                    window.web3.utils.toBN(window.web3.utils.toWei(this.state.modalInputValue, 'ether')).toString(),
+                    window.web3.utils.toBN(window.web3.utils.toWei( (this.state.modalInputValue+""), 'ether')).toString(),
                 ];
 
                 if (pair === "ETHBTC") {
@@ -184,7 +184,7 @@ class Manage extends React.Component {
                     this.toggle();
                     this.calltoggleLoading();
 
-                    let a = window.web3.utils.toBN(window.web3.utils.toWei(this.state.modalInputValue, 'ether')).toString();
+                    let a = window.web3.utils.toBN(window.web3.utils.toWei( Number.parseFloat(this.state.modalInputValue), 'ether')).toString();
                     this.props.myFujiVaultAVAXUSDT.methods
                         .deposit(...args)
                         .send({ from: this.props.myAccount, value: a })
@@ -211,7 +211,7 @@ class Manage extends React.Component {
             modalInputValue: this.state.collateralAmount,
             modalCall: () => {
                 let args = [
-                    window.web3.utils.toBN(window.web3.utils.toWei(this.state.modalInputValue, 'ether')).toString(),
+                    window.web3.utils.toBN(window.web3.utils.toWei( (this.state.modalInputValue)+"", 'ether')).toString(),
                 ];
 
                 if (pair === "ETHBTC") {
