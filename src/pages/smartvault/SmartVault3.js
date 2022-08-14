@@ -65,7 +65,7 @@ class SmartVault3 extends React.Component {
                     ${Number(this.props.totalBtcLpAmount * this.props.priceOfBtc / 100).toFixed(2)}
                   </Col>
                   <Col>
-                    ${this.props.myBtcLpAmount * this.props.priceOfBtc / 100}<br/>
+                    ${parseFloat(this.props.myBtcLpAmount * this.props.priceOfBtc / 100).toFixed(2)}<br/>
                     {this.props.myBtcLpAmount} BTC
                   </Col>
                 </Row>

@@ -44,11 +44,11 @@ class SmartVault2 extends React.Component {
                     <img style={{padding: '5px'}} className="icon" src="/assets/icon/eth-logo.svg" alt="x"></img> ETH / <img style={{padding: '5px'}} className="icon" src="/assets/icon/btc-logo.svg" alt="x"></img> BTC
                   </Col>
                   <Col lg={3} md={12}>
-                    ${parseFloat((this.props.userDepositBalanceEth * this.props.priceOfEth / 100).toFixed(6))}<br/>
+                    ${parseFloat((this.props.userDepositBalanceEth * this.props.priceOfEth / 100).toFixed(2))}<br/>
                     {parseFloat(Number(this.props.userDepositBalanceEth))} ETH
                   </Col>
                   <Col lg={3} md={12}>
-                    ${parseFloat((this.props.userDebtBalanceBtc * this.props.priceOfBtc / 100).toFixed(6))}<br/>
+                    ${parseFloat((this.props.userDebtBalanceBtc * this.props.priceOfBtc / 100).toFixed(2))}<br/>
                     {parseFloat(Number(this.props.userDebtBalanceBtc))} BTC
                   </Col>
                   <Col lg={3} md={12}>

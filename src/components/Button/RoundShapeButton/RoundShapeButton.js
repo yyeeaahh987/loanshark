@@ -79,7 +79,7 @@ class RoundShapeButton extends React.Component {
 
   render() {
     return (
-        <Button className={"button"}
+        <Button size={"sm"} className={"button"}
         onClick={this.props.onClick}
         >{this.props.label}</Button>
     );

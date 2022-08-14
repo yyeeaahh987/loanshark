@@ -222,7 +222,7 @@ class Dashboard extends React.Component {
 										</span>
 									</td>
 									<td className="middle" style={{ color: "orange" }}>
-										{this.props.myBtcLpAmount > 0 ? <span>Protected by ${this.props.myBtcLpAmount * this.props.priceOfBtc / 100}</span>: <span>Unprotected</span>}
+										{this.props.myBtcLpAmount > 0 ? <span>Protected by ${parseFloat(this.props.myBtcLpAmount * this.props.priceOfBtc / 100).toFixed(2)}</span>: <span>Unprotected</span>}
 									</td>
 									<td className="lastOne">
 										<NavLink
@@ -359,14 +359,14 @@ class Dashboard extends React.Component {
 										BTC
 									</td>
 									<td className="middle">
-										${this.props.myBtcLpAmount * this.props.priceOfBtc / 100}<br />
+										${parseFloat(this.props.myBtcLpAmount * this.props.priceOfBtc / 100).toFixed(2)}<br />
 										{this.props.myBtcLpAmount} BTC
 									</td>
 									<td className="middle">
 										5.4%
 									</td>
 									<td className="lastOne">
-										${this.props.totalBtcLpAmount * this.props.priceOfBtc / 100}
+										${parseFloat(this.props.totalBtcLpAmount * this.props.priceOfBtc / 100).toFixed(2)}
 									</td>
 								</tr>
 								<br></br>

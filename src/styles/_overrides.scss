@@ -4,7 +4,7 @@
 }
 
 .navbar {
-  height: $navbar-height;
+  min-height: $navbar-height;
   border: none;
   font-weight: 500;
   justify-content: flex-start;
@@ -257,7 +257,7 @@ small {
 
 .btn {
   font-family: $font-family-sans-serif;
-  border-radius: 10px;
+  border-radius: 8px;
   border: none;
   text-transform: initial;
   &.dropdown-toggle {

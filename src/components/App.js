@@ -7,6 +7,7 @@ import { ToastContainer } from 'react-toastify';
 import '../styles/theme.scss';
 import LayoutComponent from '../components/Layout';
 
+const LOANSHARK_MINT = process.env.REACT_APP_LOANSHARK_MINT;
 const LOANSHARK_TWITTER = process.env.REACT_APP_LOANSHARK_TWITTER;
 const LOANSHARK_DOCUMENT = process.env.REACT_APP_LOANSHARK_DOCUMENT;
 const LOANSHARK_INTRODUCTION = process.env.REACT_APP_LOANSHARK_INTRODUCTION;
@@ -82,6 +83,10 @@ class App extends React.PureComponent {
                     <Route path="/app" exact render={() => <Redirect to="/app/main" />} />
                     <Route path="/twitter" exact component={() => {
                         window.location.href = LOANSHARK_TWITTER;
+                        return null;
+                    }} />
+                    <Route path="/mint" exact component={() => {
+                        window.location.href = LOANSHARK_MINT;
                         return null;
                     }} />
                     <Route path="/documentation" exact component={() => {

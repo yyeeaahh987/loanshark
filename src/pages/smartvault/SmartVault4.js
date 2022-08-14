@@ -159,12 +159,12 @@ class SmartVault4 extends React.Component {
                     <img style={{padding: '5px'}} className="icon" src="/assets/icon/eth-logo.svg" alt="x"></img> ETH / <img style={{padding: '5px'}} className="icon" src="/assets/icon/btc-logo.svg" alt="x"></img> BTC
                   </td>
                   <td className={"pl-0 fw-thin"}>
-                    ${parseFloat((this.props.userDepositBalanceEth * this.props.priceOfEth / 100).toFixed(6))}<br/>
-                    {parseFloat(Number(this.props.userDepositBalanceEth).toFixed(6))} ETH
+                    ${parseFloat((this.props.userDepositBalanceEth * this.props.priceOfEth / 100).toFixed(2))}<br/>
+                    {Number(this.props.userDepositBalanceEth)} ETH
                   </td>
                   <td className={"pl-0 fw-thin"}>
-                    ${parseFloat((this.props.userDebtBalanceBtc * this.props.priceOfBtc / 100).toFixed(6))}<br/>
-                    {parseFloat(Number(this.props.userDebtBalanceBtc).toFixed(6))} BTC
+                    ${parseFloat((this.props.userDebtBalanceBtc * this.props.priceOfBtc / 100).toFixed(2))}<br/>
+                    {Number(this.props.userDebtBalanceBtc)} BTC
                   </td>
                   <td className={"pl-0 fw-normal"}>
                   {((this.props.userDepositBalanceEth * this.props.priceOfEth / 100) * this.props.LTV["ETHBTC"] / (this.props.userDebtBalanceBtc * this.props.priceOfBtc / 100)).toFixed(2) }
@@ -191,7 +191,7 @@ class SmartVault4 extends React.Component {
                   <Row style={{paddingTop: '20px'}} >
                     <Col lg={4} md={12}>Your Balance:</Col>
                     <Col style={{textAlign: 'right'}} lg={8} md={12}>
-                      ${this.props.myBtcLpAmount * this.props.priceOfBtc / 100}<br/>
+                      ${parseFloat(this.props.myBtcLpAmount * this.props.priceOfBtc / 100).toFixed(2)}<br/>
                     </Col>
                   </Row>
                   <Row style={{paddingTop: '20px'}} >
@@ -200,7 +200,7 @@ class SmartVault4 extends React.Component {
                   </Row>
                   <Row style={{paddingTop: '20px'}} >
                     <Col lg={4} md={12}>TVL:</Col>
-                    <Col style={{textAlign: 'right'}} lg={8} md={12}> ${this.props.totalBtcLpAmount * this.props.priceOfBtc / 100}</Col>
+                    <Col style={{textAlign: 'right'}} lg={8} md={12}> ${parseFloat(this.props.totalBtcLpAmount * this.props.priceOfBtc / 100).toFixed(2)}</Col>
                   </Row>
                 </Widget>
               </Col>

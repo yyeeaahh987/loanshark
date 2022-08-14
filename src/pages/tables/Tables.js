@@ -71,19 +71,19 @@ class Tables extends React.Component {
             <HealthFactorPieChart />
             <TradeInfo />
             <Widget title={<p style={{ fontWeight: 700 }}>Borrowing APY of {this.props.selectedPair === "ETHBTC"? "BTC":"USDT"}</p>}>
-                <Row>
+                <Row style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 0, marginTop: 0 }}>
                   <Col>
                     <span style={{ color: "#00ff00" }}>AAVE</span>
                   </Col>
-                  <Col lg={6} style={{ textAlign: 'right' }} >
+                  <Col style={{ textAlign: 'right' }} >
                     <span style={{ color: "#00ff00" }}>1.4%</span>
                   </Col>
                 </Row>
-                <Row>
+                <Row style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 0, marginTop: 0 }}>
                   <Col>
                     Benqi
                   </Col>
-                  <Col lg={6} style={{ textAlign: 'right' }} >
+                  <Col style={{ textAlign: 'right' }} >
                     2.0%
                   </Col>
                 </Row>

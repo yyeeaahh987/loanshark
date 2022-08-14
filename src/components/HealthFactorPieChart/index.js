@@ -65,6 +65,7 @@ class HealthFactorPieChart extends React.Component {
                             ]
                         }}
                         options={{
+                            animation: false,
                             indexAxis: 'y',
                             elements: {
                                 bar: {
