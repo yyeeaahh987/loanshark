@@ -114,6 +114,17 @@ class Sidebar extends React.Component {
 							onActiveSidebarItemChange={activeItem =>
 								this.props.dispatch(changeActiveSidebarItem(activeItem))
 							}
+							header="Mint ETH / BTC"
+							isHeader
+							link="/mint"
+							index="main"
+							target="_blank"
+						>
+						</LinksGroup>
+						<LinksGroup
+							onActiveSidebarItemChange={activeItem =>
+								this.props.dispatch(changeActiveSidebarItem(activeItem))
+							}
 							header="Introduction"
 							link="/introduction"
 							target="_blank"

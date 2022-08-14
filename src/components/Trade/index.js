@@ -27,10 +27,6 @@ import {
     changeSelectedPair,
 } from "../../actions/loanshark";
 
-import {
-    toDecimalNumber
-} from '../../utils/commonFunction'
-
 const ownAssetType = [
     // {
     //     "chainId": 1,
@@ -55,7 +51,7 @@ class BalanceAmount extends React.Component {
             <>
                 <div className="balanceBox">
                     <div className="balanceBox__content">
-                        <div>{`${this.props.displayPrefixText}${toDecimalNumber(this.props.amount, 6)}`}</div>
+                        <div>{`${this.props.displayPrefixText}${(this.props.amount)}`}</div>
                     </div>
                 </div>
             </>
@@ -292,29 +288,29 @@ class Trade extends React.Component {
                             <Col xs={"auto"} className={"borrow-power__option"}>
                                 <Button className="borrow-power-button" 
                                         onClick={() => {
-                                        this.setState({ inputBtcBorrow: isNaN(borrowPower)===true?0:(borrowPower * 0.25).toFixed(6) });
-                                        this.props.dispatch(changeInputBtcDebt((borrowPower * 0.25).toFixed(6)));
+                                        this.setState({ inputBtcBorrow: isNaN(borrowPower)===true?0:(borrowPower * 0.25).toFixed(8) });
+                                        this.props.dispatch(changeInputBtcDebt((borrowPower * 0.25).toFixed(8)));
                                     }}>25%</Button>
                             </Col>
                             <Col xs={"auto"} className={"borrow-power__option"}>
                                 <Button className="borrow-power-button" 
                                     onClick={() => {
-                                        this.setState({ inputBtcBorrow: isNaN(borrowPower)===true?0:(borrowPower * 0.5).toFixed(6) });
-                                        this.props.dispatch(changeInputBtcDebt((borrowPower * 0.5).toFixed(6)));
+                                        this.setState({ inputBtcBorrow: isNaN(borrowPower)===true?0:(borrowPower * 0.5).toFixed(8) });
+                                        this.props.dispatch(changeInputBtcDebt((borrowPower * 0.5).toFixed(8)));
                                     }}>50%</Button>
                             </Col>
                             <Col xs={"auto"} className={"borrow-power__option"}>
                                 <Button className="borrow-power-button" 
                                     onClick={() => {
-                                        this.setState({ inputBtcBorrow: isNaN(borrowPower)===true?0:(borrowPower * 0.75).toFixed(6) });
-                                        this.props.dispatch(changeInputBtcDebt((borrowPower * 0.75).toFixed(6)));
+                                        this.setState({ inputBtcBorrow: isNaN(borrowPower)===true?0:(borrowPower * 0.75).toFixed(8) });
+                                        this.props.dispatch(changeInputBtcDebt((borrowPower * 0.75).toFixed(8)));
                                     }}>75%</Button>
                             </Col>
                             <Col xs={"auto"} className={"borrow-power__option"}>
                                 <Button className="borrow-power-button" 
                                     onClick={() => {
-                                        this.setState({ inputBtcBorrow: isNaN(borrowPower)===true?0:(borrowPower * 0.9).toFixed(6) });
-                                        this.props.dispatch(changeInputBtcDebt((borrowPower * 0.9).toFixed(6)));
+                                        this.setState({ inputBtcBorrow: isNaN(borrowPower)===true?0:(borrowPower * 0.9).toFixed(8) });
+                                        this.props.dispatch(changeInputBtcDebt((borrowPower * 0.9).toFixed(8)));
                                     }}>90%</Button>
                             </Col>
                         </Row>

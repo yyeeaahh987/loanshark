@@ -11,8 +11,6 @@ import {
 import './Card.scss'
 import Widget from '../../../components/Widget';
 
-
-
 class Card extends React.Component {
     static propTypes = {
         widgetSize: PropTypes.oneOf(["full", "left", "right"]),
@@ -272,17 +270,6 @@ class Card extends React.Component {
                                                     </Grid>
                                                     <Grid item xs={5}>
                                                         <Grid container spacing={1}>
-                                                            <Grid item xs={12} style={{
-                                                                textAlign: "end",
-                                                                // padding: "5px",
-                                                            }}>
-                                                                <div  hidden={this.state.smartVaultView}>
-                                                                    <span style={{
-                                                                        fontSize: "14px",
-                                                                        fontWeight: "bold",
-                                                                    }}>balance: {`${this.props.maxBalance}`}</span>
-                                                                </div>
-                                                            </Grid>
                                                             <Grid item xs={12} style={{ textAlign: "end" }}>
                                                                 <Grid container justifyContent={"end"} alignItems={"center"} spacing={1}>
                                                                     <Grid item>
@@ -305,6 +292,18 @@ class Card extends React.Component {
                                                                 </Grid>
                                                             </Grid>
                                                         </Grid>
+                                                    </Grid>
+                                                    
+                                                    <Grid item xs={12} style={{
+                                                            textAlign: "end",
+                                                            // padding: "5px",
+                                                        }}>
+                                                        <div  hidden={this.state.smartVaultView}>
+                                                            <span style={{
+                                                                fontSize: "14px",
+                                                                fontWeight: "bold",
+                                                            }}>balance: {`${this.props.maxBalance}`}</span>
+                                                        </div>
                                                     </Grid>
                                                 </Grid>
                                             </div>
@@ -351,6 +350,8 @@ function mapStateToProps(store) {
         smartVaultUsdt: store.loanshark.smartVaultUsdt,
         myETHAmount: store.loanshark.myETHAmount,
         myBTCAmount: store.loanshark.myBTCAmount,
+        inputBtcDept: store.loanshark.inputBtcDept,
+        inputEthDeposit: store.loanshark.inputEthDeposit,
         LTV: store.loanshark.LTV,
     };
 }

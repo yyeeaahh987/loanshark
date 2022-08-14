@@ -18,6 +18,13 @@ class TradeInfo extends React.Component {
             / (this.props.selectedPair === "ETHBTC" ? this.props.priceOfBtc : this.props.priceOfUsdt)
         ).toFixed(2);
 
+        var liquidationPrice = (
+            (parseFloat(this.props.inputBtcDept) + parseFloat(this.props.userDebtBalanceBtc)) 
+            * (this.props.selectedPair === "ETHBTC" ? this.props.priceOfBtc : this.props.priceOfUsdt) / 100
+            / (parseFloat(this.props.inputEthDeposit) + parseFloat(this.props.userDepositBalanceEth))
+            / this.props.LTV[this.props.selectedPair]
+        ).toFixed(2);
+        
         return (
             <Widget title={' '}>
                 <Row style={{ marginBottom: 0, marginTop: 0 }}>
@@ -70,11 +77,7 @@ class TradeInfo extends React.Component {
                     </Col>
                     <Col lg={4} style={{ textAlign: 'right' }}>
                         {
-                            (isNaN((this.props.inputBtcDept * (this.props.selectedPair === "ETHBTC" ? this.props.priceOfBtc : this.props.priceOfUsdt) / 100)
-                                / this.props.inputEthDeposit
-                                / this.props.LTV[this.props.selectedPair]) === true ? 0 : (this.props.inputBtcDept * (this.props.selectedPair === "ETHBTC" ? this.props.priceOfBtc : this.props.priceOfUsdt) / 100)
-                                / this.props.inputEthDeposit
-                            / this.props.LTV[this.props.selectedPair]).toFixed(2)
+                           liquidationPrice
                         }
                     </Col>
                 </Row>
@@ -89,8 +92,8 @@ function mapStateToProps(store) {
         selectedPair: store.loanshark.selectedPair,
         numberOfEth: store.loanshark.numberOfEth,
         numberOfAvax: store.loanshark.numberOfAvax,
-        userDepositBalance: store.loanshark.userDepositBalance,
-        userDebtBalance: store.loanshark.userDebtBalance,
+        userDepositBalanceEth: store.loanshark.userDepositBalanceEth,
+        userDebtBalanceBtc: store.loanshark.userDebtBalanceBtc,
         myFujiVaultETHBTC: store.loanshark.myFujiVaultETHBTC,
         myFujiVaultAVAXUSDT: store.loanshark.myFujiVaultAVAXUSDT,
         myFliquidatorAVAX: store.loanshark.myFliquidatorAVAX,
