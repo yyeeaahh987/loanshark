@@ -27,55 +27,55 @@ class TradeInfo extends React.Component {
         
         return (
             <Widget title={' '}>
-                <Row style={{ marginBottom: 0, marginTop: 0 }}>
-                    <Col lg={6}>
+                <Row style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 0, marginTop: 0 }}>
+                    <Col>
                         Current Price of {this.props.selectedPair === "ETHBTC" ? "ETH" : "AVAX"}:
                     </Col>
-                    <Col lg={6} style={{ textAlign: 'right' }} >
+                    <Col style={{ textAlign: 'right' }} >
                         {(this.props.selectedPair === "ETHBTC" ? this.props.priceOfEth : this.props.priceOfAvax) / 100}
                     </Col>
                 </Row>
-                <Row style={{ marginBottom: 0, marginTop: 0 }}>
-                    <Col lg={6}>
+                <Row style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 0, marginTop: 0 }}>
+                    <Col>
                         Current Price of {this.props.selectedPair === "ETHBTC" ? "BTC" : "USDT"}:
                     </Col>
-                    <Col lg={6} style={{ textAlign: 'right' }} >
+                    <Col style={{ textAlign: 'right' }} >
                         {(this.props.selectedPair === "ETHBTC" ? this.props.priceOfBtc : this.props.priceOfUsdt) / 100}
                     </Col>
                 </Row>
                 <Row style={{ marginBottom: 9, marginTop: 20 }}>
 
                 </Row>
-                <Row style={{ marginBottom: 0, marginTop: 0 }}>
-                    <Col lg={6}>
+                <Row style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 0, marginTop: 0 }}>
+                    <Col>
                         LTV:
                     </Col>
-                    <Col lg={6} style={{ textAlign: 'right' }} >
+                    <Col style={{ textAlign: 'right' }} >
                         {(this.props.LTV[this.props.selectedPair] * this.props.liquidationPrice[this.props.selectedPair] * 100).toFixed(2)} %
                     </Col>
                 </Row>
-                <Row style={{ marginBottom: 0, marginTop: 0 }}>
-                    <Col lg={6}>
+                <Row style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 0, marginTop: 0 }}>
+                    <Col>
                         Max Borrowing Capacity:
                     </Col>
-                    <Col lg={6} style={{ textAlign: 'right' }} >
+                    <Col style={{ textAlign: 'right' }} >
                         {isNaN(borrowPower) === true ? 0 : borrowPower} {this.props.selectedPair === "ETHBTC" ? "BTC" : "USDT"}
                     </Col>
                 </Row>
 
-                <Row style={{ marginBottom: 0, marginTop: 0 }}>
-                    <Col lg={6}>
+                <Row style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 0, marginTop: 0 }}>
+                    <Col>
                         Liquidity Threshold:
                     </Col>
-                    <Col lg={6} style={{ textAlign: 'right' }} >
+                    <Col style={{ textAlign: 'right' }} >
                         {(this.props.LTV[this.props.selectedPair] * 100).toFixed(2)} %
                     </Col>
                 </Row>
-                <Row style={{ marginBottom: 0, marginTop: 0 }}>
-                    <Col lg={8}>
+                <Row style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 0, marginTop: 0 }}>
+                    <Col>
                         Liquidation Price of {this.props.selectedPair === "ETHBTC" ? "ETH" : "AVAX"}:
                     </Col>
-                    <Col lg={4} style={{ textAlign: 'right' }}>
+                    <Col style={{ textAlign: 'right' }} >
                         {
                            liquidationPrice
                         }

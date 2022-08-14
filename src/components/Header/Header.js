@@ -475,20 +475,20 @@ class Header extends React.Component {
 
 					<Grid container>
 						<Grid item xs={12} md={12}>
-							<Grid container spacing={2} alignItems={"center"}>
+							<Grid container style={{display: "flex", flexDirection: "row", alignItems: "center", gap: "10px", justifyContent: "space-between"}}>
 								{this.props.location.pathname === '/app/main/borrow' ||
 									this.props.location.pathname === '/app/main/dashboard' ||
 									this.props.location.pathname === '/app/main/smartVault1' ? null : <>
 									<Grid item>
-										<Button color={"text"} onClick={() => this.props.history.goBack()}
+										<Button size={"sm"} color={"text"} onClick={() => this.props.history.goBack()}
 											icon={faArrowLeftLong}
 										><FontAwesomeIcon icon={faArrowLeftLong} /> <span>Back</span>
 										</Button>
 									</Grid>
 								</>
 								}
-
-								<Grid item style={{ marginLeft: "auto" }}>
+								<Grid item></Grid>
+								<Grid item style={{display: "flex", flexDirection: "row", alignItems: "center", gap: "10px", justifyContent: "space-between"}}>
 									<div>
 										{
 											!this.state.myAccount ?
@@ -503,28 +503,22 @@ class Header extends React.Component {
 												</div>
 										}
 									</div>
-								</Grid>
-								<Grid item>
 									<div>
 										{
 											this.state.myAccount ?
 											<RoundShapeButton
-												label={"Disconnect"}
+												label={"Disconnect"}size={"sm"} 
 												onClick={(e) => { this.ethDisabled() }}
 											></RoundShapeButton>
 											: null
 										}
 									</div>
-								</Grid>
-								<Grid item>
 									<div>
 										<FontAwesomeIcon style={{ cursor: "pointer" }} onClick={() => {
 											this.getNeededCollateralFor();
 										}}
 											icon={faRotateRight} />
 									</div>
-								</Grid>
-								<Grid item>
 									<div>
 										<FontAwesomeIcon style={{ cursor: "pointer" }} onClick={() => {
 											this.handleResize();
