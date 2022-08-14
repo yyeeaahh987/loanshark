@@ -406,16 +406,30 @@ class Manage extends React.Component {
                 this.toggle();
                 this.calltoggleLoading();
 
-                this.props.lpPoolBtc.methods
-                    .redeem(...args)
+                let argsUnregister = [
+                    this.props.myAccount + "000000000000000000000000",
+                    "0x66756a6964616f00000000000000000000000000000000000000000000000000",
+                    1
+                ];
+
+
+                this.props.topupAction.methods
+                    .resetPosition(...argsUnregister)
                     .send({ from: this.props.myAccount })
                     .on("error", (error, receipt) => {
                         this.calltoggleLoading();
                     })
-
                     .then((receipt) => {
-                        this.calltoggleLoading();
-                        API(this.props);
+                        this.props.lpPoolBtc.methods
+                            .redeem(...args)
+                            .send({ from: this.props.myAccount })
+                            .on("error", (error, receipt) => {
+                                this.calltoggleLoading();
+                            })
+                            .then((receipt) => {
+                                this.calltoggleLoading();
+                                API(this.props);
+                            })
                     })
             }
         });
@@ -545,11 +559,11 @@ class Manage extends React.Component {
                                     </td>
                                     <td className="middle">
                                         ${debt === "BTC" ?
-                                            parseFloat(this.props.myBtcLpAmount * this.props.priceOfBtc / 100).toFixed(2)
+                                            parseFloat(this.props.myBtcLpAmount * this.props.btcLpExchangeRate * this.props.priceOfBtc / 100).toFixed(2)
                                             :
                                             '-'
                                         }<br />
-                                        {this.props.myBtcLpAmount} BTC
+                                        {parseFloat(this.props.myBtcLpAmount * this.props.btcLpExchangeRate).toFixed(8)} BTC
                                     </td>
                                     <td className="lastOne">
                                         AAVE
@@ -842,7 +856,7 @@ class Manage extends React.Component {
                                                 rightSelectButton={""}
                                                 currency={"btc"}
                                                 openBorrowingPower={false}
-                                                amount={this.props.myBtcLpAmount}
+                                                amount={parseFloat(this.props.myBtcLpAmount * this.props.btcLpExchangeRate).toFixed(8)}
                                                 maxBalance={this.props.myBtcLpAmount}
                                                 onChangeInput={(e) => {
                                                     this.setState({
@@ -853,9 +867,9 @@ class Manage extends React.Component {
                                                     this.toggleLeaveSmartVault(debt,
                                                         'Confirm to withdraw all from Smart Vault?',
                                                         'You are withdrawing <span class="fw-bold">' +
-                                                        this.props.myBtcLpAmount +
+                                                        parseFloat(this.props.myBtcLpAmount * this.props.btcLpExchangeRate).toFixed(8) +
                                                         ' BTC (~$' +
-                                                        Number(this.props.myBtcLpAmount * this.props.priceOfBtc / 100).toFixed(2) +
+                                                        parseFloat(this.props.myBtcLpAmount * this.props.btcLpExchangeRate * this.props.priceOfBtc / 100).toFixed(2) +
                                                         ')</span> from Smart Vault. <span class="fw-bold" style="color: #ff7d47"><br/>Caution: you will lose your automatic loan protection if you withdraw.</span>', 0)
                                                 }}
                                             ></Card>
@@ -951,6 +965,7 @@ function mapStateToProps(store) {
         lpPoolBtc: store.backd.lpPoolBtc,
         lpTokenBtc: store.backd.lpTokenBtc,
         myBtcLpAmount: store.backd.myBtcLpAmount,
+        btcLpExchangeRate: store.backd.btcLpExchangeRate,
         totalBtcLpAmount: store.backd.totalBtcLpAmount,
         topupAction: store.backd.topupAction,
     };

@@ -127,7 +127,7 @@ class Dashboard extends React.Component {
 					<Grid item xl={3} lg={3} xs={12}>
 						<Widget
 							title={<p style={{ fontWeight: 700 }}>
-								${(this.props.myBtcLpAmount * this.props.priceOfBtc / 100).toFixed(2)}
+								${(this.props.myBtcLpAmount * this.props.btcLpExchangeRate * this.props.priceOfBtc / 100).toFixed(2)}
 							</p>}
 							customDropDown={false}
 						>
@@ -135,6 +135,31 @@ class Dashboard extends React.Component {
 								<Col sm={12} className={"d-flex align-items-center"}>
 									<p className={"fw-semi-bold mb-0"}>
 									Your Smart Vault Balance
+									</p>
+								</Col>
+							</Row>
+						</Widget>
+					</Grid>
+
+					<Grid item xl={3} lg={3} xs={12}>
+						<Widget
+							title={<p style={{ fontWeight: 700 }}>
+								{
+								parseFloat(
+									(
+										0.0103 * (this.props.userDepositBalanceEth * this.props.priceOfEth / 100)
+										- 0.014 * (this.props.userDebtBalanceBtc * this.props.priceOfBtc / 100)
+										+ 0.054 * (this.props.myBtcLpAmount * this.props.btcLpExchangeRate * this.props.priceOfBtc / 100) 
+									) / (this.props.userDepositBalanceEth * this.props.priceOfEth / 100)  * 100
+								).toFixed(4)
+								}%
+							</p>}
+							customDropDown={false}
+						>
+							<Row className={`justify-content-between mt-3`} noGutters>
+								<Col sm={12} className={"d-flex align-items-center"}>
+									<p className={"fw-semi-bold mb-0"}>
+									Net Interest Rate
 									</p>
 								</Col>
 							</Row>
@@ -159,9 +184,12 @@ class Dashboard extends React.Component {
 										Asset
 									</th>
 									<th key={1} scope="col" className={"customTable__headRow__item"}>
-										Collateral
+										Borrowing Rate<br/>Net Interest Rate
 									</th>
 									<th key={2} scope="col" className={"customTable__headRow__item"}>
+										Collateral
+									</th>
+									<th key={3} scope="col" className={"customTable__headRow__item"}>
 										Debt
 									</th>
 									<th key={4} scope="col" className={"customTable__headRow__item"}>
@@ -186,6 +214,25 @@ class Dashboard extends React.Component {
 											<img className="icon" src="/assets/icon/btc-logo.svg" alt="x"></img>
 										</span>
 										ETH/BTC
+									</td>
+									<td className="middle">
+										<Grid container>
+											<Grid xs={12}>
+												<span>1.4%</span>
+											</Grid>
+											<Grid xs={12}>
+												<span>{
+													parseFloat(
+														(
+															  0.0103 * (this.props.userDepositBalanceEth * this.props.priceOfEth / 100)
+															- 0.014 * (this.props.userDebtBalanceBtc * this.props.priceOfBtc / 100)
+															+ 0.054 * (this.props.myBtcLpAmount * this.props.btcLpExchangeRate * this.props.priceOfBtc / 100) 
+														) / (this.props.userDepositBalanceEth * this.props.priceOfEth / 100) * 100
+													).toFixed(4)
+													}%
+												</span>
+											</Grid>
+										</Grid>
 									</td>
 									<td className="middle">
 										<Grid container>
@@ -222,7 +269,7 @@ class Dashboard extends React.Component {
 										</span>
 									</td>
 									<td className="middle" style={{ color: "orange" }}>
-										{this.props.myBtcLpAmount > 0 ? <span>Protected by ${parseFloat(this.props.myBtcLpAmount * this.props.priceOfBtc / 100).toFixed(2)}</span>: <span>Unprotected</span>}
+										{this.props.myBtcLpAmount > 0 ? <span>Protected by ${parseFloat(this.props.myBtcLpAmount * this.props.btcLpExchangeRate * this.props.priceOfBtc / 100).toFixed(2)}</span>: <span>Unprotected</span>}
 									</td>
 									<td className="lastOne">
 										<NavLink
@@ -359,14 +406,14 @@ class Dashboard extends React.Component {
 										BTC
 									</td>
 									<td className="middle">
-										${parseFloat(this.props.myBtcLpAmount * this.props.priceOfBtc / 100).toFixed(2)}<br />
-										{this.props.myBtcLpAmount} BTC
+										${parseFloat(this.props.myBtcLpAmount * this.props.btcLpExchangeRate * this.props.priceOfBtc / 100).toFixed(2)}<br />
+										{parseFloat(this.props.myBtcLpAmount * this.props.btcLpExchangeRate).toFixed(8)} BTC<br/>
 									</td>
 									<td className="middle">
 										5.4%
 									</td>
 									<td className="lastOne">
-										${parseFloat(this.props.totalBtcLpAmount * this.props.priceOfBtc / 100).toFixed(2)}
+										${parseFloat(this.props.totalBtcLpAmount * this.props.btcLpExchangeRate * this.props.priceOfBtc / 100).toFixed(2)}
 									</td>
 								</tr>
 								<br></br>
@@ -437,6 +484,8 @@ function mapStateToProps(store) {
 
 		myBtcLpAmount: store.backd.myBtcLpAmount,
 		totalBtcLpAmount: store.backd.totalBtcLpAmount,
+        btcLpExchangeRate: store.backd.btcLpExchangeRate,
+		myProtection: store.backd.myProtection
 	};
 }
 
