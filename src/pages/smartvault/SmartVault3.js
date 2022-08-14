@@ -62,11 +62,11 @@ class SmartVault3 extends React.Component {
                     5.4%
                   </Col>
                   <Col>
-                    ${Number(this.props.totalBtcLpAmount * this.props.priceOfBtc / 100).toFixed(2)}
+                    ${parseFloat(this.props.totalBtcLpAmount * this.props.btcLpExchangeRate * this.props.priceOfBtc / 100).toFixed(2)}
                   </Col>
                   <Col>
-                    ${parseFloat(this.props.myBtcLpAmount * this.props.priceOfBtc / 100).toFixed(2)}<br/>
-                    {this.props.myBtcLpAmount} BTC
+                    ${parseFloat(this.props.myBtcLpAmount * this.props.btcLpExchangeRate * this.props.priceOfBtc / 100).toFixed(2)}<br/>
+                    {parseFloat(this.props.myBtcLpAmount * this.props.btcLpExchangeRate).toFixed(8)} BTC
                   </Col>
                 </Row>
           </Col>
@@ -82,6 +82,7 @@ function mapStateToProps(store) {
     priceOfBtc: store.loanshark.priceOfBtc,
     myBtcLpAmount: store.backd.myBtcLpAmount,
     totalBtcLpAmount: store.backd.totalBtcLpAmount,
+    btcLpExchangeRate: store.backd.btcLpExchangeRate
   };
 }
 

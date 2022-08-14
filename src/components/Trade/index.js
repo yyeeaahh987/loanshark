@@ -479,7 +479,12 @@ function mapStateToProps(store) {
         myAVAXAmount: store.loanshark.myAVAXAmount,
         myUSDTAmount: store.loanshark.myUSDTAmount,
         LTV: store.loanshark.LTV,
-        liquidationPrice: store.loanshark.liquidationPrice
+        liquidationPrice: store.loanshark.liquidationPrice,
+        
+        myBtcLpAmount: store.backd.myBtcLpAmount,
+        totalBtcLpAmount: store.backd.totalBtcLpAmount,
+        topupAction: store.backd.topupAction,
+        btcLpExchangeRate: store.backd.btcLpExchangeRate
     };
 }
 
