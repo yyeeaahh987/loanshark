@@ -148,6 +148,9 @@ class Trade extends React.Component {
             } else if (this.state.inputBtcBorrow <= 0 || isNaN(this.state.inputBtcBorrow)) {
                 modalTitle = 'Unable to borrow BTC using ETH as collateral';
                 modalMessage = 'Please enter the amount that you want to borrow.';
+            } else if (this.state.inputEthDeposit > this.props.myETHAmount) {
+                modalTitle = 'Unable to borrow BTC using ETH as collateral';
+                modalMessage = 'You do not have enough ETH to deposit.';
             } else if (newHealthFactor <= 1) {
                 modalTitle = 'Unable to borrow BTC using ETH as collateral';
                 modalMessage = 'You are unable to deposit <span class="fw-bold">' +

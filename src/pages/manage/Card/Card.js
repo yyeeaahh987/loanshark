@@ -15,6 +15,7 @@ class Card extends React.Component {
     static propTypes = {
         widgetSize: PropTypes.oneOf(["full", "left", "right"]),
         title: PropTypes.string,
+        extraHtmlContent: PropTypes.string,
         leftSelectButton: PropTypes.string,
         rightSelectButton: PropTypes.string,
         currency: PropTypes.string,
@@ -38,6 +39,7 @@ class Card extends React.Component {
     static defaultProps = {
         widgetSize: "full",
         title: "",
+        extraHtmlContent: "",
         leftSelectButton: "",
         rightSelectButton: "",
         currency: "",
@@ -293,7 +295,6 @@ class Card extends React.Component {
                                                             </Grid>
                                                         </Grid>
                                                     </Grid>
-                                                    
                                                     <Grid item xs={12} style={{
                                                             textAlign: "end",
                                                             // padding: "5px",
@@ -310,6 +311,7 @@ class Card extends React.Component {
                                         </Grid>
                                     </Grid>
                                 </div>
+                                <div className="content" dangerouslySetInnerHTML={{ __html: this.props.extraHtmlContent }}></div>
                             </Grid>
                             <br></br>
                             <br></br>
