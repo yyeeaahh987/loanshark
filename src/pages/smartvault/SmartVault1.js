@@ -28,13 +28,12 @@ class SmartVault1 extends React.Component {
                 <h3 className={"fw-bold"}>Start using Smart Vault</h3>
                 {
                     !this.props.myAccount ?
-                    <Row>
-                        <Col sm={6}>
-                            <p className={"fw-bold"}>Please connect your wallet first.</p>
-                        </Col>
-                    </Row>
-                    :
-                    this.props.myProtection[0] <= 0 ?
+                        <Row>
+                            <Col sm={6}>
+                                <p className={"fw-bold"}>Please connect your wallet first.</p>
+                            </Col>
+                        </Row>
+                        :
                         <Row>
                             <Col sm={6}>
                                 <p className={"fw-bold"}>Choose the way to protect your loan automatically</p>
@@ -56,12 +55,6 @@ class SmartVault1 extends React.Component {
                                         onChange={this.setSelected}
                                     />
                                 </NavLink>
-                            </Col>
-                        </Row>
-                        :
-                        <Row>
-                            <Col sm={6}>
-                                <p className={"fw-bold"}>You have already protected by the Smart Vault. <br/> If you want to set a new Smart Vault, please withdraw the original one.</p>
                             </Col>
                         </Row>
                 }

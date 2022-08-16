@@ -646,6 +646,13 @@ class Manage extends React.Component {
                                                         'Please enter the amount that you want to deposit.',
                                                         deposit + debt
                                                     )
+                                                } else if (this.state.collateralAmount > this.props.myETHAmount) {
+                                                    this.toggleNoAction(
+                                                        deposit,
+                                                        'Unable to deposit',
+                                                        'You do not have enough ETH to deposit.',
+                                                        deposit + debt
+                                                    )
                                                 } else if (newHealthFactor <= 1) {
                                                     this.toggleNoAction(
                                                         deposit,
@@ -682,6 +689,13 @@ class Manage extends React.Component {
                                                         deposit,
                                                         'Unable to withdraw',
                                                         'Please enter the amount that you want to withdraw.',
+                                                        deposit + debt
+                                                    )
+                                                } else if (this.state.collateralAmount > this.state.maxdepositAmount) {
+                                                    this.toggleNoAction(
+                                                        deposit,
+                                                        'Unable to withdraw',
+                                                        'You do not have so much ETH to withdraw.',
                                                         deposit + debt
                                                     )
                                                 } else if (newHealthFactor <= 1) {
@@ -782,17 +796,25 @@ class Manage extends React.Component {
                                                         'Please enter the amount that you want to payback.',
                                                         deposit + debt
                                                     )
+                                                } else if (this.state.debtAmount > this.props.myBTCAmount) {
+                                                    this.toggleNoAction(
+                                                        deposit,
+                                                        'Unable to payback',
+                                                        'You do not have enough BTC to payback.',
+                                                        deposit + debt
+                                                    )
                                                 } else if (newHealthFactor <= 1) {
                                                     this.toggleNoAction(
                                                         deposit,
                                                         'Unable to payback',
-                                                        'You are unable to borrow <span class="fw-bold">' +
+                                                        'You are unable to payback <span class="fw-bold">' +
                                                         this.state.debtAmount + ' ' + debt +
                                                         ' (~$' +
                                                         Number(this.state.debtAmount * this.props.priceOfBtc / 100).toFixed(2) +
                                                         ')</span>. <br/>The new health factor will be <span class="fw-bold" style="color: #ff7d47">' + newHealthFactor + '</span> which is below 1.',
                                                         deposit + debt
                                                     )
+                                                    
                                                 } else {
                                                     this.togglePayback(
                                                         deposit,
@@ -851,6 +873,12 @@ class Manage extends React.Component {
                                             <Card
                                                 widgetSize={"full"}
                                                 title={"Current Smart Vault Balance"}
+                                                extraHtmlContent={"<br /><p style='font-size: 14px'> Trigger Health Factor: " 
+                                                + parseFloat(this.props.myProtection[0]/1000000000000000000)
+                                                + "<br />" 
+                                                + "Repay amount each time: " 
+                                                + parseFloat(this.props.myProtection[5]/0.9999/100000000)
+                                                + "</p>" }
                                                 currencyIconPath={this.state.debtCurrencyIconPath}
                                                 leftSelectButton={""}
                                                 rightSelectButton={""}
@@ -864,13 +892,22 @@ class Manage extends React.Component {
                                                     })
                                                 }}
                                                 onClickWithdraw={() => {
-                                                    this.toggleLeaveSmartVault(debt,
-                                                        'Confirm to withdraw all from Smart Vault?',
-                                                        'You are withdrawing <span class="fw-bold">' +
-                                                        parseFloat(this.props.myBtcLpAmount * this.props.btcLpExchangeRate).toFixed(8) +
-                                                        ' BTC (~$' +
-                                                        parseFloat(this.props.myBtcLpAmount * this.props.btcLpExchangeRate * this.props.priceOfBtc / 100).toFixed(2) +
-                                                        ')</span> from Smart Vault. <span class="fw-bold" style="color: #ff7d47"><br/>Caution: you will lose your automatic loan protection if you withdraw.</span>', 0)
+                                                    if (this.props.myBtcLpAmount <= 0) {
+                                                        this.toggleNoAction(
+                                                            deposit,
+                                                            'Unable to withdraw all from Smart Vault',
+                                                            'You do not have any BTC in Smart Vault.',
+                                                            deposit + debt
+                                                        )
+                                                    } else {
+                                                        this.toggleLeaveSmartVault(debt,
+                                                            'Confirm to withdraw all from Smart Vault?',
+                                                            'You are withdrawing <span class="fw-bold">' +
+                                                            parseFloat(this.props.myBtcLpAmount * this.props.btcLpExchangeRate).toFixed(8) +
+                                                            ' BTC (~$' +
+                                                            parseFloat(this.props.myBtcLpAmount * this.props.btcLpExchangeRate * this.props.priceOfBtc / 100).toFixed(2) +
+                                                            ')</span> from Smart Vault. <span class="fw-bold" style="color: #ff7d47"><br/>Caution: you will lose your automatic loan protection if you withdraw.</span>', 0)
+                                                    }
                                                 }}
                                             ></Card>
                                         </Grid>
@@ -968,6 +1005,7 @@ function mapStateToProps(store) {
         btcLpExchangeRate: store.backd.btcLpExchangeRate,
         totalBtcLpAmount: store.backd.totalBtcLpAmount,
         topupAction: store.backd.topupAction,
+        myProtection: store.backd.myProtection
     };
 }
 
