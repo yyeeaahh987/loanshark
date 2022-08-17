@@ -7,6 +7,15 @@ import Widget from "../../components/Widget";
 
 class HealthFactorPieChart extends React.Component {
 
+    componentDidUpdate(prevProps) {
+        if (prevProps.userDepositBalanceEth !== this.props.userDepositBalanceEth
+            ||
+            prevProps.userDebtBalanceBtc !== this.props.userDebtBalanceBtc
+            ) {
+            this.forceUpdate();
+        }
+    }
+
     render() {
         var text = (!(
             (this.props.selectedPair === "ETHBTC" ? Number(this.props.userDebtBalanceBtc) : Number(this.props.userDebtBalanceUsdt))

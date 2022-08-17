@@ -148,7 +148,7 @@ class Dashboard extends React.Component {
 								parseFloat(
 									(
 										0.0103 * (this.props.userDepositBalanceEth * this.props.priceOfEth / 100)
-										- 0.014 * (this.props.userDebtBalanceBtc * this.props.priceOfBtc / 100)
+										- this.props.aaveBtcBorrowRate / 100 * (this.props.userDebtBalanceBtc * this.props.priceOfBtc / 100)
 										+ 0.054 * (this.props.myBtcLpAmount * this.props.btcLpExchangeRate * this.props.priceOfBtc / 100) 
 									) / (this.props.userDepositBalanceEth * this.props.priceOfEth / 100)  * 100
 								).toFixed(4)
@@ -218,14 +218,14 @@ class Dashboard extends React.Component {
 									<td className="middle">
 										<Grid container>
 											<Grid xs={12}>
-												<span>1.4%</span>
+												<span>{this.props.aaveBtcBorrowRate}%</span>
 											</Grid>
 											<Grid xs={12}>
 												<span>{
 													parseFloat(
 														(
 															  0.0103 * (this.props.userDepositBalanceEth * this.props.priceOfEth / 100)
-															- 0.014 * (this.props.userDebtBalanceBtc * this.props.priceOfBtc / 100)
+															- this.props.aaveBtcBorrowRate / 100 * (this.props.userDebtBalanceBtc * this.props.priceOfBtc / 100)
 															+ 0.054 * (this.props.myBtcLpAmount * this.props.btcLpExchangeRate * this.props.priceOfBtc / 100) 
 														) / (this.props.userDepositBalanceEth * this.props.priceOfEth / 100) * 100
 													).toFixed(4)
@@ -457,6 +457,7 @@ function mapStateToProps(store) {
 		myAccount: store.loanshark.myAccount,
 		selectedPair: store.loanshark.selectedPair,
 		numberOfEth: store.loanshark.numberOfEth,
+		aaveBtcBorrowRate: store.loanshark.aaveBtcBorrowRate,
 		userDepositBalanceEth: store.loanshark.userDepositBalanceEth,
 		userDepositBalanceAvax: store.loanshark.userDepositBalanceAvax,
 		userDebtBalanceBtc: store.loanshark.userDebtBalanceBtc,
