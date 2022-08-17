@@ -3,6 +3,7 @@ export const CHANGE_MY_ACCOUNT = 'CHANGE_MY_ACCOUNT';
 export const CHANGE_SELECTED_PAIR = 'CHANGE_SELECTED_PAIR';
 export const CHANGE_NUMBER_OF_ETH = 'CHANGE_NUMBER_OF_ETH';
 export const CHANGE_NUMBER_OF_AVAX = 'CHANGE_NUMBER_OF_AVAX';
+export const CHANGE_AAVE_BTC_BORROW_RATE = 'CHANGE_AAVE_BTC_BORROW_RATE';
 export const CHANGE_USER_DEPOSIT_BALANCE_ETH = 'CHANGE_USER_DEPOSIT_BALANCE_ETH';
 export const CHANGE_USER_DEPOSIT_BALANCE_AVAX = 'CHANGE_USER_DEPOSIT_BALANCE_AVAX';
 export const CHANGE_USER_DEBT_BALANCE_BTC = 'CHANGE_USER_DEBT_BALANCE_BTC';
@@ -48,6 +49,9 @@ export function changeNumberOfEth(payload) {
 }
 export function changeNumberOfAvax(payload) {
   return {type: CHANGE_NUMBER_OF_AVAX,payload};
+}
+export function changeAaveBtcBorrowRate(payload) {
+  return {type: CHANGE_AAVE_BTC_BORROW_RATE,payload};
 }
 export function changeUserDepositBalanceEth(payload) {
   return {type: CHANGE_USER_DEPOSIT_BALANCE_ETH,payload};

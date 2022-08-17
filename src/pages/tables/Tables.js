@@ -76,7 +76,7 @@ class Tables extends React.Component {
                     <span style={{ color: "#00ff00" }}>AAVE</span>
                   </Col>
                   <Col style={{ textAlign: 'right' }} >
-                    <span style={{ color: "#00ff00" }}>1.4%</span>
+                    <span style={{ color: "#00ff00" }}>{this.props.aaveBtcBorrowRate}%</span>
                   </Col>
                 </Row>
                 <Row style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 0, marginTop: 0 }}>
@@ -84,7 +84,7 @@ class Tables extends React.Component {
                     Benqi
                   </Col>
                   <Col style={{ textAlign: 'right' }} >
-                    2.0%
+                    5.0%
                   </Col>
                 </Row>
             </Widget>
@@ -102,6 +102,7 @@ function mapStateToProps(store) {
     selectedPair: store.loanshark.selectedPair,
     numberOfEth: store.loanshark.numberOfEth,
     numberOfAvax: store.loanshark.numberOfAvax,
+    aaveBtcBorrowRate: store.loanshark.aaveBtcBorrowRate,
     userDepositBalanceEth: store.loanshark.userDepositBalanceEth,
     userDepositBalanceAvax: store.loanshark.userDepositBalanceAvax,
     userDebtBalanceBtc: store.loanshark.userDebtBalanceBtc,

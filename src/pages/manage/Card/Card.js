@@ -193,9 +193,9 @@ class Card extends React.Component {
                                     onClick={this.props.onClickBorrowingPowerChange}
                                     >90%</Button>
                                     <Button className={"borrow-power-button"} size="xs"
-                                    name={100}
+                                    name={ this.props.action === "borrow" ? 95 : 100 }
                                     onClick={this.props.onClickBorrowingPowerChange}
-                                    >Max</Button>
+                                    >{ this.props.action === "borrow" ? "95%" : "Max"}</Button>
                                  </ButtonGroup>
                             </Grid>
                         </Grid>
@@ -303,7 +303,11 @@ class Card extends React.Component {
                                                             <span style={{
                                                                 fontSize: "14px",
                                                                 fontWeight: "bold",
-                                                            }}>balance: {`${this.props.maxBalance}`}</span>
+                                                            }}>{
+                                                                this.props.action === "borrow" ? "Max borrow" : 
+                                                                this.props.action === "payback" ? "Max Payback": 
+                                                                this.props.action === "deposit" ? "Balance" : 
+                                                                this.props.action === "withdraw" ? "Balance" : ""} : {`${this.props.maxBalance}`}</span>
                                                         </div>
                                                     </Grid>
                                                 </Grid>

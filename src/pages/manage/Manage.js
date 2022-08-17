@@ -60,7 +60,38 @@ class Manage extends React.Component {
         }
     }
 
-    componentDidMount() {
+    componentDidUpdate(prevProps) {
+        if (prevProps.myETHAmount !== this.props.myETHAmount) {
+            this.setState({
+                maxdepositAmount: Number(this.props.myETHAmount),
+                depositAmount: 0,
+            });
+            this.props.dispatch(changeInputEthDeposit(0));
+        }
+        
+        if (prevProps.userDepositBalanceEth !== this.props.userDepositBalanceEth ||
+            prevProps.userDebtBalanceBtc !== this.props.userDebtBalanceBtc
+            ) {
+            var borrowPower = 0;
+            borrowPower = this.props.userDepositBalanceEth;
+            borrowPower = borrowPower * this.props.priceOfEth;
+            borrowPower = borrowPower * this.props.LTV[this.props.selectedPair];
+            borrowPower = borrowPower * this.props.liquidationPrice[this.props.selectedPair];
+            borrowPower = borrowPower / this.props.priceOfBtc;
+            borrowPower = borrowPower - this.props.userDebtBalanceBtc;
+            
+            this.setState({
+                maxdebtAmount: this.state.debtAction === 'borrow' ? Number(borrowPower).toFixed(8) : Number(this.props.userDebtBalanceBtc).toFixed(8) ,
+                maxdepositAmount: this.state.collateralAction === "deposit" ? Number(this.props.myETHAmount) : this.props.userDepositBalanceEth,
+                debtAmount: 0,
+                depositAmount: 0
+            });
+            this.props.dispatch(changeInputEthDeposit(0));
+            this.props.dispatch(changeInputBtcDebt(0));
+        }
+    }
+
+    updateBorrowPower = () => {
         if ((this?.props?.location?.state?.pair ?? "") === "") return
         let tempPari = this.props.location.state.pair.split("_")
         let deposit = tempPari[0]
@@ -97,6 +128,7 @@ class Manage extends React.Component {
             borrowPower = borrowPower * this.props.LTV[this.props.selectedPair];
             borrowPower = borrowPower * this.props.liquidationPrice[this.props.selectedPair];
             borrowPower = borrowPower / this.props.priceOfBtc;
+            borrowPower = borrowPower - this.props.userDebtBalanceBtc;
 
             this.setState({
                 depositCurrency: deposit,
@@ -110,11 +142,14 @@ class Manage extends React.Component {
 
                 maxWithdrawAmount: Number(this.props.userDepositBalanceEth),
                 debtCurrencyPrice: Number(this.props.priceOfBtc),
-                maxDetAmount: Number(this.props.myBTCAmount).toFixed(8),
                 maxPaybackAmount: Number(this.props.userDebtBalanceBtc).toFixed(8),
             })
             this.props.dispatch(changeSelectedPair("ETHBTC"));
         }
+    }
+
+    componentDidMount() {
+        this.updateBorrowPower();
         this.forceUpdate();
     }
 
@@ -149,11 +184,11 @@ class Manage extends React.Component {
             modalCall: () => {
                 let approveArgs = [
                     (pair === "ETHBTC" ? this.props.myFujiVaultETHBTC.options.address : pair === "AVAXUSDT" ? this.props.myFujiVaultAVAXUSDT.options.address : ""),
-                    window.web3.utils.toBN(window.web3.utils.toWei( (this.state.modalInputValue +""), 'ether')).toString()
+                    window.web3.utils.toBN(window.web3.utils.toWei((this.state.modalInputValue + ""), 'ether')).toString()
                 ]
 
                 let args = [
-                    window.web3.utils.toBN(window.web3.utils.toWei( (this.state.modalInputValue+""), 'ether')).toString(),
+                    window.web3.utils.toBN(window.web3.utils.toWei((this.state.modalInputValue + ""), 'ether')).toString(),
                 ];
 
                 if (pair === "ETHBTC") {
@@ -184,7 +219,7 @@ class Manage extends React.Component {
                     this.toggle();
                     this.calltoggleLoading();
 
-                    let a = window.web3.utils.toBN(window.web3.utils.toWei( Number.parseFloat(this.state.modalInputValue), 'ether')).toString();
+                    let a = window.web3.utils.toBN(window.web3.utils.toWei(Number.parseFloat(this.state.modalInputValue), 'ether')).toString();
                     this.props.myFujiVaultAVAXUSDT.methods
                         .deposit(...args)
                         .send({ from: this.props.myAccount, value: a })
@@ -211,7 +246,7 @@ class Manage extends React.Component {
             modalInputValue: this.state.collateralAmount,
             modalCall: () => {
                 let args = [
-                    window.web3.utils.toBN(window.web3.utils.toWei( (this.state.modalInputValue)+"", 'ether')).toString(),
+                    window.web3.utils.toBN(window.web3.utils.toWei((this.state.modalInputValue) + "", 'ether')).toString(),
                 ];
 
                 if (pair === "ETHBTC") {
@@ -653,7 +688,7 @@ class Manage extends React.Component {
                                                         'You do not have enough ETH to deposit.',
                                                         deposit + debt
                                                     )
-                                                } else if (newHealthFactor <= 1) {
+                                                } else if (newHealthFactor < 1.06) {
                                                     this.toggleNoAction(
                                                         deposit,
                                                         'Unable to deposit',
@@ -661,7 +696,7 @@ class Manage extends React.Component {
                                                         this.state.collateralAmount + ' ' + deposit +
                                                         ' (~$' +
                                                         Number(this.state.collateralAmount * this.props.priceOfEth / 100).toFixed(2) +
-                                                        ')</span>. <br/>The new health factor will be <span class="fw-bold" style="color: #ff7d47">' + newHealthFactor + '</span> which is below 1.',
+                                                        ')</span>. <br/>The new health factor will be <span class="fw-bold" style="color: #ff7d47">' + newHealthFactor + '</span> which is below 1.05.',
                                                         deposit + debt
                                                     )
                                                 } else {
@@ -698,7 +733,7 @@ class Manage extends React.Component {
                                                         'You do not have so much ETH to withdraw.',
                                                         deposit + debt
                                                     )
-                                                } else if (newHealthFactor <= 1) {
+                                                } else if (newHealthFactor < 1.06) {
                                                     this.toggleNoAction(
                                                         deposit,
                                                         'Unable to withdraw',
@@ -706,7 +741,7 @@ class Manage extends React.Component {
                                                         this.state.collateralAmount + ' ' + deposit +
                                                         ' (~$' +
                                                         Number(this.state.collateralAmount * this.props.priceOfEth / 100).toFixed(2) +
-                                                        ')</span>. <br/>The new health factor will be <span class="fw-bold" style="color: #ff7d47">' + newHealthFactor + '</span> which is below 1.',
+                                                        ')</span>. <br/>The new health factor will be <span class="fw-bold" style="color: #ff7d47">' + newHealthFactor + '</span> which is below 1.05.',
                                                         deposit + debt
                                                     )
                                                 } else {
@@ -745,6 +780,7 @@ class Manage extends React.Component {
                                                         borrowPower = borrowPower * this.props.LTV[this.props.selectedPair];
                                                         borrowPower = borrowPower * this.props.liquidationPrice[this.props.selectedPair];
                                                         borrowPower = borrowPower / (this.props.selectedPair === "ETHBTC" ? this.props.priceOfBtc : this.props.priceOfUsdt);
+                                                        borrowPower = borrowPower - this.props.userDebtBalanceBtc;
 
                                                         this.setState({
                                                             debtAction: e.target.name,
@@ -803,7 +839,7 @@ class Manage extends React.Component {
                                                         'You do not have enough BTC to payback.',
                                                         deposit + debt
                                                     )
-                                                } else if (newHealthFactor <= 1) {
+                                                } else if (newHealthFactor < 1.06) {
                                                     this.toggleNoAction(
                                                         deposit,
                                                         'Unable to payback',
@@ -811,10 +847,10 @@ class Manage extends React.Component {
                                                         this.state.debtAmount + ' ' + debt +
                                                         ' (~$' +
                                                         Number(this.state.debtAmount * this.props.priceOfBtc / 100).toFixed(2) +
-                                                        ')</span>. <br/>The new health factor will be <span class="fw-bold" style="color: #ff7d47">' + newHealthFactor + '</span> which is below 1.',
+                                                        ')</span>. <br/>The new health factor will be <span class="fw-bold" style="color: #ff7d47">' + newHealthFactor + '</span> which is below 1.05.',
                                                         deposit + debt
                                                     )
-                                                    
+
                                                 } else {
                                                     this.togglePayback(
                                                         deposit,
@@ -842,7 +878,7 @@ class Manage extends React.Component {
                                                         'Please enter the amount that you want to borrow.',
                                                         deposit + debt
                                                     )
-                                                } else if (newHealthFactor <= 1) {
+                                                } else if (newHealthFactor < 1.06) {
                                                     this.toggleNoAction(
                                                         deposit,
                                                         'Unable to borrow',
@@ -850,7 +886,7 @@ class Manage extends React.Component {
                                                         this.state.debtAmount + ' ' + debt +
                                                         ' (~$' +
                                                         Number(this.state.debtAmount * this.props.priceOfBtc / 100).toFixed(2) +
-                                                        ')</span>. <br/>The new health factor will be <span class="fw-bold" style="color: #ff7d47">' + newHealthFactor + '</span> which is below 1.',
+                                                        ')</span>. <br/>The new health factor will be <span class="fw-bold" style="color: #ff7d47">' + newHealthFactor + '</span> which is below 1.05.',
                                                         deposit + debt
                                                     )
                                                 } else {
@@ -873,12 +909,12 @@ class Manage extends React.Component {
                                             <Card
                                                 widgetSize={"full"}
                                                 title={"Current Smart Vault Balance"}
-                                                extraHtmlContent={"<br /><p style='font-size: 14px'> Trigger Health Factor: " 
-                                                + parseFloat(this.props.myProtection[0]/1000000000000000000)
-                                                + "<br />" 
-                                                + "Repay amount each time: " 
-                                                + parseFloat(this.props.myProtection[5]/0.9999/100000000)
-                                                + "</p>" }
+                                                extraHtmlContent={"<br /><p style='font-size: 14px'> Trigger Health Factor: "
+                                                    + parseFloat(this.props.myProtection[0] / 1000000000000000000)
+                                                    + "<br />"
+                                                    + "Repay amount each time: "
+                                                    + parseFloat(this.props.myProtection[5] / 0.9999 / 100000000)
+                                                    + "</p>"}
                                                 currencyIconPath={this.state.debtCurrencyIconPath}
                                                 leftSelectButton={""}
                                                 rightSelectButton={""}

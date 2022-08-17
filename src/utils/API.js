@@ -1,6 +1,7 @@
 import {
     changeNumberOfEth,
     changeNumberOfAvax,
+    changeAaveBtcBorrowRate,
     changeUserDepositBalanceEth,
     changeUserDepositBalanceAvax,
     changeUserDebtBalanceBtc,
@@ -44,7 +45,7 @@ let refreshPrice = (props) => {
             props.dispatch(changeUserDepositBalanceEth(window.web3.utils.fromWei(result, 'ether')));
         });
         props.myFujiVaultETHBTC.methods.userDebtBalance(props.myAccount).call({}, (error, result) => {
-            props.dispatch(changeUserDebtBalanceBtc(window.web3.utils.fromWei(result, 'gwei') * 10));
+            props.dispatch(changeUserDebtBalanceBtc(parseFloat((window.web3.utils.fromWei(result, 'gwei') * 10).toFixed(8))));
         });
         props.myFujiVaultETHBTC.methods.collatF().call({}, (error, result) => {
             props.dispatch(changeLTV({ "ETHBTC": result.b / result.a }));
@@ -88,6 +89,13 @@ let refreshPrice = (props) => {
             props.dispatch(changePriceOfUsdt(result));
         });
 
+        if (props.providerAAVEAVAX) {
+            props.providerAAVEAVAX.methods.getBorrowRateFor(WBTC).call({}, (error, result) => {
+                var APR = result /1000000000000000000000000000;
+                props.dispatch(changeAaveBtcBorrowRate(parseFloat((Math.pow(1 + APR/365, 365) - 1)*100).toFixed(2)));
+            });
+        }
+        
         if (props.mySmartVaultBtc) {
             props.mySmartVaultBtc.methods.balances(props.myAccount).call({}, (error, result) => {
                 props.dispatch(changeSmartVaultBtc(window.web3.utils.fromWei(result, 'gwei') * 10));

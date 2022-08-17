@@ -556,6 +556,7 @@ function mapStateToProps(store) {
 		myAccount: store.loanshark.myAccount,
 		selectedPair: store.loanshark.selectedPair,
 		numberOfEth: store.loanshark.userDebtBalance,
+		changeAaveBtcBorrowRate: store.loanshark.aaveBtcBorrowRate,
 		userDepositBalanceEth: store.loanshark.userDepositBalanceEth,
 		userDepositBalanceAvax: store.loanshark.userDepositBalanceAvax,
 		userDebtBalanceBtc: store.loanshark.userDebtBalanceBtc,
