@@ -27,11 +27,28 @@ th, td {
 }
 
 .rowHover:hover {
-  color: #000000;
-  background-color: #ffffff;
+  color: #ffffff;
+  background-color: #444444;
 }
 
+
+.rowHovered {
+  color: #ffffff;
+  background-color: #444444;
+  border-style: none;
+  border-width: 1px;
+  border-color: rgb(122, 122, 122);
+  cursor: pointer;
+  padding: 15px;
+  border-radius: 15px;
+  display: 'flex';
+  align-items: 'center';
+  box-shadow: var(--widget-shadow);
+}
+
+
 .table-light {
+  background-color: #444444;
   box-shadow: var(--widget-shadow);
 }
 

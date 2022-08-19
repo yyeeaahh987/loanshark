@@ -198,7 +198,7 @@ class SmartVault4 extends React.Component {
                                 </tr>
                             </thead>
                             <tbody className="">
-                                <tr key={0} className={'table-light'} style={{ color: '#000000' }}>
+                                <tr key={0}  className="rowHovered">
                                     <td className="fw-thin pl-4">
                                         <img style={{ padding: '5px' }} className="icon" src="/assets/icon/eth-logo.svg" alt="x"></img> ETH / <img style={{ padding: '5px' }} className="icon" src="/assets/icon/btc-logo.svg" alt="x"></img> BTC
                                     </td>
@@ -270,7 +270,7 @@ class SmartVault4 extends React.Component {
                     {
                         this.props.myProtection[0] <= 0 ?
                             <Col md={12}>
-                                <Button block color={'light'} style={{ padding: '20px', color: '#000000' }} onClick={() => {
+                                <Button block className={'manage-button'} style={{ padding: '20px' }} onClick={() => {
                                     this.stakeToVault();
                                 }}>Confirm</Button>
                             </Col>
@@ -291,7 +291,7 @@ class SmartVault4 extends React.Component {
                                 <div className="content" dangerouslySetInnerHTML={{ __html: this.state.htmlContent }}></div>
                             </Col>
                             <Col style={{ paddingTop: '20px', paddingLeft: '40px', paddingRight: '40px' }} sm={12}>
-                                <Button block color={'light'} style={{ padding: '20px', color: '#000000' }} onClick={this.state.modalCall}>{this.state.modalButton}</Button>
+                                <Button block className={'manage-button'}  style={{ padding: '20px' }} onClick={this.state.modalCall}>{this.state.modalButton}</Button>
                             </Col>
                         </Row>
                     </ModalBody>

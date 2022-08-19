@@ -989,7 +989,7 @@ class Manage extends React.Component {
                                 </Input> {this.state.modalToken}
                             </Col>
                             <Col style={{ paddingTop: '20px', paddingLeft: '40px', paddingRight: '40px' }} sm={12}>
-                                <Button block color={'light'} style={{ padding: '5px', color: '#000000' }}
+                                <Button block className={'manage-button'} style={{ padding: '5px' }}
                                     onClick={this.state.modalCall ? this.state.modalCall : this.toggle}>
                                     {this.state.modalCall ? 'Confirm' : 'Close'}
                                 </Button>

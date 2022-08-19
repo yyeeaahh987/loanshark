@@ -165,7 +165,7 @@
       box-shadow: var(--widget-shadow);
       
       &:hover {
-        color: black !important
+        color: #ffffff !important
       }
     }
 
@@ -182,26 +182,20 @@
 }
 
 .manage-button {
-  background-color: white;
-  color: black;
-  border: 1px solid transparent;
+  background-color: #444444;
+  color: #ffffff;
+  border: 1px solid #ffffff;
 
   &:active {
-    border: 1px solid white !important;
-    background-color: white !important;
-    color: black !important;
+    background-color: #000000 !important;
   }
 
   &:focus {
-    border: 1px solid white !important;
-    background-color: white;
-    color: black !important;
+    background-color: #000000;
   }
 
   &:hover {
-    border: 1px solid white;
-    background-color: transparent;
-    color: white !important
+    background-color: #000000;
   }
 }
 

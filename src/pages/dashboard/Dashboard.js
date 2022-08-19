@@ -364,7 +364,7 @@ class Dashboard extends React.Component {
 								pathname: "/app/main/borrow",
 							}}
 						>
-							<Button block outline color={"light"} className={"customTable__dataRow__borrow"}>+ Borrow</Button>
+							<Button block outline color={"secondary"} className={"customTable__dataRow__borrow"}>+ Borrow</Button>
 						</NavLink>
 					</Grid>
 				</Grid>
@@ -427,7 +427,7 @@ class Dashboard extends React.Component {
 							}}
 							hidden={this.props.myBtcLpAmount > 0}
 						>
-							<Button block outline color={"light"} className={"customTable__dataRow__borrow"}>+ Smart Vault</Button>
+							<Button block outline color={"secondary"} className={"customTable__dataRow__borrow"}>+ Smart Vault</Button>
 						</NavLink>
 					</Grid>
 				</Grid>
@@ -442,7 +442,7 @@ class Dashboard extends React.Component {
 								<Button close color="secondary" onClick={this.toggle}></Button>
 							</Col>
 							<Col style={{ paddingTop: '20px', paddingLeft: '40px', paddingRight: '40px' }} sm={12}>
-								<Button block color={'light'} style={{ padding: '5px', color: '#000000' }} onClick={this.state.modalCall}>Confirm</Button>
+								<Button block color={'secondary'} style={{ padding: '5px', color: '#000000' }} onClick={this.state.modalCall}>Confirm</Button>
 							</Col>
 						</Row>
 					</ModalBody>
