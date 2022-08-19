@@ -93,14 +93,14 @@ class Dashboard extends React.Component {
 				<Grid container spacing={2}>
 					<Grid item xl={3} lg={3} xs={12}>
 						<Widget
-							title={<p style={{ fontWeight: 700 }}>
+							title={<p style={{ fontSize: '40px', fontWeight: 700 }}>
 								${((this.props.userDepositBalanceEth * this.props.priceOfEth / 100) + (this.props.userDepositBalanceAvax * this.props.priceOfAvax / 100)).toFixed(2)}
 							</p>}
 							customDropDown={false}
 						>
 							<Row className={`justify-content-between mt-3`} noGutters>
 								<Col sm={12} className={"d-flex align-items-center"}>
-									<p className={"fw-semi-bold mb-0"}>
+									<p style={{ fontSize: '20px', fontWeight: 700 }} className={"fw-semi-bold mb-0"}>
 										Your Collateral
 									</p>
 								</Col>
@@ -110,14 +110,14 @@ class Dashboard extends React.Component {
 
 					<Grid item xl={3} lg={3} xs={12}>
 						<Widget
-							title={<p style={{ fontWeight: 700 }}>
+							title={<p style={{ fontSize: '40px', fontWeight: 700 }}>
 								${((this.props.userDebtBalanceBtc * this.props.priceOfBtc / 100) + (this.props.userDebtBalanceUsdt * this.props.priceOfUsdt / 100)).toFixed(2)}
 							</p>}
 							customDropDown={false}
 						>
 							<Row className={`justify-content-between mt-3`} noGutters>
 								<Col sm={12} className={"d-flex align-items-center"}>
-									<p className={"fw-semi-bold mb-0"}>
+									<p style={{ fontSize: '20px', fontWeight: 700 }} className={"fw-semi-bold mb-0"}>
 										Your Debt
 									</p>
 								</Col>
@@ -126,14 +126,14 @@ class Dashboard extends React.Component {
 					</Grid>
 					<Grid item xl={3} lg={3} xs={12}>
 						<Widget
-							title={<p style={{ fontWeight: 700 }}>
+							title={<p style={{ fontSize: '40px', fontWeight: 700 }}>
 								${(this.props.myBtcLpAmount * this.props.btcLpExchangeRate * this.props.priceOfBtc / 100).toFixed(2)}
 							</p>}
 							customDropDown={false}
 						>
 							<Row className={`justify-content-between mt-3`} noGutters>
 								<Col sm={12} className={"d-flex align-items-center"}>
-									<p className={"fw-semi-bold mb-0"}>
+									<p style={{ fontSize: '20px', fontWeight: 700 }} className={"fw-semi-bold mb-0"}>
 									Your Smart Vault Balance
 									</p>
 								</Col>
@@ -143,7 +143,7 @@ class Dashboard extends React.Component {
 
 					<Grid item xl={3} lg={3} xs={12}>
 						<Widget
-							title={<p style={{ fontWeight: 700 }}>
+							title={<p style={{ fontSize: '40px', fontWeight: 700 }}>
 								{
 								parseFloat(
 									(
@@ -158,7 +158,7 @@ class Dashboard extends React.Component {
 						>
 							<Row className={`justify-content-between mt-3`} noGutters>
 								<Col sm={12} className={"d-flex align-items-center"}>
-									<p className={"fw-semi-bold mb-0"}>
+									<p style={{ fontSize: '20px', fontWeight: 700 }} className={"fw-semi-bold mb-0"}>
 									Net Interest Rate
 									</p>
 								</Col>
@@ -172,7 +172,7 @@ class Dashboard extends React.Component {
 					<Grid item xs={12}>
 						<span style={{
 							fontWeight: "800",
-							fontSize: "1em",
+							fontSize: "20px",
 						}}>My Borrowing Position</span>
 					</Grid>
 
@@ -375,7 +375,7 @@ class Dashboard extends React.Component {
 					<Grid item xs={12}>
 						<span style={{
 							fontWeight: "800",
-							fontSize: "1em",
+							fontSize: "20px",
 						}}>My Smart Vault Position</span>
 					</Grid>
 

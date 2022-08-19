@@ -238,7 +238,7 @@ class Card extends React.Component {
             <Grid container>
                 <Grid item xs={12}>
                     <Widget
-                        title={<p style={{ fontWeight: 700 }}>{this.props.title}</p>}
+                        title={<p>{this.props.title}</p>}
                         customDropDown={false}
                         widgetSize={this.props.widgetSize}
                     >

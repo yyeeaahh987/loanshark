@@ -43,11 +43,11 @@ class Layout extends React.Component {
 					<Wave
 						style={{ position: "fixed", bottom: "0" }}
 						fill="#777777"
-						paused={false}
+						paused={true}
 						opacity="0.1"
 						options={{
-							height: 80,
-							amplitude: 20,
+							height: 10,
+							amplitude: 100,
 							speed: 0.2,
 							points: 4,
 						}}
@@ -56,11 +56,11 @@ class Layout extends React.Component {
 					<Wave
 						style={{ position: "fixed", bottom: "0" }}
 						fill="#888888"
-						paused={false}
+						paused={true}
 						opacity="0.2"
 						options={{
 							height: 50,
-							amplitude: 10,
+							amplitude: 100,
 							speed: 0.2,
 							points: 7,
 						}}
@@ -68,11 +68,11 @@ class Layout extends React.Component {
 					<Wave
 						style={{ position: "fixed", bottom: "0" }}
 						fill="#999999"
-						paused={false}
+						paused={true}
 						opacity="0.2"
 						options={{
 							height: 20,
-							amplitude: 5,
+							amplitude: 50,
 							speed: 0.2,
 							points: 11,
 						}}
