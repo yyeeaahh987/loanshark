@@ -30,20 +30,20 @@ td {
     height: 100%;
     border-top-right-radius: 0px;
     border-bottom-right-radius: 0px;
-    color: #000000;
-    background-color: #ffffff;
+    color: #ffffff;
+    background-color: #444444;
 
     &:hover {
-      color: #000000;
-      background-color: #ffffff;
+      color: #ffffff;
+      background-color:  #444444;
     }
     &:active {
-      color: #000000;
-      background-color: #ffffff !important;
+      color: #ffffff;
+      background-color: #444444 !important;
     }
     &:focus {
-      color: #000000;
-      background-color: #ffffff;
+      color: #ffffff;
+      background-color:  #444444;
     }
   }
 
