@@ -37,36 +37,36 @@ class Layout extends React.Component {
 		return (
 			<LoadingOverlay
 				active={this.props.loadingActive}
-				spinner={<CircleLoader color={"#ffffff"} size={150} />}
+				spinner={<CircleLoader color={"#444444"} size={100} />}
 			>
 				<div style={{ position: "fixed", bottom: "0", width: "100vw", zIndex: "1", pointerEvents: "none" }}>
 					<Wave
-						style={{ position: "fixed", bottom: "0" }}
+						style={{ position: "fixed", bottom: "0", height: "400px" }}
 						fill="#777777"
 						paused={true}
 						opacity="0.1"
 						options={{
 							height: 10,
-							amplitude: 100,
+							amplitude: 500,
 							speed: 0.2,
 							points: 4,
 						}}
 					/>
 
 					<Wave
-						style={{ position: "fixed", bottom: "0" }}
+						style={{ position: "fixed", bottom: "0", height: "300px" }}
 						fill="#888888"
 						paused={true}
 						opacity="0.2"
 						options={{
-							height: 50,
-							amplitude: 100,
+							height: 10,
+							amplitude: 200,
 							speed: 0.2,
 							points: 7,
 						}}
 					/>
 					<Wave
-						style={{ position: "fixed", bottom: "0" }}
+						style={{ position: "fixed", bottom: "0", height: "100px" }}
 						fill="#999999"
 						paused={true}
 						opacity="0.2"

@@ -277,9 +277,9 @@ class Card extends React.Component {
                                                                     <Grid item>
                                                                         <label
                                                                             style={{
-                                                                                border: "1px solid white",
                                                                                 borderRadius: "10px",
-                                                                                backgroundColor: "white",
+                                                                                backgroundColor: "#444444",
+                                                                                color: '#ffffff',
                                                                                 padding: "3px 10px"
                                                                             }}
                                                                         > 
@@ -288,7 +288,7 @@ class Card extends React.Component {
                                                                                 // src={this.state.iconPath}
                                                                                 alt="x"></img>
                                                                                 {'    '}
-                                                                            <span style={{ color: "black", fontSize: "14px", fontWeight: "bold", }}>{this.props.currency.toUpperCase()}</span>
+                                                                            <span style={{ color: "#ffffff", fontSize: "14px", fontWeight: "bold", }}>{this.props.currency.toUpperCase()}</span>
                                                                         </label>
                                                                     </Grid>
                                                                 </Grid>

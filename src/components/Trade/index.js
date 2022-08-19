@@ -147,16 +147,21 @@ class Trade extends React.Component {
 
             var modalTitle = '';
             var modalMessage = '';
+            var error = false;
             if (this.state.inputEthDeposit <= 0 || isNaN(this.state.inputEthDeposit)) {
+                error = true;
                 modalTitle = 'Unable to borrow BTC using ETH as collateral';
                 modalMessage = 'Please enter the amount that you want to deposit.';
             } else if (this.state.inputBtcBorrow <= 0 || isNaN(this.state.inputBtcBorrow)) {
+                error = true;
                 modalTitle = 'Unable to borrow BTC using ETH as collateral';
                 modalMessage = 'Please enter the amount that you want to borrow.';
             } else if (this.state.inputEthDeposit > this.props.myETHAmount) {
+                error = true;
                 modalTitle = 'Unable to borrow BTC using ETH as collateral';
                 modalMessage = 'You do not have enough ETH to deposit.';
             } else if (newHealthFactor < 1.06) {
+                error = true;
                 modalTitle = 'Unable to borrow BTC using ETH as collateral';
                 modalMessage = 'You are unable to deposit <span class="fw-bold">' +
                     this.state.inputEthDeposit + ' ETH ' +
@@ -194,16 +199,15 @@ class Trade extends React.Component {
                 modalToken: "",
                 modalAction: "",
                 modalInputValue: 0,
-                modalCall: () => {
+                modalCall: error? null : () => {
                     let approveArgs = [
                         this.props.myFujiVaultETHBTC.options.address,
                         window.web3.utils.toBN(window.web3.utils.toWei(this.state.inputEthDeposit, 'ether')).toString()
                     ]
-                    let finalInputBtcBorrow = (this.state.inputBtcBorrow / 10).toString() + "";
 
                     let args = [
                         window.web3.utils.toBN(window.web3.utils.toWei(this.state.inputEthDeposit, 'ether')).toString(),
-                        window.web3.utils.toBN(window.web3.utils.toWei(finalInputBtcBorrow, 'shannon')).toString()
+                        window.web3.utils.toBN(parseFloat((this.state.inputBtcBorrow * 10000000).toFixed(0))).toString()
                     ]
 
                     this.toggle();
@@ -411,27 +415,27 @@ class Trade extends React.Component {
                                     <Button className="borrow-power-button"
                                         onClick={() => {
                                             this.setState({ inputBtcBorrow: isNaN(borrowPower) === true ? 0 : (borrowPower * 0.25).toFixed(8) });
-                                            this.props.dispatch(changeInputBtcDebt((borrowPower * 0.25).toFixed(8)));
+                                            this.props.dispatch(changeInputBtcDebt(parseFloat((borrowPower * 0.25).toFixed(8))));
                                         }}>25%</Button>
                                     <Button className="borrow-power-button"
                                         onClick={() => {
                                             this.setState({ inputBtcBorrow: isNaN(borrowPower) === true ? 0 : (borrowPower * 0.5).toFixed(8) });
-                                            this.props.dispatch(changeInputBtcDebt((borrowPower * 0.5).toFixed(8)));
+                                            this.props.dispatch(changeInputBtcDebt(parseFloat((borrowPower * 0.25).toFixed(8))));
                                         }}>50%</Button>
                                     <Button className="borrow-power-button"
                                         onClick={() => {
                                             this.setState({ inputBtcBorrow: isNaN(borrowPower) === true ? 0 : (borrowPower * 0.75).toFixed(8) });
-                                            this.props.dispatch(changeInputBtcDebt((borrowPower * 0.75).toFixed(8)));
+                                            this.props.dispatch(changeInputBtcDebt(parseFloat((borrowPower * 0.25).toFixed(8))));
                                         }}>75%</Button>
                                     <Button className="borrow-power-button"
                                         onClick={() => {
                                             this.setState({ inputBtcBorrow: isNaN(borrowPower) === true ? 0 : (borrowPower * 0.9).toFixed(8) });
-                                            this.props.dispatch(changeInputBtcDebt((borrowPower * 0.9).toFixed(8)));
+                                            this.props.dispatch(changeInputBtcDebt(parseFloat((borrowPower * 0.25).toFixed(8))));
                                         }}>90%</Button>
                                     <Button className="borrow-power-button"
                                         onClick={() => {
                                             this.setState({ inputBtcBorrow: isNaN(borrowPower) === true ? 0 : (borrowPower * 0.9).toFixed(8) });
-                                            this.props.dispatch(changeInputBtcDebt((borrowPower * 0.9).toFixed(8)));
+                                            this.props.dispatch(changeInputBtcDebt(parseFloat((borrowPower * 0.25).toFixed(8))));
                                         }}>90%</Button>
                                 </ButtonGroup>
                             </Col>
@@ -470,7 +474,7 @@ class Trade extends React.Component {
                                 </Input> {this.state.modalToken}
                             </Col>
                             <Col style={{ paddingTop: '20px', paddingLeft: '40px', paddingRight: '40px' }} sm={12}>
-                                <Button block color={'light'} style={{ padding: '5px', color: '#000000' }}
+                                <Button block className={'manage-button'} style={{ padding: '5px' }}
                                     onClick={this.state.modalCall ? this.state.modalCall : this.toggle}>
                                     {this.state.modalCall ? 'Confirm' : 'Close'}
                                 </Button>

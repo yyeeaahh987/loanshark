@@ -872,7 +872,7 @@ class OldDashboard extends React.Component {
                   </Input>
                 </Col>
                 <Col style={{paddingTop: '20px', paddingLeft: '40px', paddingRight: '40px'}} sm={12}>
-                  <Button block color={'light'} style={{padding: '5px', color: '#000000'}} onClick={this.state.modalCall}>Confirm</Button>
+                  <Button block className={'manage-button'}  style={{padding: '5px'}} onClick={this.state.modalCall}>Confirm</Button>
                 </Col>
               </Row>
           </ModalBody>
