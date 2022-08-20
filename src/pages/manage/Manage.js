@@ -68,10 +68,10 @@ class Manage extends React.Component {
             });
             this.props.dispatch(changeInputEthDeposit(0));
         }
-        
+
         if (prevProps.userDepositBalanceEth !== this.props.userDepositBalanceEth ||
             prevProps.userDebtBalanceBtc !== this.props.userDebtBalanceBtc
-            ) {
+        ) {
             var borrowPower = 0;
             borrowPower = this.props.userDepositBalanceEth;
             borrowPower = borrowPower * this.props.priceOfEth;
@@ -79,9 +79,9 @@ class Manage extends React.Component {
             borrowPower = borrowPower * this.props.liquidationPrice[this.props.selectedPair];
             borrowPower = borrowPower / this.props.priceOfBtc;
             borrowPower = borrowPower - this.props.userDebtBalanceBtc;
-            
+
             this.setState({
-                maxdebtAmount: this.state.debtAction === 'borrow' ? Number(borrowPower).toFixed(8) : Number(this.props.userDebtBalanceBtc).toFixed(8) ,
+                maxdebtAmount: this.state.debtAction === 'borrow' ? Number(borrowPower).toFixed(8) : Number(this.props.userDebtBalanceBtc).toFixed(8),
                 maxdepositAmount: this.state.collateralAction === "deposit" ? Number(this.props.myETHAmount) : this.props.userDepositBalanceEth,
                 debtAmount: 0,
                 depositAmount: 0
@@ -447,25 +447,38 @@ class Manage extends React.Component {
                     1
                 ];
 
+                if (this.props.myProtection && this.props.myProtection[0] > 0) {
 
-                this.props.topupAction.methods
-                    .resetPosition(...argsUnregister)
-                    .send({ from: this.props.myAccount })
-                    .on("error", (error, receipt) => {
-                        this.calltoggleLoading();
-                    })
-                    .then((receipt) => {
-                        this.props.lpPoolBtc.methods
-                            .redeem(...args)
-                            .send({ from: this.props.myAccount })
-                            .on("error", (error, receipt) => {
-                                this.calltoggleLoading();
-                            })
-                            .then((receipt) => {
-                                this.calltoggleLoading();
-                                API(this.props);
-                            })
-                    })
+                    this.props.topupAction.methods
+                        .resetPosition(...argsUnregister)
+                        .send({ from: this.props.myAccount })
+                        .on("error", (error, receipt) => {
+                            this.calltoggleLoading();
+                        })
+                        .then((receipt) => {
+                            this.props.lpPoolBtc.methods
+                                .redeem(...args)
+                                .send({ from: this.props.myAccount })
+                                .on("error", (error, receipt) => {
+                                    this.calltoggleLoading();
+                                })
+                                .then((receipt) => {
+                                    this.calltoggleLoading();
+                                    API(this.props);
+                                })
+                        })
+                } else {
+                    this.props.lpPoolBtc.methods
+                        .redeem(...args)
+                        .send({ from: this.props.myAccount })
+                        .on("error", (error, receipt) => {
+                            this.calltoggleLoading();
+                        })
+                        .then((receipt) => {
+                            this.calltoggleLoading();
+                            API(this.props);
+                        })
+                }
             }
         });
     }
@@ -914,6 +927,9 @@ class Manage extends React.Component {
                                                     + "<br />"
                                                     + "Repay amount each time: "
                                                     + parseFloat(this.props.myProtection[5] / 0.9999 / 100000000)
+                                                    + "<br />"
+                                                    + "Remaining prepaid gas fee: "
+                                                    + parseFloat(this.props.myGasBankBalance)
                                                     + "</p>"}
                                                 currencyIconPath={this.state.debtCurrencyIconPath}
                                                 leftSelectButton={""}
@@ -942,7 +958,7 @@ class Manage extends React.Component {
                                                             parseFloat(this.props.myBtcLpAmount * this.props.btcLpExchangeRate).toFixed(8) +
                                                             ' BTC (~$' +
                                                             parseFloat(this.props.myBtcLpAmount * this.props.btcLpExchangeRate * this.props.priceOfBtc / 100).toFixed(2) +
-                                                            ')</span> from Smart Vault. <span class="fw-bold" style="color: #ff7d47"><br/>Caution: you will lose your automatic loan protection if you withdraw.</span>', 0)
+                                                            ')</span> from Smart Vault. Remaining gas fee of ' + parseFloat(this.props.myGasBankBalance) + ' AVAX will be returned. <span class="fw-bold" style="color: #ff7d47"><br/>Caution: you will lose your automatic loan protection if you withdraw.</span>', 0)
                                                     }
                                                 }}
                                             ></Card>
@@ -1041,7 +1057,8 @@ function mapStateToProps(store) {
         btcLpExchangeRate: store.backd.btcLpExchangeRate,
         totalBtcLpAmount: store.backd.totalBtcLpAmount,
         topupAction: store.backd.topupAction,
-        myProtection: store.backd.myProtection
+        myProtection: store.backd.myProtection,
+        myGasBankBalance: store.backd.myGasBankBalance
     };
 }
 

@@ -24,7 +24,8 @@ import {
     changeMyBtcLpAmount,
     changeMyProtection,
     changeTotalBtcLpAmount,
-    changeBtcLpExchangeRateAmount
+    changeBtcLpExchangeRateAmount,
+    changeMyGasBankBalance
 } from "../actions/backd";
 
 const WBTC = process.env.REACT_APP_WBTC;
@@ -165,6 +166,12 @@ let refreshPrice = (props) => {
         if (props.lpTokenBtc) {
             props.lpTokenBtc.methods.totalSupply().call({}, (error, result) => {
                 props.dispatch(changeTotalBtcLpAmount(window.web3.utils.fromWei(result, 'gwei') * 10));
+            });
+        }
+
+        if (props.gasBank) {
+            props.gasBank.methods.balanceOf(props.myAccount).call({}, (error, result) => {
+                props.dispatch(changeMyGasBankBalance(window.web3.utils.fromWei(result, 'ether')));
             });
         }
     }

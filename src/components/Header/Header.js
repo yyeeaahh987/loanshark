@@ -45,6 +45,7 @@ import {
 	changeLpTokenBtc,
 	changeVaultBtc,
 	changeTopupAction,
+	changeGasBank
 } from "../../actions/backd";
 
 import Controller from '../../abi/fujidao/Controller.json';
@@ -58,6 +59,7 @@ import lpPoolAbi from '../../abi/backd/lpPool.json';
 import lpTokenAbi from '../../abi/backd/lpToken.json';
 import topupActionAbi from '../../abi/backd/topupAction.json';
 import vaultBtcAbi from '../../abi/backd/vaultBtc.json';
+import gasBankAbi from '../../abi/backd/gasBank.json';
 
 import API from '../../utils/API'
 
@@ -80,6 +82,7 @@ const VAULT_BTC = process.env.REACT_APP_VAULT_BTC;
 const TOPUP_ACTION = process.env.REACT_APP_TOPUP_ACTION;
 const SMART_VAULT_BTC = process.env.REACT_APP_SMART_VAULT_BTC;
 const SMART_VAULT_USDT = process.env.REACT_APP_SMART_VAULT_USDT;
+const GAS_BANK = process.env.REACT_APP_GAS_BANK;
 
 //Asset Contracts
 const WBTC = process.env.REACT_APP_WBTC;
@@ -422,6 +425,7 @@ class Header extends React.Component {
 										this.props.dispatch(changeLpTokenBtc(new window.web3.eth.Contract(lpTokenAbi, LP_TOKEN_BTC)));
 										this.props.dispatch(changeVaultBtc(new window.web3.eth.Contract(vaultBtcAbi, VAULT_BTC)));
 										this.props.dispatch(changeTopupAction(new window.web3.eth.Contract(topupActionAbi, TOPUP_ACTION)));
+										this.props.dispatch(changeGasBank(new window.web3.eth.Contract(gasBankAbi, GAS_BANK)));
 
 										this.props.dispatch(changeSelectedPair('AVAXUSDT'));
 
@@ -447,6 +451,7 @@ class Header extends React.Component {
 								this.props.dispatch(changeLpTokenBtc(new window.web3.eth.Contract(lpTokenAbi, LP_TOKEN_BTC)));
 								this.props.dispatch(changeVaultBtc(new window.web3.eth.Contract(vaultBtcAbi, VAULT_BTC)));
 								this.props.dispatch(changeTopupAction(new window.web3.eth.Contract(topupActionAbi, TOPUP_ACTION)));
+								this.props.dispatch(changeGasBank(new window.web3.eth.Contract(gasBankAbi, GAS_BANK)));
 
 								this.props.dispatch(changeSelectedPair('ETHBTC'));
 
@@ -583,7 +588,9 @@ function mapStateToProps(store) {
 		lpTokenBtc: store.backd.lpTokenBtc,
 		vaultBtc: store.backd.vaultBtc,
 		topupAction: store.backd.topupAction,
-		totalBtcLpAmount: store.backd.totalBtcLpAmount
+		gasBank: store.backd.gasBank,
+		totalBtcLpAmount: store.backd.totalBtcLpAmount,
+		myGasBankBalance: store.backd.myGasBankBalance
 	};
 }
 
