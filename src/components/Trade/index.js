@@ -420,23 +420,23 @@ class Trade extends React.Component {
                                     <Button className="borrow-power-button"
                                         onClick={() => {
                                             this.setState({ inputBtcBorrow: isNaN(borrowPower) === true ? 0 : (borrowPower * 0.5).toFixed(8) });
-                                            this.props.dispatch(changeInputBtcDebt(parseFloat((borrowPower * 0.25).toFixed(8))));
+                                            this.props.dispatch(changeInputBtcDebt(parseFloat((borrowPower * 0.5).toFixed(8))));
                                         }}>50%</Button>
                                     <Button className="borrow-power-button"
                                         onClick={() => {
                                             this.setState({ inputBtcBorrow: isNaN(borrowPower) === true ? 0 : (borrowPower * 0.75).toFixed(8) });
-                                            this.props.dispatch(changeInputBtcDebt(parseFloat((borrowPower * 0.25).toFixed(8))));
+                                            this.props.dispatch(changeInputBtcDebt(parseFloat((borrowPower * 0.75).toFixed(8))));
                                         }}>75%</Button>
                                     <Button className="borrow-power-button"
                                         onClick={() => {
                                             this.setState({ inputBtcBorrow: isNaN(borrowPower) === true ? 0 : (borrowPower * 0.9).toFixed(8) });
-                                            this.props.dispatch(changeInputBtcDebt(parseFloat((borrowPower * 0.25).toFixed(8))));
+                                            this.props.dispatch(changeInputBtcDebt(parseFloat((borrowPower * 0.9).toFixed(8))));
                                         }}>90%</Button>
                                     <Button className="borrow-power-button"
                                         onClick={() => {
-                                            this.setState({ inputBtcBorrow: isNaN(borrowPower) === true ? 0 : (borrowPower * 0.9).toFixed(8) });
-                                            this.props.dispatch(changeInputBtcDebt(parseFloat((borrowPower * 0.25).toFixed(8))));
-                                        }}>90%</Button>
+                                            this.setState({ inputBtcBorrow: isNaN(borrowPower) === true ? 0 : (borrowPower * 0.95).toFixed(8) });
+                                            this.props.dispatch(changeInputBtcDebt(parseFloat((borrowPower * 0.95).toFixed(8))));
+                                        }}>95%</Button>
                                 </ButtonGroup>
                             </Col>
                         </Row>
