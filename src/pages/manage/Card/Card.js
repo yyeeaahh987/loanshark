@@ -279,6 +279,7 @@ class Card extends React.Component {
                                                                             style={{
                                                                                 borderRadius: "10px",
                                                                                 backgroundColor: "#444444",
+                                                                                marginTop: "8px",
                                                                                 color: '#ffffff',
                                                                                 padding: "3px 10px"
                                                                             }}
