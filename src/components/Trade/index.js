@@ -156,7 +156,7 @@ class Trade extends React.Component {
                 error = true;
                 modalTitle = 'Unable to borrow BTC using ETH as collateral';
                 modalMessage = 'Please enter the amount that you want to borrow.';
-            } else if (this.state.inputEthDeposit > this.props.myETHAmount) {
+            } else if (parseFloat(this.state.inputEthDeposit) > this.props.myETHAmount) {
                 error = true;
                 modalTitle = 'Unable to borrow BTC using ETH as collateral';
                 modalMessage = 'You do not have enough ETH to deposit.';
@@ -207,7 +207,7 @@ class Trade extends React.Component {
 
                     let args = [
                         window.web3.utils.toBN(window.web3.utils.toWei(this.state.inputEthDeposit, 'ether')).toString(),
-                        window.web3.utils.toBN(parseFloat((this.state.inputBtcBorrow * 10000000).toFixed(0))).toString()
+                        window.web3.utils.toBN(parseFloat((this.state.inputBtcBorrow * 100000000).toFixed(0))).toString()
                     ]
 
                     this.toggle();
@@ -379,7 +379,7 @@ class Trade extends React.Component {
                             }}>
                                 <span style={{ margin: '5px', fontSize: '14px', color: '#888888' }}>Borrow</span>
                                 <BalanceAmount
-                                    amount={parseFloat((borrowPower * 0.25).toFixed(8))}
+                                    amount={parseFloat((borrowPower).toFixed(8))}
                                     displayPrefixText={"Max borrow: "}
                                 ></BalanceAmount>
                                 <InputGroup style={{ width: "100%" }}  >
