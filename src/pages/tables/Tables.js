@@ -58,12 +58,7 @@ class Tables extends React.Component {
             <Widget
               title={
                 <p style={{ fontWeight: 700 }}>
-                  Deposit {this.props.selectedPair === "ETHBTC"? " ETH" : this.props.selectedPair === "AVAXUSDT"? " AVAX" : ""} and 
-                  Borrow {this.props.selectedPair === "ETHBTC"? " BTC" : this.props.selectedPair === "AVAXUSDT"? " USDT" : ""}<br/>
-                    <span style={{color: "#0000000", fontSize: "16px"}}>
-                      {this.props.selectedPair === "ETHBTC" ? this.props.numberOfEth : this.props.selectedPair === "AVAXUSDT" ? this.props.numberOfAvax : ""}  
-                      {this.props.selectedPair === "ETHBTC"? " ETH" : this.props.selectedPair === "AVAXUSDT"? " AVAX" : ""} as collateral to borrow 1 
-                      {this.props.selectedPair === "ETHBTC"? " BTC" : this.props.selectedPair === "AVAXUSDT"? " USDT" : ""}</span>
+                  Borrow
                 </p>
               }
               customDropDown
@@ -76,20 +71,20 @@ class Tables extends React.Component {
             <HealthFactorPieChart />
             <TradeInfo />
             <Widget title={<p style={{ fontWeight: 700 }}>Borrowing APY of {this.props.selectedPair === "ETHBTC"? "BTC":"USDT"}</p>}>
-                <Row>
+                <Row style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 0, marginTop: 0 }}>
                   <Col>
                     <span style={{ color: "#00ff00" }}>AAVE</span>
                   </Col>
-                  <Col lg={6} style={{ textAlign: 'right' }} >
-                    <span style={{ color: "#00ff00" }}>1.4%</span>
+                  <Col style={{ textAlign: 'right' }} >
+                    <span style={{ color: "#00ff00" }}>{this.props.aaveBtcBorrowRate}%</span>
                   </Col>
                 </Row>
-                <Row>
+                <Row style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 0, marginTop: 0 }}>
                   <Col>
-                    Tranquil
+                    Benqi
                   </Col>
-                  <Col lg={6} style={{ textAlign: 'right' }} >
-                    2.0%
+                  <Col style={{ textAlign: 'right' }} >
+                    5.0%
                   </Col>
                 </Row>
             </Widget>
@@ -107,6 +102,7 @@ function mapStateToProps(store) {
     selectedPair: store.loanshark.selectedPair,
     numberOfEth: store.loanshark.numberOfEth,
     numberOfAvax: store.loanshark.numberOfAvax,
+    aaveBtcBorrowRate: store.loanshark.aaveBtcBorrowRate,
     userDepositBalanceEth: store.loanshark.userDepositBalanceEth,
     userDepositBalanceAvax: store.loanshark.userDepositBalanceAvax,
     userDebtBalanceBtc: store.loanshark.userDebtBalanceBtc,

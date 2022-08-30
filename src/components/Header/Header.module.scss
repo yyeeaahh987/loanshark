@@ -4,7 +4,7 @@
   z-index: 100;
   background: var(--navbar-bg);
   box-shadow: var(--navbar-shadow);
-  height: $navbar-height;
+  min-height: $navbar-height;
   flex-wrap: nowrap;
   transition: background-color .2s ease, margin .2s ease;
 
@@ -272,11 +272,13 @@
 }
 
 .addressClass {
-  display:none;
+  display:block;
+  width: 100px;
 }
 
 @media (min-width: 768px) {
     .addressClass {
       display:block;
+      width: 450px;
     }
 }

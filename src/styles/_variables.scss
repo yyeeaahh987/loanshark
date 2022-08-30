@@ -20,7 +20,7 @@ $font-size-larger:        1.1rem;
 $font-size-mini:          0.9rem;
 $font-size-index:         0.7rem;
 
-$font-family-base: 'Nunito', sans-serif;
+$font-family-base: 'Poppins', sans-serif;
 
 $headings-font-weight: 400;
 
@@ -98,9 +98,9 @@ $content-padding-sm: 25px;
 
 $nav-link-padding: 10px;
 
-$border-radius:          0.3rem !default;
-$border-radius-lg:       0.35rem !default;
-$border-radius-sm:       0.25rem !default;
+$border-radius:          10px !default;
+$border-radius-lg:       10px !default;
+$border-radius-sm:       10px !default;
 
 //== Sidebar
 //
@@ -126,7 +126,7 @@ $breadcrumb-bg: transparent;
 $widget-bg: #000;
 $widget-title-color: #fff;
 $widget-shadow-designated: -1px 0 8px rgba(0,0,0,.2);
-$widget-border-radius: 8px;
+$widget-border-radius: 10px;
 
 $input-btn-line-height: 1.5;
 

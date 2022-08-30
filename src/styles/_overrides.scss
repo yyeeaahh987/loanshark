@@ -4,7 +4,7 @@
 }
 
 .navbar {
-  height: $navbar-height;
+  min-height: $navbar-height;
   border: none;
   font-weight: 500;
   justify-content: flex-start;
@@ -753,7 +753,7 @@ pre {
 ///// Toastify /////
 .Toastify {
   .Toastify__toast {
-    font-family: Nunito, sans-serif;
+    font-family: 'Poppins', sans-serif;
     border-radius: $border-radius;
     &.Toastify__toast--success {
       background: $success;

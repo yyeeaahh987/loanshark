@@ -13,10 +13,19 @@ import LinksGroup from "./LinksGroup/LinksGroup";
 import {
 	changeActiveSidebarItem
 } from "../../actions/navigation";
+import {
+	closeSidebar,
+} from "../../actions/navigation";
 
 import logo from "../../images/logo.png";
 
 class Sidebar extends React.Component {
+	constructor() {
+		super();
+		this.state = { screenWidth: 1980 };
+		this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
+	}
+
 	static propTypes = {
 		sidebarStatic: PropTypes.bool,
 		sidebarOpened: PropTypes.bool,
@@ -27,11 +36,31 @@ class Sidebar extends React.Component {
 		}).isRequired
 	};
 
-	static defaultProps = {
-		sidebarStatic: false,
-		sidebarOpened: true,
-		activeItem: ""
-	};
+	componentDidMount() {
+		window.addEventListener("resize", this.updateWindowDimensions);
+		if (window.innerWidth <= 768) {
+			this.props.dispatch(closeSidebar());
+		}
+	}
+
+	componentDidUpdate(prevProps) {
+		if (this.props.location !== prevProps.location) {
+			if (window.innerWidth <= 768) {
+				this.props.dispatch(closeSidebar());
+			}
+		}
+	}
+
+	componentWillUnmount() {
+		window.removeEventListener("resize", this.updateWindowDimensions)
+	}
+
+	updateWindowDimensions() {
+		this.setState({ screenWidth: window.innerWidth });
+		if (this.state.screenWidth <= 768) {
+			this.props.dispatch(closeSidebar());
+		}
+	}
 
 	dismissAlert(id) {
 		this.props.dispatch(dismissAlert(id));
@@ -41,10 +70,22 @@ class Sidebar extends React.Component {
 		return (
 			<div className={`${(!this.props.sidebarOpened && !this.props.sidebarStatic) ? s.sidebarClose : ''} ${s.sidebarWrapper}`} id={"sidebar-drawer"}>
 				<nav className={s.root} >
+
 					<header className={s.logo} style={{ paddingTop: '20px' }}>
 						<img src={logo} alt="LoanShark" width="161px" className={s.logoStyle} />
 					</header>
 					<ul className={s.nav}>
+						<LinksGroup
+							onActiveSidebarItemChange={activeItem =>
+								this.props.dispatch(changeActiveSidebarItem(activeItem))
+							}
+							activeItem={this.props.activeItem}
+							header="Dashboard"
+							isHeader
+							link="/app/main/dashboard"
+							index="main"
+						>
+						</LinksGroup>
 						<LinksGroup
 							onActiveSidebarItemChange={activeItem =>
 								this.props.dispatch(changeActiveSidebarItem(activeItem))
@@ -61,17 +102,6 @@ class Sidebar extends React.Component {
 								this.props.dispatch(changeActiveSidebarItem(activeItem))
 							}
 							activeItem={this.props.activeItem}
-							header="Dashboard"
-							isHeader
-							link="/app/main/dashboard"
-							index="main"
-						>
-						</LinksGroup>
-						<LinksGroup
-							onActiveSidebarItemChange={activeItem =>
-							    this.props.dispatch(changeActiveSidebarItem(activeItem))
-							}
-							activeItem={this.props.activeItem}
 							header="Smart Vault"
 							isHeader
 							link="/app/main/smartVault1"
@@ -80,6 +110,17 @@ class Sidebar extends React.Component {
 						</LinksGroup>
 					</ul>
 					<ul className={s.downNav}>
+						<LinksGroup
+							onActiveSidebarItemChange={activeItem =>
+								this.props.dispatch(changeActiveSidebarItem(activeItem))
+							}
+							header="Mint ETH / BTC"
+							isHeader
+							link="/mint"
+							index="main"
+							target="_blank"
+						>
+						</LinksGroup>
 						<LinksGroup
 							onActiveSidebarItemChange={activeItem =>
 								this.props.dispatch(changeActiveSidebarItem(activeItem))

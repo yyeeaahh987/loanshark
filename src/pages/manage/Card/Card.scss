@@ -121,23 +121,23 @@
 
 .firstOne {
 
-    border-top: 1px solid #ffffff !important;
-    border-left: 1px solid #ffffff !important;
-    border-bottom: 1px solid #ffffff !important;
+    border-top: 1px solid rgb(122, 122, 122) !important;
+    border-left: 1px solid rgb(122, 122, 122) !important;
+    border-bottom: 1px solid rgb(122, 122, 122) !important;
     border-radius: 10px 0px 0px 10px !important;
 
 }
 
 .middle {
 
-    border-top: 1px solid #ffffff !important;
-    border-bottom: 1px solid #ffffff !important;
+    border-top: 1px solid rgb(122, 122, 122) !important;
+    border-bottom: 1px solid rgb(122, 122, 122) !important;
 }
 
 .lastOne {
-    border-top: 1px solid #ffffff !important;
-    border-right: 1px solid #ffffff !important;
-    border-bottom: 1px solid #ffffff !important;
+    border-top: 1px solid rgb(122, 122, 122) !important;
+    border-right: 1px solid rgb(122, 122, 122) !important;
+    border-bottom: 1px solid rgb(122, 122, 122) !important;
     border-radius: 0px 10px 10px 0px !important;
 }
 
@@ -159,7 +159,7 @@
         &__borrow {
             text-align: center;
             border-radius: 10px 10px 10px 10px !important;
-            border: 2px dashed #FFFFFF !important;
+            border: 1px dashed #FFFFFF !important;
         }
 
         &__healthFactor {
@@ -177,47 +177,48 @@
 
 .customButton {
     background-color: black;
-    color: white;
+    color: #ffffff;
 
     &:active {
-        background-color: black;
-        color: white;
+        background-color: #444444;
+        border: 1px solid #FFFFFF !important;
     }
 
     &:focus {
-        background-color: black;
-        color: white;
+        background-color: #444444;
+        border: 1px solid #FFFFFF !important;
     }
 
     &:hover {
-        background-color: black;
-        color: white;
+        background-color: #444444;
+        border: 1px solid #FFFFFF !important;
     }
 
     &__select {
-        background-color: white;
-        color: black;
+        background-color: #444444;
+        color: #ffffff;
+        border: 1px solid #FFFFFF !important;
 
         &:active {
-            background-color: white;
+            background-color: #444444;
             color: black;
         }
 
         &:focus {
-            background-color: white;
-            color: black;
+            background-color: #444444;
+            color: #ffffff;
         }
 
         &:hover {
-            background-color: white;
-            color: black;
+            background-color: #444444;
+            color: #ffffff;
         }
     }
 }
 
 .pairButton {
     &__left {
-        border-radius: 8px 0px 0px 8px;
+        border-radius: 10px 0px 0px 10px;
         width: 100%;
         border: solid white;
         border-width: 1px 0px 1px 1px;
@@ -243,26 +244,20 @@
 
 .deposit-button {
     width: 100%;
-    background-color: white;
-    color: black;
+    background-color: #444444;
+    color: #ffffff;
     border-radius: 8px 8px 8px 8px;
     border: 1px solid white;
     &:active {
-        border: 1px solid white  !important;
         background-color: white !important;
-        color: black !important;
     }
 
     &:focus {
-        border: 1px solid white  !important;
-        background-color: white ;
-        color: black !important;
+        background-color: #444444 !important;
     }
 
     &:hover {
-        border: 1px solid white;
-        background-color: transparent;
-        color: white !important
+        background-color: #000000 !important;
     }
 
 }
@@ -271,7 +266,7 @@
     width: 100%;
     background-color: rgb(207, 204, 19);
     color: black;
-    border-radius: 8px 8px 8px 8px;
+    border-radius: 10px;
     border: 1px solid rgb(207, 204, 19);
 
     &:active {
@@ -294,7 +289,7 @@
 }
 
 .amount-text {
-    font-size: 2.5em;
+    font-size: 18px;
     font-weight: bold;
     background-color: transparent;
     border-width: 0px;

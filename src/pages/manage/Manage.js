@@ -7,7 +7,7 @@ import { Row, Col, Table, Input, Button, Modal, ModalBody } from 'reactstrap';
 
 import TradeInfo from "../../components/TradeInfo";
 import HealthFactorPieChart from "../../components/HealthFactorPieChart";
-import { changeSelectedPair } from "../../actions/loanshark";
+import { changeInputEthDeposit, changeInputBtcDebt, changeSelectedPair } from "../../actions/loanshark";
 import Card from './Card/Card'
 import { toggleLoading } from "../../actions/navigation";
 import API from '../../utils/API'
@@ -28,6 +28,7 @@ class Manage extends React.Component {
         super(props);
         this.calltoggleLoading = this.calltoggleLoading.bind(this);
         this.toggle = this.toggle.bind(this);
+        this.roundDown = this.roundDown.bind(this);
         this.state = {
             depositCurrency: "",
             depositAmount: 0,
@@ -41,6 +42,7 @@ class Manage extends React.Component {
             debtCurrencyIconPath: "",
             modal: false,
             modalTitle: '',
+            modalMessage: '',
             subHeading: "",
             modalToken: '',
             modalAction: '',
@@ -58,7 +60,38 @@ class Manage extends React.Component {
         }
     }
 
-    componentDidMount() {
+    componentDidUpdate(prevProps) {
+        if (prevProps.myETHAmount !== this.props.myETHAmount) {
+            this.setState({
+                maxdepositAmount: Number(this.props.myETHAmount),
+                depositAmount: 0,
+            });
+            this.props.dispatch(changeInputEthDeposit(0));
+        }
+
+        if (prevProps.userDepositBalanceEth !== this.props.userDepositBalanceEth ||
+            prevProps.userDebtBalanceBtc !== this.props.userDebtBalanceBtc
+        ) {
+            var borrowPower = 0;
+            borrowPower = this.props.userDepositBalanceEth;
+            borrowPower = borrowPower * this.props.priceOfEth;
+            borrowPower = borrowPower * this.props.LTV[this.props.selectedPair];
+            borrowPower = borrowPower * this.props.liquidationPrice[this.props.selectedPair];
+            borrowPower = borrowPower / this.props.priceOfBtc;
+            borrowPower = borrowPower - this.props.userDebtBalanceBtc;
+
+            this.setState({
+                maxdebtAmount: this.state.debtAction === 'borrow' ? Number(borrowPower).toFixed(8) : Number(this.props.userDebtBalanceBtc).toFixed(8),
+                maxdepositAmount: this.state.collateralAction === "deposit" ? Number(this.props.myETHAmount) : this.props.userDepositBalanceEth,
+                debtAmount: 0,
+                depositAmount: 0
+            });
+            this.props.dispatch(changeInputEthDeposit(0));
+            this.props.dispatch(changeInputBtcDebt(0));
+        }
+    }
+
+    updateBorrowPower = () => {
         if ((this?.props?.location?.state?.pair ?? "") === "") return
         let tempPari = this.props.location.state.pair.split("_")
         let deposit = tempPari[0]
@@ -75,7 +108,7 @@ class Manage extends React.Component {
                 depositCurrency: deposit,
                 depositAmount: this.props.userDepositBalanceAvax,
                 depositCurrencyPrice: Number(this.props.priceOfAvax),
-                maxdepositAmount: Number(this.props.myAVAXAmount).toFixed(6),
+                maxdepositAmount: Number(this.props.myAVAXAmount),
                 maxWithdrawAmount: Number(this.props.userDepositBalanceAvax),
                 depositCurrencyIconPath: `/assets/icon/${deposit.toLowerCase()}-logo.svg`,
                 debtCurrency: debt,
@@ -95,25 +128,34 @@ class Manage extends React.Component {
             borrowPower = borrowPower * this.props.LTV[this.props.selectedPair];
             borrowPower = borrowPower * this.props.liquidationPrice[this.props.selectedPair];
             borrowPower = borrowPower / this.props.priceOfBtc;
+            borrowPower = borrowPower - this.props.userDebtBalanceBtc;
 
             this.setState({
                 depositCurrency: deposit,
                 depositAmount: this.props.userDepositBalanceEth,
-                maxdepositAmount: Number(this.props.myETHAmount).toFixed(6),
+                maxdepositAmount: Number(this.props.myETHAmount),
                 depositCurrencyIconPath: `/assets/icon/${deposit.toLowerCase()}-logo.svg`,
                 debtCurrency: debt,
                 debtAmount: 0,
-                maxdebtAmount: Number(borrowPower).toFixed(6),
+                maxdebtAmount: Number(borrowPower).toFixed(8),
                 debtCurrencyIconPath: `/assets/icon/${debt.toLowerCase()}-logo.svg`,
 
                 maxWithdrawAmount: Number(this.props.userDepositBalanceEth),
                 debtCurrencyPrice: Number(this.props.priceOfBtc),
-                maxDetAmount: Number(this.props.myBTCAmount),
-                maxPaybackAmount: Number(this.props.userDebtBalanceBtc),
+                maxPaybackAmount: Number(this.props.userDebtBalanceBtc).toFixed(8),
             })
             this.props.dispatch(changeSelectedPair("ETHBTC"));
         }
+    }
+
+    componentDidMount() {
+        this.updateBorrowPower();
         this.forceUpdate();
+    }
+
+    componentWillUnmount() {
+        this.props.dispatch(changeInputEthDeposit(0));
+        this.props.dispatch(changeInputBtcDebt(0));
     }
 
     toggle() {
@@ -127,27 +169,26 @@ class Manage extends React.Component {
     }
 
     calculateHealthFactor(depositAmouont, priceOfdeposit, LTV, debtAmount, priceOfDebt) {
-        console.log(`depositAmouont`, depositAmouont)
-        console.log(`debtAmount`, debtAmount)
         if (debtAmount === undefined || debtAmount === null || debtAmount === 0) return "-"
         return ((depositAmouont * priceOfdeposit / 100) * LTV / (debtAmount * priceOfDebt / 100)).toFixed(2)
     }
 
-    toggleDeposit(inputModalToken, inputModalAction, pair) {
+    toggleDeposit(inputModalToken, inputModalAction, inputModalMessage, pair) {
         this.setState({
             modal: !this.state.modal,
-            modalTitle: inputModalAction + " " + inputModalToken,
+            modalTitle: inputModalAction,
+            modalMessage: inputModalMessage,
             modalToken: inputModalToken,
             modalAction: inputModalAction,
             modalInputValue: this.state.collateralAmount,
             modalCall: () => {
                 let approveArgs = [
                     (pair === "ETHBTC" ? this.props.myFujiVaultETHBTC.options.address : pair === "AVAXUSDT" ? this.props.myFujiVaultAVAXUSDT.options.address : ""),
-                    window.web3.utils.toBN(window.web3.utils.toWei(this.state.modalInputValue, 'ether')).toString()
+                    window.web3.utils.toBN(window.web3.utils.toWei((this.state.modalInputValue + ""), 'ether')).toString()
                 ]
 
                 let args = [
-                    window.web3.utils.toBN(window.web3.utils.toWei(this.state.modalInputValue, 'ether')).toString(),
+                    window.web3.utils.toBN(window.web3.utils.toWei((this.state.modalInputValue + ""), 'ether')).toString(),
                 ];
 
                 if (pair === "ETHBTC") {
@@ -178,7 +219,7 @@ class Manage extends React.Component {
                     this.toggle();
                     this.calltoggleLoading();
 
-                    let a = window.web3.utils.toBN(window.web3.utils.toWei(this.state.modalInputValue, 'ether')).toString();
+                    let a = window.web3.utils.toBN(window.web3.utils.toWei(Number.parseFloat(this.state.modalInputValue), 'ether')).toString();
                     this.props.myFujiVaultAVAXUSDT.methods
                         .deposit(...args)
                         .send({ from: this.props.myAccount, value: a })
@@ -195,16 +236,17 @@ class Manage extends React.Component {
         });
     }
 
-    toggleWithdrawn(inputModalToken, inputModalAction, pair) {
+    toggleWithdrawn(inputModalToken, inputModalAction, inputModalMessage, pair) {
         this.setState({
             modal: !this.state.modal,
-            modalTitle: inputModalAction + " " + inputModalToken,
+            modalTitle: inputModalAction,
+            modalMessage: inputModalMessage,
             modalToken: inputModalToken,
             modalAction: inputModalAction,
             modalInputValue: this.state.collateralAmount,
             modalCall: () => {
                 let args = [
-                    window.web3.utils.toBN(window.web3.utils.toWei(this.state.modalInputValue, 'ether')).toString(),
+                    window.web3.utils.toBN(window.web3.utils.toWei((this.state.modalInputValue) + "", 'ether')).toString(),
                 ];
 
                 if (pair === "ETHBTC") {
@@ -242,10 +284,11 @@ class Manage extends React.Component {
         });
     }
 
-    toggleBorrow(inputModalToken, inputModalAction, pair) {
+    toggleBorrow(inputModalToken, inputModalAction, inputModalMessage, pair) {
         this.setState({
             modal: !this.state.modal,
-            modalTitle: inputModalAction + " " + inputModalToken,
+            modalTitle: inputModalAction,
+            modalMessage: inputModalMessage,
             modalToken: inputModalToken,
             modalAction: inputModalAction,
             modalInputValue: this.state.debtAmount,
@@ -294,15 +337,15 @@ class Manage extends React.Component {
         });
     }
 
-    togglePayback(inputModalToken, inputModalAction, pair) {
+    togglePayback(inputModalToken, inputModalAction, inputModalMessage, pair) {
         this.setState({
             modal: !this.state.modal,
-            modalTitle: inputModalAction + " " + inputModalToken,
+            modalTitle: inputModalAction,
+            modalMessage: inputModalMessage,
             modalToken: inputModalToken,
             modalAction: inputModalAction,
             modalInputValue: this.state.debtAmount,
             modalCall: () => {
-
                 var finalModalInputValue;
                 if (pair === "ETHBTC") {
                     finalModalInputValue = this.state.modalInputValue < 0 ? Number.parseFloat(1000000000000).toFixed(0) : Number.parseFloat(this.state.modalInputValue * 100000000).toFixed(0);
@@ -370,11 +413,23 @@ class Manage extends React.Component {
             }
         });
     }
-
-    toggleLeaveSmartVault(inputModalToken, inputModalAction, pair) {
+    toggleNoAction(inputModalToken, inputModalAction, inputModalMessage, pair) {
         this.setState({
             modal: !this.state.modal,
             modalTitle: inputModalAction,
+            modalMessage: inputModalMessage,
+            modalToken: inputModalToken,
+            modalAction: inputModalAction,
+            modalInputValue: this.state.debtAmount,
+            modalCall: null
+        });
+    }
+
+    toggleLeaveSmartVault(inputModalToken, inputModalAction, inputModalMessage, pair) {
+        this.setState({
+            modal: !this.state.modal,
+            modalTitle: inputModalAction,
+            modalMessage: inputModalMessage,
             modalToken: inputModalToken,
             modalAction: inputModalAction,
             modalInputValue: this.props.myBtcLpAmount,
@@ -386,19 +441,51 @@ class Manage extends React.Component {
                 this.toggle();
                 this.calltoggleLoading();
 
-                this.props.lpPoolBtc.methods
-                    .redeem(...args)
-                    .send({ from: this.props.myAccount })
-                    .on("error", (error, receipt) => {
-                        this.calltoggleLoading();
-                    })
+                let argsUnregister = [
+                    this.props.myAccount + "000000000000000000000000",
+                    "0x66756a6964616f00000000000000000000000000000000000000000000000000",
+                    1
+                ];
 
-                    .then((receipt) => {
-                        this.calltoggleLoading();
-                        API(this.props);
-                    })
+                if (this.props.myProtection && this.props.myProtection[0] > 0) {
+
+                    this.props.topupAction.methods
+                        .resetPosition(...argsUnregister)
+                        .send({ from: this.props.myAccount })
+                        .on("error", (error, receipt) => {
+                            this.calltoggleLoading();
+                        })
+                        .then((receipt) => {
+                            this.props.lpPoolBtc.methods
+                                .redeem(...args)
+                                .send({ from: this.props.myAccount })
+                                .on("error", (error, receipt) => {
+                                    this.calltoggleLoading();
+                                })
+                                .then((receipt) => {
+                                    this.calltoggleLoading();
+                                    API(this.props);
+                                })
+                        })
+                } else {
+                    this.props.lpPoolBtc.methods
+                        .redeem(...args)
+                        .send({ from: this.props.myAccount })
+                        .on("error", (error, receipt) => {
+                            this.calltoggleLoading();
+                        })
+                        .then((receipt) => {
+                            this.calltoggleLoading();
+                            API(this.props);
+                        })
+                }
             }
         });
+    }
+
+    roundDown(number, decimals) {
+        decimals = decimals || 0;
+        return parseFloat(Math.floor(number * Math.pow(10, decimals)) / Math.pow(10, decimals));
     }
 
     render() {
@@ -519,11 +606,12 @@ class Manage extends React.Component {
                                         }
                                     </td>
                                     <td className="middle">
-                                        {debt === "BTC" ?
-                                            this.props.myBtcLpAmount * this.props.priceOfBtc
+                                        ${debt === "BTC" ?
+                                            parseFloat(this.props.myBtcLpAmount * this.props.btcLpExchangeRate * this.props.priceOfBtc / 100).toFixed(2)
                                             :
                                             '-'
-                                        }
+                                        }<br />
+                                        {parseFloat(this.props.myBtcLpAmount * this.props.btcLpExchangeRate).toFixed(8)} BTC
                                     </td>
                                     <td className="lastOne">
                                         AAVE
@@ -557,7 +645,7 @@ class Manage extends React.Component {
                                                         this.setState({
                                                             collateralAction: e.target.name,
                                                             collateralAmount: 0,
-                                                            maxdepositAmount: (deposit === "ETH" ? Number(this.props.myETHAmount).toFixed(6) : Number(this.props.myAVAXAmount).toFixed(6))
+                                                            maxdepositAmount: (deposit === "ETH" ? Number(this.props.myETHAmount) : Number(this.props.myAVAXAmount))
                                                         })
 
                                                         break;
@@ -565,17 +653,25 @@ class Manage extends React.Component {
                                                         this.setState({
                                                             collateralAction: e.target.name,
                                                             collateralAmount: 0,
-                                                            maxdepositAmount: deposit === "ETH" ? Number(this.props.userDepositBalanceEth).toFixed(6) : Number(this.props.userDepositBalanceAvax).toFixed(6)
+                                                            maxdepositAmount: deposit === "ETH" ? Number(this.props.userDepositBalanceEth) : Number(this.props.userDepositBalanceAvax)
                                                         })
                                                         break;
                                                     default:
                                                         break;
                                                 }
                                             }}
+                                            onClickDepositChange={(e) => {
+                                                let finalAmount = this.roundDown(this.state.maxdepositAmount * e.target.name / 100, 18)
+                                                this.setState({
+                                                    collateralAmount: finalAmount,
+                                                })
+                                                this.props.dispatch(changeInputEthDeposit(finalAmount * (this.state.collateralAction === "deposit" ? 1 : -1)));
+                                            }}
                                             onChangeInput={(e) => {
                                                 this.setState({
                                                     collateralAmount: e.target.value === "" ? 0 : e.target.value
                                                 })
+                                                this.props.dispatch(changeInputEthDeposit(e.target.value * (this.state.collateralAction === "deposit" ? 1 : -1)));
                                             }}
                                             amount={this.state.collateralAmount}
                                             onClickMax={() => {
@@ -584,10 +680,94 @@ class Manage extends React.Component {
                                                 })
                                             }}
                                             onClickDeposit={() => {
-                                                this.toggleDeposit(deposit, 'Deposit', deposit + debt)
+                                                let newHealthFactor =
+                                                    this.calculateHealthFactor(
+                                                        parseFloat(this.props.userDepositBalanceEth) + parseFloat(this.state.collateralAmount),
+                                                        this.props.priceOfEth,
+                                                        this.props.LTV["ETHBTC"],
+                                                        this.props.userDebtBalanceBtc,
+                                                        this.props.priceOfBtc);
+                                                if (this.state.collateralAmount <= 0 || isNaN(this.state.collateralAmount)) {
+                                                    this.toggleNoAction(
+                                                        deposit,
+                                                        'Unable to deposit',
+                                                        'Please enter the amount that you want to deposit.',
+                                                        deposit + debt
+                                                    )
+                                                } else if (this.state.collateralAmount > this.props.myETHAmount) {
+                                                    this.toggleNoAction(
+                                                        deposit,
+                                                        'Unable to deposit',
+                                                        'You do not have enough ETH to deposit.',
+                                                        deposit + debt
+                                                    )
+                                                } else if (newHealthFactor < 1.06) {
+                                                    this.toggleNoAction(
+                                                        deposit,
+                                                        'Unable to deposit',
+                                                        'You are unable to deposit <span class="fw-bold">' +
+                                                        this.state.collateralAmount + ' ' + deposit +
+                                                        ' (~$' +
+                                                        Number(this.state.collateralAmount * this.props.priceOfEth / 100).toFixed(2) +
+                                                        ')</span>. <br/>The new health factor will be <span class="fw-bold" style="color: #ff7d47">' + newHealthFactor + '</span> which is below 1.05.',
+                                                        deposit + debt
+                                                    )
+                                                } else {
+                                                    this.toggleDeposit(
+                                                        deposit,
+                                                        'Confirm to deposit?',
+                                                        'You are depositing <span class="fw-bold">' +
+                                                        this.state.collateralAmount + ' ' + deposit +
+                                                        ' (~$' +
+                                                        Number(this.state.collateralAmount * this.props.priceOfEth / 100).toFixed(2) +
+                                                        ')</span>. <br/>Your new health factor will be <span class="fw-bold" style="color: #68ca66">' + newHealthFactor + '</span>.',
+                                                        deposit + debt)
+                                                }
                                             }}
                                             onClickWithdraw={() => {
-                                                this.toggleWithdrawn(deposit, 'Withdraw', deposit + debt)
+                                                let newHealthFactor =
+                                                    this.calculateHealthFactor(
+                                                        parseFloat(this.props.userDepositBalanceEth) - parseFloat(this.state.collateralAmount),
+                                                        this.props.priceOfEth,
+                                                        this.props.LTV["ETHBTC"],
+                                                        this.props.userDebtBalanceBtc,
+                                                        this.props.priceOfBtc);
+                                                if (this.state.collateralAmount <= 0 || isNaN(this.state.collateralAmount)) {
+                                                    this.toggleNoAction(
+                                                        deposit,
+                                                        'Unable to withdraw',
+                                                        'Please enter the amount that you want to withdraw.',
+                                                        deposit + debt
+                                                    )
+                                                } else if (this.state.collateralAmount > this.state.maxdepositAmount) {
+                                                    this.toggleNoAction(
+                                                        deposit,
+                                                        'Unable to withdraw',
+                                                        'You do not have so much ETH to withdraw.',
+                                                        deposit + debt
+                                                    )
+                                                } else if (newHealthFactor < 1.06) {
+                                                    this.toggleNoAction(
+                                                        deposit,
+                                                        'Unable to withdraw',
+                                                        'You are unable to withdraw <span class="fw-bold">' +
+                                                        this.state.collateralAmount + ' ' + deposit +
+                                                        ' (~$' +
+                                                        Number(this.state.collateralAmount * this.props.priceOfEth / 100).toFixed(2) +
+                                                        ')</span>. <br/>The new health factor will be <span class="fw-bold" style="color: #ff7d47">' + newHealthFactor + '</span> which is below 1.05.',
+                                                        deposit + debt
+                                                    )
+                                                } else {
+                                                    this.toggleWithdrawn(
+                                                        deposit,
+                                                        'Confirm to withdraw?',
+                                                        'You are withdrawing <span class="fw-bold">' +
+                                                        this.state.collateralAmount + ' ' + deposit +
+                                                        ' (~$' +
+                                                        Number(this.state.collateralAmount * this.props.priceOfEth / 100).toFixed(2) +
+                                                        ')</span>. <br/>Your new health factor will be <span class="fw-bold" style="color: #68ca66">' + newHealthFactor + '</span>.',
+                                                        deposit + debt)
+                                                }
                                             }}
                                         ></Card>
                                     </Grid>
@@ -613,18 +793,19 @@ class Manage extends React.Component {
                                                         borrowPower = borrowPower * this.props.LTV[this.props.selectedPair];
                                                         borrowPower = borrowPower * this.props.liquidationPrice[this.props.selectedPair];
                                                         borrowPower = borrowPower / (this.props.selectedPair === "ETHBTC" ? this.props.priceOfBtc : this.props.priceOfUsdt);
+                                                        borrowPower = borrowPower - this.props.userDebtBalanceBtc;
 
                                                         this.setState({
                                                             debtAction: e.target.name,
                                                             debtAmount: 0,
-                                                            maxdebtAmount: borrowPower.toFixed(6)
+                                                            maxdebtAmount: borrowPower.toFixed(8)
                                                         })
                                                         break;
                                                     case "payback":
                                                         this.setState({
                                                             debtAction: e.target.name,
                                                             debtAmount: 0,
-                                                            maxdebtAmount: debt === "BTC" ? Number(this.props.userDebtBalanceBtc).toFixed(6) : Number(this.props.userDebtBalanceUsdt).toFixed(6)
+                                                            maxdebtAmount: debt === "BTC" ? Number(this.props.userDebtBalanceBtc).toFixed(8) : Number(this.props.userDebtBalanceUsdt).toFixed(8)
                                                         })
                                                         break;
                                                     default:
@@ -635,6 +816,7 @@ class Manage extends React.Component {
                                                 this.setState({
                                                     debtAmount: e.target.value === "" ? 0 : e.target.value
                                                 })
+                                                this.props.dispatch(changeInputBtcDebt(e.target.value * (this.state.debtAction === "borrow" ? 1 : -1)));
                                             }}
                                             onClickMax={() => {
                                                 this.setState({
@@ -642,16 +824,96 @@ class Manage extends React.Component {
                                                 })
                                             }}
                                             onClickBorrowingPowerChange={(e) => {
-                                                let finalAmount = (this.state.maxdebtAmount * e.target.name / 100).toFixed(6)
+                                                let finalAmount = this.roundDown(this.state.maxdebtAmount * e.target.name / 100, 8)
                                                 this.setState({
                                                     debtAmount: finalAmount,
                                                 })
+                                                this.props.dispatch(changeInputBtcDebt(finalAmount * (this.state.debtAction === "borrow" ? 1 : -1)));
                                             }}
                                             onClickPayback={() => {
-                                                this.togglePayback(debt, 'Payback', deposit + debt)
+                                                let newHealthFactor =
+                                                    this.calculateHealthFactor(
+                                                        parseFloat(this.props.userDepositBalanceEth),
+                                                        this.props.priceOfEth,
+                                                        this.props.LTV["ETHBTC"],
+                                                        parseFloat(this.props.userDebtBalanceBtc) - parseFloat(this.state.debtAmount),
+                                                        this.props.priceOfBtc);
+                                                if (this.state.debtAmount <= 0 || isNaN(this.state.debtAmount)) {
+                                                    this.toggleNoAction(
+                                                        deposit,
+                                                        'Unable to payback',
+                                                        'Please enter the amount that you want to payback.',
+                                                        deposit + debt
+                                                    )
+                                                } else if (this.state.debtAmount > this.props.myBTCAmount) {
+                                                    this.toggleNoAction(
+                                                        deposit,
+                                                        'Unable to payback',
+                                                        'You do not have enough BTC to payback.',
+                                                        deposit + debt
+                                                    )
+                                                } else if (newHealthFactor < 1.06) {
+                                                    this.toggleNoAction(
+                                                        deposit,
+                                                        'Unable to payback',
+                                                        'You are unable to payback <span class="fw-bold">' +
+                                                        this.state.debtAmount + ' ' + debt +
+                                                        ' (~$' +
+                                                        Number(this.state.debtAmount * this.props.priceOfBtc / 100).toFixed(2) +
+                                                        ')</span>. <br/>The new health factor will be <span class="fw-bold" style="color: #ff7d47">' + newHealthFactor + '</span> which is below 1.05.',
+                                                        deposit + debt
+                                                    )
+
+                                                } else {
+                                                    this.togglePayback(
+                                                        deposit,
+                                                        'Confirm to payback?',
+                                                        'You are paying back <span class="fw-bold">' +
+                                                        this.state.debtAmount + ' ' + debt +
+                                                        ' (~$' +
+                                                        Number(this.state.debtAmount * this.props.priceOfBtc / 100).toFixed(2) +
+                                                        ')</span>. <br/>Your new health factor will be <span class="fw-bold" style="color: #68ca66">' + newHealthFactor + '</span>.',
+                                                        deposit + debt)
+                                                }
                                             }}
                                             onClickBorrow={() => {
-                                                this.toggleBorrow(debt, 'Borrow', deposit + debt)
+                                                let newHealthFactor =
+                                                    this.calculateHealthFactor(
+                                                        parseFloat(this.props.userDepositBalanceEth),
+                                                        this.props.priceOfEth,
+                                                        this.props.LTV["ETHBTC"],
+                                                        parseFloat(this.props.userDebtBalanceBtc) + parseFloat(this.state.debtAmount),
+                                                        this.props.priceOfBtc);
+                                                if (this.state.debtAmount <= 0 || isNaN(this.state.debtAmount)) {
+                                                    this.toggleNoAction(
+                                                        deposit,
+                                                        'Unable to borrow',
+                                                        'Please enter the amount that you want to borrow.',
+                                                        deposit + debt
+                                                    )
+                                                } else if (newHealthFactor < 1.06) {
+                                                    this.toggleNoAction(
+                                                        deposit,
+                                                        'Unable to borrow',
+                                                        'You are unable to borrow <span class="fw-bold">' +
+                                                        this.state.debtAmount + ' ' + debt +
+                                                        ' (~$' +
+                                                        Number(this.state.debtAmount * this.props.priceOfBtc / 100).toFixed(2) +
+                                                        ')</span>. <br/>The new health factor will be <span class="fw-bold" style="color: #ff7d47">' + newHealthFactor + '</span> which is below 1.05.',
+                                                        deposit + debt
+                                                    )
+                                                } else {
+                                                    this.toggleBorrow(
+                                                        deposit,
+                                                        'Confirm to borrow?',
+                                                        'You are borrowing <span class="fw-bold">' +
+                                                        this.state.debtAmount + ' ' + debt +
+                                                        ' (~$' +
+                                                        Number(this.state.debtAmount * this.props.priceOfBtc / 100).toFixed(2) +
+                                                        ')</span>. <br/>Your new health factor will be <span class="fw-bold" style="color: #68ca66">' + newHealthFactor + '</span>.',
+                                                        deposit + debt
+                                                    )
+                                                }
                                             }}
                                         ></Card>
                                     </Grid>
@@ -660,12 +922,21 @@ class Manage extends React.Component {
                                             <Card
                                                 widgetSize={"full"}
                                                 title={"Current Smart Vault Balance"}
+                                                extraHtmlContent={"<br /><p style='font-size: 14px'> Trigger Health Factor: "
+                                                    + parseFloat(this.props.myProtection[0] / 1000000000000000000)
+                                                    + "<br />"
+                                                    + "Repay amount each time: "
+                                                    + parseFloat(this.props.myProtection[5] / 0.9999 / 100000000)
+                                                    + "<br />"
+                                                    + "Remaining prepaid gas fee: "
+                                                    + parseFloat(this.props.myGasBankBalance)
+                                                    + "</p>"}
                                                 currencyIconPath={this.state.debtCurrencyIconPath}
                                                 leftSelectButton={""}
                                                 rightSelectButton={""}
                                                 currency={"btc"}
                                                 openBorrowingPower={false}
-                                                amount={this.props.myBtcLpAmount}
+                                                amount={parseFloat(this.props.myBtcLpAmount * this.props.btcLpExchangeRate).toFixed(8)}
                                                 maxBalance={this.props.myBtcLpAmount}
                                                 onChangeInput={(e) => {
                                                     this.setState({
@@ -673,7 +944,22 @@ class Manage extends React.Component {
                                                     })
                                                 }}
                                                 onClickWithdraw={() => {
-                                                    this.toggleLeaveSmartVault(debt, 'Leave Smart Vault', deposit + debt)
+                                                    if (this.props.myBtcLpAmount <= 0) {
+                                                        this.toggleNoAction(
+                                                            deposit,
+                                                            'Unable to withdraw all from Smart Vault',
+                                                            'You do not have any BTC in Smart Vault.',
+                                                            deposit + debt
+                                                        )
+                                                    } else {
+                                                        this.toggleLeaveSmartVault(debt,
+                                                            'Confirm to withdraw all from Smart Vault?',
+                                                            'You are withdrawing <span class="fw-bold">' +
+                                                            parseFloat(this.props.myBtcLpAmount * this.props.btcLpExchangeRate).toFixed(8) +
+                                                            ' BTC (~$' +
+                                                            parseFloat(this.props.myBtcLpAmount * this.props.btcLpExchangeRate * this.props.priceOfBtc / 100).toFixed(2) +
+                                                            ')</span> from Smart Vault. Remaining gas fee of ' + parseFloat(this.props.myGasBankBalance) + ' AVAX will be returned. <span class="fw-bold" style="color: #ff7d47"><br/>Caution: you will lose your automatic loan protection if you withdraw.</span>', 0)
+                                                    }
                                                 }}
                                             ></Card>
                                         </Grid>
@@ -710,13 +996,19 @@ class Manage extends React.Component {
                                 <Button close color="secondary" onClick={this.toggle}></Button>
                             </Col>
                             <Col style={{ paddingTop: '20px', paddingLeft: '40px', paddingRight: '40px' }} sm={12}>
+                                <div className="content" dangerouslySetInnerHTML={{ __html: this.state.modalMessage }}></div>
+                            </Col>
+                            <Col style={{ display: 'none' }} sm={12}>
                                 <Input disabled className={`amount-text`}
                                     style={{ backgroundColor: 'transparent', color: '#ffffff' }}
                                     value={Number(this.state.modalInputValue)}>
-                                </Input>
+                                </Input> {this.state.modalToken}
                             </Col>
                             <Col style={{ paddingTop: '20px', paddingLeft: '40px', paddingRight: '40px' }} sm={12}>
-                                <Button block color={'light'} style={{ padding: '5px', color: '#000000' }} onClick={this.state.modalCall}>Confirm</Button>
+                                <Button block className={'manage-button'} style={{ padding: '5px' }}
+                                    onClick={this.state.modalCall ? this.state.modalCall : this.toggle}>
+                                    {this.state.modalCall ? 'Confirm' : 'Close'}
+                                </Button>
                             </Col>
                         </Row>
                     </ModalBody>
@@ -762,8 +1054,11 @@ function mapStateToProps(store) {
         lpPoolBtc: store.backd.lpPoolBtc,
         lpTokenBtc: store.backd.lpTokenBtc,
         myBtcLpAmount: store.backd.myBtcLpAmount,
+        btcLpExchangeRate: store.backd.btcLpExchangeRate,
         totalBtcLpAmount: store.backd.totalBtcLpAmount,
         topupAction: store.backd.topupAction,
+        myProtection: store.backd.myProtection,
+        myGasBankBalance: store.backd.myGasBankBalance
     };
 }
 

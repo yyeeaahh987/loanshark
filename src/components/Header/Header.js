@@ -45,6 +45,7 @@ import {
 	changeLpTokenBtc,
 	changeVaultBtc,
 	changeTopupAction,
+	changeGasBank
 } from "../../actions/backd";
 
 import Controller from '../../abi/fujidao/Controller.json';
@@ -58,6 +59,7 @@ import lpPoolAbi from '../../abi/backd/lpPool.json';
 import lpTokenAbi from '../../abi/backd/lpToken.json';
 import topupActionAbi from '../../abi/backd/topupAction.json';
 import vaultBtcAbi from '../../abi/backd/vaultBtc.json';
+import gasBankAbi from '../../abi/backd/gasBank.json';
 
 import API from '../../utils/API'
 
@@ -80,6 +82,7 @@ const VAULT_BTC = process.env.REACT_APP_VAULT_BTC;
 const TOPUP_ACTION = process.env.REACT_APP_TOPUP_ACTION;
 const SMART_VAULT_BTC = process.env.REACT_APP_SMART_VAULT_BTC;
 const SMART_VAULT_USDT = process.env.REACT_APP_SMART_VAULT_USDT;
+const GAS_BANK = process.env.REACT_APP_GAS_BANK;
 
 //Asset Contracts
 const WBTC = process.env.REACT_APP_WBTC;
@@ -112,6 +115,7 @@ class Header extends React.Component {
 		this.changeArrowImg = this.changeArrowImg.bind(this);
 		this.changeArrowImgOut = this.changeArrowImgOut.bind(this);
 		this.ethEnabled = this.ethEnabled.bind(this);
+		this.ethDisabled = this.ethDisabled.bind(this);
 		this.getNeededCollateralFor = this.getNeededCollateralFor.bind(this);
 
 		this.setMyFujiVaultETHBTC = this.setMyFujiVaultETHBTC.bind(this);
@@ -414,13 +418,14 @@ class Header extends React.Component {
 										this.setMyBTCContract(new window.web3.eth.Contract(dataHong, WBTC));
 										this.setMyUSDTContract(new window.web3.eth.Contract(dataHong, USDT));
 										this.setMyAAVEAVAXContract(new window.web3.eth.Contract(ProviderAAVEAVAX.abi, ProviderAAVEAVAX));
-										this.setMySmartVaultContract(new window.web3.eth.Contract(SmartVault, SMART_VAULT_BTC));
-										this.setMySmartVaultContract(new window.web3.eth.Contract(SmartVault, SMART_VAULT_USDT));
+										this.setMySmartVaultContractBtc(new window.web3.eth.Contract(SmartVault, SMART_VAULT_BTC));
+										this.setMySmartVaultContractUsdt(new window.web3.eth.Contract(SmartVault, SMART_VAULT_USDT));
 
 										this.props.dispatch(changeLpPoolBtc(new window.web3.eth.Contract(lpPoolAbi, LP_POOL_BTC)));
 										this.props.dispatch(changeLpTokenBtc(new window.web3.eth.Contract(lpTokenAbi, LP_TOKEN_BTC)));
 										this.props.dispatch(changeVaultBtc(new window.web3.eth.Contract(vaultBtcAbi, VAULT_BTC)));
 										this.props.dispatch(changeTopupAction(new window.web3.eth.Contract(topupActionAbi, TOPUP_ACTION)));
+										this.props.dispatch(changeGasBank(new window.web3.eth.Contract(gasBankAbi, GAS_BANK)));
 
 										this.props.dispatch(changeSelectedPair('AVAXUSDT'));
 
@@ -446,6 +451,7 @@ class Header extends React.Component {
 								this.props.dispatch(changeLpTokenBtc(new window.web3.eth.Contract(lpTokenAbi, LP_TOKEN_BTC)));
 								this.props.dispatch(changeVaultBtc(new window.web3.eth.Contract(vaultBtcAbi, VAULT_BTC)));
 								this.props.dispatch(changeTopupAction(new window.web3.eth.Contract(topupActionAbi, TOPUP_ACTION)));
+								this.props.dispatch(changeGasBank(new window.web3.eth.Contract(gasBankAbi, GAS_BANK)));
 
 								this.props.dispatch(changeSelectedPair('ETHBTC'));
 
@@ -461,6 +467,12 @@ class Header extends React.Component {
 		}
 	}
 
+	
+	ethDisabled() {
+		window.location.reload();
+	}
+
+
 	render() {
 		return (
 			<div>
@@ -468,20 +480,20 @@ class Header extends React.Component {
 
 					<Grid container>
 						<Grid item xs={12} md={12}>
-							<Grid container spacing={2} alignItems={"center"}>
+							<Grid container style={{display: "flex", flexDirection: "row", alignItems: "center", gap: "10px", justifyContent: "space-between"}}>
 								{this.props.location.pathname === '/app/main/borrow' ||
 									this.props.location.pathname === '/app/main/dashboard' ||
 									this.props.location.pathname === '/app/main/smartVault1' ? null : <>
 									<Grid item>
-										<Button color={"text"} onClick={() => this.props.history.goBack()}
+										<Button size={"sm"} color={"text"} onClick={() => this.props.history.goBack()}
 											icon={faArrowLeftLong}
 										><FontAwesomeIcon icon={faArrowLeftLong} /> <span>Back</span>
 										</Button>
 									</Grid>
 								</>
 								}
-
-								<Grid item style={{ marginLeft: "auto" }}>
+								<Grid item></Grid>
+								<Grid item style={{display: "flex", flexDirection: "row", alignItems: "center", gap: "10px", justifyContent: "space-between"}}>
 									<div>
 										{
 											!this.state.myAccount ?
@@ -490,19 +502,28 @@ class Header extends React.Component {
 													onClick={(e) => { this.ethEnabled() }}
 												></RoundShapeButton>
 												:
-												<div style={{ marginLeft: "auto" }}><Input className={s.addressClass} id={"sidebar-drawer"} disabled={true} valid style={{ width: '450px' }} value={this.state.myAccount}></Input></div>
+												<div style={{ marginLeft: "auto" }}>
+													<Input
+													 className={s.addressClass} id={"sidebar-drawer"} disabled={true} valid value={this.state.myAccount}></Input>
+												</div>
 										}
 									</div>
-								</Grid>
-								<Grid item>
+									<div>
+										{
+											this.state.myAccount ?
+											<RoundShapeButton
+												label={"Disconnect"}size={"sm"} 
+												onClick={(e) => { this.ethDisabled() }}
+											></RoundShapeButton>
+											: null
+										}
+									</div>
 									<div>
 										<FontAwesomeIcon style={{ cursor: "pointer" }} onClick={() => {
 											this.getNeededCollateralFor();
 										}}
 											icon={faRotateRight} />
 									</div>
-								</Grid>
-								<Grid item>
 									<div>
 										<FontAwesomeIcon style={{ cursor: "pointer" }} onClick={() => {
 											this.handleResize();
@@ -540,6 +561,7 @@ function mapStateToProps(store) {
 		myAccount: store.loanshark.myAccount,
 		selectedPair: store.loanshark.selectedPair,
 		numberOfEth: store.loanshark.userDebtBalance,
+		changeAaveBtcBorrowRate: store.loanshark.aaveBtcBorrowRate,
 		userDepositBalanceEth: store.loanshark.userDepositBalanceEth,
 		userDepositBalanceAvax: store.loanshark.userDepositBalanceAvax,
 		userDebtBalanceBtc: store.loanshark.userDebtBalanceBtc,
@@ -566,7 +588,9 @@ function mapStateToProps(store) {
 		lpTokenBtc: store.backd.lpTokenBtc,
 		vaultBtc: store.backd.vaultBtc,
 		topupAction: store.backd.topupAction,
-		totalBtcLpAmount: store.backd.totalBtcLpAmount
+		gasBank: store.backd.gasBank,
+		totalBtcLpAmount: store.backd.totalBtcLpAmount,
+		myGasBankBalance: store.backd.myGasBankBalance
 	};
 }
 

@@ -1,8 +1,9 @@
 import {
-    changeNumberOfEth, 
-    changeNumberOfAvax, 
-    changeUserDepositBalanceEth, 
-    changeUserDepositBalanceAvax, 
+    changeNumberOfEth,
+    changeNumberOfAvax,
+    changeAaveBtcBorrowRate,
+    changeUserDepositBalanceEth,
+    changeUserDepositBalanceAvax,
     changeUserDebtBalanceBtc,
     changeUserDebtBalanceUsdt,
     changePriceOfEth,
@@ -17,22 +18,24 @@ import {
     changeMyUSDTAmount,
     changeLTV,
     changeLiqudationPrice
-  } from "../actions/loanshark";
+} from "../actions/loanshark";
 
 import {
-  changeMyBtcLpAmount,
-  changeMyProtection,
-  changeTotalBtcLpAmount,
+    changeMyBtcLpAmount,
+    changeMyProtection,
+    changeTotalBtcLpAmount,
+    changeBtcLpExchangeRateAmount,
+    changeMyGasBankBalance
 } from "../actions/backd";
-  
-const WBTC=process.env.REACT_APP_WBTC;
-const AVAX=process.env.REACT_APP_AVAX;
-const WETH=process.env.REACT_APP_WETH;
-const USDT=process.env.REACT_APP_USDT;
+
+const WBTC = process.env.REACT_APP_WBTC;
+const AVAX = process.env.REACT_APP_AVAX;
+const WETH = process.env.REACT_APP_WETH;
+const USDT = process.env.REACT_APP_USDT;
 
 let refreshPrice = (props) => {
     if (props.myFujiVaultETHBTC) {
-        let args = [1,true]
+        let args = [1, true]
 
         // ETH-BTC Vaults
         props.myFujiVaultETHBTC.methods.getNeededCollateralFor(...args).call({}, (error, result) => {
@@ -43,15 +46,15 @@ let refreshPrice = (props) => {
             props.dispatch(changeUserDepositBalanceEth(window.web3.utils.fromWei(result, 'ether')));
         });
         props.myFujiVaultETHBTC.methods.userDebtBalance(props.myAccount).call({}, (error, result) => {
-            props.dispatch(changeUserDebtBalanceBtc(window.web3.utils.fromWei(result, 'gwei') * 10));
+            props.dispatch(changeUserDebtBalanceBtc(parseFloat((window.web3.utils.fromWei(result, 'gwei') * 10).toFixed(8))));
         });
         props.myFujiVaultETHBTC.methods.collatF().call({}, (error, result) => {
-            props.dispatch(changeLTV({"ETHBTC": result.b / result.a}));
+            props.dispatch(changeLTV({ "ETHBTC": result.b / result.a }));
         });
         props.myFujiVaultETHBTC.methods.safetyF().call({}, (error, result) => {
-            props.dispatch(changeLiqudationPrice({"ETHBTC": result.b / result.a}));
+            props.dispatch(changeLiqudationPrice({ "ETHBTC": result.b / result.a }));
         });
-        
+
         // AVAX-USDT Vaults
         props.myFujiVaultAVAXUSDT.methods.getNeededCollateralFor(...args).call({}, (error, result) => {
             props.dispatch(changeNumberOfAvax((result / 1000000000000)));
@@ -64,29 +67,36 @@ let refreshPrice = (props) => {
             props.dispatch(changeUserDebtBalanceUsdt(window.web3.utils.fromWei(result, 'picoether')));
         });
         props.myFujiVaultAVAXUSDT.methods.collatF().call({}, (error, result) => {
-            props.dispatch(changeLTV({"AVAXUSDT": result.b / result.a}));
+            props.dispatch(changeLTV({ "AVAXUSDT": result.b / result.a }));
         });
         props.myFujiVaultAVAXUSDT.methods.safetyF().call({}, (error, result) => {
-            props.dispatch(changeLiqudationPrice({"AVAXUSDT": result.b / result.a}));
+            props.dispatch(changeLiqudationPrice({ "AVAXUSDT": result.b / result.a }));
         });
 
-        let argsPriceOfEth = [USDT,WETH,2]
+        let argsPriceOfEth = [USDT, WETH, 2]
         props.myFujiOracle.methods.getPriceOf(...argsPriceOfEth).call({}, (error, result) => {
             props.dispatch(changePriceOfEth(result));
         });
-        let argsPriceOfBtc = [USDT,WBTC,2]
+        let argsPriceOfBtc = [USDT, WBTC, 2]
         props.myFujiOracle.methods.getPriceOf(...argsPriceOfBtc).call({}, (error, result) => {
             props.dispatch(changePriceOfBtc(result));
         });
-        let argsPriceOfAvax = [USDT,AVAX,2]
+        let argsPriceOfAvax = [USDT, AVAX, 2]
         props.myFujiOracle.methods.getPriceOf(...argsPriceOfAvax).call({}, (error, result) => {
             props.dispatch(changePriceOfAvax(result));
         });
-        let argsPriceOfUsdt = [USDT,USDT,2]
+        let argsPriceOfUsdt = [USDT, USDT, 2]
         props.myFujiOracle.methods.getPriceOf(...argsPriceOfUsdt).call({}, (error, result) => {
             props.dispatch(changePriceOfUsdt(result));
         });
 
+        if (props.providerAAVEAVAX) {
+            props.providerAAVEAVAX.methods.getBorrowRateFor(WBTC).call({}, (error, result) => {
+                var APR = result /1000000000000000000000000000;
+                props.dispatch(changeAaveBtcBorrowRate(parseFloat((Math.pow(1 + APR/365, 365) - 1)*100).toFixed(2)));
+            });
+        }
+        
         if (props.mySmartVaultBtc) {
             props.mySmartVaultBtc.methods.balances(props.myAccount).call({}, (error, result) => {
                 props.dispatch(changeSmartVaultBtc(window.web3.utils.fromWei(result, 'gwei') * 10));
@@ -109,7 +119,7 @@ let refreshPrice = (props) => {
             props.dispatch(changeMyUSDTAmount(window.web3.utils.fromWei(result, 'picoether')));
         });
 
-        window.web3.eth.getBalance(props.myAccount, function(err, result) {
+        window.web3.eth.getBalance(props.myAccount, function (err, result) {
             if (err) {
             } else {
                 props.dispatch(changeMyAVAXAmount(window.web3.utils.fromWei(result, 'ether')));
@@ -117,9 +127,29 @@ let refreshPrice = (props) => {
         })
 
         //Backd
-        props.lpTokenBtc.methods.balanceOf(props.myAccount).call({},  (error, result) => {
-            props.dispatch(changeMyBtcLpAmount(window.web3.utils.fromWei(result, 'gwei') * 10));
-        });
+        if (props.lpTokenBtc) {
+            props.lpTokenBtc.methods.balanceOf(props.myAccount).call({}, (error, result) => {
+                let argsGetPosition = [
+                    props.myAccount,
+                    props.myAccount + "000000000000000000000000",
+                    "0x66756a6964616f00000000000000000000000000000000000000000000000000"
+                ];
+
+                if (props.topupAction) {
+                    props.topupAction.methods.getPosition(...argsGetPosition).call({}, (error, resultStakerVault) => {
+                        let stakerVault = parseFloat(window.web3.utils.fromWei(resultStakerVault[7], 'gwei') * 10);
+                        props.dispatch(changeMyBtcLpAmount(stakerVault + window.web3.utils.fromWei(result, 'gwei') * 10));
+                    });
+                }
+                props.dispatch(changeMyBtcLpAmount(window.web3.utils.fromWei(result, 'gwei') * 10));
+            });
+        }
+
+        if (props.lpPoolBtc) {
+            props.lpPoolBtc.methods.exchangeRate().call({}, (error, resultExchangeRate) => {
+                props.dispatch(changeBtcLpExchangeRateAmount(window.web3.utils.fromWei(resultExchangeRate, 'ether')));
+            });
+        }
 
         let argsGetPosition = [
             props.myAccount,
@@ -127,13 +157,23 @@ let refreshPrice = (props) => {
             "0x66756a6964616f00000000000000000000000000000000000000000000000000"
         ];
 
-        props.topupAction.methods.getPosition(...argsGetPosition).call({},  (error, result) => {
-            props.dispatch(changeMyProtection(result));
-        });
+        if (props.topupAction) {
+            props.topupAction.methods.getPosition(...argsGetPosition).call({}, (error, result) => {
+                props.dispatch(changeMyProtection(result));
+            });
+        }
 
-        props.lpTokenBtc.methods.totalSupply().call({}, (error, result) => {
-            props.dispatch(changeTotalBtcLpAmount(window.web3.utils.fromWei(result, 'gwei') * 10));
-        });
+        if (props.lpTokenBtc) {
+            props.lpTokenBtc.methods.totalSupply().call({}, (error, result) => {
+                props.dispatch(changeTotalBtcLpAmount(window.web3.utils.fromWei(result, 'gwei') * 10));
+            });
+        }
+
+        if (props.gasBank) {
+            props.gasBank.methods.balanceOf(props.myAccount).call({}, (error, result) => {
+                props.dispatch(changeMyGasBankBalance(window.web3.utils.fromWei(result, 'ether')));
+            });
+        }
     }
 }
 

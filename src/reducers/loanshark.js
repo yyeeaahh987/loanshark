@@ -3,6 +3,7 @@ import {
   CHANGE_SELECTED_PAIR,
   CHANGE_NUMBER_OF_ETH, 
   CHANGE_NUMBER_OF_AVAX, 
+  CHANGE_AAVE_BTC_BORROW_RATE, 
   CHANGE_USER_DEPOSIT_BALANCE_ETH, 
   CHANGE_USER_DEPOSIT_BALANCE_AVAX,
   CHANGE_USER_DEBT_BALANCE_BTC,
@@ -40,6 +41,7 @@ const defaultState = {
   selectedPair: 'ETHBTC',
   numberOfEth: 0,
   numberOfAvax: 0,
+  aaveBtcBorrowRate: 0,
   userDepositBalanceEth: 0,
   userDepositBalanceAvax: 0,
   userDebtBalanceBtc: 0,
@@ -81,6 +83,8 @@ export default function loansharkReducer(state = defaultState, action) {
       return {...state,numberOfEth: action.payload};
     case CHANGE_NUMBER_OF_AVAX:
       return {...state,numberOfAvax: action.payload};
+    case CHANGE_AAVE_BTC_BORROW_RATE:
+      return {...state,aaveBtcBorrowRate: action.payload};
     case CHANGE_USER_DEPOSIT_BALANCE_ETH:
       return {...state,userDepositBalanceEth: action.payload};
     case CHANGE_USER_DEPOSIT_BALANCE_AVAX:

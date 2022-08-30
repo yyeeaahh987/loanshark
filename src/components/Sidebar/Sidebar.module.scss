@@ -29,7 +29,7 @@
   transition: width $sidebar-transition-time ease-in-out;
   background-color: var(--sidebar-bg-color);
   z-index: 100;
-  box-shadow: 4px 4px 25px rgba(109, 105, 105, 0.15);
+  box-shadow: 0px 0px 25px 0px rgba(0, 0, 0, 10.5); 
 }
 
 .sidebarClose.sidebarWrapper {

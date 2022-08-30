@@ -90,11 +90,11 @@
   position: relative;
   margin-bottom: $grid-gutter-width;
   
-  background: $widget-bg-color;
+  background: linear-gradient(40deg, rgba(0,0,0,1) 0%, rgba(24,24,24,1) 74%);
   border: solid;
   border-width: 1px;
   border-radius: $widget-border-radius;
-  border-color: #ffffff;
+  border-color: rgb(122, 122, 122, 10.5);
   box-shadow: var(--widget-shadow);
 
   > header {
@@ -336,9 +336,9 @@
 }
 
 .widgetBorderLeft{
-  border-radius: 8px 0px 0px 8px; 
+  border-radius: 10px; 
 }
 
 .widgetBorderRight{
-  border-radius: 0px 8px 8px 0px;
+  border-radius: 10px;
 }
