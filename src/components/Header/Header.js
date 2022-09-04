@@ -488,13 +488,20 @@ class Header extends React.Component {
 	}
 
 	async walletConnectEnabled() {
-		console.log(window)
-		window.web3 = new Web3(window.web3.currentProvider);
+		const provider = new WalletConnectProvider({
+			rpc:{
+				43113: "https://api.avax-test.network/ext/bc/C/rpc",
+			},
+			// infuraId: "27e484dcd9e3efcfd25a83a78777cdf1",
+		});
+		
+		await provider.enable();
+		window.web3 = new Web3(provider);
 		const accounts = await window.web3.eth.getAccounts();
 		console.log(`accounts`, accounts)
 		this.setState({ myAccount: accounts[0] });
 		this.setMyAccount(accounts[0]);
-		//  Get Chain Id
+		// //  Get Chain Id
 		const chainId = await window.web3.eth.getChainId();
 		if (parseInt(chainId) === CHIAN_ID) {
 			window.ethereum.request({
@@ -606,6 +613,13 @@ class Header extends React.Component {
 								}
 								<Grid item></Grid>
 								<Grid item style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: "10px", justifyContent: "space-between" }}>
+									<div>
+										<Button onClick={()=>{
+											// await provider.disconnect()
+										}}>
+											disconnect All
+										</Button>
+									</div>
 									<div>
 										{
 											!this.state.myAccount ?
