@@ -594,7 +594,7 @@ class OldDashboard extends React.Component {
                         (this.props.userDepositBalanceEth) * this.props.priceOfEth / 100) + (this.props.userDebtBalanceBtc * this.props.priceOfBtc / 100
                       ) +
                       (
-                        (this.props.userDepositBalanceAvax) * this.props.priceOfAvax / 100) + (this.props.userDebtBalanceUsdt * this.props.priceOfUsdt / 100
+                          (this.props.userDepositBalanceAvax) * this.props.priceOfAvax / 100) + (this.props.userDebtBalanceUsdt * this.props.priceOfUsdt / 100
                       )
                     ).toFixed(2) }</h3>
                 </Col>

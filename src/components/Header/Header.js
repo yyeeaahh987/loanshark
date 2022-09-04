@@ -2,6 +2,8 @@ import React from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router";
+import WalletConnectProvider from "@walletconnect/web3-provider";
+//  Enable session (triggers QR Code modal)
 import s from "./Header.module.scss";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -67,6 +69,8 @@ import Web3 from 'web3';
 import arrowUnactive from '../../images/Arrow 6.svg'
 import arrowActive from '../../images/Arrow 5.svg'
 
+//
+const CHIAN_ID = 43113 //AVAX TESTNET
 //Fujidao Contracts
 const MY_FujiVaultETHBTC = process.env.REACT_APP_MY_FujiVaultETHBTC;
 const MY_FujiVaultAVAXUSDT = process.env.REACT_APP_MY_FujiVaultAVAXUSDT;
@@ -116,6 +120,8 @@ class Header extends React.Component {
 		this.changeArrowImgOut = this.changeArrowImgOut.bind(this);
 		this.ethEnabled = this.ethEnabled.bind(this);
 		this.ethDisabled = this.ethDisabled.bind(this);
+		this.walletConnectEnabled = this.walletConnectEnabled.bind(this);
+		this.disconnectWalletConnectEnabled = this.disconnectWalletConnectEnabled.bind(this);
 		this.getNeededCollateralFor = this.getNeededCollateralFor.bind(this);
 
 		this.setMyFujiVaultETHBTC = this.setMyFujiVaultETHBTC.bind(this);
@@ -376,6 +382,10 @@ class Header extends React.Component {
 
 	ethEnabled() {
 		if (window.web3) {
+			console.log(`current provider`, window.web3.currentProvider)
+			console.log(window)
+			console.log(window.web3)
+			console.log(window.web3.currentProvider)
 			window.web3 = new Web3(window.web3.currentProvider);
 			window.ethereum.enable();
 			const web3js = window.web3;
@@ -386,9 +396,15 @@ class Header extends React.Component {
 				this.setState({ myAccount: result[0] });
 				this.setMyAccount(result[0]);
 				const chainId = 43113 // Avax Testnet
+				console.log(window.ethereum.networkVersion)
+				console.log(typeof (window.ethereum.networkVersion))
+				console.log(chainId)
+				console.log(typeof (chainId))
 
 				if (window.ethereum.networkVersion !== chainId) {
+					console.log(`switch chain`)
 					try {
+						console.log(window.ethereum)
 						window.ethereum.request({
 							method: 'wallet_switchEthereumChain',
 							params: [{ chainId: window.web3.utils.toHex(chainId) }]
@@ -467,10 +483,113 @@ class Header extends React.Component {
 		}
 	}
 
-	
 	ethDisabled() {
 		window.location.reload();
 	}
+
+	async walletConnectEnabled() {
+		const provider = new WalletConnectProvider({
+			rpc:{
+				43113: "https://api.avax-test.network/ext/bc/C/rpc",
+			},
+			// infuraId: "27e484dcd9e3efcfd25a83a78777cdf1",
+		});
+		
+		await provider.enable();
+		window.web3 = new Web3(provider);
+		const accounts = await window.web3.eth.getAccounts();
+		console.log(`accounts`, accounts)
+		this.setState({ myAccount: accounts[0] });
+		this.setMyAccount(accounts[0]);
+		// //  Get Chain Id
+		const chainId = await window.web3.eth.getChainId();
+		if (parseInt(chainId) === CHIAN_ID) {
+			window.ethereum.request({
+				method: 'wallet_switchEthereumChain',
+				params: [{ chainId: window.web3.utils.toHex(CHIAN_ID) }]
+			})
+				.catch((error) => {
+					console.log(error);
+					// This error code indicates that the chain has not been added to MetaMask
+					if (error.code === 4902) {
+						window.ethereum.request({
+							method: 'wallet_addEthereumChain',
+							params: [
+								{
+									chainName: 'Avalanche Fuji Testnet',
+									chainId: window.web3.utils.toHex(chainId),
+									nativeCurrency: { name: 'AVAX', decimals: 18, symbol: 'AVAX' },
+									rpcUrls: ['https://speedy-nodes-nyc.moralis.io/2b572311b72eca56f1517c91/avalanche/testnet']
+								}
+							]
+						}).then(() => {
+							const dataHong = require('../../abi/Hong.json');
+							this.setMyFujiVaultETHBTC(new window.web3.eth.Contract(FujiVaultAVAX.abi, MY_FujiVaultETHBTC));
+							this.setMyFujiVaultAVAXUSDT(new window.web3.eth.Contract(FujiVaultAVAX.abi, MY_FujiVaultAVAXUSDT));
+							this.setMyFliquidatorAVAX(new window.web3.eth.Contract(FliquidatorAVAX.abi, MY_FliquidatorAVAX));
+							this.setMyFujiController(new window.web3.eth.Contract(Controller.abi, MY_FujiController));
+							this.setMyFujiOracle(new window.web3.eth.Contract(FujiOracle.abi, MY_FujiOracle));
+							this.setMyETHContract(new window.web3.eth.Contract(dataHong, WETH));
+							this.setMyBTCContract(new window.web3.eth.Contract(dataHong, WBTC));
+							this.setMyUSDTContract(new window.web3.eth.Contract(dataHong, USDT));
+							this.setMyAAVEAVAXContract(new window.web3.eth.Contract(ProviderAAVEAVAX.abi, ProviderAAVEAVAX));
+							this.setMySmartVaultContractBtc(new window.web3.eth.Contract(SmartVault, SMART_VAULT_BTC));
+							this.setMySmartVaultContractUsdt(new window.web3.eth.Contract(SmartVault, SMART_VAULT_USDT));
+
+							this.props.dispatch(changeLpPoolBtc(new window.web3.eth.Contract(lpPoolAbi, LP_POOL_BTC)));
+							this.props.dispatch(changeLpTokenBtc(new window.web3.eth.Contract(lpTokenAbi, LP_TOKEN_BTC)));
+							this.props.dispatch(changeVaultBtc(new window.web3.eth.Contract(vaultBtcAbi, VAULT_BTC)));
+							this.props.dispatch(changeTopupAction(new window.web3.eth.Contract(topupActionAbi, TOPUP_ACTION)));
+							this.props.dispatch(changeGasBank(new window.web3.eth.Contract(gasBankAbi, GAS_BANK)));
+
+							this.props.dispatch(changeSelectedPair('AVAXUSDT'));
+
+							this.getNeededCollateralFor()
+						});
+					}
+				})
+				.then(() => {
+					const dataHong = require('../../abi/Hong.json');
+					this.setMyFujiVaultETHBTC(new window.web3.eth.Contract(FujiVaultAVAX.abi, MY_FujiVaultETHBTC));
+					this.setMyFujiVaultAVAXUSDT(new window.web3.eth.Contract(FujiVaultAVAX.abi, MY_FujiVaultAVAXUSDT));
+					this.setMyFliquidatorAVAX(new window.web3.eth.Contract(FliquidatorAVAX.abi, MY_FliquidatorAVAX));
+					this.setMyFujiController(new window.web3.eth.Contract(Controller.abi, MY_FujiController));
+					this.setMyFujiOracle(new window.web3.eth.Contract(FujiOracle.abi, MY_FujiOracle));
+					this.setMyETHContract(new window.web3.eth.Contract(dataHong, WETH));
+					this.setMyBTCContract(new window.web3.eth.Contract(dataHong, WBTC));
+					this.setMyUSDTContract(new window.web3.eth.Contract(dataHong, USDT));
+					this.setMyAAVEAVAXContract(new window.web3.eth.Contract(ProviderAAVEAVAX.abi, AAVEAVAX));
+					this.setMySmartVaultContractBtc(new window.web3.eth.Contract(SmartVault, SMART_VAULT_BTC));
+					this.setMySmartVaultContractUsdt(new window.web3.eth.Contract(SmartVault, SMART_VAULT_USDT));
+
+					this.props.dispatch(changeLpPoolBtc(new window.web3.eth.Contract(lpPoolAbi, LP_POOL_BTC)));
+					this.props.dispatch(changeLpTokenBtc(new window.web3.eth.Contract(lpTokenAbi, LP_TOKEN_BTC)));
+					this.props.dispatch(changeVaultBtc(new window.web3.eth.Contract(vaultBtcAbi, VAULT_BTC)));
+					this.props.dispatch(changeTopupAction(new window.web3.eth.Contract(topupActionAbi, TOPUP_ACTION)));
+					this.props.dispatch(changeGasBank(new window.web3.eth.Contract(gasBankAbi, GAS_BANK)));
+
+					this.props.dispatch(changeSelectedPair('ETHBTC'));
+
+					this.getNeededCollateralFor()
+				})
+				.catch((error) => {
+					console.log(error);
+				});
+		} else {
+		}
+	}
+
+	async disconnectWalletConnectEnabled() {
+		console.log(`disconnectWalletConnectEnabled`)
+		const INFURA_ID = "27e484dcd9e3efcfd25a83a78777cdf1"
+		//  Create WalletConnect Provider
+		const provider = new WalletConnectProvider({
+			infuraId: INFURA_ID,
+		});
+		await provider.disconnect()
+	}
+
+
 
 
 	render() {
@@ -480,7 +599,7 @@ class Header extends React.Component {
 
 					<Grid container>
 						<Grid item xs={12} md={12}>
-							<Grid container style={{display: "flex", flexDirection: "row", alignItems: "center", gap: "10px", justifyContent: "space-between"}}>
+							<Grid container style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: "10px", justifyContent: "space-between" }}>
 								{this.props.location.pathname === '/app/main/borrow' ||
 									this.props.location.pathname === '/app/main/dashboard' ||
 									this.props.location.pathname === '/app/main/smartVault1' ? null : <>
@@ -493,29 +612,43 @@ class Header extends React.Component {
 								</>
 								}
 								<Grid item></Grid>
-								<Grid item style={{display: "flex", flexDirection: "row", alignItems: "center", gap: "10px", justifyContent: "space-between"}}>
+								<Grid item style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: "10px", justifyContent: "space-between" }}>
+									{/* <div>
+										<Button onClick={()=>{
+											// await provider.disconnect()
+										}}>
+											disconnect All
+										</Button>
+									</div> */}
 									<div>
 										{
 											!this.state.myAccount ?
 												<RoundShapeButton
 													label={"Connect Wallet"}
-													onClick={(e) => { this.ethEnabled() }}
+													onClick={(e) => {
+														this.setState({
+															modal: !this.state.modal,
+															modalTitle: "Please choose connect wallet",
+															modalAction: "connect_wallet",
+														})
+													}}
 												></RoundShapeButton>
 												:
 												<div style={{ marginLeft: "auto" }}>
 													<Input
-													 className={s.addressClass} id={"sidebar-drawer"} disabled={true} valid value={this.state.myAccount}></Input>
+														className={s.addressClass} id={"sidebar-drawer"} disabled={true} valid value={this.state.myAccount}></Input>
 												</div>
 										}
 									</div>
+
 									<div>
 										{
 											this.state.myAccount ?
-											<RoundShapeButton
-												label={"Disconnect"}size={"sm"} 
-												onClick={(e) => { this.ethDisabled() }}
-											></RoundShapeButton>
-											: null
+												<RoundShapeButton
+													label={"Disconnect"} size={"sm"}
+													onClick={(e) => { this.ethDisabled() }}
+												></RoundShapeButton>
+												: null
 										}
 									</div>
 									<div>
@@ -536,18 +669,76 @@ class Header extends React.Component {
 					</Grid>
 				</Navbar>
 				<Modal isOpen={this.state.modal} toggle={this.toggle} style={{ color: '#000000' }}>
-					<ModalHeader toggle={this.toggle}>{this.state.modalTitle}</ModalHeader>
-					<ModalBody>
-						{this.state.modalAction} {this.state.modalToken} :
-						<Input
-							value={this.state.modalInputValue}
-							onChange={this.setInput}>
-						</Input>
-					</ModalBody>
-					<ModalFooter>
-						<Button color="primary" onClick={this.state.modalCall}>Confirm</Button>{' '}
-						<Button color="secondary" onClick={this.toggle}>Cancel</Button>
-					</ModalFooter>
+					{this.state.modalAction === "connect_wallet" &&
+						<>
+							<ModalHeader toggle={this.toggle}>{this.state.modalTitle}</ModalHeader>
+							<ModalBody>
+								<a>
+									<div style={{
+										border: "1px solid #473647",
+										borderRadius: "10px",
+									}}
+										onClick={() => {
+											this.ethEnabled()
+											this.toggle()
+										}}>
+										<div style={{ padding: "10px" }}>
+											<Grid container spacing={1} alignContent={"center"} textAlign={"center"} justifyContent={"space-between"}>
+												<Grid item>
+													MetaMask
+												</Grid>
+												<Grid item>
+													<img style={{ width: "15px", height: "15px" }} src="/assets/icon/metamask.png" alt=""></img>
+												</Grid>
+											</Grid>
+										</div>
+									</div>
+								</a>
+								<br></br>
+								<a>
+									<div style={{
+										border: "1px solid #473647",
+										borderRadius: "10px",
+									}}
+										onClick={() => {
+											this.walletConnectEnabled()
+											this.toggle()
+										}}>
+										<div style={{ padding: "10px" }}>
+											<Grid container spacing={1} alignContent={"center"} textAlign={"center"} justifyContent={"space-between"}>
+												<Grid item>
+													WalletConnect
+												</Grid>
+												<Grid item>
+													<img style={{ width: "15px", height: "15px" }} src="/assets/icon/walletConnectIcon.svg" alt=""></img>
+												</Grid>
+											</Grid>
+										</div>
+									</div>
+								</a>
+							</ModalBody>
+							<ModalFooter>
+								{/* <Button color="primary" onClick={()=>{}}>Confirm</Button>{' '} */}
+								<Button color="secondary" onClick={this.toggle}>Cancel</Button>
+							</ModalFooter>
+						</>
+					}
+					{this.state.modalAction !== "connect_wallet" &&
+						<>
+							<ModalHeader toggle={this.toggle}>{this.state.modalTitle}</ModalHeader>
+							<ModalBody>
+								{this.state.modalAction} {this.state.modalToken} :
+								<Input
+									value={this.state.modalInputValue}
+									onChange={this.setInput}>
+								</Input>
+							</ModalBody>
+							<ModalFooter>
+								<Button color="primary" onClick={this.state.modalCall}>Confirm</Button>{' '}
+								<Button color="secondary" onClick={this.toggle}>Cancel</Button>
+							</ModalFooter>
+						</>
+					}
 				</Modal>
 			</div>
 		);
