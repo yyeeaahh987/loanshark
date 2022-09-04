@@ -613,13 +613,13 @@ class Header extends React.Component {
 								}
 								<Grid item></Grid>
 								<Grid item style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: "10px", justifyContent: "space-between" }}>
-									<div>
+									{/* <div>
 										<Button onClick={()=>{
 											// await provider.disconnect()
 										}}>
 											disconnect All
 										</Button>
-									</div>
+									</div> */}
 									<div>
 										{
 											!this.state.myAccount ?
