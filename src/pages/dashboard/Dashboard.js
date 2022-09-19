@@ -89,7 +89,7 @@ class Dashboard extends React.Component {
 
 	render() {
 		return (
-			<div abc={console.log(this.props)}>
+			<div>
 				<Grid container spacing={2}>
 					<Grid item xl={3} lg={3} xs={12}>
 						<Widget

@@ -101,6 +101,9 @@ const WBTC = process.env.REACT_APP_WBTC;
 const WETH = process.env.REACT_APP_WETH;
 const USDT = process.env.REACT_APP_USDT;
 
+//metamask url
+const METAMASK_INSTALL_URL = process.env.REACT_APP_METAMASK_INSTALL_URL;
+
 class Header extends React.Component {
 	static propTypes = {
 		sidebarOpened: PropTypes.bool.isRequired,
@@ -129,6 +132,7 @@ class Header extends React.Component {
 		this.ethEnabled = this.ethEnabled.bind(this);
 		this.ethDisabled = this.ethDisabled.bind(this);
 		this.walletConnectEnabled = this.walletConnectEnabled.bind(this);
+		this.trustWalletConnectEnabled = this.trustWalletConnectEnabled(this);
 		this.disconnectWalletConnectEnabled = this.disconnectWalletConnectEnabled.bind(this);
 		this.getNeededCollateralFor = this.getNeededCollateralFor.bind(this);
 
@@ -155,7 +159,7 @@ class Header extends React.Component {
 			hideMessage: true,
 			run: true,
 			arrowImg: arrowActive,
-			myAccount: false,
+			myAccount: "",
 			ethNeededCollateral: 0,
 			myFliquidatorAVAX: '',
 			myFujiController: '',
@@ -167,9 +171,49 @@ class Header extends React.Component {
 			modalTitle: '',
 			modalToken: '',
 			modalAction: '',
-			modalCall: () => { },
+			modalCall: () => { },		
 			modalInputValue: 0
 		};
+	}
+
+	async componentDidMount() {
+		if (localStorage.getItem("isWalletConnected") === "true") {
+			//check metamask are connected before
+			window.web3 = new Web3(window.web3.currentProvider);
+			window.ethereum.enable();
+			let validAccount = await window.ethereum.request({ method: "eth_accounts" });
+			console.log(validAccount)
+			if (validAccount) {
+				this.ethEnabled()
+			}
+		}
+
+	}
+
+	clearAccount(){
+		console.log(`clear account`)	
+		this.setState({myAccount: "",})
+		this.setMyFujiVaultETHBTC(null);
+		this.setMyFujiVaultAVAXUSDT(null);
+		this.setMyFliquidatorAVAX(null);
+		this.setMyFujiController(null);
+		this.setMyFujiOracle(null);
+		this.setMyETHContract(null);
+		this.setMyBTCContract(null);
+		this.setMyUSDTContract(null);
+		this.setMyAAVEAVAXContract(null);
+		this.setMySmartVaultContractBtc(null);
+		this.setMySmartVaultContractUsdt(null);
+
+		this.props.dispatch(changeLpPoolBtc(null));
+		this.props.dispatch(changeLpTokenBtc(null));
+		this.props.dispatch(changeVaultBtc(null));
+		this.props.dispatch(changeTopupAction(null));
+		this.props.dispatch(changeGasBank(null));
+
+		this.props.dispatch(changeSelectedPair('ETHBTC'));
+		this.getNeededCollateralFor("CLEAR")
+		localStorage.setItem("isWalletConnected", false)
 	}
 
 	handleResize() {
@@ -326,8 +370,8 @@ class Header extends React.Component {
 		this.props.dispatch(changeProviderAAVEAVAX(val));
 	}
 
-	getNeededCollateralFor() {
-		API(this.props);
+	getNeededCollateralFor(action) {
+		API(this.props,action);
 	}
 
 	toggleMintETH(inputModalToken, inputModalAction) {
@@ -389,30 +433,21 @@ class Header extends React.Component {
 	}
 
 	ethEnabled() {
-		if (window.web3) {
-			console.log(`current provider`, window.web3.currentProvider)
-			console.log(window)
-			console.log(window.web3)
-			console.log(window.web3.currentProvider)
+		if(window.web3===undefined){
+			window.open(METAMASK_INSTALL_URL);
+		}
+		else if (window.web3) {
 			window.web3 = new Web3(window.web3.currentProvider);
 			window.ethereum.enable();
 			const web3js = window.web3;
 			web3js.eth.getAccounts((err, result) => {
 				console.log("account error:", err);
 				console.log("accounts:", result);
-
 				this.setState({ myAccount: result[0] });
 				this.setMyAccount(result[0]);
 				const chainId = 43113 // Avax Testnet
-				console.log(window.ethereum.networkVersion)
-				console.log(typeof (window.ethereum.networkVersion))
-				console.log(chainId)
-				console.log(typeof (chainId))
-
 				if (window.ethereum.networkVersion !== chainId) {
-					console.log(`switch chain`)
 					try {
-						console.log(window.ethereum)
 						window.ethereum.request({
 							method: 'wallet_switchEthereumChain',
 							params: [{ chainId: window.web3.utils.toHex(chainId) }]
@@ -457,7 +492,7 @@ class Header extends React.Component {
 
 										this.props.dispatch(changeSelectedPair('AVAXUSDT'));
 
-										this.getNeededCollateralFor()
+										this.getNeededCollateralFor("GET_NEW")
 									});
 								}
 							})
@@ -487,7 +522,8 @@ class Header extends React.Component {
 
 								this.props.dispatch(changeSelectedPair('ETHBTC'));
 
-								this.getNeededCollateralFor()
+								this.getNeededCollateralFor("GET_NEW")
+								localStorage.setItem("isWalletConnected", true)
 							})
 							.catch((error) => {
 								console.log(error);
@@ -594,7 +630,7 @@ class Header extends React.Component {
 
 					this.props.dispatch(changeSelectedPair('ETHBTC'));
 
-					this.getNeededCollateralFor()
+					this.getNeededCollateralFor("GET_NEW")
 				})
 				.catch((error) => {
 					console.log(error);
@@ -603,8 +639,9 @@ class Header extends React.Component {
 		}
 	}
 
+	trustWalletConnectEnabled() {
+	}
 	async disconnectWalletConnectEnabled() {
-		console.log(`disconnectWalletConnectEnabled`)
 		const INFURA_ID = "27e484dcd9e3efcfd25a83a78777cdf1"
 		//  Create WalletConnect Provider
 		const provider = new WalletConnectProvider({
@@ -637,13 +674,6 @@ class Header extends React.Component {
 								}
 								<Grid item></Grid>
 								<Grid item style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: "10px", justifyContent: "space-between" }}>
-									{/* <div>
-										<Button onClick={()=>{
-											// await provider.disconnect()
-										}}>
-											disconnect All
-										</Button>
-									</div> */}
 									<div>
 										{
 											!this.state.myAccount ?
@@ -652,7 +682,7 @@ class Header extends React.Component {
 													onClick={(e) => {
 														this.setState({
 															modal: !this.state.modal,
-															modalTitle: "Please choose connect wallet",
+															modalTitle: "Please choose wallet type to connect",
 															modalAction: "connect_wallet",
 														})
 													}}
@@ -667,17 +697,22 @@ class Header extends React.Component {
 
 									<div>
 										{
-											this.state.myAccount ?
+											((this?.state?.myAccount ?? "") !== "") ?
 												<RoundShapeButton
 													label={"Disconnect"} size={"sm"}
-													onClick={(e) => { this.ethDisabled() }}
+													onClick={(e) => {
+														// window.web3.setProvider({})
+														localStorage.setItem("isWalletConnected", false)
+														this.clearAccount()
+														// window.location.reload();
+													}}
 												></RoundShapeButton>
 												: null
 										}
 									</div>
 									<div>
 										<FontAwesomeIcon style={{ cursor: "pointer" }} onClick={() => {
-											this.getNeededCollateralFor();
+											this.getNeededCollateralFor("GET_NEW");
 										}}
 											icon={faRotateRight} />
 									</div>
@@ -692,16 +727,13 @@ class Header extends React.Component {
 						</Grid>
 					</Grid>
 				</Navbar>
-				<Modal isOpen={this.state.modal} toggle={this.toggle} style={{ color: '#000000' }}>
+				<Modal isOpen={this.state.modal} toggle={this.toggle}>
 					{this.state.modalAction === "connect_wallet" &&
 						<>
-							<ModalHeader toggle={this.toggle}>{this.state.modalTitle}</ModalHeader>
-							<ModalBody>
+							<ModalBody style={{ width: "500px", color: '#ffffff', backgroundColor: '#000000', border: 'solid', borderRadius: '5px', borderColor: '#ffffff' }}>
+								<h4 className={"fw-bold"}>{this.state.modalTitle}</h4>
 								<a>
-									<div style={{
-										border: "1px solid #473647",
-										borderRadius: "10px",
-									}}
+									<div className={'manage-button'} 
 										onClick={() => {
 											this.ethEnabled()
 											this.toggle()
@@ -709,7 +741,7 @@ class Header extends React.Component {
 										<div style={{ padding: "10px" }}>
 											<Grid container spacing={1} alignContent={"center"} textAlign={"center"} justifyContent={"space-between"}>
 												<Grid item>
-													MetaMask
+													{`${(window.web3===undefined)?"Install ":""}MetaMask`}
 												</Grid>
 												<Grid item>
 													<img style={{ width: "15px", height: "15px" }} src="/assets/icon/metamask.png" alt=""></img>
@@ -720,10 +752,7 @@ class Header extends React.Component {
 								</a>
 								<br></br>
 								<a>
-									<div style={{
-										border: "1px solid #473647",
-										borderRadius: "10px",
-									}}
+									<div className={'manage-button'} 
 										onClick={() => {
 											this.walletConnectEnabled()
 											this.toggle()
@@ -740,11 +769,27 @@ class Header extends React.Component {
 										</div>
 									</div>
 								</a>
+								<br></br>
+								<a>
+									<div className={'manage-button'} 
+										onClick={() => {
+											this.walletConnectEnabled()
+											this.toggle()
+										}}>
+										<div style={{ padding: "10px" }}>
+											<Grid container spacing={1} alignContent={"center"} textAlign={"center"} justifyContent={"space-between"}>
+												<Grid item>
+													Trust Wallet
+												</Grid>
+												<Grid item>
+													<img style={{ width: "15px", height: "15px" }} src="/assets/icon/trustWalletIcon.svg" alt=""></img>
+												</Grid>
+											</Grid>
+										</div>
+									</div>
+								</a>
+
 							</ModalBody>
-							<ModalFooter>
-								{/* <Button color="primary" onClick={()=>{}}>Confirm</Button>{' '} */}
-								<Button color="secondary" onClick={this.toggle}>Cancel</Button>
-							</ModalFooter>
 						</>
 					}
 					{this.state.modalAction !== "connect_wallet" &&
