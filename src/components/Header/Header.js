@@ -93,6 +93,9 @@ const WBTC = process.env.REACT_APP_WBTC;
 const WETH = process.env.REACT_APP_WETH;
 const USDT = process.env.REACT_APP_USDT;
 
+//metamask url
+const METAMASK_INSTALL_URL = process.env.REACT_APP_METAMASK_INSTALL_URL;
+
 class Header extends React.Component {
 	static propTypes = {
 		sidebarOpened: PropTypes.bool.isRequired,
@@ -160,7 +163,7 @@ class Header extends React.Component {
 			modalTitle: '',
 			modalToken: '',
 			modalAction: '',
-			modalCall: () => { },
+			modalCall: () => { },		
 			modalInputValue: 0
 		};
 	}
@@ -422,30 +425,21 @@ class Header extends React.Component {
 	}
 
 	ethEnabled() {
-		if (window.web3) {
-			console.log(`current provider`, window.web3.currentProvider)
-			console.log(window)
-			console.log(window.web3)
-			console.log(window.web3.currentProvider)
+		if(window.web3===undefined){
+			window.open(METAMASK_INSTALL_URL);
+		}
+		else if (window.web3) {
 			window.web3 = new Web3(window.web3.currentProvider);
 			window.ethereum.enable();
 			const web3js = window.web3;
 			web3js.eth.getAccounts((err, result) => {
 				console.log("account error:", err);
 				console.log("accounts:", result);
-
 				this.setState({ myAccount: result[0] });
 				this.setMyAccount(result[0]);
 				const chainId = 43113 // Avax Testnet
-				console.log(window.ethereum.networkVersion)
-				console.log(typeof (window.ethereum.networkVersion))
-				console.log(chainId)
-				console.log(typeof (chainId))
-
 				if (window.ethereum.networkVersion !== chainId) {
-					console.log(`switch chain`)
 					try {
-						console.log(window.ethereum)
 						window.ethereum.request({
 							method: 'wallet_switchEthereumChain',
 							params: [{ chainId: window.web3.utils.toHex(chainId) }]
@@ -492,7 +486,6 @@ class Header extends React.Component {
 							})
 							.then(() => {
 								const dataHong = require('../../abi/Hong.json');
-								console.log(new window.web3.eth.Contract(FujiVaultAVAX.abi, MY_FujiVaultETHBTC))
 								this.setMyFujiVaultETHBTC(new window.web3.eth.Contract(FujiVaultAVAX.abi, MY_FujiVaultETHBTC));
 								this.setMyFujiVaultAVAXUSDT(new window.web3.eth.Contract(FujiVaultAVAX.abi, MY_FujiVaultAVAXUSDT));
 								this.setMyFliquidatorAVAX(new window.web3.eth.Contract(FliquidatorAVAX.abi, MY_FliquidatorAVAX));
@@ -623,10 +616,8 @@ class Header extends React.Component {
 	}
 
 	trustWalletConnectEnabled() {
-		console.log(`connect trust wallet`)
 	}
 	async disconnectWalletConnectEnabled() {
-		console.log(`disconnectWalletConnectEnabled`)
 		const INFURA_ID = "27e484dcd9e3efcfd25a83a78777cdf1"
 		//  Create WalletConnect Provider
 		const provider = new WalletConnectProvider({
@@ -729,7 +720,7 @@ class Header extends React.Component {
 										<div style={{ padding: "10px" }}>
 											<Grid container spacing={1} alignContent={"center"} textAlign={"center"} justifyContent={"space-between"}>
 												<Grid item>
-													MetaMask
+													{`${(window.web3===undefined)?"Install ":""}MetaMask`}
 												</Grid>
 												<Grid item>
 													<img style={{ width: "15px", height: "15px" }} src="/assets/icon/metamask.png" alt=""></img>
