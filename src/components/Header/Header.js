@@ -47,7 +47,11 @@ import {
 	changeLpTokenBtc,
 	changeVaultBtc,
 	changeTopupAction,
-	changeGasBank
+	changeGasBank,
+
+	changeLpPoolEth,
+	changeLpTokenEth,
+	changeVaultEth,
 } from "../../actions/backd";
 
 import Controller from '../../abi/fujidao/Controller.json';
@@ -87,6 +91,10 @@ const TOPUP_ACTION = process.env.REACT_APP_TOPUP_ACTION;
 const SMART_VAULT_BTC = process.env.REACT_APP_SMART_VAULT_BTC;
 const SMART_VAULT_USDT = process.env.REACT_APP_SMART_VAULT_USDT;
 const GAS_BANK = process.env.REACT_APP_GAS_BANK;
+
+const LP_POOL_ETH = process.env.REACT_APP_LP_POOL_ETH;
+const LP_TOKEN_ETH = process.env.REACT_APP_LP_TOKEN_ETH;
+const VAULT_ETH = process.env.REACT_APP_VAULT_ETH;
 
 //Asset Contracts
 const WBTC = process.env.REACT_APP_WBTC;
@@ -443,6 +451,10 @@ class Header extends React.Component {
 										this.props.dispatch(changeTopupAction(new window.web3.eth.Contract(topupActionAbi, TOPUP_ACTION)));
 										this.props.dispatch(changeGasBank(new window.web3.eth.Contract(gasBankAbi, GAS_BANK)));
 
+										this.props.dispatch(changeLpPoolEth(new window.web3.eth.Contract(lpPoolAbi, LP_POOL_ETH)));
+										this.props.dispatch(changeLpTokenEth(new window.web3.eth.Contract(lpTokenAbi, LP_TOKEN_ETH)));
+										this.props.dispatch(changeVaultEth(new window.web3.eth.Contract(vaultBtcAbi, VAULT_ETH)));
+
 										this.props.dispatch(changeSelectedPair('AVAXUSDT'));
 
 										this.getNeededCollateralFor()
@@ -469,6 +481,10 @@ class Header extends React.Component {
 								this.props.dispatch(changeTopupAction(new window.web3.eth.Contract(topupActionAbi, TOPUP_ACTION)));
 								this.props.dispatch(changeGasBank(new window.web3.eth.Contract(gasBankAbi, GAS_BANK)));
 
+								this.props.dispatch(changeLpPoolEth(new window.web3.eth.Contract(lpPoolAbi, LP_POOL_ETH)));
+								this.props.dispatch(changeLpTokenEth(new window.web3.eth.Contract(lpTokenAbi, LP_TOKEN_ETH)));
+								this.props.dispatch(changeVaultEth(new window.web3.eth.Contract(vaultBtcAbi, VAULT_ETH)));
+
 								this.props.dispatch(changeSelectedPair('ETHBTC'));
 
 								this.getNeededCollateralFor()
@@ -489,12 +505,12 @@ class Header extends React.Component {
 
 	async walletConnectEnabled() {
 		const provider = new WalletConnectProvider({
-			rpc:{
+			rpc: {
 				43113: "https://api.avax-test.network/ext/bc/C/rpc",
 			},
 			// infuraId: "27e484dcd9e3efcfd25a83a78777cdf1",
 		});
-		
+
 		await provider.enable();
 		window.web3 = new Web3(provider);
 		const accounts = await window.web3.eth.getAccounts();
@@ -542,6 +558,10 @@ class Header extends React.Component {
 							this.props.dispatch(changeTopupAction(new window.web3.eth.Contract(topupActionAbi, TOPUP_ACTION)));
 							this.props.dispatch(changeGasBank(new window.web3.eth.Contract(gasBankAbi, GAS_BANK)));
 
+							this.props.dispatch(changeLpPoolEth(new window.web3.eth.Contract(lpPoolAbi, LP_POOL_ETH)));
+							this.props.dispatch(changeLpTokenEth(new window.web3.eth.Contract(lpTokenAbi, LP_TOKEN_ETH)));
+							this.props.dispatch(changeVaultEth(new window.web3.eth.Contract(vaultBtcAbi, VAULT_ETH)));
+
 							this.props.dispatch(changeSelectedPair('AVAXUSDT'));
 
 							this.getNeededCollateralFor()
@@ -567,6 +587,10 @@ class Header extends React.Component {
 					this.props.dispatch(changeVaultBtc(new window.web3.eth.Contract(vaultBtcAbi, VAULT_BTC)));
 					this.props.dispatch(changeTopupAction(new window.web3.eth.Contract(topupActionAbi, TOPUP_ACTION)));
 					this.props.dispatch(changeGasBank(new window.web3.eth.Contract(gasBankAbi, GAS_BANK)));
+
+					this.props.dispatch(changeLpPoolEth(new window.web3.eth.Contract(lpPoolAbi, LP_POOL_ETH)));
+					this.props.dispatch(changeLpTokenEth(new window.web3.eth.Contract(lpTokenAbi, LP_TOKEN_ETH)));
+					this.props.dispatch(changeVaultEth(new window.web3.eth.Contract(vaultBtcAbi, VAULT_ETH)));
 
 					this.props.dispatch(changeSelectedPair('ETHBTC'));
 
@@ -781,7 +805,12 @@ function mapStateToProps(store) {
 		topupAction: store.backd.topupAction,
 		gasBank: store.backd.gasBank,
 		totalBtcLpAmount: store.backd.totalBtcLpAmount,
-		myGasBankBalance: store.backd.myGasBankBalance
+		myGasBankBalance: store.backd.myGasBankBalance,
+
+		lpPoolEth: store.backd.lpPoolEth,
+		lpTokenEth: store.backd.lpTokenEth,
+		vaultEth: store.backd.vaultEth,
+		totalEthLpAmount: store.backd.totalEthLpAmount,
 	};
 }
 

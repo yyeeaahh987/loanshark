@@ -2,6 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 
 import { NavLink } from "react-router-dom";
+import { changeMyProtectionType } from "../../actions/smartvault";
 
 import {
     Row, Col
@@ -20,6 +21,7 @@ class SmartVault1 extends React.Component {
 
     setSelected(value) {
         this.setState({ selected: value });
+		this.props.dispatch(changeMyProtectionType(value));
     }
 
     render() {
@@ -37,13 +39,18 @@ class SmartVault1 extends React.Component {
                         <Row>
                             <Col sm={6}>
                                 <p className={"fw-bold"}>Choose the way to protect your loan automatically</p>
-                                <Radio
-                                    value="topup"
-                                    selected={this.state.selected}
-                                    text="Top-up"
-                                    disabled="disabled"
-                                    onChange={this.setSelected}
-                                />
+
+                                <NavLink
+                                    to={"/app/main/smartVault2"}
+                                >
+                                    <Radio
+                                        value="topup"
+                                        selected={this.state.selected}
+                                        text="Top-up"
+                                        disabled=""
+                                        onChange={this.setSelected}
+                                    />
+                                </NavLink>
                                 <NavLink
                                     to={"/app/main/smartVault2"}
                                 >
@@ -69,7 +76,8 @@ function mapStateToProps(store) {
         myBtcLpAmount: store.backd.myBtcLpAmount,
         priceOfBtc: store.loanshark.priceOfBtc,
         myBTCContract: store.loanshark.myBTCContract,
-        myProtection: store.backd.myProtection
+        myProtection: store.backd.myProtection,
+        myProtectionType: store.smartvault.myProtectionType
     };
 }
 

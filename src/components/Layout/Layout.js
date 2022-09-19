@@ -13,6 +13,7 @@ import SmartVault1 from "../../pages/smartvault/SmartVault1";
 import SmartVault2 from "../../pages/smartvault/SmartVault2";
 import SmartVault3 from "../../pages/smartvault/SmartVault3";
 import SmartVault4 from "../../pages/smartvault/SmartVault4";
+import SmartVault4ETH from "../../pages/smartvault/SmartVault4ETH";
 import Header from "../Header";
 import Sidebar from "../Sidebar";
 import s from "./Layout.module.scss";
@@ -135,6 +136,11 @@ class Layout extends React.Component {
 											path="/app/main/smartVault4"
 											exact
 											component={SmartVault4}
+										/>
+										<Route
+											path="/app/main/smartVault4ETH"
+											exact
+											component={SmartVault4ETH}
 										/>
 									</Switch>
 								</CSSTransition>

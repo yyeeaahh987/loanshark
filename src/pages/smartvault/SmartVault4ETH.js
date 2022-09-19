@@ -17,7 +17,7 @@ import {
 import API from '../../utils/API'
 import Widget from "../../components/Widget/Widget";
 
-class SmartVault4 extends React.Component {
+class SmartVault4ETH extends React.Component {
     constructor() {
         super();
         this.setSelected = this.setSelected.bind(this);
@@ -66,7 +66,7 @@ class SmartVault4 extends React.Component {
     }
 
     stakeToVault() {
-        if (!this.props.lpPoolBtc) {
+        if (!this.props.lpPoolEth) {
             return;
         }
 
@@ -80,77 +80,77 @@ class SmartVault4 extends React.Component {
                         this.state.singleTopupAmount > this.state.stakeAmount ?
                             "Please deposit more than the amount to repay for you each time the target heath factor is hit."
                             :
-                            this.state.stakeAmount > this.props.myBTCAmount ?
-                                "You do not have " + this.state.stakeAmount + " BTC to stake. You have " + this.props.myBTCAmount + " BTC only."
+                            this.state.stakeAmount > this.props.myETHAmount ?
+                                "You do not have " + this.state.stakeAmount + " ETH to stake. You have " + this.props.myETHAmount + " ETH only."
                                 :
                                 "When the health factor drops below <span style='color: #00ff00'>" + this.state.triggerHealthFactor + "</span>, " +
-                                "it will be topped up with <span class='fw-bold'>" + this.state.singleTopupAmount + " BTC (~" + parseFloat((this.state.singleTopupAmount * this.props.priceOfBtc / 100).toFixed(8)) + ")</span>. " +
+                                "it will be topped up with <span class='fw-bold'>" + this.state.singleTopupAmount + " ETH (~" + parseFloat((this.state.singleTopupAmount * this.props.priceOfEth / 100).toFixed(8)) + ")</span>. " +
                                 "This will be repeated each time the health factor drops below <span style='color: #00ff00'>" + this.state.triggerHealthFactor + "</span>, " +
-                                "until a total of <span class='fw-bold'>" + this.state.stakeAmount + " BTC (~$" + parseFloat((this.state.stakeAmount * this.props.priceOfBtc / 100).toFixed(8)) + ")</span> is topped up. 0.1 AVAX will be given for gas fee."
+                                "until a total of <span class='fw-bold'>" + this.state.stakeAmount + " ETH (~$" + parseFloat((this.state.stakeAmount * this.props.priceOfEth / 100).toFixed(8)) + ")</span> is topped up. 0.1 AVAX will be given for gas fee."
                 ),
             modalButton:
                 (
-                    this.state.triggerHealthFactor < 1.05 || this.state.singleTopupAmount > this.state.stakeAmount || this.state.stakeAmount > this.props.myBTCAmount ?
+                    this.state.triggerHealthFactor < 1.05 || this.state.singleTopupAmount > this.state.stakeAmount || this.state.stakeAmount > this.props.myETHAmount ?
                         "Close" : "Confirm"
                 ),
             modalTitle:
                 (
-                    this.state.triggerHealthFactor < 1.05 || this.state.singleTopupAmount > this.state.stakeAmount || this.state.stakeAmount > this.props.myBTCAmount ?
+                    this.state.triggerHealthFactor < 1.05 || this.state.singleTopupAmount > this.state.stakeAmount || this.state.stakeAmount > this.props.myETHAmount ?
                         "Cannot add Smart Vault" : "Confirm to add Smart Vault?"
                 ),
             modalCall:
-                this.state.triggerHealthFactor < 1.05 || this.state.singleTopupAmount > this.state.stakeAmount || this.state.stakeAmount > this.props.myBTCAmount ?
+                this.state.triggerHealthFactor < 1.05 || this.state.singleTopupAmount > this.state.stakeAmount || this.state.stakeAmount > this.props.myETHAmount ?
                     () => { this.toggle() } :
                     () => {
                         let approveArgs = [
-                            this.props.lpPoolBtc.options.address,
-                            window.web3.utils.toBN((this.state.stakeAmount * 100000000).toFixed(0)).toString()
+                            this.props.lpPoolEth.options.address,
+                            window.web3.utils.toBN((this.state.stakeAmount * 1000000000000000000).toFixed(0)).toString()
                         ]
 
                         let args = [
-                            window.web3.utils.toBN((this.state.stakeAmount * 100000000).toFixed(0)).toString(),
+                            window.web3.utils.toBN((this.state.stakeAmount * 1000000000000000000).toFixed(0)).toString(),
                         ];
 
                         let approveArgsForTopupAction = [
                             this.props.topupAction.options.address,
-                            window.web3.utils.toBN((this.state.stakeAmount / this.props.btcLpExchangeRate * 100000000).toFixed(0)).toString()
+                            window.web3.utils.toBN((this.state.stakeAmount / this.props.ethLpExchangeRate * 1000000000000000000).toFixed(0)).toString()
                         ]
 
                         let argsRegister = [
                             this.props.myAccount + "000000000000000000000000",
-                            "0x66756a6964616f00000000000000000000000000000000000000000000000000",
-                            window.web3.utils.toBN((this.state.stakeAmount / this.props.btcLpExchangeRate * 100000000).toFixed(0)).toString(),
+                            "0x66756a6964616f65746800000000000000000000000000000000000000000000",
+                            window.web3.utils.toBN((this.state.stakeAmount / this.props.ethLpExchangeRate * 1000000000000000000).toFixed(0)).toString(),
                             [
                                 window.web3.utils.toBN(window.web3.utils.toWei((this.state.triggerHealthFactor).toString(), 'ether')).toString(),
                                 "0",
                                 window.web3.utils.toBN((this.state.stakeAmount * 0.9999 * 1).toFixed(0)).toString(),
-                                "0x9c1dcacb57ada1e9e2d3a8280b7cfc7eb936186f",
-                                "0x9f2b4eeb926d8de19289e93cbf524b6522397b05",
-                                window.web3.utils.toBN((this.state.singleTopupAmount * 0.9999 * 100000000).toFixed(0)).toString(),
-                                window.web3.utils.toBN((this.state.stakeAmount * 0.9999 * 100000000).toFixed(0)).toString(),
-                                window.web3.utils.toBN((this.state.stakeAmount * 0.9999 * 100000000).toFixed(0)).toString(),
-                                "0x0000000000000000000000000000000000000000000000000000000000000001"
+                                "0x9668f5f55f2712Dd2dfa316256609b516292D554",
+                                "0x22e9DEAB7fC35a85f4E33F88ff9012d4aF2d35f7",
+                                window.web3.utils.toBN((this.state.singleTopupAmount * 0.9999 * 1000000000000000000).toFixed(0)).toString(),
+                                window.web3.utils.toBN((this.state.stakeAmount * 0.9999 * 1000000000000000000).toFixed(0)).toString(),
+                                window.web3.utils.toBN((this.state.stakeAmount * 0.9999 * 1000000000000000000).toFixed(0)).toString(),
+                                "0x66756a6964616f65746800000000000000000000000000000000000000000000"
                             ]
                         ];
 
                         this.toggle();
                         this.calltoggleLoading();
 
-                        this.props.myBTCContract.methods
+                        this.props.myETHContract.methods
                             .approve(...approveArgs)
                             .send({ from: this.props.myAccount })
                             .on("error", (error, receipt) => {
                                 this.calltoggleLoading();
                             })
                             .then((receipt) => {
-                                this.props.lpPoolBtc.methods
+                                this.props.lpPoolEth.methods
                                     .deposit(...args)
                                     .send({ from: this.props.myAccount })
                                     .on("error", (error, receipt) => {
                                         this.calltoggleLoading();
                                     })
                                     .then((receipt) => {
-                                        this.props.lpTokenBtc.methods
+                                        this.props.lpTokenEth.methods
                                             .approve(...approveArgsForTopupAction)
                                             .send({ from: this.props.myAccount })
                                             .on("error", (error, receipt) => {
@@ -218,15 +218,15 @@ class SmartVault4 extends React.Component {
                         </Table>
 
                         {
-                            this.props.myProtection[0] <= 0 ?
+                            this.props.myProtectionEth[0] <= 0 ?
                                 <>
-                                    <p className={"fw-bold"}>Input the amount of BTC you would like to deposit into the smart vault</p>
+                                    <p className={"fw-bold"}>Input the amount of ETH you would like to deposit into the smart vault</p>
                                     <Input style={{ backgroundColor: 'transparent', color: '#ffffff' }} value={this.state.stakeAmount} onChange={this.setStakeAmount}></Input>
                                     <br />
                                     <p className={"fw-bold"}>Input the target health factor to trigger the automatic top-up/repayment action</p>
                                     <Input style={{ backgroundColor: 'transparent', color: '#ffffff' }} value={this.state.triggerHealthFactor} onChange={this.setTriggerHealthFactor}></Input>
                                     <br />
-                                    <p className={"fw-bold"}>Input the amount of BTC you would like Loanshark to repay for you each time the target heath factor is hit</p>
+                                    <p className={"fw-bold"}>Input the amount of ETH you would like Loanshark to repay for you each time the target heath factor is hit</p>
                                     <Input style={{ backgroundColor: 'transparent', color: '#ffffff' }} value={this.state.singleTopupAmount} onChange={this.setSingleTopupAmount}></Input>
                                     <br />
                                 </>
@@ -249,12 +249,12 @@ class SmartVault4 extends React.Component {
                     <Col lg={4} md={12}>
                         <Widget style={{ paddingTop: '20px' }} >
                             <p className={"fw-bold"}>Selected Smart Vault</p>
-                            <p className={"fw-bold"}><img style={{ padding: '5px' }} className="icon" src="/assets/icon/btc-logo.svg" alt="x"></img> BTC</p>
+                            <p className={"fw-bold"}><img style={{ padding: '5px' }} className="icon" src="/assets/icon/eth-logo.svg" alt="x"></img> ETH</p>
 
                             <Row style={{ paddingTop: '20px' }} >
                                 <Col lg={4} md={12}>Your Balance:</Col>
                                 <Col style={{ textAlign: 'right' }} lg={8} md={12}>
-                                    ${parseFloat(this.props.myBtcLpAmount * this.props.btcLpExchangeRate * this.props.priceOfBtc / 100).toFixed(2)}<br />
+                                    ${parseFloat(this.props.myEthLpAmount * this.props.ethLpExchangeRate * this.props.priceOfEth / 100).toFixed(2)}<br />
                                 </Col>
                             </Row>
                             <Row style={{ paddingTop: '20px' }} >
@@ -263,12 +263,12 @@ class SmartVault4 extends React.Component {
                             </Row>
                             <Row style={{ paddingTop: '20px' }} >
                                 <Col lg={4} md={12}>TVL:</Col>
-                                <Col style={{ textAlign: 'right' }} lg={8} md={12}> ${parseFloat(this.props.totalBtcLpAmount * this.props.btcLpExchangeRate * this.props.priceOfBtc / 100).toFixed(2)}</Col>
+                                <Col style={{ textAlign: 'right' }} lg={8} md={12}> ${parseFloat(this.props.totalEthLpAmount * this.props.ethLpExchangeRate * this.props.priceOfEth / 100).toFixed(2)}</Col>
                             </Row>
                         </Widget>
                     </Col>
                     {
-                        this.props.myProtection[0] <= 0 ?
+                        this.props.myProtectionEth[0] <= 0 ?
                             <Col md={12}>
                                 <Button block className={'manage-button'} style={{ padding: '20px' }} onClick={() => {
                                     this.stakeToVault();
@@ -304,22 +304,22 @@ class SmartVault4 extends React.Component {
 function mapStateToProps(store) {
     return {
         myAccount: store.loanshark.myAccount,
-        lpPoolBtc: store.backd.lpPoolBtc,
-        myBTCAmount: store.loanshark.myBTCAmount,
-        priceOfBtc: store.loanshark.priceOfBtc,
+        lpPoolEth: store.backd.lpPoolEth,
+        myETHAmount: store.loanshark.myETHAmount,
         priceOfEth: store.loanshark.priceOfEth,
-        myBTCContract: store.loanshark.myBTCContract,
+        priceOfBtc: store.loanshark.priceOfBtc,
+        myETHContract: store.loanshark.myETHContract,
         userDepositBalanceEth: store.loanshark.userDepositBalanceEth,
         userDebtBalanceBtc: store.loanshark.userDebtBalanceBtc,
 
         LTV: store.loanshark.LTV,
-        myBtcLpAmount: store.backd.myBtcLpAmount,
-        totalBtcLpAmount: store.backd.totalBtcLpAmount,
+        myEthLpAmount: store.backd.myEthLpAmount,
+        totalEthLpAmount: store.backd.totalEthLpAmount,
         topupAction: store.backd.topupAction,
-        btcLpExchangeRate: store.backd.btcLpExchangeRate,
-        lpTokenBtc: store.backd.lpTokenBtc,
-        myProtection: store.backd.myProtection,
+        ethLpExchangeRate: store.backd.ethLpExchangeRate,
+        lpTokenEth: store.backd.lpTokenEth,
+        myProtectionEth: store.backd.myProtectionEth,
     };
 }
 
-export default connect(mapStateToProps)(SmartVault4);
+export default connect(mapStateToProps)(SmartVault4ETH);

@@ -23,9 +23,15 @@ import {
 import {
     changeMyBtcLpAmount,
     changeMyProtection,
+    changeMyProtectionEth,
     changeTotalBtcLpAmount,
     changeBtcLpExchangeRateAmount,
-    changeMyGasBankBalance
+    changeMyGasBankBalance,
+
+
+    changeMyEthLpAmount,
+    changeTotalEthLpAmount,
+    changeEthLpExchangeRateAmount,
 } from "../actions/backd";
 
 const WBTC = process.env.REACT_APP_WBTC;
@@ -141,6 +147,7 @@ let refreshPrice = (props) => {
                         props.dispatch(changeMyBtcLpAmount(stakerVault + window.web3.utils.fromWei(result, 'gwei') * 10));
                     });
                 }
+                
                 props.dispatch(changeMyBtcLpAmount(window.web3.utils.fromWei(result, 'gwei') * 10));
             });
         }
@@ -163,6 +170,18 @@ let refreshPrice = (props) => {
             });
         }
 
+        let argsGetPositionEth = [
+            props.myAccount,
+            props.myAccount + "000000000000000000000000",
+            "0x66756a6964616f65746800000000000000000000000000000000000000000000"
+        ];
+
+        if (props.topupAction) {
+            props.topupAction.methods.getPosition(...argsGetPositionEth).call({}, (error, result) => {
+                props.dispatch(changeMyProtectionEth(result));
+            });
+        }
+
         if (props.lpTokenBtc) {
             props.lpTokenBtc.methods.totalSupply().call({}, (error, result) => {
                 props.dispatch(changeTotalBtcLpAmount(window.web3.utils.fromWei(result, 'gwei') * 10));
@@ -172,6 +191,39 @@ let refreshPrice = (props) => {
         if (props.gasBank) {
             props.gasBank.methods.balanceOf(props.myAccount).call({}, (error, result) => {
                 props.dispatch(changeMyGasBankBalance(window.web3.utils.fromWei(result, 'ether')));
+            });
+        }
+
+
+
+        if (props.lpTokenEth) {
+            props.lpTokenEth.methods.balanceOf(props.myAccount).call({}, (error, result) => {
+                let argsGetPosition = [
+                    props.myAccount,
+                    props.myAccount + "000000000000000000000000",
+                    "0x66756a6964616f65746800000000000000000000000000000000000000000000"
+                ];
+
+                if (props.topupAction) {
+                    props.topupAction.methods.getPosition(...argsGetPosition).call({}, (error, resultStakerVault) => {
+                        let stakerVault = parseFloat(window.web3.utils.fromWei(resultStakerVault[7], 'ether') * 1);
+                        props.dispatch(changeMyEthLpAmount(stakerVault + window.web3.utils.fromWei(result, 'ether') * 1));
+                    });
+                }
+                
+                props.dispatch(changeMyEthLpAmount(window.web3.utils.fromWei(result, 'ether') * 1));
+            });
+        }
+
+        if (props.lpPoolEth) {
+            props.lpPoolEth.methods.exchangeRate().call({}, (error, resultExchangeRate) => {
+                props.dispatch(changeEthLpExchangeRateAmount(window.web3.utils.fromWei(resultExchangeRate, 'ether')));
+            });
+        }
+
+        if (props.lpTokenEth) {
+            props.lpTokenEth.methods.totalSupply().call({}, (error, result) => {
+                props.dispatch(changeTotalEthLpAmount(window.web3.utils.fromWei(result, 'ether') * 1));
             });
         }
     }
