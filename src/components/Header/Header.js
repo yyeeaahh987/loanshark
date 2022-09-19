@@ -47,7 +47,11 @@ import {
 	changeLpTokenBtc,
 	changeVaultBtc,
 	changeTopupAction,
-	changeGasBank
+	changeGasBank,
+
+	changeLpPoolEth,
+	changeLpTokenEth,
+	changeVaultEth,
 } from "../../actions/backd";
 
 import Controller from '../../abi/fujidao/Controller.json';
@@ -87,6 +91,10 @@ const TOPUP_ACTION = process.env.REACT_APP_TOPUP_ACTION;
 const SMART_VAULT_BTC = process.env.REACT_APP_SMART_VAULT_BTC;
 const SMART_VAULT_USDT = process.env.REACT_APP_SMART_VAULT_USDT;
 const GAS_BANK = process.env.REACT_APP_GAS_BANK;
+
+const LP_POOL_ETH = process.env.REACT_APP_LP_POOL_ETH;
+const LP_TOKEN_ETH = process.env.REACT_APP_LP_TOKEN_ETH;
+const VAULT_ETH = process.env.REACT_APP_VAULT_ETH;
 
 //Asset Contracts
 const WBTC = process.env.REACT_APP_WBTC;
@@ -478,6 +486,10 @@ class Header extends React.Component {
 										this.props.dispatch(changeTopupAction(new window.web3.eth.Contract(topupActionAbi, TOPUP_ACTION)));
 										this.props.dispatch(changeGasBank(new window.web3.eth.Contract(gasBankAbi, GAS_BANK)));
 
+										this.props.dispatch(changeLpPoolEth(new window.web3.eth.Contract(lpPoolAbi, LP_POOL_ETH)));
+										this.props.dispatch(changeLpTokenEth(new window.web3.eth.Contract(lpTokenAbi, LP_TOKEN_ETH)));
+										this.props.dispatch(changeVaultEth(new window.web3.eth.Contract(vaultBtcAbi, VAULT_ETH)));
+
 										this.props.dispatch(changeSelectedPair('AVAXUSDT'));
 
 										this.getNeededCollateralFor("GET_NEW")
@@ -503,6 +515,10 @@ class Header extends React.Component {
 								this.props.dispatch(changeVaultBtc(new window.web3.eth.Contract(vaultBtcAbi, VAULT_BTC)));
 								this.props.dispatch(changeTopupAction(new window.web3.eth.Contract(topupActionAbi, TOPUP_ACTION)));
 								this.props.dispatch(changeGasBank(new window.web3.eth.Contract(gasBankAbi, GAS_BANK)));
+
+								this.props.dispatch(changeLpPoolEth(new window.web3.eth.Contract(lpPoolAbi, LP_POOL_ETH)));
+								this.props.dispatch(changeLpTokenEth(new window.web3.eth.Contract(lpTokenAbi, LP_TOKEN_ETH)));
+								this.props.dispatch(changeVaultEth(new window.web3.eth.Contract(vaultBtcAbi, VAULT_ETH)));
 
 								this.props.dispatch(changeSelectedPair('ETHBTC'));
 
@@ -578,6 +594,10 @@ class Header extends React.Component {
 							this.props.dispatch(changeTopupAction(new window.web3.eth.Contract(topupActionAbi, TOPUP_ACTION)));
 							this.props.dispatch(changeGasBank(new window.web3.eth.Contract(gasBankAbi, GAS_BANK)));
 
+							this.props.dispatch(changeLpPoolEth(new window.web3.eth.Contract(lpPoolAbi, LP_POOL_ETH)));
+							this.props.dispatch(changeLpTokenEth(new window.web3.eth.Contract(lpTokenAbi, LP_TOKEN_ETH)));
+							this.props.dispatch(changeVaultEth(new window.web3.eth.Contract(vaultBtcAbi, VAULT_ETH)));
+
 							this.props.dispatch(changeSelectedPair('AVAXUSDT'));
 
 							this.getNeededCollateralFor()
@@ -603,6 +623,10 @@ class Header extends React.Component {
 					this.props.dispatch(changeVaultBtc(new window.web3.eth.Contract(vaultBtcAbi, VAULT_BTC)));
 					this.props.dispatch(changeTopupAction(new window.web3.eth.Contract(topupActionAbi, TOPUP_ACTION)));
 					this.props.dispatch(changeGasBank(new window.web3.eth.Contract(gasBankAbi, GAS_BANK)));
+
+					this.props.dispatch(changeLpPoolEth(new window.web3.eth.Contract(lpPoolAbi, LP_POOL_ETH)));
+					this.props.dispatch(changeLpTokenEth(new window.web3.eth.Contract(lpTokenAbi, LP_TOKEN_ETH)));
+					this.props.dispatch(changeVaultEth(new window.web3.eth.Contract(vaultBtcAbi, VAULT_ETH)));
 
 					this.props.dispatch(changeSelectedPair('ETHBTC'));
 
@@ -658,7 +682,7 @@ class Header extends React.Component {
 													onClick={(e) => {
 														this.setState({
 															modal: !this.state.modal,
-															modalTitle: "Please choose connect wallet",
+															modalTitle: "Please choose wallet type to connect",
 															modalAction: "connect_wallet",
 														})
 													}}
@@ -703,16 +727,13 @@ class Header extends React.Component {
 						</Grid>
 					</Grid>
 				</Navbar>
-				<Modal isOpen={this.state.modal} toggle={this.toggle} style={{ color: '#000000' }}>
+				<Modal isOpen={this.state.modal} toggle={this.toggle}>
 					{this.state.modalAction === "connect_wallet" &&
 						<>
-							<ModalHeader toggle={this.toggle}>{this.state.modalTitle}</ModalHeader>
-							<ModalBody>
+							<ModalBody style={{ width: "500px", color: '#ffffff', backgroundColor: '#000000', border: 'solid', borderRadius: '5px', borderColor: '#ffffff' }}>
+								<h4 className={"fw-bold"}>{this.state.modalTitle}</h4>
 								<a>
-									<div style={{
-										border: "1px solid #473647",
-										borderRadius: "10px",
-									}}
+									<div className={'manage-button'} 
 										onClick={() => {
 											this.ethEnabled()
 											this.toggle()
@@ -731,10 +752,7 @@ class Header extends React.Component {
 								</a>
 								<br></br>
 								<a>
-									<div style={{
-										border: "1px solid #473647",
-										borderRadius: "10px",
-									}}
+									<div className={'manage-button'} 
 										onClick={() => {
 											this.walletConnectEnabled()
 											this.toggle()
@@ -753,10 +771,7 @@ class Header extends React.Component {
 								</a>
 								<br></br>
 								<a>
-									<div style={{
-										border: "1px solid #473647",
-										borderRadius: "10px",
-									}}
+									<div className={'manage-button'} 
 										onClick={() => {
 											this.walletConnectEnabled()
 											this.toggle()
@@ -773,11 +788,8 @@ class Header extends React.Component {
 										</div>
 									</div>
 								</a>
+
 							</ModalBody>
-							<ModalFooter>
-								{/* <Button color="primary" onClick={()=>{}}>Confirm</Button>{' '} */}
-								<Button color="secondary" onClick={this.toggle}>Cancel</Button>
-							</ModalFooter>
 						</>
 					}
 					{this.state.modalAction !== "connect_wallet" &&
@@ -838,7 +850,12 @@ function mapStateToProps(store) {
 		topupAction: store.backd.topupAction,
 		gasBank: store.backd.gasBank,
 		totalBtcLpAmount: store.backd.totalBtcLpAmount,
-		myGasBankBalance: store.backd.myGasBankBalance
+		myGasBankBalance: store.backd.myGasBankBalance,
+
+		lpPoolEth: store.backd.lpPoolEth,
+		lpTokenEth: store.backd.lpTokenEth,
+		vaultEth: store.backd.vaultEth,
+		totalEthLpAmount: store.backd.totalEthLpAmount,
 	};
 }
 

@@ -24,7 +24,12 @@ class SmartVault3 extends React.Component {
     this.setState(prevState => ({
       selectedRow: prevState.selectedRow === rowId? -1 : rowId
     }));
-    window.location = '#/app/main/smartVault4';
+    if (rowId === 1) {
+      window.location = '#/app/main/smartVault4';
+    }
+    if (rowId === 2) {
+      window.location = '#/app/main/smartVault4ETH';
+    }
   }
 
   render() {
@@ -69,6 +74,25 @@ class SmartVault3 extends React.Component {
                     {parseFloat(this.props.myBtcLpAmount * this.props.btcLpExchangeRate).toFixed(8)} BTC
                   </Col>
                 </Row>
+								<br></br>
+                <Row style={{marginLeft: '1px',
+                    display: 'flex',
+                    alignItems: 'center'}} key={0}  className={'rowHover'} onClick={() => this.selectRow(2)}>
+                  <Col>
+                    <img style={{padding: '5px'}} className="icon" src="/assets/icon/eth-logo.svg" alt="x"></img> ETH
+                  </Col>
+                  <Col>
+                    5.4%
+                  </Col>
+                  <Col>
+                    ${parseFloat(this.props.totalEthLpAmount * this.props.ethLpExchangeRate * this.props.priceOfEth / 100).toFixed(2)}
+                  </Col>
+                  <Col>
+                    ${parseFloat(this.props.myEthLpAmount * this.props.ethLpExchangeRate * this.props.priceOfEth / 100).toFixed(2)}<br/>
+                    {parseFloat(this.props.myEthLpAmount * this.props.ethLpExchangeRate).toFixed(8)} ETH
+                  </Col>
+                </Row>
+
           </Col>
         </Row>
       </div>
@@ -80,9 +104,13 @@ function mapStateToProps(store) {
   return {
     myAccount: store.loanshark.myAccount,
     priceOfBtc: store.loanshark.priceOfBtc,
+    priceOfEth: store.loanshark.priceOfEth,
     myBtcLpAmount: store.backd.myBtcLpAmount,
+    myEthLpAmount: store.backd.myEthLpAmount,
     totalBtcLpAmount: store.backd.totalBtcLpAmount,
-    btcLpExchangeRate: store.backd.btcLpExchangeRate
+    totalEthLpAmount: store.backd.totalEthLpAmount,
+    btcLpExchangeRate: store.backd.btcLpExchangeRate,
+    ethLpExchangeRate: store.backd.ethLpExchangeRate
   };
 }
 

@@ -23,9 +23,15 @@ import {
 import {
     changeMyBtcLpAmount,
     changeMyProtection,
+    changeMyProtectionEth,
     changeTotalBtcLpAmount,
     changeBtcLpExchangeRateAmount,
-    changeMyGasBankBalance
+    changeMyGasBankBalance,
+
+
+    changeMyEthLpAmount,
+    changeTotalEthLpAmount,
+    changeEthLpExchangeRateAmount,
 } from "../actions/backd";
 
 const WBTC = process.env.REACT_APP_WBTC;
@@ -99,6 +105,25 @@ let refreshPrice = (props, action) => {
                 });
             }
 
+            //Backd
+            if (props.lpTokenBtc) {
+                props.lpTokenBtc.methods.balanceOf(props.myAccount).call({}, (error, result) => {
+                    let argsGetPosition = [
+                        props.myAccount,
+                        props.myAccount + "000000000000000000000000",
+                        "0x66756a6964616f00000000000000000000000000000000000000000000000000"
+                    ];
+
+                    if (props.topupAction) {
+                        props.topupAction.methods.getPosition(...argsGetPosition).call({}, (error, resultStakerVault) => {
+                            let stakerVault = parseFloat(window.web3.utils.fromWei(resultStakerVault[7], 'gwei') * 10);
+                            props.dispatch(changeMyBtcLpAmount(stakerVault + window.web3.utils.fromWei(result, 'gwei') * 10));
+                        });
+                    }
+
+                    props.dispatch(changeMyBtcLpAmount(window.web3.utils.fromWei(result, 'gwei') * 10));
+                });
+            }
             if (props.mySmartVaultBtc) {
                 props.mySmartVaultBtc.methods.balances(props.myAccount).call({}, (error, result) => {
                     props.dispatch(changeSmartVaultBtc(window.web3.utils.fromWei(result, 'gwei') * 10));
@@ -153,6 +178,23 @@ let refreshPrice = (props, action) => {
                 });
             }
 
+            let argsGetPositionEth = [
+                props.myAccount,
+                props.myAccount + "000000000000000000000000",
+                "0x66756a6964616f65746800000000000000000000000000000000000000000000"
+            ];
+
+            if (props.topupAction) {
+                props.topupAction.methods.getPosition(...argsGetPositionEth).call({}, (error, result) => {
+                    props.dispatch(changeMyProtectionEth(result));
+                });
+            }
+
+            if (props.lpTokenBtc) {
+                props.lpTokenBtc.methods.totalSupply().call({}, (error, result) => {
+                    props.dispatch(changeTotalBtcLpAmount(window.web3.utils.fromWei(result, 'gwei') * 10));
+                });
+            }
             let argsGetPosition = [
                 props.myAccount,
                 props.myAccount + "000000000000000000000000",
@@ -165,24 +207,49 @@ let refreshPrice = (props, action) => {
                 });
             }
 
-            if (props.lpTokenBtc) {
-                props.lpTokenBtc.methods.totalSupply().call({}, (error, result) => {
-                    props.dispatch(changeTotalBtcLpAmount(window.web3.utils.fromWei(result, 'gwei') * 10));
-                });
-            }
-
             if (props.gasBank) {
                 props.gasBank.methods.balanceOf(props.myAccount).call({}, (error, result) => {
                     props.dispatch(changeMyGasBankBalance(window.web3.utils.fromWei(result, 'ether')));
                 });
             }
         }
+
+        if (props.lpTokenEth) {
+            props.lpTokenEth.methods.balanceOf(props.myAccount).call({}, (error, result) => {
+                let argsGetPosition = [
+                    props.myAccount,
+                    props.myAccount + "000000000000000000000000",
+                    "0x66756a6964616f65746800000000000000000000000000000000000000000000"
+                ];
+
+                if (props.topupAction) {
+                    props.topupAction.methods.getPosition(...argsGetPosition).call({}, (error, resultStakerVault) => {
+                        let stakerVault = parseFloat(window.web3.utils.fromWei(resultStakerVault[7], 'ether') * 1);
+                        props.dispatch(changeMyEthLpAmount(stakerVault + window.web3.utils.fromWei(result, 'ether') * 1));
+                    });
+                }
+
+                props.dispatch(changeMyEthLpAmount(window.web3.utils.fromWei(result, 'ether') * 1));
+            });
+        }
+
+        if (props.lpPoolEth) {
+            props.lpPoolEth.methods.exchangeRate().call({}, (error, resultExchangeRate) => {
+                props.dispatch(changeEthLpExchangeRateAmount(window.web3.utils.fromWei(resultExchangeRate, 'ether')));
+            });
+        }
+
+        if (props.lpTokenEth) {
+            props.lpTokenEth.methods.totalSupply().call({}, (error, result) => {
+                props.dispatch(changeTotalEthLpAmount(window.web3.utils.fromWei(result, 'ether') * 1));
+            });
+        }
     } else {
         //action==="CLEAR"    
         // ETH-BTC Vaults
         props.dispatch(changeNumberOfEth(0));
-        props.dispatch(changeUserDepositBalanceEth(0)); 
-        props.dispatch(changeUserDebtBalanceBtc(0));  
+        props.dispatch(changeUserDepositBalanceEth(0));
+        props.dispatch(changeUserDebtBalanceBtc(0));
         props.dispatch(changeLTV({ "ETHBTC": 0 }));
         props.dispatch(changeLiqudationPrice({ "ETHBTC": 0 }));
 
@@ -192,8 +259,8 @@ let refreshPrice = (props, action) => {
         props.dispatch(changeUserDebtBalanceUsdt(0));
         props.dispatch(changeLTV({ "AVAXUSDT": 0 }));
         props.dispatch(changeLiqudationPrice({ "AVAXUSDT": 0 }));
-        props.dispatch(changePriceOfEth(null)); 
-        props.dispatch(changePriceOfBtc(null)); 
+        props.dispatch(changePriceOfEth(null));
+        props.dispatch(changePriceOfBtc(null));
         props.dispatch(changePriceOfAvax(null));
         props.dispatch(changePriceOfUsdt(null));
         props.dispatch(changeAaveBtcBorrowRate(0));
@@ -209,6 +276,12 @@ let refreshPrice = (props, action) => {
         props.dispatch(changeBtcLpExchangeRateAmount(0));
         props.dispatch(changeMyProtection([]));
         props.dispatch(changeTotalBtcLpAmount(null));
+        props.dispatch(changeMyGasBankBalance(null));
+        
+        props.dispatch(changeMyEthLpAmount(null));
+        props.dispatch(changeEthLpExchangeRateAmount(0));
+        props.dispatch(changeMyProtectionEth([]));
+        props.dispatch(changeTotalEthLpAmount(null));
         props.dispatch(changeMyGasBankBalance(null));
     }
 

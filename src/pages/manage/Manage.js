@@ -483,6 +483,65 @@ class Manage extends React.Component {
         });
     }
 
+    
+    toggleLeaveSmartVaultETH(inputModalToken, inputModalAction, inputModalMessage, pair) {
+        this.setState({
+            modal: !this.state.modal,
+            modalTitle: inputModalAction,
+            modalMessage: inputModalMessage,
+            modalToken: inputModalToken,
+            modalAction: inputModalAction,
+            modalInputValue: this.props.myEthLpAmount,
+            modalCall: () => {
+                let args = [
+                    window.web3.utils.toBN((this.state.modalInputValue * 1000000000000000000).toFixed(0)).toString(),
+                ];
+
+                this.toggle();
+                this.calltoggleLoading();
+
+                let argsUnregister = [
+                    this.props.myAccount + "000000000000000000000000",
+                    "0x66756a6964616f65746800000000000000000000000000000000000000000000",
+                    1
+                ];
+
+                if (this.props.myProtectionEth && this.props.myProtectionEth[0] > 0) {
+
+                    this.props.topupAction.methods
+                        .resetPosition(...argsUnregister)
+                        .send({ from: this.props.myAccount })
+                        .on("error", (error, receipt) => {
+                            this.calltoggleLoading();
+                        })
+                        .then((receipt) => {
+                            this.props.lpPoolEth.methods
+                                .redeem(...args)
+                                .send({ from: this.props.myAccount })
+                                .on("error", (error, receipt) => {
+                                    this.calltoggleLoading();
+                                })
+                                .then((receipt) => {
+                                    this.calltoggleLoading();
+                                    API(this.props);
+                                })
+                        })
+                } else {
+                    this.props.lpPoolEth.methods
+                        .redeem(...args)
+                        .send({ from: this.props.myAccount })
+                        .on("error", (error, receipt) => {
+                            this.calltoggleLoading();
+                        })
+                        .then((receipt) => {
+                            this.calltoggleLoading();
+                            API(this.props);
+                        })
+                }
+            }
+        });
+    }
+
     roundDown(number, decimals) {
         decimals = decimals || 0;
         return parseFloat(Math.floor(number * Math.pow(10, decimals)) / Math.pow(10, decimals));
@@ -769,7 +828,8 @@ class Manage extends React.Component {
                                                         deposit + debt)
                                                 }
                                             }}
-                                        ></Card>
+                                        >
+                                        </Card>
                                     </Grid>
                                     <Grid item lg={6} md={12}>
                                         <Card
@@ -918,9 +978,9 @@ class Manage extends React.Component {
                                         ></Card>
                                     </Grid>
                                     {debt === "BTC" ?
-                                        <Grid item lg={6} md={12}>
+                                        <><Grid item lg={6} md={12}>
                                             <Card
-                                                widgetSize={"full"}
+                                                widgetSize={"left"}
                                                 title={"Current Smart Vault Balance"}
                                                 extraHtmlContent={"<br /><p style='font-size: 14px'> Trigger Health Factor: "
                                                     + parseFloat(this.props.myProtection[0] / 1000000000000000000)
@@ -963,6 +1023,51 @@ class Manage extends React.Component {
                                                 }}
                                             ></Card>
                                         </Grid>
+                                            <Grid item lg={6} md={12}>
+                                                <Card
+                                                    widgetSize={"right"}
+                                                    title={"Current Smart Vault Balance"}
+                                                    extraHtmlContent={"<br /><p style='font-size: 14px'> Trigger Health Factor: "
+                                                        + parseFloat(this.props.myProtectionEth[0] / 1000000000000000000)
+                                                        + "<br />"
+                                                        + "Repay amount each time: "
+                                                        + parseFloat(this.props.myProtectionEth[5] / 0.9999 / 1000000000000000000)
+                                                        + "<br />"
+                                                        + "Remaining prepaid gas fee: "
+                                                        + parseFloat(this.props.myGasBankBalance)
+                                                        + "</p>"}
+                                                    currencyIconPath={this.state.depositCurrencyIconPath}
+                                                    leftSelectButton={""}
+                                                    rightSelectButton={""}
+                                                    currency={"eth"}
+                                                    openBorrowingPower={false}
+                                                    amount={parseFloat(this.props.myEthLpAmount * this.props.ethLpExchangeRate).toFixed(8)}
+                                                    maxBalance={this.props.myEthLpAmount}
+                                                    onChangeInput={(e) => {
+                                                        this.setState({
+                                                            debtAmount: e.target.value === "" ? 0 : e.target.value
+                                                        })
+                                                    }}
+                                                    onClickWithdraw={() => {
+                                                        if (this.props.myEthLpAmount <= 0) {
+                                                            this.toggleNoAction(
+                                                                deposit,
+                                                                'Unable to withdraw all from Smart Vault',
+                                                                'You do not have any ETH in Smart Vault.',
+                                                                deposit + debt
+                                                            )
+                                                        } else {
+                                                            this.toggleLeaveSmartVaultETH(deposit,
+                                                                'Confirm to withdraw all from Smart Vault?',
+                                                                'You are withdrawing <span class="fw-bold">' +
+                                                                parseFloat(this.props.myEthLpAmount * this.props.ethLpExchangeRate).toFixed(8) +
+                                                                ' ETH (~$' +
+                                                                parseFloat(this.props.myEthLpAmount * this.props.ethLpExchangeRate * this.props.priceOfEth / 100).toFixed(2) +
+                                                                ')</span> from Smart Vault. Remaining gas fee of ' + parseFloat(this.props.myGasBankBalance) + ' AVAX will be returned. <span class="fw-bold" style="color: #ff7d47"><br/>Caution: you will lose your automatic loan protection if you withdraw.</span>', 0)
+                                                        }
+                                                    }}
+                                                ></Card>
+                                            </Grid></>
                                         :
                                         null
                                     }
@@ -1058,7 +1163,14 @@ function mapStateToProps(store) {
         totalBtcLpAmount: store.backd.totalBtcLpAmount,
         topupAction: store.backd.topupAction,
         myProtection: store.backd.myProtection,
-        myGasBankBalance: store.backd.myGasBankBalance
+        myGasBankBalance: store.backd.myGasBankBalance,
+
+        lpPoolEth: store.backd.lpPoolEth,
+        lpTokenEth: store.backd.lpTokenEth,
+        myEthLpAmount: store.backd.myEthLpAmount,
+        ethLpExchangeRate: store.backd.ethLpExchangeRate,
+        totalEthLpAmount: store.backd.totalEthLpAmount,
+        myProtectionEth: store.backd.myProtectionEth,
     };
 }
 
