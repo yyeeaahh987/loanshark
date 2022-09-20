@@ -483,7 +483,7 @@ class Manage extends React.Component {
         });
     }
 
-    
+
     toggleLeaveSmartVaultETH(inputModalToken, inputModalAction, inputModalMessage, pair) {
         this.setState({
             modal: !this.state.modal,
@@ -978,7 +978,53 @@ class Manage extends React.Component {
                                         ></Card>
                                     </Grid>
                                     {debt === "BTC" ?
-                                        <><Grid item lg={6} md={12}>
+                                        <>
+                                            <Grid item lg={6} md={12}>
+                                                <Card
+                                                    widgetSize={"right"}
+                                                    title={"Current Smart Vault Balance"}
+                                                    extraHtmlContent={"<br /><p style='font-size: 14px'> Trigger Health Factor: "
+                                                        + parseFloat(this.props.myProtectionEth[0] / 1000000000000000000)
+                                                        + "<br />"
+                                                        + "Top-up amount each time: "
+                                                        + parseFloat(this.props.myProtectionEth[5] / 1000000000000000000)
+                                                        + "<br />"
+                                                        + "Remaining prepaid gas fee: "
+                                                        + parseFloat(this.props.myGasBankBalance)
+                                                        + "</p>"}
+                                                    currencyIconPath={this.state.depositCurrencyIconPath}
+                                                    leftSelectButton={""}
+                                                    rightSelectButton={""}
+                                                    currency={"eth"}
+                                                    openBorrowingPower={false}
+                                                    amount={parseFloat(this.props.myEthLpAmount * this.props.ethLpExchangeRate).toFixed(8)}
+                                                    maxBalance={this.props.myEthLpAmount}
+                                                    onChangeInput={(e) => {
+                                                        this.setState({
+                                                            debtAmount: e.target.value === "" ? 0 : e.target.value
+                                                        })
+                                                    }}
+                                                    onClickWithdraw={() => {
+                                                        if (this.props.myEthLpAmount <= 0) {
+                                                            this.toggleNoAction(
+                                                                deposit,
+                                                                'Unable to withdraw all from Smart Vault',
+                                                                'You do not have any ETH in Smart Vault.',
+                                                                deposit + debt
+                                                            )
+                                                        } else {
+                                                            this.toggleLeaveSmartVaultETH(deposit,
+                                                                'Confirm to withdraw all from Smart Vault?',
+                                                                'You are withdrawing <span class="fw-bold">' +
+                                                                parseFloat(this.props.myEthLpAmount * this.props.ethLpExchangeRate).toFixed(8) +
+                                                                ' ETH (~$' +
+                                                                parseFloat(this.props.myEthLpAmount * this.props.ethLpExchangeRate * this.props.priceOfEth / 100).toFixed(2) +
+                                                                ')</span> from Smart Vault. Remaining gas fee of ' + parseFloat(this.props.myGasBankBalance) + ' AVAX will be returned. <span class="fw-bold" style="color: #ff7d47"><br/>Caution: you will lose your automatic loan protection if you withdraw.</span>', 0)
+                                                        }
+                                                    }}
+                                                ></Card>
+                                            </Grid>
+                                            <Grid item lg={6} md={12}>
                                             <Card
                                                 widgetSize={"left"}
                                                 title={"Current Smart Vault Balance"}
@@ -1023,51 +1069,7 @@ class Manage extends React.Component {
                                                 }}
                                             ></Card>
                                         </Grid>
-                                            <Grid item lg={6} md={12}>
-                                                <Card
-                                                    widgetSize={"right"}
-                                                    title={"Current Smart Vault Balance"}
-                                                    extraHtmlContent={"<br /><p style='font-size: 14px'> Trigger Health Factor: "
-                                                        + parseFloat(this.props.myProtectionEth[0] / 1000000000000000000)
-                                                        + "<br />"
-                                                        + "Repay amount each time: "
-                                                        + parseFloat(this.props.myProtectionEth[5] / 0.9999 / 1000000000000000000)
-                                                        + "<br />"
-                                                        + "Remaining prepaid gas fee: "
-                                                        + parseFloat(this.props.myGasBankBalance)
-                                                        + "</p>"}
-                                                    currencyIconPath={this.state.depositCurrencyIconPath}
-                                                    leftSelectButton={""}
-                                                    rightSelectButton={""}
-                                                    currency={"eth"}
-                                                    openBorrowingPower={false}
-                                                    amount={parseFloat(this.props.myEthLpAmount * this.props.ethLpExchangeRate).toFixed(8)}
-                                                    maxBalance={this.props.myEthLpAmount}
-                                                    onChangeInput={(e) => {
-                                                        this.setState({
-                                                            debtAmount: e.target.value === "" ? 0 : e.target.value
-                                                        })
-                                                    }}
-                                                    onClickWithdraw={() => {
-                                                        if (this.props.myEthLpAmount <= 0) {
-                                                            this.toggleNoAction(
-                                                                deposit,
-                                                                'Unable to withdraw all from Smart Vault',
-                                                                'You do not have any ETH in Smart Vault.',
-                                                                deposit + debt
-                                                            )
-                                                        } else {
-                                                            this.toggleLeaveSmartVaultETH(deposit,
-                                                                'Confirm to withdraw all from Smart Vault?',
-                                                                'You are withdrawing <span class="fw-bold">' +
-                                                                parseFloat(this.props.myEthLpAmount * this.props.ethLpExchangeRate).toFixed(8) +
-                                                                ' ETH (~$' +
-                                                                parseFloat(this.props.myEthLpAmount * this.props.ethLpExchangeRate * this.props.priceOfEth / 100).toFixed(2) +
-                                                                ')</span> from Smart Vault. Remaining gas fee of ' + parseFloat(this.props.myGasBankBalance) + ' AVAX will be returned. <span class="fw-bold" style="color: #ff7d47"><br/>Caution: you will lose your automatic loan protection if you withdraw.</span>', 0)
-                                                        }
-                                                    }}
-                                                ></Card>
-                                            </Grid></>
+                                            </>
                                         :
                                         null
                                     }
