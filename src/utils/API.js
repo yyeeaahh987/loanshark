@@ -41,7 +41,7 @@ const USDT = process.env.REACT_APP_USDT;
 
 let refreshPrice = (props, action) => {
     console.log(action)
-    if (action === "GET_NEW") {
+    if (action === "GET_NEW" || action == "" ) {
         if (props.myFujiVaultETHBTC) {
             let args = [1, true]
 
@@ -244,7 +244,7 @@ let refreshPrice = (props, action) => {
                 props.dispatch(changeTotalEthLpAmount(window.web3.utils.fromWei(result, 'ether') * 1));
             });
         }
-    } else {
+    } else if (action === "CLEAR"){
         //action==="CLEAR"    
         // ETH-BTC Vaults
         props.dispatch(changeNumberOfEth(0));

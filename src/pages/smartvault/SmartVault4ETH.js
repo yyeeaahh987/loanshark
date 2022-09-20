@@ -165,7 +165,7 @@ class SmartVault4ETH extends React.Component {
                                                     })
                                                     .then((receipt) => {
                                                         this.calltoggleLoading();
-                                                        API(this.props);
+                                                        API(this.props, "GET_NEW");
                                                     })
                                             })
                                     })
