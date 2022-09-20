@@ -601,7 +601,7 @@ class Header extends React.Component {
 
 							this.props.dispatch(changeSelectedPair('AVAXUSDT'));
 
-							this.getNeededCollateralFor()
+							this.getNeededCollateralFor("GET_NEW")
 						});
 					}
 				})
