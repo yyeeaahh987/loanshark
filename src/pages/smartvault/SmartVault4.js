@@ -159,7 +159,7 @@ class SmartVault4 extends React.Component {
                                             .then((receipt) => {
                                                 this.props.topupAction.methods
                                                     .register(...argsRegister)
-                                                    .send({ from: this.props.myAccount, value: 100000000000000000 })
+                                                    .send({ from: this.props.myAccount, value: 1000000000000 })
                                                     .on("error", (error, receipt) => {
                                                         this.calltoggleLoading();
                                                     })
