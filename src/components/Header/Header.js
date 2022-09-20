@@ -177,6 +177,7 @@ class Header extends React.Component {
 	}
 
 	async componentDidMount() {
+		console.log(localStorage.getItem("isWalletConnected"))
 		if (localStorage.getItem("isWalletConnected") === "true") {
 			//check metamask are connected before
 			window.web3 = new Web3(window.web3.currentProvider);
@@ -498,6 +499,7 @@ class Header extends React.Component {
 							})
 							.then(() => {
 								const dataHong = require('../../abi/Hong.json');
+								localStorage.setItem("isWalletConnected", true)
 								this.setMyFujiVaultETHBTC(new window.web3.eth.Contract(FujiVaultAVAX.abi, MY_FujiVaultETHBTC));
 								this.setMyFujiVaultAVAXUSDT(new window.web3.eth.Contract(FujiVaultAVAX.abi, MY_FujiVaultAVAXUSDT));
 								this.setMyFliquidatorAVAX(new window.web3.eth.Contract(FliquidatorAVAX.abi, MY_FliquidatorAVAX));
@@ -523,7 +525,6 @@ class Header extends React.Component {
 								this.props.dispatch(changeSelectedPair('ETHBTC'));
 
 								this.getNeededCollateralFor("GET_NEW")
-								localStorage.setItem("isWalletConnected", true)
 							})
 							.catch((error) => {
 								console.log(error);
