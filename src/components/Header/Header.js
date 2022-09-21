@@ -193,7 +193,7 @@ class Header extends React.Component {
 
 	clearAccount(){
 		console.log(`clear account`)	
-		this.setState({myAccount: "",})
+		this.setState({myAccount: null})
 		this.setMyFujiVaultETHBTC(null);
 		this.setMyFujiVaultAVAXUSDT(null);
 		this.setMyFliquidatorAVAX(null);
@@ -206,6 +206,7 @@ class Header extends React.Component {
 		this.setMySmartVaultContractBtc(null);
 		this.setMySmartVaultContractUsdt(null);
 
+		this.props.dispatch(changeMyAccount(null));
 		this.props.dispatch(changeLpPoolBtc(null));
 		this.props.dispatch(changeLpTokenBtc(null));
 		this.props.dispatch(changeVaultBtc(null));
