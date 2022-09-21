@@ -86,7 +86,7 @@ class SmartVault4ETH extends React.Component {
                                 "When the health factor drops below <span style='color: #00ff00'>" + this.state.triggerHealthFactor + "</span>, " +
                                 "it will be topped up with <span class='fw-bold'>" + this.state.singleTopupAmount + " ETH (~" + parseFloat((this.state.singleTopupAmount * this.props.priceOfEth / 100).toFixed(8)) + ")</span>. " +
                                 "This will be repeated each time the health factor drops below <span style='color: #00ff00'>" + this.state.triggerHealthFactor + "</span>, " +
-                                "until a total of <span class='fw-bold'>" + this.state.stakeAmount + " ETH (~$" + parseFloat((this.state.stakeAmount * this.props.priceOfEth / 100).toFixed(8)) + ")</span> is topped up. 0.1 AVAX will be given for gas fee."
+                                "until a total of <span class='fw-bold'>" + this.state.stakeAmount + " ETH (~$" + parseFloat((this.state.stakeAmount * this.props.priceOfEth / 100).toFixed(8)) + ")</span> is topped up."
                 ),
             modalButton:
                 (
