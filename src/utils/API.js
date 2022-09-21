@@ -39,9 +39,9 @@ const AVAX = process.env.REACT_APP_AVAX;
 const WETH = process.env.REACT_APP_WETH;
 const USDT = process.env.REACT_APP_USDT;
 
-let refreshPrice = (props, action) => {
+let refreshPrice = (props, action="GET_NEW") => {
     console.log(action)
-    if (action === "GET_NEW" || action == "" ) {
+    if (action === "GET_NEW") {
         if (props.myFujiVaultETHBTC) {
             let args = [1, true]
 
