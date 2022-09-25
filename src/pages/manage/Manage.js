@@ -753,7 +753,7 @@ class Manage extends React.Component {
                                                         'Please enter the amount that you want to deposit.',
                                                         deposit + debt
                                                     )
-                                                } else if (this.state.collateralAmount > this.props.myETHAmount) {
+                                                } else if (Number(this.state.collateralAmount) > Number(this.props.myETHAmount)) {
                                                     this.toggleNoAction(
                                                         deposit,
                                                         'Unable to deposit',
@@ -898,21 +898,21 @@ class Manage extends React.Component {
                                                         this.props.LTV["ETHBTC"],
                                                         parseFloat(this.props.userDebtBalanceBtc) - parseFloat(this.state.debtAmount),
                                                         this.props.priceOfBtc);
-                                                if (this.state.debtAmount <= 0 || isNaN(this.state.debtAmount)) {
+                                                if (Number(this.state.debtAmount) <= 0 || isNaN(this.state.debtAmount)) {
                                                     this.toggleNoAction(
                                                         deposit,
                                                         'Unable to payback',
                                                         'Please enter the amount that you want to payback.',
                                                         deposit + debt
                                                     )
-                                                } else if (this.state.debtAmount > this.props.myBTCAmount) {
+                                                } else if (Number(this.state.debtAmount) > (this.props.myBTCAmount)) {
                                                     this.toggleNoAction(
                                                         deposit,
                                                         'Unable to payback',
                                                         'You do not have enough BTC to payback.',
                                                         deposit + debt
                                                     )
-                                                } else if (newHealthFactor < 1.06) {
+                                                } else if (Number(newHealthFactor) < 1.06) {
                                                     this.toggleNoAction(
                                                         deposit,
                                                         'Unable to payback',
@@ -944,14 +944,14 @@ class Manage extends React.Component {
                                                         this.props.LTV["ETHBTC"],
                                                         parseFloat(this.props.userDebtBalanceBtc) + parseFloat(this.state.debtAmount),
                                                         this.props.priceOfBtc);
-                                                if (this.state.debtAmount <= 0 || isNaN(this.state.debtAmount)) {
+                                                if (Number(this.state.debtAmount) <= 0 || isNaN(this.state.debtAmount)) {
                                                     this.toggleNoAction(
                                                         deposit,
                                                         'Unable to borrow',
                                                         'Please enter the amount that you want to borrow.',
                                                         deposit + debt
                                                     )
-                                                } else if (newHealthFactor < 1.06) {
+                                                } else if (Number(newHealthFactor) < 1.06) {
                                                     this.toggleNoAction(
                                                         deposit,
                                                         'Unable to borrow',
