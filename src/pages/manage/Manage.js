@@ -494,7 +494,7 @@ class Manage extends React.Component {
             modalInputValue: this.props.myEthLpAmount,
             modalCall: () => {
                 let args = [
-                    window.web3.utils.toBN((this.state.modalInputValue * 1000000000000000000).toFixed(0)).toString(),
+                    window.web3.utils.toBN(window.web3.utils.toWei(String(this.props.myEthLpAmount), 'ether')).toString(),
                 ];
 
                 this.toggle();
@@ -984,10 +984,10 @@ class Manage extends React.Component {
                                                     widgetSize={"right"}
                                                     title={"Current Smart Vault Balance"}
                                                     extraHtmlContent={"<br /><p style='font-size: 14px'> Trigger Health Factor: "
-                                                        + parseFloat(this.props.myProtectionEth[0] / 1000000000000000000)
+                                                        + parseFloat( window.web3.utils.fromWei(this.props.myProtectionEth[0], 'ether') )
                                                         + "<br />"
                                                         + "Top-up amount each time: "
-                                                        + parseFloat(this.props.myProtectionEth[5] / 1000000000000000000)
+                                                        + parseFloat( window.web3.utils.fromWei(this.props.myProtectionEth[5], 'ether') )
                                                         + "<br />"
                                                         + "Remaining prepaid gas fee: "
                                                         + parseFloat(this.props.myGasBankBalance)
@@ -1029,7 +1029,7 @@ class Manage extends React.Component {
                                                 widgetSize={"left"}
                                                 title={"Current Smart Vault Balance"}
                                                 extraHtmlContent={"<br /><p style='font-size: 14px'> Trigger Health Factor: "
-                                                    + parseFloat(this.props.myProtection[0] / 1000000000000000000)
+                                                    + parseFloat(window.web3.utils.fromWei(this.props.myProtectionEth[0], 'ether'))
                                                     + "<br />"
                                                     + "Repay amount each time: "
                                                     + parseFloat(this.props.myProtection[5] / 0.9999 / 100000000)
