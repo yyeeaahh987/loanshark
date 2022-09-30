@@ -198,19 +198,19 @@ class SmartVault4 extends React.Component {
                                 </tr>
                             </thead>
                             <tbody className="">
-                                <tr key={0}  className="rowHovered">
-                                    <td className="fw-thin pl-4">
+                                <tr key={0} className={`rowHovered ${this.props.theme === "light" ? "rowHovered-light" : "rowHovered-dark"}`}>
+                                    <td className="fw-thin pl-4 firstOne">
                                         <img style={{ padding: '5px' }} className="icon" src="/assets/icon/eth-logo.svg" alt="x"></img> ETH / <img style={{ padding: '5px' }} className="icon" src="/assets/icon/btc-logo.svg" alt="x"></img> BTC
                                     </td>
-                                    <td className={"pl-0 fw-thin"}>
+                                    <td className={"pl-0 fw-thin middle"}>
                                         ${parseFloat((this.props.userDepositBalanceEth * this.props.priceOfEth / 100).toFixed(2))}<br />
                                         {Number(this.props.userDepositBalanceEth)} ETH
                                     </td>
-                                    <td className={"pl-0 fw-thin"}>
+                                    <td className={"pl-0 fw-thin middle"}>
                                         ${parseFloat((this.props.userDebtBalanceBtc * this.props.priceOfBtc / 100).toFixed(2))}<br />
                                         {Number(this.props.userDebtBalanceBtc)} BTC
                                     </td>
-                                    <td className={"pl-0 fw-normal"}>
+                                    <td className={"pl-0 fw-normal lastOne"}>
                                         {((this.props.userDepositBalanceEth * this.props.priceOfEth / 100) * this.props.LTV["ETHBTC"] / (this.props.userDebtBalanceBtc * this.props.priceOfBtc / 100)).toFixed(2)}
                                     </td>
                                 </tr>
@@ -221,13 +221,13 @@ class SmartVault4 extends React.Component {
                             this.props.myProtection[0] <= 0 ?
                                 <>
                                     <p className={"fw-bold"}>Input the amount of BTC you would like to deposit into the smart vault</p>
-                                    <Input style={{ backgroundColor: 'transparent', color: '#ffffff' }} value={this.state.stakeAmount} onChange={this.setStakeAmount}></Input>
+                                    <Input className={`my-protection-text-${this.props.theme === "light" ? "light" : "dark"}`} value={this.state.stakeAmount} onChange={this.setStakeAmount}></Input>
                                     <br />
                                     <p className={"fw-bold"}>Input the target health factor to trigger the automatic top-up/repayment action</p>
-                                    <Input style={{ backgroundColor: 'transparent', color: '#ffffff' }} value={this.state.triggerHealthFactor} onChange={this.setTriggerHealthFactor}></Input>
+                                    <Input className={`my-protection-text-${this.props.theme === "light" ? "light" : "dark"}`} value={this.state.triggerHealthFactor} onChange={this.setTriggerHealthFactor}></Input>
                                     <br />
                                     <p className={"fw-bold"}>Input the amount of BTC you would like Loanshark to repay for you each time the target heath factor is hit</p>
-                                    <Input style={{ backgroundColor: 'transparent', color: '#ffffff' }} value={this.state.singleTopupAmount} onChange={this.setSingleTopupAmount}></Input>
+                                    <Input className={`my-protection-text-${this.props.theme === "light" ? "light" : "dark"}`} value={this.state.singleTopupAmount} onChange={this.setSingleTopupAmount}></Input>
                                     <br />
                                 </>
                                 :
@@ -240,14 +240,17 @@ class SmartVault4 extends React.Component {
                                     :
                                     <Row>
                                         <Col sm={12}>
-                                            <p className={"fw-bold"}>You are already protected. <br /> If you want to modify your deposit or protection parameters, please withdraw your smart vault balance in Dashboard > Manage.</p>
+                                            <p className={"fw-bold"}>
+                                                You are already protected. <br />
+                                                {`If you want to modify your deposit or protection parameters, please withdraw your smart vault balance in Dashboard > Manage.`}
+                                            </p>
                                         </Col>
                                     </Row>
                         }
                     </Col>
 
                     <Col lg={4} md={12}>
-                        <Widget style={{ paddingTop: '20px' }} >
+                        <Widget style={{ paddingTop: '20px' }} theme={this.props.theme}>
                             <p className={"fw-bold"}>Selected Smart Vault</p>
                             <p className={"fw-bold"}><img style={{ padding: '5px' }} className="icon" src="/assets/icon/btc-logo.svg" alt="x"></img> BTC</p>
 
@@ -270,7 +273,7 @@ class SmartVault4 extends React.Component {
                     {
                         this.props.myProtection[0] <= 0 ?
                             <Col md={12}>
-                                <Button block className={'manage-button'} style={{ padding: '20px' }} onClick={() => {
+                                <Button block className={`manage-button__${this.props.theme === "light" ? "light" : "dark"}`} style={{ padding: '20px' }} onClick={() => {
                                     this.stakeToVault();
                                 }}>Confirm</Button>
                             </Col>
@@ -291,7 +294,7 @@ class SmartVault4 extends React.Component {
                                 <div className="content" dangerouslySetInnerHTML={{ __html: this.state.htmlContent }}></div>
                             </Col>
                             <Col style={{ paddingTop: '20px', paddingLeft: '40px', paddingRight: '40px' }} sm={12}>
-                                <Button block className={'manage-button'}  style={{ padding: '20px' }} onClick={this.state.modalCall}>{this.state.modalButton}</Button>
+                                <Button block className={'manage-button'} style={{ padding: '20px' }} onClick={this.state.modalCall}>{this.state.modalButton}</Button>
                             </Col>
                         </Row>
                     </ModalBody>
@@ -319,6 +322,8 @@ function mapStateToProps(store) {
         btcLpExchangeRate: store.backd.btcLpExchangeRate,
         lpTokenBtc: store.backd.lpTokenBtc,
         myProtection: store.backd.myProtection,
+
+        theme: store.layout.theme,
     };
 }
 

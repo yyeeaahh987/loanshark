@@ -1,5 +1,28 @@
-
 .borrow-power-button {
+  &__light{
+    background-color: #ffffff;
+    color: black;
+    border: 1px solid black;
+  
+    &:active {
+      border: 1px solid #ffffff !important;
+      background-color: #ffffff !important;
+      color: black !important;
+    }
+  
+    &:focus {
+      border: 1px solid black !important;
+      background-color: #ffffff;
+      color: black !important;
+    }
+  
+    &:hover {
+      border: 1px solid black;
+      background-color: rgba(204, 199, 199, 0.808);
+      color: black !important
+    }
+  }
+  &__dark{
     background-color: #444444;
     color: #ffffff;
     border: 1px solid black;
@@ -22,4 +45,4 @@
       color: black !important
     }
   }
-  
+}

@@ -40,6 +40,7 @@ class HealthFactorPieChart extends React.Component {
 
         return (
             <Widget
+            theme={this.props.theme }
                 title={<p style={{ fontWeight: 700 }}>Deposited, Borrowed and Health Factor</p>
                 }
                 customDropDown
@@ -119,6 +120,8 @@ function mapStateToProps(store) {
         inputBtcDept: store.loanshark.inputBtcDept,
         inputEthDeposit: store.loanshark.inputEthDeposit,
         LTV: store.loanshark.LTV,
+
+        theme: store.layout.theme,
     };
 }
 

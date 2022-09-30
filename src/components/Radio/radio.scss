@@ -34,10 +34,15 @@
     height: 0;
   }
   .helper-text {
-    color: #fff;
     padding-right: 8px;
   }
-  
+  .helper-text-light{
+    color: black;
+  }
+  .helper-text-dark{
+    color: #fff;
+  }
+
   div[disabled]
   {
     pointer-events: none;

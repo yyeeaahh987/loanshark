@@ -49,6 +49,7 @@ class SmartVault1 extends React.Component {
                                         text="Top-up"
                                         disabled=""
                                         onChange={this.setSelected}
+                                        theme={this.props.theme}
                                     />
                                 </NavLink>
                                 <NavLink
@@ -60,6 +61,7 @@ class SmartVault1 extends React.Component {
                                         text="Repay"
                                         disabled=""
                                         onChange={this.setSelected}
+                                        theme={this.props.theme}
                                     />
                                 </NavLink>
                             </Col>
@@ -77,7 +79,9 @@ function mapStateToProps(store) {
         priceOfBtc: store.loanshark.priceOfBtc,
         myBTCContract: store.loanshark.myBTCContract,
         myProtection: store.backd.myProtection,
-        myProtectionType: store.smartvault.myProtectionType
+        myProtectionType: store.smartvault.myProtectionType,
+
+        theme: store.layout.theme,
     };
 }
 

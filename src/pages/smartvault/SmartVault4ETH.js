@@ -247,7 +247,7 @@ class SmartVault4ETH extends React.Component {
                     </Col>
 
                     <Col lg={4} md={12}>
-                        <Widget style={{ paddingTop: '20px' }} >
+                        <Widget style={{ paddingTop: '20px' }} theme={this.props.theme}>
                             <p className={"fw-bold"}>Selected Smart Vault</p>
                             <p className={"fw-bold"}><img style={{ padding: '5px' }} className="icon" src="/assets/icon/eth-logo.svg" alt="x"></img> ETH</p>
 
@@ -319,6 +319,8 @@ function mapStateToProps(store) {
         ethLpExchangeRate: store.backd.ethLpExchangeRate,
         lpTokenEth: store.backd.lpTokenEth,
         myProtectionEth: store.backd.myProtectionEth,
+
+        theme: store.layout.theme,
     };
 }
 

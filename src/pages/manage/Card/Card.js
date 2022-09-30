@@ -238,6 +238,7 @@ class Card extends React.Component {
             <Grid container>
                 <Grid item xs={12}>
                     <Widget
+                    theme={this.props.theme }
                         title={<p>{this.props.title}</p>}
                         customDropDown={false}
                         widgetSize={this.props.widgetSize}
@@ -360,6 +361,8 @@ function mapStateToProps(store) {
         inputBtcDept: store.loanshark.inputBtcDept,
         inputEthDeposit: store.loanshark.inputEthDeposit,
         LTV: store.loanshark.LTV,
+
+        theme: store.layout.theme,
     };
 }
 
