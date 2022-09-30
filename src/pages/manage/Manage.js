@@ -494,7 +494,7 @@ class Manage extends React.Component {
             modalInputValue: this.props.myEthLpAmount,
             modalCall: () => {
                 let args = [
-                    window.web3.utils.toBN((this.state.modalInputValue * 1000000000000000000).toFixed(0)).toString(),
+                    window.web3.utils.toBN(window.web3.utils.toWei(String(this.props.myEthLpAmount), 'ether')).toString(),
                 ];
 
                 this.toggle();
@@ -753,7 +753,7 @@ class Manage extends React.Component {
                                                         'Please enter the amount that you want to deposit.',
                                                         deposit + debt
                                                     )
-                                                } else if (this.state.collateralAmount > this.props.myETHAmount) {
+                                                } else if (Number(this.state.collateralAmount) > Number(this.props.myETHAmount)) {
                                                     this.toggleNoAction(
                                                         deposit,
                                                         'Unable to deposit',
@@ -898,21 +898,21 @@ class Manage extends React.Component {
                                                         this.props.LTV["ETHBTC"],
                                                         parseFloat(this.props.userDebtBalanceBtc) - parseFloat(this.state.debtAmount),
                                                         this.props.priceOfBtc);
-                                                if (this.state.debtAmount <= 0 || isNaN(this.state.debtAmount)) {
+                                                if (Number(this.state.debtAmount) <= 0 || isNaN(this.state.debtAmount)) {
                                                     this.toggleNoAction(
                                                         deposit,
                                                         'Unable to payback',
                                                         'Please enter the amount that you want to payback.',
                                                         deposit + debt
                                                     )
-                                                } else if (this.state.debtAmount > this.props.myBTCAmount) {
+                                                } else if (Number(this.state.debtAmount) > (this.props.myBTCAmount)) {
                                                     this.toggleNoAction(
                                                         deposit,
                                                         'Unable to payback',
                                                         'You do not have enough BTC to payback.',
                                                         deposit + debt
                                                     )
-                                                } else if (newHealthFactor < 1.06) {
+                                                } else if (Number(newHealthFactor) < 1.06) {
                                                     this.toggleNoAction(
                                                         deposit,
                                                         'Unable to payback',
@@ -944,14 +944,14 @@ class Manage extends React.Component {
                                                         this.props.LTV["ETHBTC"],
                                                         parseFloat(this.props.userDebtBalanceBtc) + parseFloat(this.state.debtAmount),
                                                         this.props.priceOfBtc);
-                                                if (this.state.debtAmount <= 0 || isNaN(this.state.debtAmount)) {
+                                                if (Number(this.state.debtAmount) <= 0 || isNaN(this.state.debtAmount)) {
                                                     this.toggleNoAction(
                                                         deposit,
                                                         'Unable to borrow',
                                                         'Please enter the amount that you want to borrow.',
                                                         deposit + debt
                                                     )
-                                                } else if (newHealthFactor < 1.06) {
+                                                } else if (Number(newHealthFactor) < 1.06) {
                                                     this.toggleNoAction(
                                                         deposit,
                                                         'Unable to borrow',
@@ -984,10 +984,10 @@ class Manage extends React.Component {
                                                     widgetSize={"right"}
                                                     title={"Current Smart Vault Balance"}
                                                     extraHtmlContent={"<br /><p style='font-size: 14px'> Trigger Health Factor: "
-                                                        + parseFloat(this.props.myProtectionEth[0] / 1000000000000000000)
+                                                        + parseFloat( window.web3.utils.fromWei(this.props.myProtectionEth[0], 'ether') )
                                                         + "<br />"
                                                         + "Top-up amount each time: "
-                                                        + parseFloat(this.props.myProtectionEth[5] / 1000000000000000000)
+                                                        + parseFloat( window.web3.utils.fromWei(this.props.myProtectionEth[5], 'ether') )
                                                         + "<br />"
                                                         + "Remaining prepaid gas fee: "
                                                         + parseFloat(this.props.myGasBankBalance)
@@ -1029,7 +1029,7 @@ class Manage extends React.Component {
                                                 widgetSize={"left"}
                                                 title={"Current Smart Vault Balance"}
                                                 extraHtmlContent={"<br /><p style='font-size: 14px'> Trigger Health Factor: "
-                                                    + parseFloat(this.props.myProtection[0] / 1000000000000000000)
+                                                    + parseFloat(window.web3.utils.fromWei(this.props.myProtectionEth[0], 'ether'))
                                                     + "<br />"
                                                     + "Repay amount each time: "
                                                     + parseFloat(this.props.myProtection[5] / 0.9999 / 100000000)

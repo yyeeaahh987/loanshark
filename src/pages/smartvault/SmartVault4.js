@@ -123,7 +123,7 @@ class SmartVault4 extends React.Component {
                             [
                                 window.web3.utils.toBN(window.web3.utils.toWei((this.state.triggerHealthFactor).toString(), 'ether')).toString(),
                                 "0",
-                                window.web3.utils.toBN((this.state.stakeAmount * 0.9999 * 1).toFixed(0)).toString(),
+                                "1",
                                 "0x9c1dcacb57ada1e9e2d3a8280b7cfc7eb936186f",
                                 "0x9f2b4eeb926d8de19289e93cbf524b6522397b05",
                                 window.web3.utils.toBN((this.state.singleTopupAmount * 0.9999 * 100000000).toFixed(0)).toString(),

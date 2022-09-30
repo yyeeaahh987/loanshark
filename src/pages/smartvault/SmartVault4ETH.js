@@ -104,31 +104,31 @@ class SmartVault4ETH extends React.Component {
                     () => {
                         let approveArgs = [
                             this.props.lpPoolEth.options.address,
-                            window.web3.utils.toBN((this.state.stakeAmount * 1000000000000000000).toFixed(0)).toString()
+                            window.web3.utils.toBN(window.web3.utils.toWei(String(this.state.stakeAmount), 'ether')).toString()
                         ]
 
                         let args = [
-                            window.web3.utils.toBN((this.state.stakeAmount * 1000000000000000000).toFixed(0)).toString(),
+                            window.web3.utils.toBN(window.web3.utils.toWei(String(this.state.stakeAmount), 'ether')).toString(),
                         ];
 
                         let approveArgsForTopupAction = [
                             this.props.topupAction.options.address,
-                            window.web3.utils.toBN((this.state.stakeAmount / this.props.ethLpExchangeRate * 1000000000000000000).toFixed(0)).toString()
+                            window.web3.utils.toBN(window.web3.utils.toWei(String(this.state.stakeAmount / this.props.ethLpExchangeRate), 'ether')).toString()
                         ]
 
                         let argsRegister = [
                             this.props.myAccount + "000000000000000000000000",
                             "0x66756a6964616f65746800000000000000000000000000000000000000000000",
-                            window.web3.utils.toBN((this.state.stakeAmount / this.props.ethLpExchangeRate * 1000000000000000000).toFixed(0)).toString(),
+                            window.web3.utils.toBN( window.web3.utils.toWei(String(this.state.stakeAmount / this.props.ethLpExchangeRate), 'ether')).toString(),
                             [
-                                window.web3.utils.toBN(window.web3.utils.toWei((this.state.triggerHealthFactor).toString(), 'ether')).toString(),
+                                window.web3.utils.toBN( window.web3.utils.toWei( String(this.state.triggerHealthFactor), 'ether') ).toString(),
                                 "0",
-                                window.web3.utils.toBN((this.state.stakeAmount * 1 * 1).toFixed(0)).toString(),
+                                "1",
                                 "0x9668f5f55f2712Dd2dfa316256609b516292D554",
                                 "0x22e9DEAB7fC35a85f4E33F88ff9012d4aF2d35f7",
-                                window.web3.utils.toBN((this.state.singleTopupAmount * 1 * 1000000000000000000).toFixed(0)).toString(),
-                                window.web3.utils.toBN((this.state.stakeAmount * 1 * 1000000000000000000).toFixed(0)).toString(),
-                                window.web3.utils.toBN((this.state.stakeAmount * 1 * 1000000000000000000).toFixed(0)).toString(),
+                                window.web3.utils.toBN( window.web3.utils.toWei( String(this.state.singleTopupAmount), 'ether') ).toString(),
+                                window.web3.utils.toBN( window.web3.utils.toWei( String(this.state.stakeAmount* 0.9999), 'ether') ).toString(),
+                                window.web3.utils.toBN( window.web3.utils.toWei( String(this.state.stakeAmount* 0.9999), 'ether') ).toString(),
                                 "0x0000000000000000000000000000000000000000000000000000000000000000"
                             ]
                         ];

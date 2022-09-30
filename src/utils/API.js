@@ -162,10 +162,14 @@ let refreshPrice = (props, action="GET_NEW") => {
                         "0x66756a6964616f00000000000000000000000000000000000000000000000000"
                     ];
 
+                    let previousResult = String(result);
                     if (props.topupAction) {
-                        props.topupAction.methods.getPosition(...argsGetPosition).call({}, (error, resultStakerVault) => {
-                            let stakerVault = parseFloat(window.web3.utils.fromWei(resultStakerVault[7], 'gwei') * 10);
-                            props.dispatch(changeMyBtcLpAmount(stakerVault + window.web3.utils.fromWei(result, 'gwei') * 10));
+                        props.topupAction.methods.getPosition(...argsGetPosition).call({}, (error, resultStakerVault) => {                            
+                            const amount = window.web3.utils.toBN(resultStakerVault[7]);
+                            const amountToAdd = window.web3.utils.toBN(previousResult);
+                            const newAmountInWei = amount.add(amountToAdd);
+
+                            props.dispatch(changeMyBtcLpAmount(window.web3.utils.fromWei(newAmountInWei, 'gwei') * 10));
                         });
                     }
                     props.dispatch(changeMyBtcLpAmount(window.web3.utils.fromWei(result, 'gwei') * 10));
@@ -222,14 +226,17 @@ let refreshPrice = (props, action="GET_NEW") => {
                     "0x66756a6964616f65746800000000000000000000000000000000000000000000"
                 ];
 
+                let previousResult = String(result);
                 if (props.topupAction) {
                     props.topupAction.methods.getPosition(...argsGetPosition).call({}, (error, resultStakerVault) => {
-                        let stakerVault = parseFloat(window.web3.utils.fromWei(resultStakerVault[7], 'ether') * 1);
-                        props.dispatch(changeMyEthLpAmount(stakerVault + window.web3.utils.fromWei(result, 'ether') * 1));
+                        const amount = window.web3.utils.toBN(resultStakerVault[7]);
+                        const amountToAdd = window.web3.utils.toBN(previousResult);
+                        const newAmountInWei = amount.add(amountToAdd);
+
+                        props.dispatch(changeMyEthLpAmount(window.web3.utils.fromWei(newAmountInWei, 'ether')));
                     });
                 }
-
-                props.dispatch(changeMyEthLpAmount(window.web3.utils.fromWei(result, 'ether') * 1));
+                props.dispatch(changeMyEthLpAmount(window.web3.utils.fromWei(String(result), 'ether')));
             });
         }
 
