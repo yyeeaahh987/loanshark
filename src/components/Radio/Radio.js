@@ -6,7 +6,8 @@ export class Radio extends Component {
   state = {};
 
   render() {
-    const { selected, onChange, text, value, disabled } = this.props;
+    const { theme, selected, onChange, text, value, disabled } = this.props;
+    console.log(theme)
     return (
       <div
         className="modern-radio-container"
@@ -23,13 +24,14 @@ export class Radio extends Component {
               "unselected-circle"}`}
           />
         </div>
-        <div className="helper-text">{text}</div>
+        <div className={`helper-text ${theme === "light" ? "helper-text-light" : "helper-text-dark"}`}>{text}</div>
       </div>
-    );
+    )
   }
 }
 
 Radio.propTypes = {
+  theme: PropTypes.oneOf(["light", "dark"]),
   text: PropTypes.node.isRequired,
   onChange: PropTypes.func.isRequired,
   selected: PropTypes.string.isRequired,

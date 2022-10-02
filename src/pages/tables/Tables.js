@@ -56,6 +56,7 @@ class Tables extends React.Component {
         <Row>
           <Col xl={7} lg={7}>
             <Widget
+            theme={this.props.theme}
               title={
                 <p style={{ fontWeight: 700 }}>
                   Borrow
@@ -63,14 +64,18 @@ class Tables extends React.Component {
               }
               customDropDown
             >
-              <Trade />
+              <Trade/>
             </Widget>
           </Col>
 
           <Col xl={5} lg={5}>
             <HealthFactorPieChart />
-            <TradeInfo />
-            <Widget title={<p style={{ fontWeight: 700 }}>Borrowing APY of {this.props.selectedPair === "ETHBTC"? "BTC":"USDT"}</p>}>
+            <TradeInfo/>
+            <Widget 
+            abc={console.log(this.props.theme)}
+            title={<p style={{ fontWeight: 700 }}>Borrowing APY of {this.props.selectedPair === "ETHBTC"? "BTC":"USDT"}</p>}
+            theme={this.props.theme}
+            >
                 <Row style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 0, marginTop: 0 }}>
                   <Col>
                     <span style={{ color: "#00ff00" }}>AAVE</span>
@@ -114,6 +119,8 @@ function mapStateToProps(store) {
     inputBtcDept: store.loanshark.inputBtcDept,
     inputEthDeposit: store.loanshark.inputEthDeposit,
     LTV: store.loanshark.LTV,
+
+    theme: store.layout.theme,
   };
 }
 

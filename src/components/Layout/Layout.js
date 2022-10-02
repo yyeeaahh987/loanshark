@@ -79,10 +79,10 @@ class Layout extends React.Component {
 						}}
 					/>
 				</div>
-
 				<div
 					className={[
 						s.root,
+						(this.props.theme==="light"?s.rootLight:s.rootDark),
 						!this.props.sidebarOpened ? s.sidebarClose : "",
 						"flatlogic-one",
 						"dashboard-black",
@@ -157,7 +157,9 @@ function mapStateToProps(store) {
 	return {
 		sidebarOpened: store.navigation.sidebarOpened,
 		sidebarStatic: store.navigation.sidebarStatic,
-		loadingActive: store.navigation.loadingActive
+		loadingActive: store.navigation.loadingActive,
+
+		theme: store.layout.theme,
 	};
 }
 

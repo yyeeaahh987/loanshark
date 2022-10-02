@@ -7,7 +7,7 @@ import WalletConnectProvider from "@walletconnect/web3-provider";
 import s from "./Header.module.scss";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBars, faRotateRight, faArrowLeftLong } from "@fortawesome/free-solid-svg-icons"
+import { faBars, faRotateRight, faArrowLeftLong, faLightbulb } from "@fortawesome/free-solid-svg-icons"
 import { Grid } from '@mui/material';
 import {
 	Navbar, Button, Input,
@@ -53,6 +53,10 @@ import {
 	changeLpTokenEth,
 	changeVaultEth,
 } from "../../actions/backd";
+
+import {
+	changeTheme
+} from "../../actions/layout"
 
 import Controller from '../../abi/fujidao/Controller.json';
 import FujiVaultAVAX from '../../abi/fujidao/FujiVaultAVAX.json';
@@ -147,6 +151,7 @@ class Header extends React.Component {
 		this.setMyAAVEAVAXContract = this.setMyAAVEAVAXContract.bind(this);
 		this.setMySmartVaultContractBtc = this.setMySmartVaultContractBtc.bind(this);
 		this.setMySmartVaultContractUsdt = this.setMySmartVaultContractUsdt.bind(this);
+		this.setAppThemeMode = this.setAppThemeMode.bind(this);
 
 		this.state = {
 			menuOpen: false,
@@ -171,7 +176,7 @@ class Header extends React.Component {
 			modalTitle: '',
 			modalToken: '',
 			modalAction: '',
-			modalCall: () => { },		
+			modalCall: () => { },
 			modalInputValue: 0
 		};
 	}
@@ -191,9 +196,9 @@ class Header extends React.Component {
 
 	}
 
-	clearAccount(){
-		console.log(`clear account`)	
-		this.setState({myAccount: null})
+	clearAccount() {
+		console.log(`clear account`)
+		this.setState({ myAccount: null })
 		this.setMyFujiVaultETHBTC(null);
 		this.setMyFujiVaultAVAXUSDT(null);
 		this.setMyFliquidatorAVAX(null);
@@ -372,8 +377,12 @@ class Header extends React.Component {
 		this.props.dispatch(changeProviderAAVEAVAX(val));
 	}
 
+	setAppThemeMode(mode) {
+		this.props.dispatch(changeTheme(mode));
+	}
+
 	getNeededCollateralFor(action) {
-		API(this.props,action);
+		API(this.props, action);
 	}
 
 	toggleMintETH(inputModalToken, inputModalAction) {
@@ -435,7 +444,7 @@ class Header extends React.Component {
 	}
 
 	ethEnabled() {
-		if(window.web3===undefined){
+		if (window.web3 === undefined) {
 			window.open(METAMASK_INSTALL_URL);
 		}
 		else if (window.web3) {
@@ -724,6 +733,19 @@ class Header extends React.Component {
 										}}
 											icon={faBars} />
 									</div>
+									<div>
+										<FontAwesomeIcon style={{ cursor: "pointer" }} onClick={() => {
+											if (this.props.theme === "light") this.setAppThemeMode("dark")
+											else this.setAppThemeMode("light")
+											// console.log(localStorage.getItem("theme"))
+											// if(!localStorage.getItem("theme") || localStorage.getItem("theme")==="dark"){
+											// 	localStorage.setItem("theme","light")
+											// }else{
+											// 	localStorage.setItem("theme","dark")
+											// }
+										}}
+											icon={faLightbulb} />
+									</div>
 								</Grid>
 							</Grid>
 						</Grid>
@@ -732,10 +754,14 @@ class Header extends React.Component {
 				<Modal isOpen={this.state.modal} toggle={this.toggle}>
 					{this.state.modalAction === "connect_wallet" &&
 						<>
-							<ModalBody style={{ width: "500px", color: '#ffffff', backgroundColor: '#000000', border: 'solid', borderRadius: '5px', borderColor: '#ffffff' }}>
+							<ModalBody
+								// style={{ width: "500px", color: '#ffffff', backgroundColor: '#000000', border: 'solid', borderRadius: '5px', borderColor: '#ffffff' }}
+								className={[s.connectWallet, (this.props.theme === "light" ? s.connectWalletLight : s.connectWalletDark)]}
+							// className={s.addressClass}
+							>
 								<h4 className={"fw-bold"}>{this.state.modalTitle}</h4>
 								<a>
-									<div className={'manage-button'} 
+									<div className={'manage-button'}
 										onClick={() => {
 											this.ethEnabled()
 											this.toggle()
@@ -743,7 +769,7 @@ class Header extends React.Component {
 										<div style={{ padding: "10px" }}>
 											<Grid container spacing={1} alignContent={"center"} textAlign={"center"} justifyContent={"space-between"}>
 												<Grid item>
-													{`${(window.web3===undefined)?"Install ":""}MetaMask`}
+													{`${(window.web3 === undefined) ? "Install " : ""}MetaMask`}
 												</Grid>
 												<Grid item>
 													<img style={{ width: "15px", height: "15px" }} src="/assets/icon/metamask.png" alt=""></img>
@@ -754,7 +780,7 @@ class Header extends React.Component {
 								</a>
 								<br></br>
 								<a>
-									<div className={'manage-button'} 
+									<div className={'manage-button'}
 										onClick={() => {
 											this.walletConnectEnabled()
 											this.toggle()
@@ -773,7 +799,7 @@ class Header extends React.Component {
 								</a>
 								<br></br>
 								<a>
-									<div className={'manage-button'} 
+									<div className={'manage-button'}
 										onClick={() => {
 											this.walletConnectEnabled()
 											this.toggle()
@@ -817,6 +843,7 @@ class Header extends React.Component {
 }
 
 function mapStateToProps(store) {
+	console.log(store)
 	return {
 		sidebarOpened: store.navigation.sidebarOpened,
 		sidebarStatic: store.navigation.sidebarStatic,
@@ -858,6 +885,8 @@ function mapStateToProps(store) {
 		lpTokenEth: store.backd.lpTokenEth,
 		vaultEth: store.backd.vaultEth,
 		totalEthLpAmount: store.backd.totalEthLpAmount,
+
+		theme: store.layout.theme,
 	};
 }
 

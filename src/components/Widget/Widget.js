@@ -33,7 +33,8 @@ class Widget extends React.Component {
     customControls: PropTypes.bool,
     options: PropTypes.object, //eslint-disable-line,
     fetchingData: PropTypes.bool,
-    widgetSize: PropTypes.oneOf(["full","left","right"])
+    widgetSize: PropTypes.oneOf(["full", "left", "right"]),
+    theme: PropTypes.oneOf(["light", "dark"]),
   };
 
   static defaultProps = {
@@ -61,7 +62,8 @@ class Widget extends React.Component {
     options: {},
     fetchingData: false,
     widgetType: "",
-    widgetSize:"full"
+    widgetSize: "full",
+    theme: "light",
   };
 
   constructor(props) {
@@ -122,8 +124,8 @@ class Widget extends React.Component {
     }
     this.setState({ reloading: true });
     let endpoint = false;
-    if(!endpoint) {
-      setTimeout(() => this.setState({ reloading: false }),2000);
+    if (!endpoint) {
+      setTimeout(() => this.setState({ reloading: false }), 2000);
     }
   }
 
@@ -160,6 +162,7 @@ class Widget extends React.Component {
       widgetType,
       updateWidgetData,
       options, //eslint-disable-line
+      theme,
       ...attributes
     } = this.props;
 
@@ -178,22 +181,24 @@ class Widget extends React.Component {
     return (
       <React.Fragment>
         <section
+        abc={console.log(this.props.theme)}
           style={{ display: hideWidget ? 'none' : '' }}
           className={
-            classNames('widget', 
-            (this.props.widgetSize==="left") ? s.widgetBorderLeft:"",
-            (this.props.widgetSize==="right") ? s.widgetBorderRight:"",
-            { 'fullscreened': !!fullscreened, 'collapsed': !!collapseWidget }, 
-            s.widget, 
-            className, 
-            (reloading || fetchingData) ? s.reloading : '')
+            classNames('widget',
+              (this.props.widgetSize === "left") ? s.widgetBorderLeft : "",
+              (this.props.widgetSize === "right") ? s.widgetBorderRight : "",
+              { 'fullscreened': !!fullscreened, 'collapsed': !!collapseWidget },
+              s.widget,
+              (this.props.theme === "light" ? s.widgetLight : s.widgetDark),
+              className,
+              (reloading || fetchingData) ? s.reloading : '')
           } {...attributes}
         >
           {
             title && (
               typeof title === 'string'
-                ? <h5 className={s.title}>{title}</h5>
-                : <header className={s.title}>{title}</header>
+                ? <h5 className={[s.title, (this.props.theme === "light" ? s.titleLight : s.titleDark)]}>{title}</h5>
+                : <header className={[s.title, (this.props.theme === "light" ? s.titleLight : s.titleDark)]}>{title}</header>
             )
           }
 
@@ -225,7 +230,7 @@ class Widget extends React.Component {
               </div>
             )
           }
-          
+
           {/* children part */}
           <AnimateHeight
             duration={500}

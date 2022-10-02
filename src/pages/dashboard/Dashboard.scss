@@ -149,24 +149,53 @@
 .customTable {
   &__headRow {
     &__item {
-      padding-left: 0.75rem !important;
+      padding-left: 0.75rem;
+
+      &__light {
+        color: black;
+      }
+
+      &__dark {
+        color: white;
+      }
     }
   }
 
   &__dataRow {
     height: 74px;
-      border-radius: 10px 10px 10px 10px !important;
-      border: 1px dashed rgb(122, 122, 122) !important;
-      box-shadow: var(--widget-shadow);
-    &__borrow {
-      text-align: center;
-      border-radius: 10px 10px 10px 10px !important;
-      border: 1px dashed rgb(122, 122, 122) !important;
+    &__light{
+      color:black;
+    }
+    &__dark{
       box-shadow: var(--widget-shadow);
       
-      &:hover {
-        color: #ffffff !important
+    }
+
+    &__borrow {
+      text-align: center;
+      border-radius: 10px 10px 10px 10px;
+
+      box-shadow: var(--widget-shadow);
+
+      &__light {
+        border: 1px dashed rgb(2, 2, 2);
+
+        // color: white;
+        &:hover {
+          color: #ffffff;
+          background-color: #070707;
+        }
       }
+
+      &__dark {
+        border: 1px dashed rgb(235, 235, 235);
+
+        &:hover {
+          color: #ffffff;
+          background-color: #798892;
+        }
+      }
+
     }
 
     &__healthFactor {
@@ -182,20 +211,40 @@
 }
 
 .manage-button {
-  background-color: #444444;
-  color: #ffffff;
-  border: 1px solid #ffffff;
+  &__light {
+    background-color: white !important;
+    color: black !important;
+    border: 1px solid black !important;
 
-  &:active {
-    background-color: #000000 !important;
+    &:active {
+      background-color: white !important;
+    }
+
+    &:focus {
+      background-color: white;
+    }
+
+    &:hover {
+      background-color: #444444 !important;
+    }
   }
 
-  &:focus {
-    background-color: #000000;
-  }
+  &__dark {
+    background-color: #444444;
+    color: #ffffff;
+    border: 1px solid #ffffff;
 
-  &:hover {
-    background-color: #000000;
+    &:active {
+      background-color: #000000 !important;
+    }
+
+    &:focus {
+      background-color: #000000;
+    }
+
+    &:hover {
+      background-color: #000000;
+    }
   }
 }
 
