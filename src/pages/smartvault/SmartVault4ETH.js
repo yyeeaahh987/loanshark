@@ -127,8 +127,8 @@ class SmartVault4ETH extends React.Component {
                                 "0x9668f5f55f2712Dd2dfa316256609b516292D554",
                                 "0x22e9DEAB7fC35a85f4E33F88ff9012d4aF2d35f7",
                                 window.web3.utils.toBN( window.web3.utils.toWei( String(this.state.singleTopupAmount), 'ether') ).toString(),
-                                window.web3.utils.toBN( window.web3.utils.toWei( String(this.state.stakeAmount* 0.9999), 'ether') ).toString(),
-                                window.web3.utils.toBN( window.web3.utils.toWei( String(this.state.stakeAmount* 0.9999), 'ether') ).toString(),
+                                window.web3.utils.toBN( window.web3.utils.toWei( String(this.state.stakeAmount), 'ether') ).toString(),
+                                window.web3.utils.toBN( window.web3.utils.toWei( String(this.state.stakeAmount), 'ether') ).toString(),
                                 "0x0000000000000000000000000000000000000000000000000000000000000000"
                             ]
                         ];
