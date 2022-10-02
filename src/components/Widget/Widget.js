@@ -181,7 +181,6 @@ class Widget extends React.Component {
     return (
       <React.Fragment>
         <section
-        abc={console.log(this.props.theme)}
           style={{ display: hideWidget ? 'none' : '' }}
           className={
             classNames('widget',
@@ -217,7 +216,6 @@ class Widget extends React.Component {
                 {customFullscreen && (
                   <button
                     onClick={(e) => {
-                      console.log(`325`)
                       this.handleFullscreen(e)
                     }}
                     id={`closeId-${randomId}`} className={s.customControlItem}>

@@ -9,6 +9,10 @@ import GlobalStyle from '../components/global'
 import '../styles/theme.scss';
 import LayoutComponent from '../components/Layout';
 
+import {
+	changeTheme
+} from "../actions/layout"
+
 const LOANSHARK_MINT = process.env.REACT_APP_LOANSHARK_MINT;
 const LOANSHARK_TWITTER = process.env.REACT_APP_LOANSHARK_TWITTER;
 const LOANSHARK_DOCUMENT = process.env.REACT_APP_LOANSHARK_DOCUMENT;
@@ -72,6 +76,22 @@ const CloseButton = ({ closeToast }) => <i onClick={closeToast} className="la la
 // const LanguageComponent = withTranslation()(RealComponent)
 
 class App extends React.PureComponent {
+    setAppThemeMode(mode) {
+		this.props.dispatch(changeTheme(mode));
+	}
+    componentWillMount() {
+        console.log(`componend will mount`)
+        console.log(localStorage.getItem("theme"))
+        if(localStorage.getItem("theme")===undefined || localStorage.getItem("theme")===null){
+            this.setAppThemeMode("dark")
+        }else{
+            this.setAppThemeMode(localStorage.getItem("theme"))
+        }
+        
+      }
+      componentDidMount(){
+        console.log(`componend did mount`)
+      }
     render() {
         return (
             <div>

@@ -567,29 +567,29 @@ class Manage extends React.Component {
                         <Table className={"mb-0"} borderless responsive style={{ borderCollapse: "separate", borderSpacing: "0" }}>
                             <thead className="customTable">
                                 <tr className="customTable__headRow">
-                                    <th key={0} scope="col" className={"customTable__headRow__item"}>
+                                    <th key={0} scope="col" className={`customTable__headRow__item__${this.props.theme === "light" ? "light" : "dark"}`}>
                                         Asset
                                     </th>
-                                    <th key={1} scope="col" className={"customTable__headRow__item"}>
+                                    <th key={1} scope="col" className={`customTable__headRow__item__${this.props.theme === "light" ? "light" : "dark"}`}>
                                         Collateral
                                     </th>
-                                    <th key={2} scope="col" className={"customTable__headRow__item"}>
+                                    <th key={2} scope="col" className={`customTable__headRow__item__${this.props.theme === "light" ? "light" : "dark"}`}>
                                         Debt
                                     </th>
-                                    <th key={4} scope="col" className={"customTable__headRow__item"}>
+                                    <th key={4} scope="col" className={`customTable__headRow__item__${this.props.theme === "light" ? "light" : "dark"}`}>
                                         Health Factor
                                     </th>
-                                    <th key={5} scope="col" className={"customTable__headRow__item"}>
+                                    <th key={5} scope="col" className={`customTable__headRow__item__${this.props.theme === "light" ? "light" : "dark"}`}>
                                         Smart Vault
                                     </th>
-                                    <th key={6} scope="col" className={"customTable__headRow__item"}>
+                                    <th key={6} scope="col" className={`customTable__headRow__item__${this.props.theme === "light" ? "light" : "dark"}`}>
                                         Provider
                                     </th>
                                 </tr>
                             </thead>
                             <tbody className="customTable">
                                 <tr key={0} className="customTable__dataRow">
-                                    <td className="firstOne">
+                                    <td className={`firstOne manage-text-${this.props.theme === "light" ? "light" : "dark"}`}>
                                         <span style={{ paddingRight: "5px" }}>
                                             <img className="icon" src={this.state.depositCurrencyIconPath} alt="x"></img>
                                         </span>
@@ -599,7 +599,7 @@ class Manage extends React.Component {
                                         </span>
                                         {`${this.state.depositCurrency}/${this.state.debtCurrency}`}
                                     </td>
-                                    <td className="middle">
+                                    <td className={`middle manage-text-${this.props.theme === "light" ? "light" : "dark"}`}>
                                         <Grid container>
                                             <Grid xs={12}>
                                                 {deposit === "ETH" ?
@@ -617,7 +617,7 @@ class Manage extends React.Component {
                                             </Grid>
                                         </Grid>
                                     </td>
-                                    <td className="middle">
+                                    <td className={`middle manage-text-${this.props.theme === "light" ? "light" : "dark"}`}>
                                         <Grid container>
                                             <Grid xs={12}>
                                                 {debt === "BTC" ?
@@ -635,7 +635,7 @@ class Manage extends React.Component {
                                             </Grid>
                                         </Grid>
                                     </td>
-                                    <td className="middle">
+                                    <td className={`middle manage-text-${this.props.theme === "light" ? "light" : "dark"}`}>
                                         {debt === "BTC" ?
                                             <span
                                                 className={
@@ -664,7 +664,7 @@ class Manage extends React.Component {
                                             </span>
                                         }
                                     </td>
-                                    <td className="middle">
+                                    <td className={`middle manage-text-${this.props.theme === "light" ? "light" : "dark"}`}>
                                         ${debt === "BTC" ?
                                             parseFloat(this.props.myBtcLpAmount * this.props.btcLpExchangeRate * this.props.priceOfBtc / 100).toFixed(2)
                                             :
@@ -672,7 +672,7 @@ class Manage extends React.Component {
                                         }<br />
                                         {parseFloat(this.props.myBtcLpAmount * this.props.btcLpExchangeRate).toFixed(8)} BTC
                                     </td>
-                                    <td className="lastOne">
+                                    <td className={`lastOne manage-text-${this.props.theme === "light" ? "light" : "dark"}`}>
                                         AAVE
                                     </td>
                                 </tr>
@@ -1094,7 +1094,7 @@ class Manage extends React.Component {
                 </Grid>
 
                 <Modal centered isOpen={this.state.modal} toggle={this.toggle} style={{ color: '#000000' }}>
-                    <ModalBody style={{ color: '#ffffff', backgroundColor: '#000000', border: 'solid', borderRadius: '5px', borderColor: '#ffffff' }}>
+                    <ModalBody className={`modal__${this.props.theme === "light" ? "light" : "dark"}`}>
                         <Row>
                             <Col style={{ paddingTop: '20px', paddingLeft: '40px', paddingRight: '40px' }} sm={11}>
                                 <h4 className={"fw-bold"}>{this.state.modalTitle}</h4>
@@ -1112,7 +1112,7 @@ class Manage extends React.Component {
                                 </Input> {this.state.modalToken}
                             </Col>
                             <Col style={{ paddingTop: '20px', paddingLeft: '40px', paddingRight: '40px' }} sm={12}>
-                                <Button block className={'manage-button'} style={{ padding: '5px' }}
+                                <Button block className={`manage-button__${this.props.theme === "light" ? "light" : "dark"}`} style={{ padding: '5px' }}
                                     onClick={this.state.modalCall ? this.state.modalCall : this.toggle}>
                                     {this.state.modalCall ? 'Confirm' : 'Close'}
                                 </Button>
@@ -1173,6 +1173,8 @@ function mapStateToProps(store) {
         ethLpExchangeRate: store.backd.ethLpExchangeRate,
         totalEthLpAmount: store.backd.totalEthLpAmount,
         myProtectionEth: store.backd.myProtectionEth,
+
+        theme: store.layout.theme,
     };
 }
 

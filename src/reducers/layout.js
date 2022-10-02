@@ -19,7 +19,7 @@ import {
   } from '../actions/layout';
   
   const defaultState = {
-    theme:"light",
+    theme:"dark",
     // lpPoolBtc: null,
     // lpPoolEth: null,
     // lpTokenBtc: null,
