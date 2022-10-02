@@ -3,10 +3,34 @@ import { connect } from "react-redux";
 import { NavLink } from "react-router-dom"
 import { Grid } from '@mui/material';
 import { Row, Col, Table, Button, Modal, ModalBody } from 'reactstrap';
+import { ThemeProvider, createGlobalStyle } from 'styled-components'
+import {
+	Title
+} from './TestExpport'
 import { toggleLoading } from "../../actions/navigation";
 import API from '../../utils/API'
 import Widget from "../../components/Widget";
 import './Dashboard.scss'
+
+
+const lightTheme = {
+	primary: '#fff',
+	text: '#000',
+	fontFamily: 'Segoe UI'
+}
+const darkTheme = {
+	primary: '#000',
+	text: '#fff',
+	fontFamily: 'Segoe UI'
+}
+
+
+
+
+
+
+
+
 
 class Dashboard extends React.Component {
 	constructor() {
@@ -27,6 +51,7 @@ class Dashboard extends React.Component {
 			modalOnChange: () => { },
 			modalOnCall: () => { },
 			loadingActive: false,
+			themeState: "light",
 		};
 	}
 
@@ -87,12 +112,21 @@ class Dashboard extends React.Component {
 		});
 	}
 
+
+
+	// 	const Title = styled.h1`
+	// 	font-size: 1.5em;
+	// 	text-align: center;
+	// 	color: palevioletred;
+	//   `;
+
 	render() {
 		return (
 			<div>
 				<Grid container spacing={2}>
 					<Grid item xl={3} lg={3} xs={12}>
 						<Widget
+							theme={this.props.theme}
 							title={<p style={{ fontSize: '40px', fontWeight: 700 }}>
 								${((this.props.userDepositBalanceEth * this.props.priceOfEth / 100) + (this.props.userDepositBalanceAvax * this.props.priceOfAvax / 100)).toFixed(2)}
 							</p>}
@@ -110,6 +144,7 @@ class Dashboard extends React.Component {
 
 					<Grid item xl={3} lg={3} xs={12}>
 						<Widget
+							theme={this.props.theme}
 							title={<p style={{ fontSize: '40px', fontWeight: 700 }}>
 								${((this.props.userDebtBalanceBtc * this.props.priceOfBtc / 100) + (this.props.userDebtBalanceUsdt * this.props.priceOfUsdt / 100)).toFixed(2)}
 							</p>}
@@ -126,6 +161,7 @@ class Dashboard extends React.Component {
 					</Grid>
 					<Grid item xl={3} lg={3} xs={12}>
 						<Widget
+							theme={this.props.theme}
 							title={<p style={{ fontSize: '40px', fontWeight: 700 }}>
 								${(this.props.myBtcLpAmount * this.props.btcLpExchangeRate * this.props.priceOfBtc / 100).toFixed(2)}
 							</p>}
@@ -143,6 +179,7 @@ class Dashboard extends React.Component {
 
 					<Grid item xl={3} lg={3} xs={12}>
 						<Widget
+							theme={this.props.theme}
 							title={<p style={{ fontSize: '40px', fontWeight: 700 }}>
 								{
 									parseFloat(
@@ -180,31 +217,31 @@ class Dashboard extends React.Component {
 						<Table className={"mb-0"} borderless responsive style={{ borderCollapse: "separate", borderSpacing: "0" }}>
 							<thead className="customTable">
 								<tr className="customTable__headRow">
-									<th key={0} scope="col" className={"customTable__headRow__item"}>
+									<th key={0} scope="col" className={`customTable__headRow__item__${this.props.theme === "light" ? "light" : "dark"}`}>
 										Asset
 									</th>
-									<th key={1} scope="col" className={"customTable__headRow__item"}>
+									<th key={1} scope="col" className={`customTable__headRow__item__${this.props.theme === "light" ? "light" : "dark"}`}>
 										Borrowing Rate<br />Net Interest Rate
 									</th>
-									<th key={2} scope="col" className={"customTable__headRow__item"}>
+									<th key={2} scope="col" className={`customTable__headRow__item__${this.props.theme === "light" ? "light" : "dark"}`}>
 										Collateral
 									</th>
-									<th key={3} scope="col" className={"customTable__headRow__item"}>
+									<th key={3} scope="col" className={`customTable__headRow__item__${this.props.theme === "light" ? "light" : "dark"}`}>
 										Debt
 									</th>
-									<th key={4} scope="col" className={"customTable__headRow__item"}>
+									<th key={4} scope="col" className={`customTable__headRow__item__${this.props.theme === "light" ? "light" : "dark"}`}>
 										Health Factor
 									</th>
-									<th key={5} scope="col" className={"customTable__headRow__item"}>
+									<th key={5} scope="col" className={`customTable__headRow__item__${this.props.theme === "light" ? "light" : "dark"}`}>
 										Protection
 									</th>
-									<th key={6} scope="col" className={"customTable__headRow__item"}>
+									<th key={6} scope="col" className={`customTable__headRow__item__${this.props.theme === "light" ? "light" : "dark"}`}>
 
 									</th>
 								</tr>
 							</thead>
 							<tbody hidden={this.props.userDepositBalanceEth <= 0} className="customTable">
-								<tr key={0} className="customTable__dataRow">
+								<tr key={0} className={`customTable__dataRow__${this.props.theme === "light" ? "light" : "dark"}`}>
 									<td className="firstOne">
 										<span style={{ paddingRight: "5px" }}>
 											<img className="icon" src="/assets/icon/eth-logo.svg" alt="x"></img>
@@ -280,9 +317,9 @@ class Dashboard extends React.Component {
 											this.props.myBtcLpAmount > 0 || this.props.myEthLpAmount > 0 ?
 												<span>${
 													parseFloat(
-													this.props.myBtcLpAmount * this.props.btcLpExchangeRate * this.props.priceOfBtc / 100
-													+
-													this.props.myEthLpAmount * this.props.ethLpExchangeRate * this.props.priceOfEth / 100).toFixed(2)
+														this.props.myBtcLpAmount * this.props.btcLpExchangeRate * this.props.priceOfBtc / 100
+														+
+														this.props.myEthLpAmount * this.props.ethLpExchangeRate * this.props.priceOfEth / 100).toFixed(2)
 												} </span>
 												: null
 										}
@@ -302,14 +339,14 @@ class Dashboard extends React.Component {
 												}
 											}}
 										>
-											<Button className={"manage-button"}
+											<Button className={`manage-button__${this.props.theme === "light" ? "light" : "dark"}`}
 											>Manage
 											</Button>
 										</NavLink>
 									</td>
 								</tr>
 								<br></br>
-								<tr hidden key={1} className="customTable__dataRow">
+								<tr hidden key={1} className={`customTable__dataRow__${this.props.theme === "light" ? "light" : "dark"}`}>
 									{/* asset */}
 									<td className="firstOne" key={1}>
 										<span style={{ paddingRight: "5px" }}>
@@ -386,13 +423,18 @@ class Dashboard extends React.Component {
 								pathname: "/app/main/borrow",
 							}}
 						>
-							<Button block outline color={"secondary"} className={"customTable__dataRow__borrow"}>+ Borrow</Button>
+							<Button block outline color={"secondary"} className={`customTable__dataRow__borrow__${this.props.theme === "light" ? "light" : "dark"}`}>+ Borrow</Button>
+							
 						</NavLink>
 					</Grid>
 				</Grid>
 
 				<br></br>
 				<br></br>
+
+
+
+
 				<Grid container>
 					<Grid item xs={12}>
 						<span style={{
@@ -405,16 +447,16 @@ class Dashboard extends React.Component {
 						<Table className={"mb-0"} borderless responsive style={{ borderCollapse: "separate", borderSpacing: "0" }}>
 							<thead className="customTable">
 								<tr className="customTable__headRow">
-									<th key={0} scope="col" className={"customTable__headRow__item"}>
+									<th key={0} scope="col" className={`customTable__headRow__item__${this.props.theme === "light" ? "light" : "dark"}`}>
 										Asset
 									</th>
-									<th key={1} scope="col" className={"customTable__headRow__item"}>
+									<th key={1} scope="col" className={`customTable__headRow__item__${this.props.theme === "light" ? "light" : "dark"}`}>
 										Staking Amount
 									</th>
-									<th key={2} scope="col" className={"customTable__headRow__item"}>
+									<th key={2} scope="col" className={`customTable__headRow__item__${this.props.theme === "light" ? "light" : "dark"}`}>
 										APY
 									</th>
-									<th key={3} scope="col" className={"customTable__headRow__item"}>
+									<th key={3} scope="col" className={`customTable__headRow__item__${this.props.theme === "light" ? "light" : "dark"}`}>
 										TVL
 									</th>
 								</tr>
@@ -467,7 +509,7 @@ class Dashboard extends React.Component {
 							}}
 							hidden={this.props.myBtcLpAmount > 0}
 						>
-							<Button block outline color={"secondary"} className={"customTable__dataRow__borrow"}>+ Smart Vault</Button>
+							<Button block outline color={"secondary"} className={`customTable__dataRow__borrow__${this.props.theme === "light" ? "light" : "dark"}`}>+ Smart Vault</Button>
 						</NavLink>
 					</Grid>
 				</Grid>
@@ -529,7 +571,9 @@ function mapStateToProps(store) {
 		totalEthLpAmount: store.backd.totalEthLpAmount,
 		btcLpExchangeRate: store.backd.btcLpExchangeRate,
 		ethLpExchangeRate: store.backd.ethLpExchangeRate,
-		myProtection: store.backd.myProtection
+		myProtection: store.backd.myProtection,
+
+		theme: store.layout.theme,
 	};
 }
 

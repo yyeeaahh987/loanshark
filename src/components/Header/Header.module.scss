@@ -282,3 +282,22 @@
       width: 450px;
     }
 }
+
+.connectWallet{
+  border-radius: 5px;
+  width: 500px;
+}
+
+// color: '#ffffff', 
+// backgroundColor: '#000000', 
+// border: 'solid', 
+
+// borderColor: '#ffffff'
+.connectWalletLight{
+  border: 3px solid black;
+  background-color: white;
+}
+.connectWalletDark{
+  border: 3px solid #ffffff;
+  background-color: black;  
+}

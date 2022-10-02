@@ -13,8 +13,6 @@ th, td {
 }
 
 .rowHover {
-    color: #ffffff;
-    background-color: #000000;
     border: solid;
     border-width: 1px;
     border-color: rgb(122, 122, 122);
@@ -25,6 +23,13 @@ th, td {
     align-items: 'center';
     box-shadow: var(--widget-shadow);
 }
+.rowHover-light{
+
+}
+.rowHover-dark{
+  color: #ffffff;
+  background-color: #000000;
+}
 
 .rowHover:hover {
   color: #ffffff;
@@ -32,20 +37,34 @@ th, td {
 }
 
 
-.rowHovered {
-  color: #ffffff;
-  background-color: #444444;
-  border-style: none;
-  border-width: 1px;
-  border-color: rgb(122, 122, 122);
+.rowHovered{
   cursor: pointer;
   padding: 15px;
-  border-radius: 15px;
+  
   display: 'flex';
   align-items: 'center';
+}
+.rowHovered-dark{
+  color: #ffffff;
+  background-color: #444444;
+  border: 1px none rgb(122, 122, 122);
+  /* border-style: none;
+  border-width: 1px;
+  border-color: rgb(122, 122, 122); */
   box-shadow: var(--widget-shadow);
 }
+.rowHovered-light{
+  color: #000000;
+  background-color: #ffffff;
+  border: 1px solid rgb(122, 122, 122);
+  border-radius: 20px !important;
+  /* border-style: none;
+  border-width: 1px;
+  border-color: rgb(122, 122, 122); */
 
+
+  /* box-shadow: var(--widget-shadow); */
+}
 
 .table-light {
   background-color: #444444;
@@ -54,4 +73,36 @@ th, td {
 
 .smart-vault-input {
   box-shadow: var(--widget-shadow) !important; 
+}
+
+.my-protection-text-light{
+  background-color: transparent;
+  color: black;
+}
+.my-protection-text-dark{
+  background-color: transparent;
+  color: #ffffff;
+}
+
+
+.firstOne {
+
+  border-top: 1px solid rgb(122, 122, 122) !important;
+  border-left: 1px solid rgb(122, 122, 122) !important;
+  border-bottom: 1px solid rgb(122, 122, 122) !important;
+  border-radius: 10px 0px 0px 10px !important;
+
+}
+
+.middle {
+
+  border-top: 1px solid rgb(122, 122, 122) !important;
+  border-bottom: 1px solid rgb(122, 122, 122) !important;
+}
+
+.lastOne {
+  border-top: 1px solid rgb(122, 122, 122) !important;
+  border-right: 1px solid rgb(122, 122, 122) !important;
+  border-bottom: 1px solid rgb(122, 122, 122) !important;
+  border-radius: 0px 10px 10px 0px !important;
 }

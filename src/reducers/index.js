@@ -4,13 +4,15 @@ import alerts from './alerts';
 import loanshark from './loanshark';
 import backd from './backd';
 import smartvault from './smartvault';
+import layout from './layout'
 
 const appReducer = combineReducers({
   alerts,
   navigation,
   loanshark,
   backd,
-  smartvault
+  smartvault,
+  layout,
 });
 const rootReducer = (state, action) => {
   if (action.type === 'RESET') {

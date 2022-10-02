@@ -1,5 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
+import { Grid } from '@mui/material';
 import {
     Dropdown
 } from 'react-bootstrap';
@@ -48,6 +49,24 @@ const ownAssetType = [
         "logoURI": ""
     },
 ]
+
+export const lightTheme = {
+    // color:"black",
+    // background:"white",
+    borderColor: '#000000'
+    // primary: '#fff',
+    // text: '#000',
+    // fontFamily: 'Segoe UI'
+}
+
+const darkTheme = {
+    borderColor: '#ffffff'
+    // primary: '#000',
+    // text: '#fff',
+    // fontFamily: 'Segoe UI'
+}
+
+
 class BalanceAmount extends React.Component {
     render() {
         return (
@@ -94,6 +113,7 @@ class Trade extends React.Component {
             modalValue: 0,
             modalOnChange: () => { },
             modalOnCall: () => { },
+            selectBorrowTokenModalSearchName: "",
         };
     }
 
@@ -197,9 +217,9 @@ class Trade extends React.Component {
                 modalTitle: modalTitle,
                 modalMessage: modalMessage,
                 modalToken: "",
-                modalAction: "",
+                modalAction: "CONFIRM_BORROW",
                 modalInputValue: 0,
-                modalCall: error? null : () => {
+                modalCall: error ? null : () => {
                     let approveArgs = [
                         this.props.myFujiVaultETHBTC.options.address,
                         window.web3.utils.toBN(window.web3.utils.toWei(this.state.inputEthDeposit, 'ether')).toString()
@@ -298,24 +318,13 @@ class Trade extends React.Component {
                             flexDirection: "column",
                         }}>
 
-                            <div style={{
-                                border: 'solid',
-
-                                borderWidth: '1px',
-                                borderRadius: '10px',
-                                padding: '10px',
-                                borderColor: '#ffffff'
-                            }}>
-                                <span style={{ margin: '5px', fontSize: '14px', color: '#888888' }}>Collateral</span>
-
-                                <Button size={'sm'} style={{
-                                    float: 'right',
-                                    color: '#ffffff',
-                                    backgroundColor: '#444444'
-                                }} onClick={() => {
-                                    this.setState({ inputEthDeposit: this.props.selectedPair === "ETHBTC" ? this.props.myETHAmount : this.props.selectedPair === "AVAXUSDT" ? this.props.myAVAXAmount : 0 });
-                                    this.props.dispatch(changeInputEthDeposit(this.props.selectedPair === "ETHBTC" ? this.props.myETHAmount : this.props.selectedPair === "AVAXUSDT" ? this.props.myAVAXAmount : 0));
-                                }}>Max</Button>
+                            <div className={`collateral ${(this.props.theme === "light") ? "collateral-light" : "collateral-dark"}`}>
+                                <span className={`collateral-text ${(this.props.theme === "light") ? "collateral-text-light" : "collateral-text-dark"}`}>Collateral</span>
+                                <Button size={'sm'} className={`trade-button ${(this.props.theme === "light") ? "trade-button-light" : "trade-button-dark"}`}
+                                    onClick={() => {
+                                        this.setState({ inputEthDeposit: this.props.selectedPair === "ETHBTC" ? this.props.myETHAmount : this.props.selectedPair === "AVAXUSDT" ? this.props.myAVAXAmount : 0 });
+                                        this.props.dispatch(changeInputEthDeposit(this.props.selectedPair === "ETHBTC" ? this.props.myETHAmount : this.props.selectedPair === "AVAXUSDT" ? this.props.myAVAXAmount : 0));
+                                    }}>Max</Button>
                                 <BalanceAmount
                                     style
                                     amount={this.props.selectedPair === "ETHBTC" ? this.props.myETHAmount : this.props.selectedPair === "AVAXUSDT" ? this.props.myAVAXAmount : 0}
@@ -325,14 +334,13 @@ class Trade extends React.Component {
                                 <InputGroup>
                                     <Input
                                         title="Input"
-                                        style={{ fontSize: '40px', border: 'none', backgroundColor: 'transparent', color: '#ffffff' }}
+                                        className={`input-amount input-amount-${(this.props.theme === "light") ?"light":"dark"}`}
                                         placeholder="Enter deposit amount..."
                                         value={this.state.inputEthDeposit}
                                         onChange={this.setInputEthDeposit}
                                     />
                                     <Dropdown style={{ paddingTop: '20px', height: '50px' }} className="currency-dropdown">
-                                        <Dropdown.Toggle variant="success" id="dropdown-basic" bsPrefix="p-0"
-                                            className="currency-dropdown__label-blue"
+                                        <Dropdown.Toggle variant="success" id="dropdown-basic" bsPrefix="p-0" className={`currency-dropdown__label-blue currency-dropdown__label-blue__${(this.props.theme === "light") ?"light":"dark"}`}
                                         >
                                             {this.props.selectedPair === "ETHBTC" ?
                                                 <img style={{ padding: '5px' }} className="icon" src="/assets/icon/eth-logo.svg" alt="x"></img> :
@@ -369,15 +377,8 @@ class Trade extends React.Component {
                                 ↓
                             </p>
 
-                            <div style={{
-                                border: 'solid',
-
-                                borderWidth: '1px',
-                                borderRadius: '10px',
-                                padding: '10px',
-                                borderColor: '#ffffff'
-                            }}>
-                                <span style={{ margin: '5px', fontSize: '14px', color: '#888888' }}>Borrow</span>
+                            <div className={`collateral ${(this.props.theme === "light") ? "collateral-light" : "collateral-dark"}`}>
+                                <span className={`collateral-text ${(this.props.theme === "light") ? "collateral-text-light" : "collateral-text-dark"}`}>Borrow</span>
                                 <BalanceAmount
                                     amount={parseFloat((borrowPower).toFixed(8))}
                                     displayPrefixText={"Max borrow: "}
@@ -385,14 +386,14 @@ class Trade extends React.Component {
                                 <InputGroup style={{ width: "100%" }}  >
                                     <Input
                                         title="Input"
-                                        style={{ fontSize: '40px', border: 'none', backgroundColor: 'transparent', color: '#ffffff' }}
+                                        className={`input-amount input-amount-${(this.props.theme === "light") ?"light":"dark"}`}
                                         placeholder="Enter borrow amount..."
                                         value={this.state.inputBtcBorrow}
                                         onChange={this.setInputBtcBorrow}
                                     />
 
                                     <Dropdown style={{ paddingTop: '20px', height: '50px' }} className="currency-dropdown">
-                                        <Dropdown.Toggle variant="success" id="dropdown-basic" bsPrefix="p-0" className="currency-dropdown__label-blue">
+                                        <Dropdown.Toggle variant="success" id="dropdown-basic" bsPrefix="p-0" className={`currency-dropdown__label-blue currency-dropdown__label-blue__${(this.props.theme === "light") ?"light":"dark"}`}>
                                             {this.props.selectedPair === "ETHBTC" ?
                                                 <img style={{ padding: '5px' }} className="icon" src="/assets/icon/btc-logo.svg" alt="x"></img> :
                                                 <img style={{ padding: '5px' }} className="icon" src="/assets/icon/usdt-logo.svg" alt="x"></img>} {' '}
@@ -404,6 +405,7 @@ class Trade extends React.Component {
                         </div>
                     </Col>
                 </Row>
+
                 <Row>
                     <Col lg={6} md={12}>
                         Borrowing Capacity:
@@ -412,27 +414,32 @@ class Trade extends React.Component {
                         <Row className="justify-content-end borrow-power">
                             <Col xs={"auto"} className={"borrow-power__option"}>
                                 <ButtonGroup size={'sm'}>
-                                    <Button className="borrow-power-button"
+                                    <Button 
+                                    className={`borrow-power-button__${this.props.theme === "light" ? "light" : "dark"}`}
                                         onClick={() => {
                                             this.setState({ inputBtcBorrow: isNaN(borrowPower) === true ? 0 : (borrowPower * 0.25).toFixed(8) });
                                             this.props.dispatch(changeInputBtcDebt(parseFloat((borrowPower * 0.25).toFixed(8))));
                                         }}>25%</Button>
-                                    <Button className="borrow-power-button"
+                                    <Button 
+                                    className={`borrow-power-button__${this.props.theme === "light" ? "light" : "dark"}`}
                                         onClick={() => {
                                             this.setState({ inputBtcBorrow: isNaN(borrowPower) === true ? 0 : (borrowPower * 0.5).toFixed(8) });
                                             this.props.dispatch(changeInputBtcDebt(parseFloat((borrowPower * 0.5).toFixed(8))));
                                         }}>50%</Button>
-                                    <Button className="borrow-power-button"
+                                    <Button 
+                                    className={`borrow-power-button__${this.props.theme === "light" ? "light" : "dark"}`}
                                         onClick={() => {
                                             this.setState({ inputBtcBorrow: isNaN(borrowPower) === true ? 0 : (borrowPower * 0.75).toFixed(8) });
                                             this.props.dispatch(changeInputBtcDebt(parseFloat((borrowPower * 0.75).toFixed(8))));
                                         }}>75%</Button>
-                                    <Button className="borrow-power-button"
+                                    <Button 
+                                    className={`borrow-power-button__${this.props.theme === "light" ? "light" : "dark"}`}
                                         onClick={() => {
                                             this.setState({ inputBtcBorrow: isNaN(borrowPower) === true ? 0 : (borrowPower * 0.9).toFixed(8) });
                                             this.props.dispatch(changeInputBtcDebt(parseFloat((borrowPower * 0.9).toFixed(8))));
                                         }}>90%</Button>
-                                    <Button className="borrow-power-button"
+                                    <Button 
+                                    className={`borrow-power-button__${this.props.theme === "light" ? "light" : "dark"}`}
                                         onClick={() => {
                                             this.setState({ inputBtcBorrow: isNaN(borrowPower) === true ? 0 : (borrowPower * 0.95).toFixed(8) });
                                             this.props.dispatch(changeInputBtcDebt(parseFloat((borrowPower * 0.95).toFixed(8))));
@@ -445,7 +452,8 @@ class Trade extends React.Component {
 
                 <Row style={{ marginBottom: 9, marginTop: 20 }}>
                     <Col lg={12} className={s.root}>
-                        <Button disabled={!this.props.myFujiVaultETHBTC || !(this.state.inputEthDeposit > 0)} block className={'manage-button'}
+                        <Button disabled={!this.props.myFujiVaultETHBTC || !(this.state.inputEthDeposit > 0)} block 
+                        className={`manage-button__${this.props.theme === "light" ? "light" : "dark"}`}
                             onClick={this.props.selectedPair === "ETHBTC" ? this.depositWETHAndBorrowWBTC : this.props.selectedPair === "AVAXUSDT" ? this.depositAVAXAndBorrowUSDT : null} >
                             {
                                 this.props.selectedPair === "ETHBTC" ? 'Borrow BTC using ETH as collateral' :
@@ -457,29 +465,118 @@ class Trade extends React.Component {
 
                 <Modal centered isOpen={this.state.modal} toggle={this.toggle} style={{ color: '#000000' }}>
                     <ModalBody style={{ color: '#ffffff', backgroundColor: '#000000', border: 'solid', borderRadius: '5px', borderColor: '#ffffff' }}>
-                        <Row>
-                            <Col style={{ paddingTop: '20px', paddingLeft: '40px', paddingRight: '40px' }} sm={11}>
-                                <h4 className={"fw-bold"}>{this.state.modalTitle}</h4>
-                            </Col>
-                            <Col sm={1}>
-                                <Button close color="secondary" onClick={this.toggle}></Button>
-                            </Col>
-                            <Col style={{ paddingTop: '20px', paddingLeft: '40px', paddingRight: '40px' }} sm={12}>
-                                <div className="content" dangerouslySetInnerHTML={{ __html: this.state.modalMessage }}></div>
-                            </Col>
-                            <Col style={{ display: 'none' }} sm={12}>
-                                <Input disabled className={`amount-text`}
-                                    style={{ backgroundColor: 'transparent', color: '#ffffff' }}
-                                    value={Number(this.state.modalInputValue)}>
-                                </Input> {this.state.modalToken}
-                            </Col>
-                            <Col style={{ paddingTop: '20px', paddingLeft: '40px', paddingRight: '40px' }} sm={12}>
-                                <Button block className={'manage-button'} style={{ padding: '5px' }}
-                                    onClick={this.state.modalCall ? this.state.modalCall : this.toggle}>
-                                    {this.state.modalCall ? 'Confirm' : 'Close'}
-                                </Button>
-                            </Col>
-                        </Row>
+                        {this.state.modalAction === "CONFIRM_BORROW" &&
+                            <Row>
+                                <Col style={{ paddingTop: '20px', paddingLeft: '40px', paddingRight: '40px' }} sm={11}>
+                                    <h4 className={"fw-bold"}>{this.state.modalTitle}</h4>
+                                </Col>
+                                <Col sm={1}>
+                                    <Button close color="secondary" onClick={this.toggle}></Button>
+                                </Col>
+                                <Col style={{ paddingTop: '20px', paddingLeft: '40px', paddingRight: '40px' }} sm={12}>
+                                    <div className="content" dangerouslySetInnerHTML={{ __html: this.state.modalMessage }}></div>
+                                </Col>
+                                <Col style={{ display: 'none' }} sm={12}>
+                                    <Input disabled className={`amount-text`}
+                                        style={{ backgroundColor: 'transparent', color: '#ffffff' }}
+                                        value={Number(this.state.modalInputValue)}>
+                                    </Input> {this.state.modalToken}
+                                </Col>
+                                <Col style={{ paddingTop: '20px', paddingLeft: '40px', paddingRight: '40px' }} sm={12}>
+                                    <Button block className={'manage-button'} style={{ padding: '5px' }}
+                                        onClick={this.state.modalCall ? this.state.modalCall : this.toggle}>
+                                        {this.state.modalCall ? 'Confirm' : 'Close'}
+                                    </Button>
+                                </Col>
+                            </Row>
+                        }
+                        {this.state.modalAction === "SELECT_BORROW_TOKEN" &&
+                            <Grid container>
+                                <Grid item xs={12}>
+                                    <h4 className={"fw-bold"}>{this.state.modalTitle}</h4>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <Input
+                                        title="Input"
+                                        style={{
+                                            borderRadius: "5px",
+                                            backgroundColor: "transparent",
+                                            color: "white"
+                                        }}
+                                        placeholder="Search name"
+                                        value={this.state.selectBorrowTokenModalSearchName}
+                                        onChange={(e) => {
+                                            this.setState({
+                                                selectBorrowTokenModalSearchName: e.target.value
+                                            })
+                                        }}
+                                    />
+                                </Grid>
+                                <Grid container>
+                                    <Grid item>
+                                        <div style={{ height: "10px" }}></div>
+                                    </Grid>
+                                </Grid>
+
+                                <Grid item xs={12}>
+                                    <Grid container spacing={1}>
+                                        <Grid item>
+                                            <Button className={"manage-button"}
+                                                style={{
+                                                    backgroundColor: "white",
+                                                    color: "black",
+                                                }}
+                                            >
+                                                <img style={{ width: "12px", }} src="/assets/icon/eth-logo.svg" alt="x"></img>
+                                                ETH
+                                            </Button>
+                                        </Grid>
+                                        <Grid item>
+                                            <Button className={"manage-button"}
+                                                style={{
+                                                    backgroundColor: "white",
+                                                    color: "black",
+                                                }}
+                                            >
+                                                <img style={{ width: "12px", }} src="/assets/icon/btc-logo.svg" alt="x"></img>
+                                                BTC
+                                            </Button>
+                                        </Grid>
+                                        <Grid item>
+                                            <Button className={"manage-button"}
+                                                style={{
+                                                    backgroundColor: "white",
+                                                    color: "black"
+                                                }}
+                                            >
+                                                <img style={{ width: "10px", }} src="/assets/icon/usdt-logo.svg" alt="x"></img>
+                                                USDT
+                                            </Button>
+                                        </Grid>
+                                        <Grid item>
+                                            <Button className={"manage-button"}
+                                                style={{
+                                                    backgroundColor: "white",
+                                                    color: "black"
+                                                }}
+                                            >
+                                                <img style={{ width: "12px", color: "black" }} src="/assets/icon/one-logo.svg" alt="x"></img>
+                                                ONE
+                                            </Button>
+                                        </Grid>
+                                    </Grid>
+                                </Grid>
+
+                                <Grid item xs={12}>
+                                    <div style={{ height: "30px", borderBottom: "1px solid grey" }}></div>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <h4 className={"fw-bold"}>{this.state.modalTitle}</h4>
+                                </Grid>
+                            </Grid>
+
+
+                        }
                     </ModalBody>
                 </Modal>
             </>
@@ -523,7 +620,9 @@ function mapStateToProps(store) {
         myBtcLpAmount: store.backd.myBtcLpAmount,
         totalBtcLpAmount: store.backd.totalBtcLpAmount,
         topupAction: store.backd.topupAction,
-        btcLpExchangeRate: store.backd.btcLpExchangeRate
+        btcLpExchangeRate: store.backd.btcLpExchangeRate,
+
+        theme: store.layout.theme,
     };
 }
 

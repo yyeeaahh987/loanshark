@@ -26,7 +26,7 @@ class TradeInfo extends React.Component {
         ).toFixed(2);
         
         return (
-            <Widget title={' '}>
+            <Widget title={' '} theme={this.props.theme}>
                 <Row style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 0, marginTop: 0 }}>
                     <Col>
                         Current Price of {this.props.selectedPair === "ETHBTC" ? "ETH" : "AVAX"}:
@@ -113,7 +113,9 @@ function mapStateToProps(store) {
         myAVAXAmount: store.loanshark.myAVAXAmount,
         myUSDTAmount: store.loanshark.myUSDTAmount,
         LTV: store.loanshark.LTV,
-        liquidationPrice: store.loanshark.liquidationPrice
+        liquidationPrice: store.loanshark.liquidationPrice,
+
+        theme: store.layout.theme,
     };
 }
 
