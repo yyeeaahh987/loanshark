@@ -176,136 +176,314 @@
 
 
 .customButton {
-    background-color: black;
-    color: #ffffff;
-
-    &:active {
-        background-color: #444444;
-        border: 1px solid #FFFFFF !important;
-    }
-
-    &:focus {
-        background-color: #444444;
-        border: 1px solid #FFFFFF !important;
-    }
-
-    &:hover {
-        background-color: #444444;
-        border: 1px solid #FFFFFF !important;
-    }
-
-    &__select {
-        background-color: #444444;
-        color: #ffffff;
-        border: 1px solid #FFFFFF !important;
+    &__light {
+        background-color: rgb(255, 255, 255);
+        color: black;
 
         &:active {
-            background-color: #444444;
-            color: black;
+            background-color: #292929;
         }
 
         &:focus {
-            background-color: #444444;
-            color: #ffffff;
+            background-color: #292929;
         }
 
         &:hover {
             background-color: #444444;
+        }
+
+        &__select {
+            background-color: #292929;
+            color: white;
+
+            &:active {
+                background-color: #292929;
+                color: white;
+            }
+
+            &:focus {
+                background-color: #292929;
+                color: white;
+            }
+
+            &:hover {
+                background-color: #292929;
+                color: white;
+            }
+        }
+    }
+
+    &__dark {
+        background-color: black;
+        color: #ffffff;
+
+        &:active {
+            background-color: #444444;
+            border: 1px solid #FFFFFF !important;
+        }
+
+        &:focus {
+            background-color: #444444;
+            border: 1px solid #FFFFFF !important;
+        }
+
+        &:hover {
+            background-color: #444444;
+            border: 1px solid #FFFFFF !important;
+        }
+
+        &__select {
+            background-color: #444444;
             color: #ffffff;
+            border: 1px solid #FFFFFF !important;
+
+            &:active {
+                background-color: #444444;
+                color: black;
+            }
+
+            &:focus {
+                background-color: #444444;
+                color: #ffffff;
+            }
+
+            &:hover {
+                background-color: #444444;
+                color: #ffffff;
+            }
+        }
+    }
+
+}
+
+.pairButton {
+    &__light {
+        &__left {
+            border-radius: 10px 0px 0px 10px;
+            width: 100%;
+            border: 1px solid black;
+            border-width: 1px 0px 1px 1px;
+        }
+
+        &__right {
+            border-radius: 0px 8px 8px 0px;
+            width: 100%;
+            border: 1px solid black;
+            border-width: 1px 1px 1px 0px;
+        }
+    }
+
+    &__dark {
+        &__left {
+            border-radius: 10px 0px 0px 10px;
+            width: 100%;
+            border: 1px solid white;
+            border-width: 1px 0px 1px 1px;
+        }
+
+        &__right {
+            border-radius: 0px 8px 8px 0px;
+            width: 100%;
+            border: 1px solid white;
+            border-width: 1px 1px 1px 0px;
         }
     }
 }
 
-.pairButton {
-    &__left {
-        border-radius: 10px 0px 0px 10px;
-        width: 100%;
-        border: solid white;
-        border-width: 1px 0px 1px 1px;
-    }
+.pairButton-dark {}
 
-    &__right {
-        border-radius: 0px 8px 8px 0px;
-        width: 100%;
-        border: solid white;
-        border-width: 1px 1px 1px 0px;
-    }
-}
+
 
 .max-button {
     height: fit-content;
     padding: 1px 16px;
 }
-.borrowing-power-button{
+
+.borrowing-power-button {
     height: fit-content;
     padding: 1px 1px;
     min-width: 45px;
 }
 
 .deposit-button {
-    width: 100%;
-    background-color: #444444;
-    color: #ffffff;
-    border-radius: 8px 8px 8px 8px;
-    border: 1px solid white;
-    &:active {
-        background-color: white !important;
+    &__light{
+        width: 100%;
+        background-color: white;
+        color: black;
+        border-radius: 8px 8px 8px 8px;
+        border: 1px solid black;
+    
+        &:active {
+            background-color: white !important;
+        }
+    
+        &:focus {
+            background-color: white !important;
+            color: black;
+        }
+    
+        &:hover {
+            background-color: #000000 !important;
+            color: white;
+            border: 1px solid black;
+        }
     }
-
-    &:focus {
-        background-color: #444444 !important;
+    &__dark{
+        width: 100%;
+        background-color: #444444;
+        color: #ffffff;
+        border-radius: 8px 8px 8px 8px;
+        border: 1px solid white;
+    
+        &:active {
+            background-color: white !important;
+        }
+    
+        &:focus {
+            background-color: #444444 !important;
+        }
+    
+        &:hover {
+            background-color: #000000 !important;
+        }
     }
-
-    &:hover {
-        background-color: #000000 !important;
-    }
-
 }
 
 .delete-button {
-    width: 100%;
-    background-color: rgb(207, 204, 19);
-    color: black;
-    border-radius: 10px;
-    border: 1px solid rgb(207, 204, 19);
-
-    &:active {
-        border: 1px solid rgb(207, 204, 19);
-        background-color: rgb(207, 204, 19) !important;
-        color: black !important;
-    }
-
-    &:focus {
-        border: 1px solid rgb(207, 204, 19);
+    &__light{
+        width: 100%;
         background-color: rgb(207, 204, 19);
-        color: black !important;
+        color: black;
+        border-radius: 10px;
+        border: 1px solid rgb(207, 204, 19);
+    
+        &:active {
+            border: 1px solid black;
+            background-color: rgb(207, 204, 19) !important;
+            color: black !important;
+            border: 1px solid transparent;
+        }
+    
+        &:focus {
+            border: 1px solid black;
+            background-color: rgb(207, 204, 19);
+            color: black !important;
+            border: 1px solid transparent;
+        }
+    
+        &:hover {
+            border: 1px solid white;
+            background-color: transparent;
+            color: black !important;
+            border: 1px solid black;
+        }
     }
+    &__dark{
+        width: 100%;
+        background-color: rgb(207, 204, 19);
+        color: black;
+        border-radius: 10px;
+        border: 1px solid rgb(207, 204, 19);
+    
+        &:active {
+            border: 1px solid rgb(207, 204, 19);
+            background-color: rgb(207, 204, 19) !important;
+            color: black !important;
+        }
+    
+        &:focus {
+            border: 1px solid rgb(207, 204, 19);
+            background-color: rgb(207, 204, 19);
+            color: black !important;
+        }
+    
+        &:hover {
+            border: 1px solid white;
+            background-color: transparent;
+            color: white !important
+        }
+    }
+}
 
-    &:hover {
+.amount-box{
+    &__light{
+        border-radius: 10px 10px 10px 10px;
+        border: 1px solid black;
+    }
+    &__dark{
+        border-radius: 10px 10px 10px 10px;
         border: 1px solid white;
-        background-color: transparent;
-        color: white !important
+    }
+}
+
+.amount-box-icon{
+    &__light{
+        border-radius: 10px;
+        background-color: white;
+        margin-top: 8px;
+        color: black;
+        padding: 3px 10px;
+        border: 1px solid;
+    }
+    &__dark{
+        border-radius: 10px;
+        background-color: #444444;
+        margin-top: 8px;
+        color: #ffffff;
+        padding: 3px 10px;
+    }
+}
+.amount-box-icon-label{
+    &__light{
+        color: black;
+        font-size: 14px;
+        font-weight: bold;
+    }
+    &__dark{
+        color: #ffffff;
+        font-size: 14px;
+        font-weight: bold;
     }
 }
 
 .amount-text {
-    font-size: 18px;
-    font-weight: bold;
-    background-color: transparent;
-    border-width: 0px;
-    padding: 0px;
-    color: white;
-
-    &:active {
+    &__light{
         background-color: transparent;
+        color: black;
+        font-size: 18px;
+        font-weight: bold;
         border-width: 0px;
-        color: white;
+        padding: 0px;
+        &:active {
+            background-color: transparent;
+            border-width: 0px;
+            color: black;
+        }
+    
+        &:focus {
+            background-color: transparent;
+            border-width: 0px;
+            color: black;
+        }
     }
-
-    &:focus {
+    &__dark{
         background-color: transparent;
-        border-width: 0px;
         color: white;
+        font-size: 18px;
+        font-weight: bold;
+        border-width: 0px;
+        padding: 0px;
+        &:active {
+            background-color: transparent;
+            border-width: 0px;
+            color: white;
+        }
+    
+        &:focus {
+            background-color: transparent;
+            border-width: 0px;
+            color: white;
+        }
     }
 }
 
@@ -314,6 +492,6 @@
     height: 32px;
 }
 
-input[disabled]{
+input[disabled] {
     background: transparent !important;
 }

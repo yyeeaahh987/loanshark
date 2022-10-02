@@ -183,16 +183,16 @@ class SmartVault4 extends React.Component {
                         <Table className={"mb-5"} responsive borderless>
                             <thead>
                                 <tr>
-                                    <th key={0} scope="col" className={"pl-4"}>
-
+                                    <th key={0} scope="col" className={`pl-4 protection-text-${this.props.theme==="light"?"light":"dark"}`}>
+                                    
                                     </th>
-                                    <th key={1} scope="col" className={"pl-0"}>
+                                    <th key={1} scope="col" className={`pl-0 protection-text-${this.props.theme==="light"?"light":"dark"}`}>
                                         Collateral
                                     </th>
-                                    <th key={3} scope="col" className={"pl-0"}>
+                                    <th key={3} scope="col" className={`pl-0 protection-text-${this.props.theme==="light"?"light":"dark"}`}>
                                         Debt
                                     </th>
-                                    <th key={4} scope="col" className={"pl-0"}>
+                                    <th key={4} scope="col" className={`pl-0 protection-text-${this.props.theme==="light"?"light":"dark"}`}>
                                         Health Factor
                                     </th>
                                 </tr>
