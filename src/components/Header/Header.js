@@ -675,6 +675,7 @@ class Header extends React.Component {
 									this.props.location.pathname === '/app/main/smartVault1' ? null : <>
 									<Grid item>
 										<Button size={"sm"} color={"text"} onClick={() => this.props.history.goBack()}
+											style={{ color: `${this.props.theme === "light" ? "black" : "white"}` }}
 											icon={faArrowLeftLong}
 										><FontAwesomeIcon icon={faArrowLeftLong} /> <span>Back</span>
 										</Button>
@@ -738,7 +739,7 @@ class Header extends React.Component {
 												localStorage.setItem("theme", "dark");
 											}
 											else {
-												this.setAppThemeMode("light")	
+												this.setAppThemeMode("light")
 												localStorage.setItem("theme", "light");
 											}
 										}}
@@ -759,7 +760,7 @@ class Header extends React.Component {
 							>
 								<h4 className={"fw-bold"}>{this.state.modalTitle}</h4>
 								<a>
-									<div className={`manage-button__${this.props.theme==="light"?"light":"dark"}`}
+									<div className={`manage-button__${this.props.theme === "light" ? "light" : "dark"}`}
 										onClick={() => {
 											this.ethEnabled()
 											this.toggle()
@@ -778,7 +779,7 @@ class Header extends React.Component {
 								</a>
 								<br></br>
 								<a>
-								<div className={`manage-button__${this.props.theme==="light"?"light":"dark"}`}
+									<div className={`manage-button__${this.props.theme === "light" ? "light" : "dark"}`}
 										onClick={() => {
 											this.walletConnectEnabled()
 											this.toggle()
@@ -797,7 +798,7 @@ class Header extends React.Component {
 								</a>
 								<br></br>
 								<a>
-								<div className={`manage-button__${this.props.theme==="light"?"light":"dark"}`}
+									<div className={`manage-button__${this.props.theme === "light" ? "light" : "dark"}`}
 										onClick={() => {
 											this.walletConnectEnabled()
 											this.toggle()
