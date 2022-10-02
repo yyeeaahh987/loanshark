@@ -86,7 +86,7 @@ class Card extends React.Component {
                         <Grid item xs={6}>
                             <div>
                                 <Button
-                                    className={`customButton${this.props.action === this.props.leftSelectButton ? `__select` : ``} pairButton__left`}
+                                className={`customButton__${this.props.theme==="light"?"light":"dark"}${this.props.action === this.props.leftSelectButton ? `__select` : ``} pairButton__${(this.props.theme==="light"?"light":"dark")}__left`}
                                     style={{ textTransform: "capitalize" }}
                                     name={this.props.leftSelectButton}
                                     onClick={this.props.onClickSelect}
@@ -96,7 +96,7 @@ class Card extends React.Component {
                         <Grid item xs={6}>
                             <div>
                                 <Button
-                                    className={`customButton${this.props.action === this.props.rightSelectButton ? `__select` : ``} pairButton__right`}
+                                    className={`customButton__${this.props.theme==="light"?"light":"dark"}${this.props.action === this.props.rightSelectButton ? `__select` : ``} pairButton__${(this.props.theme==="light"?"light":"dark")}__right`}
                                     style={{ textTransform: "capitalize" }}
                                     name={this.props.rightSelectButton}
                                     onClick={this.props.onClickSelect}
@@ -126,23 +126,23 @@ class Card extends React.Component {
                             <Grid item>
                                 <span style={{fontSize: '12px'}}>{action === "deposit" ? "Deposit By Percentage" : "Withdraw By Percentage"}: </span>
                                 <ButtonGroup aria-label="Borrowing Power" size="xs">
-                                    <Button className={"borrow-power-button"} size="xs"
+                                    <Button className={`borrow-power-button__${this.props.theme === "light" ? "light" : "dark"}`} size="xs"
                                         name={25}
                                         onClick={this.props.onClickDepositChange}
                                     >25%</Button>
-                                    <Button className={"borrow-power-button"} size="xs"
+                                    <Button className={`borrow-power-button__${this.props.theme === "light" ? "light" : "dark"}`} size="xs"
                                         name={50}
                                         onClick={this.props.onClickDepositChange}
                                     >50%</Button>
-                                    <Button className={"borrow-power-button"} size="xs"
+                                    <Button className={`borrow-power-button__${this.props.theme === "light" ? "light" : "dark"}`} size="xs"
                                         name={75}
                                         onClick={this.props.onClickDepositChange}
                                     >75%</Button>
-                                    <Button className={"borrow-power-button"} size="xs"
+                                    <Button className={`borrow-power-button__${this.props.theme === "light" ? "light" : "dark"}`} size="xs"
                                     name={90}
                                     onClick={this.props.onClickDepositChange}
                                     >90%</Button>
-                                    <Button className={"borrow-power-button"} size="xs"
+                                    <Button className={`borrow-power-button__${this.props.theme === "light" ? "light" : "dark"}`} size="xs"
                                     name={100}
                                     onClick={this.props.onClickDepositChange}
                                     >Max</Button>
@@ -154,7 +154,7 @@ class Card extends React.Component {
                     <br></br>
                     <br></br>
                     <Grid item xs={12}>
-                        <Button style={{textTransform: 'capitalize'}} className={"deposit-button"}
+                        <Button style={{textTransform: 'capitalize'}} className={`deposit-button__${this.props.theme === "light" ? "light" : "dark"}`}
                             onClick={() => {
                                 switch (action) {
                                     case "deposit":
@@ -176,23 +176,23 @@ class Card extends React.Component {
                             <Grid item>
                                 <span style={{fontSize: '12px'}}>{action === "borrow" ? "Borrowing Power" : "Payback By Percentage"}: </span>
                                 <ButtonGroup aria-label="Borrowing Power" size="xs">
-                                    <Button className={"borrow-power-button"} size="xs"
+                                    <Button className={`borrow-power-button__${this.props.theme === "light" ? "light" : "dark"}`} size="xs"
                                         name={25}
                                         onClick={this.props.onClickBorrowingPowerChange}
                                     >25%</Button>
-                                    <Button className={"borrow-power-button"} size="xs"
+                                    <Button className={`borrow-power-button__${this.props.theme === "light" ? "light" : "dark"}`} size="xs"
                                         name={50}
                                         onClick={this.props.onClickBorrowingPowerChange}
                                     >50%</Button>
-                                    <Button className={"borrow-power-button"} size="xs"
+                                    <Button className={`borrow-power-button__${this.props.theme === "light" ? "light" : "dark"}`} size="xs"
                                         name={75}
                                         onClick={this.props.onClickBorrowingPowerChange}
                                     >75%</Button>
-                                    <Button className={"borrow-power-button"} size="xs"
+                                    <Button className={`borrow-power-button__${this.props.theme === "light" ? "light" : "dark"}`} size="xs"
                                     name={90}
                                     onClick={this.props.onClickBorrowingPowerChange}
                                     >90%</Button>
-                                    <Button className={"borrow-power-button"} size="xs"
+                                    <Button className={`borrow-power-button__${this.props.theme === "light" ? "light" : "dark"}`} size="xs"
                                     name={ this.props.action === "borrow" ? 95 : 100 }
                                     onClick={this.props.onClickBorrowingPowerChange}
                                     >{ this.props.action === "borrow" ? "95%" : "Max"}</Button>
@@ -204,7 +204,7 @@ class Card extends React.Component {
                     <br></br>
                     <br></br>
                     <Grid item xs={12}>
-                        <Button style={{textTransform: 'capitalize'}} className={"deposit-button"} onClick={() => {
+                        <Button style={{textTransform: 'capitalize'}} className={`deposit-button__${this.props.theme === "light" ? "light" : "dark"}`} onClick={() => {
                             switch (action) {
                                 case "borrow":
                                     this.props.onClickBorrow()
@@ -221,7 +221,7 @@ class Card extends React.Component {
             case "Current Smart Vault Balance":
                 return (<>
                     <Grid item xs={12}>
-                        <Button className={"delete-button"}
+                        <Button className={`delete-button__${this.props.theme === "light" ? "light" : "dark"}`} 
                          onClick={() => {
                            this.props.onClickWithdraw()
                         }}
@@ -249,12 +249,7 @@ class Card extends React.Component {
                             <br></br>
                             <br></br>
                             <Grid item xs={12}>
-                                <div style={{
-                                    // width:"100%",
-                                    borderRadius: "10px 10px 10px 10px",
-                                    border: "1px solid white",
-                                }}
-                                >
+                                <div className={`amount-box__${this.props.theme==="light"?"light":"dark"}`}>
                                     <Grid container>
                                         <Grid item xs={12}>
                                             <div style={{
@@ -263,7 +258,7 @@ class Card extends React.Component {
                                                 <Grid container>
                                                     <Grid style={{display: "flex", flexDirection: "column", justifyContent: "center"}} item xs={7}>
                                                         <Input
-                                                            className={`amount-text`}
+                                                            className={`amount-text__${this.props.theme==="light"?"light":"dark"}`}
                                                             title="Input"
                                                             disabled={this.state.smartVaultView}
                                                             // placeholder="Enter deposit amount..."
@@ -276,31 +271,18 @@ class Card extends React.Component {
                                                             <Grid item xs={12} style={{ textAlign: "end" }}>
                                                                 <Grid container justifyContent={"end"} alignItems={"center"} spacing={1}>
                                                                     <Grid item>
-                                                                        <label
-                                                                            style={{
-                                                                                borderRadius: "10px",
-                                                                                backgroundColor: "#444444",
-                                                                                marginTop: "8px",
-                                                                                color: '#ffffff',
-                                                                                padding: "3px 10px"
-                                                                            }}
-                                                                        > 
+                                                                        <label className={`amount-box-icon__${this.props.theme==="light"?"light":"dark"}`}> 
                                                                             <img className="icon"
-                                                                                src={this.props.currencyIconPath}
-                                                                                // src={this.state.iconPath}
-                                                                                alt="x"></img>
+                                                                                src={this.props.currencyIconPath} alt="x"></img>
                                                                                 {'    '}
-                                                                            <span style={{ color: "#ffffff", fontSize: "14px", fontWeight: "bold", }}>{this.props.currency.toUpperCase()}</span>
+                                                                            <span className={`amount-box-icon-label__${this.props.theme==="light"?"light":"dark"}`}>{this.props.currency.toUpperCase()}</span>
                                                                         </label>
                                                                     </Grid>
                                                                 </Grid>
                                                             </Grid>
                                                         </Grid>
                                                     </Grid>
-                                                    <Grid item xs={12} style={{
-                                                            textAlign: "end",
-                                                            // padding: "5px",
-                                                        }}>
+                                                    <Grid item xs={12} style={{textAlign: "end",}}>
                                                         <div  hidden={this.state.smartVaultView}>
                                                             <span style={{
                                                                 fontSize: "14px",

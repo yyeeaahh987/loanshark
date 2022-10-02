@@ -182,13 +182,11 @@ class Header extends React.Component {
 	}
 
 	async componentDidMount() {
-		console.log(localStorage.getItem("isWalletConnected"))
 		if (localStorage.getItem("isWalletConnected") === "true") {
 			//check metamask are connected before
 			window.web3 = new Web3(window.web3.currentProvider);
 			window.ethereum.enable();
 			let validAccount = await window.ethereum.request({ method: "eth_accounts" });
-			console.log(validAccount)
 			if (validAccount) {
 				this.ethEnabled()
 			}
@@ -735,14 +733,14 @@ class Header extends React.Component {
 									</div>
 									<div>
 										<FontAwesomeIcon style={{ cursor: "pointer" }} onClick={() => {
-											if (this.props.theme === "light") this.setAppThemeMode("dark")
-											else this.setAppThemeMode("light")
-											// console.log(localStorage.getItem("theme"))
-											// if(!localStorage.getItem("theme") || localStorage.getItem("theme")==="dark"){
-											// 	localStorage.setItem("theme","light")
-											// }else{
-											// 	localStorage.setItem("theme","dark")
-											// }
+											if (this.props.theme === "light") {
+												this.setAppThemeMode("dark")
+												localStorage.setItem("theme", "dark");
+											}
+											else {
+												this.setAppThemeMode("light")	
+												localStorage.setItem("theme", "light");
+											}
 										}}
 											icon={faLightbulb} />
 									</div>
@@ -761,7 +759,7 @@ class Header extends React.Component {
 							>
 								<h4 className={"fw-bold"}>{this.state.modalTitle}</h4>
 								<a>
-									<div className={'manage-button'}
+									<div className={`manage-button__${this.props.theme==="light"?"light":"dark"}`}
 										onClick={() => {
 											this.ethEnabled()
 											this.toggle()
@@ -780,7 +778,7 @@ class Header extends React.Component {
 								</a>
 								<br></br>
 								<a>
-									<div className={'manage-button'}
+								<div className={`manage-button__${this.props.theme==="light"?"light":"dark"}`}
 										onClick={() => {
 											this.walletConnectEnabled()
 											this.toggle()
@@ -799,7 +797,7 @@ class Header extends React.Component {
 								</a>
 								<br></br>
 								<a>
-									<div className={'manage-button'}
+								<div className={`manage-button__${this.props.theme==="light"?"light":"dark"}`}
 										onClick={() => {
 											this.walletConnectEnabled()
 											this.toggle()
@@ -843,7 +841,6 @@ class Header extends React.Component {
 }
 
 function mapStateToProps(store) {
-	console.log(store)
 	return {
 		sidebarOpened: store.navigation.sidebarOpened,
 		sidebarStatic: store.navigation.sidebarStatic,
