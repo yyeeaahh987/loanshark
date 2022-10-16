@@ -1,0 +1,60 @@
+@import '../../styles/app';
+
+.root {
+  height: 100%;
+  position: relative;
+  left: 0;
+  transition: left $sidebar-transition-time ease-in-out;
+  
+}
+
+.rootLight{
+  background: white;
+}
+.rootDark{
+  background: radial-gradient(circle, rgba(0,0,0,1) 0%, rgba(17,17,17,1) 74%);
+}
+
+.wrap {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  margin-left: $sidebar-width-open;
+  flex-direction: column;
+  right: 0;
+  transition: left $sidebar-transition-time ease-in-out, margin-left $sidebar-transition-time ease-in-out;
+  @media (max-width: breakpoint-max(sm)) {
+    margin-left: 0px;
+  }
+}
+
+.sidebarClose div.wrap {
+  left: 0;
+}
+
+.sidebarStatic .wrap {
+  left: 0;
+  margin-left: $sidebar-width-open;
+}
+
+.content {
+  position: relative;
+  flex-grow: 1;
+  // 20px for footer height
+  padding: $content-padding $content-padding ($content-padding + 20px);
+
+  @media (max-width: breakpoint-max(sm)) {
+    padding: 25px $content-padding-sm ($content-padding + 30px);
+  }
+
+  // hammers disallows text selection, allowing it for large screens
+  @media (min-width: breakpoint-min(sm)) {
+    user-select: auto !important;
+  }
+}
+
+.contentFooter {
+  position: absolute;
+  bottom: 15px;
+  color: $text-muted;
+}
